@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.elasticsan import ElasticSanMgmtClient
 
 """
@@ -33,13 +34,13 @@ def main():
         resource_group_name="resourcegroupname",
         elastic_san_name="elasticsanname",
         parameters={
-            "location": "South Central US",
-            "properties": {"baseSizeTiB": 5, "extendedCapacitySizeTiB": 25, "sku": {"name": "Premium_LRS"}},
+            "location": "France Central",
+            "properties": {"baseSizeTiB": 1, "extendedCapacitySizeTiB": 3, "sku": {"name": "Premium_LRS"}},
         },
     ).result()
     print(response)
 
 
-# x-ms-original-file: specification/elasticsan/resource-manager/Microsoft.ElasticSan/preview/2022-12-01-preview/examples/ElasticSans_Create_MinimumSet_Gen.json
+# x-ms-original-file: specification/elasticsan/resource-manager/Microsoft.ElasticSan/preview/2024-06-01-preview/examples/ElasticSans_Create_MinimumSet_Gen.json
 if __name__ == "__main__":
     main()

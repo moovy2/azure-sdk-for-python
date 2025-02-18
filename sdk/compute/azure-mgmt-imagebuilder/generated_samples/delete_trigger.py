@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.imagebuilder import ImageBuilderClient
 
 """
@@ -29,14 +30,13 @@ def main():
         subscription_id="{subscription-id}",
     )
 
-    response = client.triggers.begin_delete(
+    client.triggers.begin_delete(
         resource_group_name="myResourceGroup",
         image_template_name="myImageTemplate",
         trigger_name="trigger1",
     ).result()
-    print(response)
 
 
-# x-ms-original-file: specification/imagebuilder/resource-manager/Microsoft.VirtualMachineImages/stable/2022-07-01/examples/DeleteTrigger.json
+# x-ms-original-file: specification/imagebuilder/resource-manager/Microsoft.VirtualMachineImages/stable/2024-02-01/examples/DeleteTrigger.json
 if __name__ == "__main__":
     main()

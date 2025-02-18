@@ -9,7 +9,7 @@
 
 import datetime
 import sys
-from typing import Any, Dict, List, Optional, TYPE_CHECKING, Union
+from typing import Any, Dict, List, Literal, Optional, TYPE_CHECKING, Union
 
 from .. import _serialization
 
@@ -17,10 +17,6 @@ if sys.version_info >= (3, 9):
     from collections.abc import MutableMapping
 else:
     from typing import MutableMapping  # type: ignore  # pylint: disable=ungrouped-imports
-if sys.version_info >= (3, 8):
-    from typing import Literal  # pylint: disable=no-name-in-module, ungrouped-imports
-else:
-    from typing_extensions import Literal  # type: ignore  # pylint: disable=ungrouped-imports
 
 if TYPE_CHECKING:
     # pylint: disable=unused-import,ungrouped-imports
@@ -28,10 +24,127 @@ if TYPE_CHECKING:
 JSON = MutableMapping[str, Any]  # pylint: disable=unsubscriptable-object
 
 
+class AccessRule(_serialization.Model):
+    """Access rule in a network security perimeter configuration profile.
+
+    :ivar name: Name of the access rule.
+    :vartype name: str
+    :ivar properties: Properties of Access Rule.
+    :vartype properties: ~azure.mgmt.batch.models.AccessRuleProperties
+    """
+
+    _attribute_map = {
+        "name": {"key": "name", "type": "str"},
+        "properties": {"key": "properties", "type": "AccessRuleProperties"},
+    }
+
+    def __init__(
+        self, *, name: Optional[str] = None, properties: Optional["_models.AccessRuleProperties"] = None, **kwargs: Any
+    ) -> None:
+        """
+        :keyword name: Name of the access rule.
+        :paramtype name: str
+        :keyword properties: Properties of Access Rule.
+        :paramtype properties: ~azure.mgmt.batch.models.AccessRuleProperties
+        """
+        super().__init__(**kwargs)
+        self.name = name
+        self.properties = properties
+
+
+class AccessRuleProperties(_serialization.Model):
+    """Properties of Access Rule.
+
+    :ivar direction: Direction of Access Rule. Known values are: "Inbound" and "Outbound".
+    :vartype direction: str or ~azure.mgmt.batch.models.AccessRuleDirection
+    :ivar address_prefixes: Address prefixes in the CIDR format for inbound rules.
+    :vartype address_prefixes: list[str]
+    :ivar subscriptions: Subscriptions for inbound rules.
+    :vartype subscriptions: list[~azure.mgmt.batch.models.AccessRulePropertiesSubscriptionsItem]
+    :ivar network_security_perimeters: Network security perimeters for inbound rules.
+    :vartype network_security_perimeters: list[~azure.mgmt.batch.models.NetworkSecurityPerimeter]
+    :ivar fully_qualified_domain_names: Fully qualified domain names (FQDN) for outbound rules.
+    :vartype fully_qualified_domain_names: list[str]
+    :ivar email_addresses: Email addresses for outbound rules.
+    :vartype email_addresses: list[str]
+    :ivar phone_numbers: Phone numbers for outbound rules.
+    :vartype phone_numbers: list[str]
+    """
+
+    _attribute_map = {
+        "direction": {"key": "direction", "type": "str"},
+        "address_prefixes": {"key": "addressPrefixes", "type": "[str]"},
+        "subscriptions": {"key": "subscriptions", "type": "[AccessRulePropertiesSubscriptionsItem]"},
+        "network_security_perimeters": {"key": "networkSecurityPerimeters", "type": "[NetworkSecurityPerimeter]"},
+        "fully_qualified_domain_names": {"key": "fullyQualifiedDomainNames", "type": "[str]"},
+        "email_addresses": {"key": "emailAddresses", "type": "[str]"},
+        "phone_numbers": {"key": "phoneNumbers", "type": "[str]"},
+    }
+
+    def __init__(
+        self,
+        *,
+        direction: Optional[Union[str, "_models.AccessRuleDirection"]] = None,
+        address_prefixes: Optional[List[str]] = None,
+        subscriptions: Optional[List["_models.AccessRulePropertiesSubscriptionsItem"]] = None,
+        network_security_perimeters: Optional[List["_models.NetworkSecurityPerimeter"]] = None,
+        fully_qualified_domain_names: Optional[List[str]] = None,
+        email_addresses: Optional[List[str]] = None,
+        phone_numbers: Optional[List[str]] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword direction: Direction of Access Rule. Known values are: "Inbound" and "Outbound".
+        :paramtype direction: str or ~azure.mgmt.batch.models.AccessRuleDirection
+        :keyword address_prefixes: Address prefixes in the CIDR format for inbound rules.
+        :paramtype address_prefixes: list[str]
+        :keyword subscriptions: Subscriptions for inbound rules.
+        :paramtype subscriptions: list[~azure.mgmt.batch.models.AccessRulePropertiesSubscriptionsItem]
+        :keyword network_security_perimeters: Network security perimeters for inbound rules.
+        :paramtype network_security_perimeters: list[~azure.mgmt.batch.models.NetworkSecurityPerimeter]
+        :keyword fully_qualified_domain_names: Fully qualified domain names (FQDN) for outbound rules.
+        :paramtype fully_qualified_domain_names: list[str]
+        :keyword email_addresses: Email addresses for outbound rules.
+        :paramtype email_addresses: list[str]
+        :keyword phone_numbers: Phone numbers for outbound rules.
+        :paramtype phone_numbers: list[str]
+        """
+        super().__init__(**kwargs)
+        self.direction = direction
+        self.address_prefixes = address_prefixes
+        self.subscriptions = subscriptions
+        self.network_security_perimeters = network_security_perimeters
+        self.fully_qualified_domain_names = fully_qualified_domain_names
+        self.email_addresses = email_addresses
+        self.phone_numbers = phone_numbers
+
+
+class AccessRulePropertiesSubscriptionsItem(_serialization.Model):
+    """Subscription identifiers.
+
+    :ivar id: The fully qualified Azure resource ID of the subscription e.g.
+     ('/subscriptions/00000000-0000-0000-0000-000000000000').
+    :vartype id: str
+    """
+
+    _attribute_map = {
+        "id": {"key": "id", "type": "str"},
+    }
+
+    def __init__(self, *, id: Optional[str] = None, **kwargs: Any) -> None:  # pylint: disable=redefined-builtin
+        """
+        :keyword id: The fully qualified Azure resource ID of the subscription e.g.
+         ('/subscriptions/00000000-0000-0000-0000-000000000000').
+        :paramtype id: str
+        """
+        super().__init__(**kwargs)
+        self.id = id
+
+
 class ActivateApplicationPackageParameters(_serialization.Model):
     """Parameters for an activating an application package.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar format: The format of the application package binary file. Required.
     :vartype format: str
@@ -54,7 +167,7 @@ class ActivateApplicationPackageParameters(_serialization.Model):
         self.format = format
 
 
-class ProxyResource(_serialization.Model):
+class AzureProxyResource(_serialization.Model):
     """A definition of an Azure resource.
 
     Variables are only populated by the server, and will be ignored when sending a request.
@@ -67,6 +180,8 @@ class ProxyResource(_serialization.Model):
     :vartype type: str
     :ivar etag: The ETag of the resource, used for concurrency statements.
     :vartype etag: str
+    :ivar tags: The tags of the resource.
+    :vartype tags: dict[str, str]
     """
 
     _validation = {
@@ -81,18 +196,23 @@ class ProxyResource(_serialization.Model):
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
         "etag": {"key": "etag", "type": "str"},
+        "tags": {"key": "tags", "type": "{str}"},
     }
 
-    def __init__(self, **kwargs: Any) -> None:
-        """ """
+    def __init__(self, *, tags: Optional[Dict[str, str]] = None, **kwargs: Any) -> None:
+        """
+        :keyword tags: The tags of the resource.
+        :paramtype tags: dict[str, str]
+        """
         super().__init__(**kwargs)
         self.id = None
         self.name = None
         self.type = None
         self.etag = None
+        self.tags = tags
 
 
-class Application(ProxyResource):
+class Application(AzureProxyResource):
     """Contains information about an application in a Batch account.
 
     Variables are only populated by the server, and will be ignored when sending a request.
@@ -105,6 +225,8 @@ class Application(ProxyResource):
     :vartype type: str
     :ivar etag: The ETag of the resource, used for concurrency statements.
     :vartype etag: str
+    :ivar tags: The tags of the resource.
+    :vartype tags: dict[str, str]
     :ivar display_name: The display name for the application.
     :vartype display_name: str
     :ivar allow_updates: A value indicating whether packages within the application may be
@@ -127,6 +249,7 @@ class Application(ProxyResource):
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
         "etag": {"key": "etag", "type": "str"},
+        "tags": {"key": "tags", "type": "{str}"},
         "display_name": {"key": "properties.displayName", "type": "str"},
         "allow_updates": {"key": "properties.allowUpdates", "type": "bool"},
         "default_version": {"key": "properties.defaultVersion", "type": "str"},
@@ -135,12 +258,15 @@ class Application(ProxyResource):
     def __init__(
         self,
         *,
+        tags: Optional[Dict[str, str]] = None,
         display_name: Optional[str] = None,
         allow_updates: Optional[bool] = None,
         default_version: Optional[str] = None,
         **kwargs: Any
     ) -> None:
         """
+        :keyword tags: The tags of the resource.
+        :paramtype tags: dict[str, str]
         :keyword display_name: The display name for the application.
         :paramtype display_name: str
         :keyword allow_updates: A value indicating whether packages within the application may be
@@ -150,13 +276,13 @@ class Application(ProxyResource):
          specify a version. This property can only be set to the name of an existing package.
         :paramtype default_version: str
         """
-        super().__init__(**kwargs)
+        super().__init__(tags=tags, **kwargs)
         self.display_name = display_name
         self.allow_updates = allow_updates
         self.default_version = default_version
 
 
-class ApplicationPackage(ProxyResource):
+class ApplicationPackage(AzureProxyResource):
     """An application package which represents a particular version of an application.
 
     Variables are only populated by the server, and will be ignored when sending a request.
@@ -169,6 +295,8 @@ class ApplicationPackage(ProxyResource):
     :vartype type: str
     :ivar etag: The ETag of the resource, used for concurrency statements.
     :vartype etag: str
+    :ivar tags: The tags of the resource.
+    :vartype tags: dict[str, str]
     :ivar state: The current state of the application package. Known values are: "Pending" and
      "Active".
     :vartype state: str or ~azure.mgmt.batch.models.PackageState
@@ -200,6 +328,7 @@ class ApplicationPackage(ProxyResource):
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
         "etag": {"key": "etag", "type": "str"},
+        "tags": {"key": "tags", "type": "{str}"},
         "state": {"key": "properties.state", "type": "str"},
         "format": {"key": "properties.format", "type": "str"},
         "storage_url": {"key": "properties.storageUrl", "type": "str"},
@@ -207,9 +336,12 @@ class ApplicationPackage(ProxyResource):
         "last_activation_time": {"key": "properties.lastActivationTime", "type": "iso-8601"},
     }
 
-    def __init__(self, **kwargs: Any) -> None:
-        """ """
-        super().__init__(**kwargs)
+    def __init__(self, *, tags: Optional[Dict[str, str]] = None, **kwargs: Any) -> None:
+        """
+        :keyword tags: The tags of the resource.
+        :paramtype tags: dict[str, str]
+        """
+        super().__init__(tags=tags, **kwargs)
         self.state = None
         self.format = None
         self.storage_url = None
@@ -220,7 +352,7 @@ class ApplicationPackage(ProxyResource):
 class ApplicationPackageReference(_serialization.Model):
     """Link to an application package inside the batch account.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: The ID of the application package to install. This must be inside the same batch
      account as the pool. This can either be a reference to a specific version or the default
@@ -259,10 +391,70 @@ class ApplicationPackageReference(_serialization.Model):
         self.version = version
 
 
+class AutomaticOSUpgradePolicy(_serialization.Model):
+    """The configuration parameters used for performing automatic OS upgrade.
+
+    :ivar disable_automatic_rollback: Whether OS image rollback feature should be disabled.
+    :vartype disable_automatic_rollback: bool
+    :ivar enable_automatic_os_upgrade: Indicates whether OS upgrades should automatically be
+     applied to scale set instances in a rolling fashion when a newer version of the OS image
+     becomes available. :code:`<br />`:code:`<br />` If this is set to true for Windows based pools,
+     `WindowsConfiguration.enableAutomaticUpdates
+     <https://learn.microsoft.com/en-us/rest/api/batchmanagement/pool/create?tabs=HTTP#windowsconfiguration>`_
+     cannot be set to true.
+    :vartype enable_automatic_os_upgrade: bool
+    :ivar use_rolling_upgrade_policy: Indicates whether rolling upgrade policy should be used
+     during Auto OS Upgrade. Auto OS Upgrade will fallback to the default policy if no policy is
+     defined on the VMSS.
+    :vartype use_rolling_upgrade_policy: bool
+    :ivar os_rolling_upgrade_deferral: Defer OS upgrades on the TVMs if they are running tasks.
+    :vartype os_rolling_upgrade_deferral: bool
+    """
+
+    _attribute_map = {
+        "disable_automatic_rollback": {"key": "disableAutomaticRollback", "type": "bool"},
+        "enable_automatic_os_upgrade": {"key": "enableAutomaticOSUpgrade", "type": "bool"},
+        "use_rolling_upgrade_policy": {"key": "useRollingUpgradePolicy", "type": "bool"},
+        "os_rolling_upgrade_deferral": {"key": "osRollingUpgradeDeferral", "type": "bool"},
+    }
+
+    def __init__(
+        self,
+        *,
+        disable_automatic_rollback: Optional[bool] = None,
+        enable_automatic_os_upgrade: Optional[bool] = None,
+        use_rolling_upgrade_policy: Optional[bool] = None,
+        os_rolling_upgrade_deferral: Optional[bool] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword disable_automatic_rollback: Whether OS image rollback feature should be disabled.
+        :paramtype disable_automatic_rollback: bool
+        :keyword enable_automatic_os_upgrade: Indicates whether OS upgrades should automatically be
+         applied to scale set instances in a rolling fashion when a newer version of the OS image
+         becomes available. :code:`<br />`:code:`<br />` If this is set to true for Windows based pools,
+         `WindowsConfiguration.enableAutomaticUpdates
+         <https://learn.microsoft.com/en-us/rest/api/batchmanagement/pool/create?tabs=HTTP#windowsconfiguration>`_
+         cannot be set to true.
+        :paramtype enable_automatic_os_upgrade: bool
+        :keyword use_rolling_upgrade_policy: Indicates whether rolling upgrade policy should be used
+         during Auto OS Upgrade. Auto OS Upgrade will fallback to the default policy if no policy is
+         defined on the VMSS.
+        :paramtype use_rolling_upgrade_policy: bool
+        :keyword os_rolling_upgrade_deferral: Defer OS upgrades on the TVMs if they are running tasks.
+        :paramtype os_rolling_upgrade_deferral: bool
+        """
+        super().__init__(**kwargs)
+        self.disable_automatic_rollback = disable_automatic_rollback
+        self.enable_automatic_os_upgrade = enable_automatic_os_upgrade
+        self.use_rolling_upgrade_policy = use_rolling_upgrade_policy
+        self.os_rolling_upgrade_deferral = os_rolling_upgrade_deferral
+
+
 class AutoScaleRun(_serialization.Model):
     """The results and errors from an execution of a pool autoscale formula.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar evaluation_time: The time at which the autoscale formula was last evaluated. Required.
     :vartype evaluation_time: ~datetime.datetime
@@ -309,7 +501,7 @@ class AutoScaleRun(_serialization.Model):
 class AutoScaleRunError(_serialization.Model):
     """An error that occurred when autoscaling a pool.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar code: An identifier for the error. Codes are invariant and are intended to be consumed
      programmatically. Required.
@@ -354,7 +546,7 @@ class AutoScaleRunError(_serialization.Model):
 class AutoScaleSettings(_serialization.Model):
     """AutoScale settings for the pool.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar formula: A formula for the desired number of compute nodes in the pool. Required.
     :vartype formula: str
@@ -388,7 +580,7 @@ class AutoScaleSettings(_serialization.Model):
 class AutoStorageBaseProperties(_serialization.Model):
     """The properties related to the auto-storage account.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar storage_account_id: The resource ID of the storage account to be used for auto-storage
      account. Required.
@@ -440,7 +632,7 @@ class AutoStorageBaseProperties(_serialization.Model):
 class AutoStorageProperties(AutoStorageBaseProperties):
     """Contains information about the auto-storage account associated with a Batch account.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar storage_account_id: The resource ID of the storage account to be used for auto-storage
      account. Required.
@@ -545,7 +737,7 @@ class AutoUserSpecification(_serialization.Model):
 class AzureBlobFileSystemConfiguration(_serialization.Model):
     """Information used to connect to an Azure Storage Container using Blobfuse.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar account_name: The Azure Storage Account name. Required.
     :vartype account_name: str
@@ -628,7 +820,7 @@ class AzureBlobFileSystemConfiguration(_serialization.Model):
 class AzureFileShareConfiguration(_serialization.Model):
     """Information used to connect to an Azure Fileshare.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar account_name: The Azure Storage account name. Required.
     :vartype account_name: str
@@ -690,7 +882,7 @@ class AzureFileShareConfiguration(_serialization.Model):
         self.mount_options = mount_options
 
 
-class Resource(_serialization.Model):
+class AzureResource(_serialization.Model):
     """A definition of an Azure resource.
 
     Variables are only populated by the server, and will be ignored when sending a request.
@@ -733,7 +925,7 @@ class Resource(_serialization.Model):
         self.tags = None
 
 
-class BatchAccount(Resource):  # pylint: disable=too-many-instance-attributes
+class BatchAccount(AzureResource):  # pylint: disable=too-many-instance-attributes
     """Contains information about an Azure Batch account.
 
     Variables are only populated by the server, and will be ignored when sending a request.
@@ -764,7 +956,7 @@ class BatchAccount(Resource):  # pylint: disable=too-many-instance-attributes
     :ivar key_vault_reference: Identifies the Azure key vault associated with a Batch account.
     :vartype key_vault_reference: ~azure.mgmt.batch.models.KeyVaultReference
     :ivar public_network_access: If not specified, the default value is 'enabled'. Known values
-     are: "Enabled" and "Disabled".
+     are: "Enabled", "Disabled", and "SecuredByPerimeter".
     :vartype public_network_access: str or ~azure.mgmt.batch.models.PublicNetworkAccessType
     :ivar network_profile: The network profile only takes effect when publicNetworkAccess is
      enabled.
@@ -876,7 +1068,7 @@ class BatchAccount(Resource):  # pylint: disable=too-many-instance-attributes
         :keyword identity: The identity of the Batch account.
         :paramtype identity: ~azure.mgmt.batch.models.BatchAccountIdentity
         :keyword public_network_access: If not specified, the default value is 'enabled'. Known values
-         are: "Enabled" and "Disabled".
+         are: "Enabled", "Disabled", and "SecuredByPerimeter".
         :paramtype public_network_access: str or ~azure.mgmt.batch.models.PublicNetworkAccessType
         :keyword network_profile: The network profile only takes effect when publicNetworkAccess is
          enabled.
@@ -906,7 +1098,7 @@ class BatchAccount(Resource):  # pylint: disable=too-many-instance-attributes
 class BatchAccountCreateParameters(_serialization.Model):
     """Parameters supplied to the Create operation.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar location: The region in which to create the account. Required.
     :vartype location: str
@@ -918,15 +1110,14 @@ class BatchAccountCreateParameters(_serialization.Model):
     :vartype auto_storage: ~azure.mgmt.batch.models.AutoStorageBaseProperties
     :ivar pool_allocation_mode: The pool allocation mode also affects how clients may authenticate
      to the Batch Service API. If the mode is BatchService, clients may authenticate using access
-     keys or Azure Active Directory. If the mode is UserSubscription, clients must use Azure Active
-     Directory. The default is BatchService. Known values are: "BatchService" and
-     "UserSubscription".
+     keys or Microsoft Entra ID. If the mode is UserSubscription, clients must use Microsoft Entra
+     ID. The default is BatchService. Known values are: "BatchService" and "UserSubscription".
     :vartype pool_allocation_mode: str or ~azure.mgmt.batch.models.PoolAllocationMode
     :ivar key_vault_reference: A reference to the Azure key vault associated with the Batch
      account.
     :vartype key_vault_reference: ~azure.mgmt.batch.models.KeyVaultReference
     :ivar public_network_access: If not specified, the default value is 'enabled'. Known values
-     are: "Enabled" and "Disabled".
+     are: "Enabled", "Disabled", and "SecuredByPerimeter".
     :vartype public_network_access: str or ~azure.mgmt.batch.models.PublicNetworkAccessType
     :ivar network_profile: The network profile only takes effect when publicNetworkAccess is
      enabled.
@@ -984,15 +1175,15 @@ class BatchAccountCreateParameters(_serialization.Model):
         :paramtype auto_storage: ~azure.mgmt.batch.models.AutoStorageBaseProperties
         :keyword pool_allocation_mode: The pool allocation mode also affects how clients may
          authenticate to the Batch Service API. If the mode is BatchService, clients may authenticate
-         using access keys or Azure Active Directory. If the mode is UserSubscription, clients must use
-         Azure Active Directory. The default is BatchService. Known values are: "BatchService" and
+         using access keys or Microsoft Entra ID. If the mode is UserSubscription, clients must use
+         Microsoft Entra ID. The default is BatchService. Known values are: "BatchService" and
          "UserSubscription".
         :paramtype pool_allocation_mode: str or ~azure.mgmt.batch.models.PoolAllocationMode
         :keyword key_vault_reference: A reference to the Azure key vault associated with the Batch
          account.
         :paramtype key_vault_reference: ~azure.mgmt.batch.models.KeyVaultReference
         :keyword public_network_access: If not specified, the default value is 'enabled'. Known values
-         are: "Enabled" and "Disabled".
+         are: "Enabled", "Disabled", and "SecuredByPerimeter".
         :paramtype public_network_access: str or ~azure.mgmt.batch.models.PublicNetworkAccessType
         :keyword network_profile: The network profile only takes effect when publicNetworkAccess is
          enabled.
@@ -1027,7 +1218,7 @@ class BatchAccountIdentity(_serialization.Model):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar principal_id: The principal id of the Batch account. This property will only be provided
      for a system assigned identity.
@@ -1141,7 +1332,7 @@ class BatchAccountListResult(_serialization.Model):
 class BatchAccountRegenerateKeyParameters(_serialization.Model):
     """Parameters supplied to the RegenerateKey operation.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar key_name: The type of account key to regenerate. Required. Known values are: "Primary"
      and "Secondary".
@@ -1184,7 +1375,7 @@ class BatchAccountUpdateParameters(_serialization.Model):
      the control plane.
     :vartype allowed_authentication_modes: list[str or ~azure.mgmt.batch.models.AuthenticationMode]
     :ivar public_network_access: If not specified, the default value is 'enabled'. Known values
-     are: "Enabled" and "Disabled".
+     are: "Enabled", "Disabled", and "SecuredByPerimeter".
     :vartype public_network_access: str or ~azure.mgmt.batch.models.PublicNetworkAccessType
     :ivar network_profile: The network profile only takes effect when publicNetworkAccess is
      enabled.
@@ -1230,7 +1421,7 @@ class BatchAccountUpdateParameters(_serialization.Model):
         :paramtype allowed_authentication_modes: list[str or
          ~azure.mgmt.batch.models.AuthenticationMode]
         :keyword public_network_access: If not specified, the default value is 'enabled'. Known values
-         are: "Enabled" and "Disabled".
+         are: "Enabled", "Disabled", and "SecuredByPerimeter".
         :paramtype public_network_access: str or ~azure.mgmt.batch.models.PublicNetworkAccessType
         :keyword network_profile: The network profile only takes effect when publicNetworkAccess is
          enabled.
@@ -1275,7 +1466,7 @@ class BatchPoolIdentity(_serialization.Model):
     existing pool, only the new vms which are created after the pool shrinks to 0 will have the
     updated identities.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: The type of identity used for the Batch Pool. Required. Known values are:
      "UserAssigned" and "None".
@@ -1312,7 +1503,7 @@ class BatchPoolIdentity(_serialization.Model):
         self.user_assigned_identities = user_assigned_identities
 
 
-class Certificate(ProxyResource):  # pylint: disable=too-many-instance-attributes
+class Certificate(AzureProxyResource):  # pylint: disable=too-many-instance-attributes
     """Contains information about a certificate.
 
     Variables are only populated by the server, and will be ignored when sending a request.
@@ -1325,6 +1516,8 @@ class Certificate(ProxyResource):  # pylint: disable=too-many-instance-attribute
     :vartype type: str
     :ivar etag: The ETag of the resource, used for concurrency statements.
     :vartype etag: str
+    :ivar tags: The tags of the resource.
+    :vartype tags: dict[str, str]
     :ivar thumbprint_algorithm: This must match the first portion of the certificate name.
      Currently required to be 'SHA1'.
     :vartype thumbprint_algorithm: str
@@ -1370,6 +1563,7 @@ class Certificate(ProxyResource):  # pylint: disable=too-many-instance-attribute
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
         "etag": {"key": "etag", "type": "str"},
+        "tags": {"key": "tags", "type": "{str}"},
         "thumbprint_algorithm": {"key": "properties.thumbprintAlgorithm", "type": "str"},
         "thumbprint": {"key": "properties.thumbprint", "type": "str"},
         "format": {"key": "properties.format", "type": "str"},
@@ -1387,12 +1581,15 @@ class Certificate(ProxyResource):  # pylint: disable=too-many-instance-attribute
     def __init__(
         self,
         *,
+        tags: Optional[Dict[str, str]] = None,
         thumbprint_algorithm: Optional[str] = None,
         thumbprint: Optional[str] = None,
         format: Optional[Union[str, "_models.CertificateFormat"]] = None,
         **kwargs: Any
     ) -> None:
         """
+        :keyword tags: The tags of the resource.
+        :paramtype tags: dict[str, str]
         :keyword thumbprint_algorithm: This must match the first portion of the certificate name.
          Currently required to be 'SHA1'.
         :paramtype thumbprint_algorithm: str
@@ -1402,7 +1599,7 @@ class Certificate(ProxyResource):  # pylint: disable=too-many-instance-attribute
          Pfx. Known values are: "Pfx" and "Cer".
         :paramtype format: str or ~azure.mgmt.batch.models.CertificateFormat
         """
-        super().__init__(**kwargs)
+        super().__init__(tags=tags, **kwargs)
         self.thumbprint_algorithm = thumbprint_algorithm
         self.thumbprint = thumbprint
         self.format = format
@@ -1457,7 +1654,7 @@ class CertificateBaseProperties(_serialization.Model):
         self.format = format
 
 
-class CertificateCreateOrUpdateParameters(ProxyResource):
+class CertificateCreateOrUpdateParameters(AzureProxyResource):
     """Contains information about a certificate.
 
     Variables are only populated by the server, and will be ignored when sending a request.
@@ -1470,6 +1667,8 @@ class CertificateCreateOrUpdateParameters(ProxyResource):
     :vartype type: str
     :ivar etag: The ETag of the resource, used for concurrency statements.
     :vartype etag: str
+    :ivar tags: The tags of the resource.
+    :vartype tags: dict[str, str]
     :ivar thumbprint_algorithm: This must match the first portion of the certificate name.
      Currently required to be 'SHA1'.
     :vartype thumbprint_algorithm: str
@@ -1496,6 +1695,7 @@ class CertificateCreateOrUpdateParameters(ProxyResource):
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
         "etag": {"key": "etag", "type": "str"},
+        "tags": {"key": "tags", "type": "{str}"},
         "thumbprint_algorithm": {"key": "properties.thumbprintAlgorithm", "type": "str"},
         "thumbprint": {"key": "properties.thumbprint", "type": "str"},
         "format": {"key": "properties.format", "type": "str"},
@@ -1506,6 +1706,7 @@ class CertificateCreateOrUpdateParameters(ProxyResource):
     def __init__(
         self,
         *,
+        tags: Optional[Dict[str, str]] = None,
         thumbprint_algorithm: Optional[str] = None,
         thumbprint: Optional[str] = None,
         format: Optional[Union[str, "_models.CertificateFormat"]] = None,
@@ -1514,6 +1715,8 @@ class CertificateCreateOrUpdateParameters(ProxyResource):
         **kwargs: Any
     ) -> None:
         """
+        :keyword tags: The tags of the resource.
+        :paramtype tags: dict[str, str]
         :keyword thumbprint_algorithm: This must match the first portion of the certificate name.
          Currently required to be 'SHA1'.
         :paramtype thumbprint_algorithm: str
@@ -1527,7 +1730,7 @@ class CertificateCreateOrUpdateParameters(ProxyResource):
         :keyword password: This must not be specified if the certificate format is Cer.
         :paramtype password: str
         """
-        super().__init__(**kwargs)
+        super().__init__(tags=tags, **kwargs)
         self.thumbprint_algorithm = thumbprint_algorithm
         self.thumbprint = thumbprint
         self.format = format
@@ -1538,7 +1741,7 @@ class CertificateCreateOrUpdateParameters(ProxyResource):
 class CertificateCreateOrUpdateProperties(CertificateBaseProperties):
     """Certificate properties for create operations.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar thumbprint_algorithm: This must match the first portion of the certificate name.
      Currently required to be 'SHA1'.
@@ -1683,25 +1886,23 @@ class CertificateReference(_serialization.Model):
     `Azure KeyVault Extension
     <https://learn.microsoft.com/azure/batch/batch-certificate-migration-guide>`_ instead.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: The fully qualified ID of the certificate to install on the pool. This must be inside
      the same batch account as the pool. Required.
     :vartype id: str
     :ivar store_location: The default value is currentUser. This property is applicable only for
-     pools configured with Windows nodes (that is, created with cloudServiceConfiguration, or with
-     virtualMachineConfiguration using a Windows image reference). For Linux compute nodes, the
-     certificates are stored in a directory inside the task working directory and an environment
-     variable AZ_BATCH_CERTIFICATES_DIR is supplied to the task to query for this location. For
-     certificates with visibility of 'remoteUser', a 'certs' directory is created in the user's home
-     directory (e.g., /home/{user-name}/certs) and certificates are placed in that directory. Known
-     values are: "CurrentUser" and "LocalMachine".
+     pools configured with Windows compute nodes. For Linux compute nodes, the certificates are
+     stored in a directory inside the task working directory and an environment variable
+     AZ_BATCH_CERTIFICATES_DIR is supplied to the task to query for this location. For certificates
+     with visibility of 'remoteUser', a 'certs' directory is created in the user's home directory
+     (e.g., /home/{user-name}/certs) and certificates are placed in that directory. Known values
+     are: "CurrentUser" and "LocalMachine".
     :vartype store_location: str or ~azure.mgmt.batch.models.CertificateStoreLocation
-    :ivar store_name: This property is applicable only for pools configured with Windows nodes
-     (that is, created with cloudServiceConfiguration, or with virtualMachineConfiguration using a
-     Windows image reference). Common store names include: My, Root, CA, Trust, Disallowed,
-     TrustedPeople, TrustedPublisher, AuthRoot, AddressBook, but any custom store name can also be
-     used. The default value is My.
+    :ivar store_name: This property is applicable only for pools configured with Windows compute
+     nodes. Common store names include: My, Root, CA, Trust, Disallowed, TrustedPeople,
+     TrustedPublisher, AuthRoot, AddressBook, but any custom store name can also be used. The
+     default value is My.
     :vartype store_name: str
     :ivar visibility: Which user accounts on the compute node should have access to the private
      data of the certificate.
@@ -1733,19 +1934,17 @@ class CertificateReference(_serialization.Model):
          inside the same batch account as the pool. Required.
         :paramtype id: str
         :keyword store_location: The default value is currentUser. This property is applicable only for
-         pools configured with Windows nodes (that is, created with cloudServiceConfiguration, or with
-         virtualMachineConfiguration using a Windows image reference). For Linux compute nodes, the
-         certificates are stored in a directory inside the task working directory and an environment
-         variable AZ_BATCH_CERTIFICATES_DIR is supplied to the task to query for this location. For
-         certificates with visibility of 'remoteUser', a 'certs' directory is created in the user's home
-         directory (e.g., /home/{user-name}/certs) and certificates are placed in that directory. Known
-         values are: "CurrentUser" and "LocalMachine".
+         pools configured with Windows compute nodes. For Linux compute nodes, the certificates are
+         stored in a directory inside the task working directory and an environment variable
+         AZ_BATCH_CERTIFICATES_DIR is supplied to the task to query for this location. For certificates
+         with visibility of 'remoteUser', a 'certs' directory is created in the user's home directory
+         (e.g., /home/{user-name}/certs) and certificates are placed in that directory. Known values
+         are: "CurrentUser" and "LocalMachine".
         :paramtype store_location: str or ~azure.mgmt.batch.models.CertificateStoreLocation
-        :keyword store_name: This property is applicable only for pools configured with Windows nodes
-         (that is, created with cloudServiceConfiguration, or with virtualMachineConfiguration using a
-         Windows image reference). Common store names include: My, Root, CA, Trust, Disallowed,
-         TrustedPeople, TrustedPublisher, AuthRoot, AddressBook, but any custom store name can also be
-         used. The default value is My.
+        :keyword store_name: This property is applicable only for pools configured with Windows compute
+         nodes. Common store names include: My, Root, CA, Trust, Disallowed, TrustedPeople,
+         TrustedPublisher, AuthRoot, AddressBook, but any custom store name can also be used. The
+         default value is My.
         :paramtype store_name: str
         :keyword visibility: Which user accounts on the compute node should have access to the private
          data of the certificate.
@@ -1763,7 +1962,7 @@ class CheckNameAvailabilityParameters(_serialization.Model):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: The name to check for availability. Required.
     :vartype name: str
@@ -1831,7 +2030,7 @@ class CheckNameAvailabilityResult(_serialization.Model):
 class CIFSMountConfiguration(_serialization.Model):
     """Information used to connect to a CIFS file system.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar user_name: The user to use for authentication against the CIFS file system. Required.
     :vartype user_name: str
@@ -1945,50 +2144,6 @@ class CloudErrorBody(_serialization.Model):
         self.details = details
 
 
-class CloudServiceConfiguration(_serialization.Model):
-    """The configuration for nodes in a pool based on the Azure Cloud Services platform.
-
-    All required parameters must be populated in order to send to Azure.
-
-    :ivar os_family: Possible values are: 2 - OS Family 2, equivalent to Windows Server 2008 R2
-     SP1. 3 - OS Family 3, equivalent to Windows Server 2012. 4 - OS Family 4, equivalent to Windows
-     Server 2012 R2. 5 - OS Family 5, equivalent to Windows Server 2016. 6 - OS Family 6, equivalent
-     to Windows Server 2019. For more information, see Azure Guest OS Releases
-     (https://azure.microsoft.com/documentation/articles/cloud-services-guestos-update-matrix/#releases).
-     Required.
-    :vartype os_family: str
-    :ivar os_version: The default value is * which specifies the latest operating system version
-     for the specified OS family.
-    :vartype os_version: str
-    """
-
-    _validation = {
-        "os_family": {"required": True},
-    }
-
-    _attribute_map = {
-        "os_family": {"key": "osFamily", "type": "str"},
-        "os_version": {"key": "osVersion", "type": "str"},
-    }
-
-    def __init__(self, *, os_family: str, os_version: Optional[str] = None, **kwargs: Any) -> None:
-        """
-        :keyword os_family: Possible values are: 2 - OS Family 2, equivalent to Windows Server 2008 R2
-         SP1. 3 - OS Family 3, equivalent to Windows Server 2012. 4 - OS Family 4, equivalent to Windows
-         Server 2012 R2. 5 - OS Family 5, equivalent to Windows Server 2016. 6 - OS Family 6, equivalent
-         to Windows Server 2019. For more information, see Azure Guest OS Releases
-         (https://azure.microsoft.com/documentation/articles/cloud-services-guestos-update-matrix/#releases).
-         Required.
-        :paramtype os_family: str
-        :keyword os_version: The default value is * which specifies the latest operating system version
-         for the specified OS family.
-        :paramtype os_version: str
-        """
-        super().__init__(**kwargs)
-        self.os_family = os_family
-        self.os_version = os_version
-
-
 class ComputeNodeIdentityReference(_serialization.Model):
     """The reference to a user assigned identity associated with the Batch pool which a compute node
     will use.
@@ -2013,7 +2168,7 @@ class ComputeNodeIdentityReference(_serialization.Model):
 class ContainerConfiguration(_serialization.Model):
     """The configuration for container-enabled pools.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: The container technology to be used. Required. Known values are: "DockerCompatible"
      and "CriCompatible".
@@ -2061,6 +2216,46 @@ class ContainerConfiguration(_serialization.Model):
         self.type = type
         self.container_image_names = container_image_names
         self.container_registries = container_registries
+
+
+class ContainerHostBatchBindMountEntry(_serialization.Model):
+    """The entry of path and mount mode you want to mount into task container.
+
+    :ivar source: The paths which will be mounted to container task's container. Known values are:
+     "Shared", "Startup", "VfsMounts", "Task", "JobPrep", and "Applications".
+    :vartype source: str or ~azure.mgmt.batch.models.ContainerHostDataPath
+    :ivar is_read_only: For Linux, if you mount this path as a read/write mode, this does not mean
+     that all users in container have the read/write access for the path, it depends on the access
+     in host VM. If this path is mounted read-only, all users within the container will not be able
+     to modify the path.
+    :vartype is_read_only: bool
+    """
+
+    _attribute_map = {
+        "source": {"key": "source", "type": "str"},
+        "is_read_only": {"key": "isReadOnly", "type": "bool"},
+    }
+
+    def __init__(
+        self,
+        *,
+        source: Optional[Union[str, "_models.ContainerHostDataPath"]] = None,
+        is_read_only: Optional[bool] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword source: The paths which will be mounted to container task's container. Known values
+         are: "Shared", "Startup", "VfsMounts", "Task", "JobPrep", and "Applications".
+        :paramtype source: str or ~azure.mgmt.batch.models.ContainerHostDataPath
+        :keyword is_read_only: For Linux, if you mount this path as a read/write mode, this does not
+         mean that all users in container have the read/write access for the path, it depends on the
+         access in host VM. If this path is mounted read-only, all users within the container will not
+         be able to modify the path.
+        :paramtype is_read_only: bool
+        """
+        super().__init__(**kwargs)
+        self.source = source
+        self.is_read_only = is_read_only
 
 
 class ContainerRegistry(_serialization.Model):
@@ -2115,7 +2310,7 @@ class DataDisk(_serialization.Model):
     """Settings which will be used by the data disks associated to Compute Nodes in the Pool. When
     using attached data disks, you need to mount and format the disks from within a VM to use them.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar lun: The lun is used to uniquely identify each data disk. If attaching multiple disks,
      each should have a distinct lun. The value must be between 0 and 63, inclusive. Required.
@@ -2136,7 +2331,7 @@ class DataDisk(_serialization.Model):
 
       Standard_LRS - The data disk should use standard locally redundant storage.
       Premium_LRS - The data disk should use premium locally redundant storage. Known values are:
-     "Standard_LRS" and "Premium_LRS".
+     "Standard_LRS", "Premium_LRS", and "StandardSSD_LRS".
     :vartype storage_account_type: str or ~azure.mgmt.batch.models.StorageAccountType
     """
 
@@ -2172,7 +2367,7 @@ class DataDisk(_serialization.Model):
           readWrite - The caching mode for the disk is read and write.
 
           The default value for caching is none. For information about the caching options see:
-         https://blogs.msdn.microsoft.com/windowsazurestorage/2012/06/27/exploring-windows-azure-drives-disks-and-images/.
+         https://blogs.msdn.microsoft.com/windowsazurestorage/2012/06/27/exploring-windows-azure-drives-disks-and-images/.  # pylint: disable=line-too-long
          Known values are: "None", "ReadOnly", and "ReadWrite".
         :paramtype caching: str or ~azure.mgmt.batch.models.CachingType
         :keyword disk_size_gb: The initial disk size in GB when creating new data disk. Required.
@@ -2181,7 +2376,7 @@ class DataDisk(_serialization.Model):
 
           Standard_LRS - The data disk should use standard locally redundant storage.
           Premium_LRS - The data disk should use premium locally redundant storage. Known values are:
-         "Standard_LRS" and "Premium_LRS".
+         "Standard_LRS", "Premium_LRS", and "StandardSSD_LRS".
         :paramtype storage_account_type: str or ~azure.mgmt.batch.models.StorageAccountType
         """
         super().__init__(**kwargs)
@@ -2194,7 +2389,7 @@ class DataDisk(_serialization.Model):
 class DeleteCertificateError(_serialization.Model):
     """An error response from the Batch service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar code: An identifier for the error. Codes are invariant and are intended to be consumed
      programmatically. Required.
@@ -2253,39 +2448,24 @@ class DeleteCertificateError(_serialization.Model):
 class DeploymentConfiguration(_serialization.Model):
     """Deployment configuration properties.
 
-    :ivar cloud_service_configuration: This property and virtualMachineConfiguration are mutually
-     exclusive and one of the properties must be specified. This property cannot be specified if the
-     Batch account was created with its poolAllocationMode property set to 'UserSubscription'.
-    :vartype cloud_service_configuration: ~azure.mgmt.batch.models.CloudServiceConfiguration
-    :ivar virtual_machine_configuration: This property and cloudServiceConfiguration are mutually
-     exclusive and one of the properties must be specified.
+    :ivar virtual_machine_configuration: The configuration for compute nodes in a pool based on the
+     Azure Virtual Machines infrastructure.
     :vartype virtual_machine_configuration: ~azure.mgmt.batch.models.VirtualMachineConfiguration
     """
 
     _attribute_map = {
-        "cloud_service_configuration": {"key": "cloudServiceConfiguration", "type": "CloudServiceConfiguration"},
         "virtual_machine_configuration": {"key": "virtualMachineConfiguration", "type": "VirtualMachineConfiguration"},
     }
 
     def __init__(
-        self,
-        *,
-        cloud_service_configuration: Optional["_models.CloudServiceConfiguration"] = None,
-        virtual_machine_configuration: Optional["_models.VirtualMachineConfiguration"] = None,
-        **kwargs: Any
+        self, *, virtual_machine_configuration: Optional["_models.VirtualMachineConfiguration"] = None, **kwargs: Any
     ) -> None:
         """
-        :keyword cloud_service_configuration: This property and virtualMachineConfiguration are
-         mutually exclusive and one of the properties must be specified. This property cannot be
-         specified if the Batch account was created with its poolAllocationMode property set to
-         'UserSubscription'.
-        :paramtype cloud_service_configuration: ~azure.mgmt.batch.models.CloudServiceConfiguration
-        :keyword virtual_machine_configuration: This property and cloudServiceConfiguration are
-         mutually exclusive and one of the properties must be specified.
+        :keyword virtual_machine_configuration: The configuration for compute nodes in a pool based on
+         the Azure Virtual Machines infrastructure.
         :paramtype virtual_machine_configuration: ~azure.mgmt.batch.models.VirtualMachineConfiguration
         """
         super().__init__(**kwargs)
-        self.cloud_service_configuration = cloud_service_configuration
         self.virtual_machine_configuration = virtual_machine_configuration
 
 
@@ -2321,7 +2501,7 @@ class DetectorListResult(_serialization.Model):
         self.next_link = next_link
 
 
-class DetectorResponse(ProxyResource):
+class DetectorResponse(AzureProxyResource):
     """Contains the information for a detector.
 
     Variables are only populated by the server, and will be ignored when sending a request.
@@ -2334,6 +2514,8 @@ class DetectorResponse(ProxyResource):
     :vartype type: str
     :ivar etag: The ETag of the resource, used for concurrency statements.
     :vartype etag: str
+    :ivar tags: The tags of the resource.
+    :vartype tags: dict[str, str]
     :ivar value: A base64 encoded string that represents the content of a detector.
     :vartype value: str
     """
@@ -2350,15 +2532,18 @@ class DetectorResponse(ProxyResource):
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
         "etag": {"key": "etag", "type": "str"},
+        "tags": {"key": "tags", "type": "{str}"},
         "value": {"key": "properties.value", "type": "str"},
     }
 
-    def __init__(self, *, value: Optional[str] = None, **kwargs: Any) -> None:
+    def __init__(self, *, tags: Optional[Dict[str, str]] = None, value: Optional[str] = None, **kwargs: Any) -> None:
         """
+        :keyword tags: The tags of the resource.
+        :paramtype tags: dict[str, str]
         :keyword value: A base64 encoded string that represents the content of a detector.
         :paramtype value: str
         """
-        super().__init__(**kwargs)
+        super().__init__(tags=tags, **kwargs)
         self.value = value
 
 
@@ -2399,8 +2584,8 @@ class DiffDiskSettings(_serialization.Model):
 
 class DiskEncryptionConfiguration(_serialization.Model):
     """The disk encryption configuration applied on compute nodes in the pool. Disk encryption
-    configuration is not supported on Linux pool created with Virtual Machine Image or Shared Image
-    Gallery Image.
+    configuration is not supported on Linux pool created with Virtual Machine Image or Azure
+    Compute Gallery Image.
 
     :ivar targets: On Linux pool, only "TemporaryDisk" is supported; on Windows pool, "OsDisk" and
      "TemporaryDisk" must be specified.
@@ -2462,7 +2647,7 @@ class EncryptionProperties(_serialization.Model):
 class EndpointAccessProfile(_serialization.Model):
     """Network access profile for Batch endpoint.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar default_action: Default action for endpoint access. It is only applicable when
      publicNetworkAccess is enabled. Required. Known values are: "Allow" and "Deny".
@@ -2560,7 +2745,7 @@ class EndpointDetail(_serialization.Model):
 class EnvironmentSetting(_serialization.Model):
     """An environment variable to be set on a task process.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: The name of the environment variable. Required.
     :vartype name: str
@@ -2587,6 +2772,98 @@ class EnvironmentSetting(_serialization.Model):
         super().__init__(**kwargs)
         self.name = name
         self.value = value
+
+
+class ErrorAdditionalInfo(_serialization.Model):
+    """The resource management error additional info.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar type: The additional info type.
+    :vartype type: str
+    :ivar info: The additional info.
+    :vartype info: JSON
+    """
+
+    _validation = {
+        "type": {"readonly": True},
+        "info": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "type": {"key": "type", "type": "str"},
+        "info": {"key": "info", "type": "object"},
+    }
+
+    def __init__(self, **kwargs: Any) -> None:
+        """ """
+        super().__init__(**kwargs)
+        self.type = None
+        self.info = None
+
+
+class ErrorDetail(_serialization.Model):
+    """The error detail.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar code: The error code.
+    :vartype code: str
+    :ivar message: The error message.
+    :vartype message: str
+    :ivar target: The error target.
+    :vartype target: str
+    :ivar details: The error details.
+    :vartype details: list[~azure.mgmt.batch.models.ErrorDetail]
+    :ivar additional_info: The error additional info.
+    :vartype additional_info: list[~azure.mgmt.batch.models.ErrorAdditionalInfo]
+    """
+
+    _validation = {
+        "code": {"readonly": True},
+        "message": {"readonly": True},
+        "target": {"readonly": True},
+        "details": {"readonly": True},
+        "additional_info": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "code": {"key": "code", "type": "str"},
+        "message": {"key": "message", "type": "str"},
+        "target": {"key": "target", "type": "str"},
+        "details": {"key": "details", "type": "[ErrorDetail]"},
+        "additional_info": {"key": "additionalInfo", "type": "[ErrorAdditionalInfo]"},
+    }
+
+    def __init__(self, **kwargs: Any) -> None:
+        """ """
+        super().__init__(**kwargs)
+        self.code = None
+        self.message = None
+        self.target = None
+        self.details = None
+        self.additional_info = None
+
+
+class ErrorResponse(_serialization.Model):
+    """Common error response for all Azure Resource Manager APIs to return error details for failed
+    operations. (This also follows the OData error response format.).
+
+    :ivar error: The error object.
+    :vartype error: ~azure.mgmt.batch.models.ErrorDetail
+    """
+
+    _attribute_map = {
+        "error": {"key": "error", "type": "ErrorDetail"},
+    }
+
+    def __init__(self, *, error: Optional["_models.ErrorDetail"] = None, **kwargs: Any) -> None:
+        """
+        :keyword error: The error object.
+        :paramtype error: ~azure.mgmt.batch.models.ErrorDetail
+        """
+        super().__init__(**kwargs)
+        self.error = error
 
 
 class FixedScaleSettings(_serialization.Model):
@@ -2619,7 +2896,7 @@ class FixedScaleSettings(_serialization.Model):
     def __init__(
         self,
         *,
-        resize_timeout: Optional[datetime.timedelta] = None,
+        resize_timeout: datetime.timedelta = "PT15M",
         target_dedicated_nodes: Optional[int] = None,
         target_low_priority_nodes: Optional[int] = None,
         node_deallocation_option: Optional[Union[str, "_models.ComputeNodeDeallocationOption"]] = None,
@@ -2663,11 +2940,17 @@ class ImageReference(_serialization.Model):
     :ivar version: A value of 'latest' can be specified to select the latest version of an image.
      If omitted, the default is 'latest'.
     :vartype version: str
-    :ivar id: This property is mutually exclusive with other properties. The Shared Image Gallery
-     image must have replicas in the same region as the Azure Batch account. For information about
+    :ivar id: This property is mutually exclusive with other properties. The Azure Compute Gallery
+     Image must have replicas in the same region as the Azure Batch account. For information about
      the firewall settings for the Batch node agent to communicate with the Batch service see
      https://docs.microsoft.com/en-us/azure/batch/batch-api-basics#virtual-network-vnet-and-firewall-configuration.
     :vartype id: str
+    :ivar shared_gallery_image_id: This property is mutually exclusive with other properties and
+     can be fetched from shared gallery image GET call.
+    :vartype shared_gallery_image_id: str
+    :ivar community_gallery_image_id: This property is mutually exclusive with other properties and
+     can be fetched from community gallery image GET call.
+    :vartype community_gallery_image_id: str
     """
 
     _attribute_map = {
@@ -2676,6 +2959,8 @@ class ImageReference(_serialization.Model):
         "sku": {"key": "sku", "type": "str"},
         "version": {"key": "version", "type": "str"},
         "id": {"key": "id", "type": "str"},
+        "shared_gallery_image_id": {"key": "sharedGalleryImageId", "type": "str"},
+        "community_gallery_image_id": {"key": "communityGalleryImageId", "type": "str"},
     }
 
     def __init__(
@@ -2686,6 +2971,8 @@ class ImageReference(_serialization.Model):
         sku: Optional[str] = None,
         version: Optional[str] = None,
         id: Optional[str] = None,  # pylint: disable=redefined-builtin
+        shared_gallery_image_id: Optional[str] = None,
+        community_gallery_image_id: Optional[str] = None,
         **kwargs: Any
     ) -> None:
         """
@@ -2698,11 +2985,17 @@ class ImageReference(_serialization.Model):
         :keyword version: A value of 'latest' can be specified to select the latest version of an
          image. If omitted, the default is 'latest'.
         :paramtype version: str
-        :keyword id: This property is mutually exclusive with other properties. The Shared Image
-         Gallery image must have replicas in the same region as the Azure Batch account. For information
+        :keyword id: This property is mutually exclusive with other properties. The Azure Compute
+         Gallery Image must have replicas in the same region as the Azure Batch account. For information
          about the firewall settings for the Batch node agent to communicate with the Batch service see
          https://docs.microsoft.com/en-us/azure/batch/batch-api-basics#virtual-network-vnet-and-firewall-configuration.
         :paramtype id: str
+        :keyword shared_gallery_image_id: This property is mutually exclusive with other properties and
+         can be fetched from shared gallery image GET call.
+        :paramtype shared_gallery_image_id: str
+        :keyword community_gallery_image_id: This property is mutually exclusive with other properties
+         and can be fetched from community gallery image GET call.
+        :paramtype community_gallery_image_id: str
         """
         super().__init__(**kwargs)
         self.publisher = publisher
@@ -2710,13 +3003,15 @@ class ImageReference(_serialization.Model):
         self.sku = sku
         self.version = version
         self.id = id
+        self.shared_gallery_image_id = shared_gallery_image_id
+        self.community_gallery_image_id = community_gallery_image_id
 
 
 class InboundNatPool(_serialization.Model):
     """A inbound NAT pool that can be used to address specific ports on compute nodes in a Batch pool
     externally.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: The name must be unique within a Batch pool, can contain letters, numbers,
      underscores, periods, and hyphens. Names must start with a letter or number, must end with a
@@ -2819,7 +3114,7 @@ class IPRule(_serialization.Model):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar action: Action when client IP address is matched. Required. Default value is "Allow".
     :vartype action: str
@@ -2885,7 +3180,7 @@ class KeyVaultProperties(_serialization.Model):
 class KeyVaultReference(_serialization.Model):
     """Identifies the Azure key vault associated with a Batch account.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: The resource ID of the Azure key vault associated with the Batch account. Required.
     :vartype id: str
@@ -3149,11 +3444,49 @@ class ListPrivateLinkResourcesResult(_serialization.Model):
         self.next_link = next_link
 
 
+class ManagedDisk(_serialization.Model):
+    """ManagedDisk.
+
+    :ivar storage_account_type: The storage account type for use in creating data disks or OS disk.
+     Known values are: "Standard_LRS", "Premium_LRS", and "StandardSSD_LRS".
+    :vartype storage_account_type: str or ~azure.mgmt.batch.models.StorageAccountType
+    :ivar security_profile: Specifies the security profile settings for the managed disk.
+     **Note**\\ : It can only be set for Confidential VMs and is required when using Confidential
+     VMs.
+    :vartype security_profile: ~azure.mgmt.batch.models.VMDiskSecurityProfile
+    """
+
+    _attribute_map = {
+        "storage_account_type": {"key": "storageAccountType", "type": "str"},
+        "security_profile": {"key": "securityProfile", "type": "VMDiskSecurityProfile"},
+    }
+
+    def __init__(
+        self,
+        *,
+        storage_account_type: Optional[Union[str, "_models.StorageAccountType"]] = None,
+        security_profile: Optional["_models.VMDiskSecurityProfile"] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword storage_account_type: The storage account type for use in creating data disks or OS
+         disk. Known values are: "Standard_LRS", "Premium_LRS", and "StandardSSD_LRS".
+        :paramtype storage_account_type: str or ~azure.mgmt.batch.models.StorageAccountType
+        :keyword security_profile: Specifies the security profile settings for the managed disk.
+         **Note**\\ : It can only be set for Confidential VMs and is required when using Confidential
+         VMs.
+        :paramtype security_profile: ~azure.mgmt.batch.models.VMDiskSecurityProfile
+        """
+        super().__init__(**kwargs)
+        self.storage_account_type = storage_account_type
+        self.security_profile = security_profile
+
+
 class MetadataItem(_serialization.Model):
     """The Batch service does not assign any meaning to this metadata; it is solely for the use of
     user code.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: The name of the metadata item. Required.
     :vartype name: str
@@ -3254,22 +3587,19 @@ class NetworkConfiguration(_serialization.Model):
      communication to the compute nodes in the specified subnet is denied by an NSG, then the Batch
      service will set the state of the compute nodes to unusable. If the specified VNet has any
      associated Network Security Groups (NSG), then a few reserved system ports must be enabled for
-     inbound communication. For pools created with a virtual machine configuration, enable ports
-     29876 and 29877, as well as port 22 for Linux and port 3389 for Windows. For pools created with
-     a cloud service configuration, enable ports 10100, 20100, and 30100. Also enable outbound
-     connections to Azure Storage on port 443. For cloudServiceConfiguration pools, only 'classic'
-     VNETs are supported. For more details see:
+     inbound communication. Enable ports 29876 and 29877, as well as port 22 for Linux and port 3389
+     for Windows. Also enable outbound connections to Azure Storage on port 443. For more details
+     see:
      https://docs.microsoft.com/en-us/azure/batch/batch-api-basics#virtual-network-vnet-and-firewall-configuration.
     :vartype subnet_id: str
     :ivar dynamic_vnet_assignment_scope: The scope of dynamic vnet assignment. Known values are:
      "none" and "job".
     :vartype dynamic_vnet_assignment_scope: str or
      ~azure.mgmt.batch.models.DynamicVNetAssignmentScope
-    :ivar endpoint_configuration: Pool endpoint configuration is only supported on pools with the
-     virtualMachineConfiguration property.
+    :ivar endpoint_configuration: The endpoint configuration for a pool.
     :vartype endpoint_configuration: ~azure.mgmt.batch.models.PoolEndpointConfiguration
-    :ivar public_ip_address_configuration: This property is only supported on Pools with the
-     virtualMachineConfiguration property.
+    :ivar public_ip_address_configuration: The public IP Address configuration of the networking
+     configuration of a Pool.
     :vartype public_ip_address_configuration: ~azure.mgmt.batch.models.PublicIPAddressConfiguration
     :ivar enable_accelerated_networking: Accelerated networking enables single root I/O
      virtualization (SR-IOV) to a VM, which may lead to improved networking performance. For more
@@ -3293,7 +3623,7 @@ class NetworkConfiguration(_serialization.Model):
         self,
         *,
         subnet_id: Optional[str] = None,
-        dynamic_vnet_assignment_scope: Optional[Union[str, "_models.DynamicVNetAssignmentScope"]] = None,
+        dynamic_vnet_assignment_scope: Union[str, "_models.DynamicVNetAssignmentScope"] = "none",
         endpoint_configuration: Optional["_models.PoolEndpointConfiguration"] = None,
         public_ip_address_configuration: Optional["_models.PublicIPAddressConfiguration"] = None,
         enable_accelerated_networking: Optional[bool] = None,
@@ -3311,22 +3641,19 @@ class NetworkConfiguration(_serialization.Model):
          communication to the compute nodes in the specified subnet is denied by an NSG, then the Batch
          service will set the state of the compute nodes to unusable. If the specified VNet has any
          associated Network Security Groups (NSG), then a few reserved system ports must be enabled for
-         inbound communication. For pools created with a virtual machine configuration, enable ports
-         29876 and 29877, as well as port 22 for Linux and port 3389 for Windows. For pools created with
-         a cloud service configuration, enable ports 10100, 20100, and 30100. Also enable outbound
-         connections to Azure Storage on port 443. For cloudServiceConfiguration pools, only 'classic'
-         VNETs are supported. For more details see:
+         inbound communication. Enable ports 29876 and 29877, as well as port 22 for Linux and port 3389
+         for Windows. Also enable outbound connections to Azure Storage on port 443. For more details
+         see:
          https://docs.microsoft.com/en-us/azure/batch/batch-api-basics#virtual-network-vnet-and-firewall-configuration.
         :paramtype subnet_id: str
         :keyword dynamic_vnet_assignment_scope: The scope of dynamic vnet assignment. Known values are:
          "none" and "job".
         :paramtype dynamic_vnet_assignment_scope: str or
          ~azure.mgmt.batch.models.DynamicVNetAssignmentScope
-        :keyword endpoint_configuration: Pool endpoint configuration is only supported on pools with
-         the virtualMachineConfiguration property.
+        :keyword endpoint_configuration: The endpoint configuration for a pool.
         :paramtype endpoint_configuration: ~azure.mgmt.batch.models.PoolEndpointConfiguration
-        :keyword public_ip_address_configuration: This property is only supported on Pools with the
-         virtualMachineConfiguration property.
+        :keyword public_ip_address_configuration: The public IP Address configuration of the networking
+         configuration of a Pool.
         :paramtype public_ip_address_configuration:
          ~azure.mgmt.batch.models.PublicIPAddressConfiguration
         :keyword enable_accelerated_networking: Accelerated networking enables single root I/O
@@ -3382,7 +3709,7 @@ class NetworkProfile(_serialization.Model):
 class NetworkSecurityGroupRule(_serialization.Model):
     """A network security group rule to apply to an inbound endpoint.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar priority: Priorities within a pool must be unique and are evaluated in order of priority.
      The lower the number the higher the priority. For example, rules could be specified with order
@@ -3397,7 +3724,7 @@ class NetworkSecurityGroupRule(_serialization.Model):
      (i.e. 192.168.1.0/24), default tag, or * (for all addresses).  If any other values are provided
      the request fails with HTTP status code 400. Required.
     :vartype source_address_prefix: str
-    :ivar source_port_ranges: Valid values are '\ *' (for all ports 0 - 65535) or arrays of ports
+    :ivar source_port_ranges: Valid values are '\\ *' (for all ports 0 - 65535) or arrays of ports
      or port ranges (i.e. 100-200). The ports should in the range of 0 to 65535 and the port ranges
      or ports can't overlap. If any other values are provided the request fails with HTTP status
      code 400. Default value will be *.
@@ -3440,7 +3767,7 @@ class NetworkSecurityGroupRule(_serialization.Model):
          subnet (i.e. 192.168.1.0/24), default tag, or * (for all addresses).  If any other values are
          provided the request fails with HTTP status code 400. Required.
         :paramtype source_address_prefix: str
-        :keyword source_port_ranges: Valid values are '\ *' (for all ports 0 - 65535) or arrays of
+        :keyword source_port_ranges: Valid values are '\\ *' (for all ports 0 - 65535) or arrays of
          ports or port ranges (i.e. 100-200). The ports should in the range of 0 to 65535 and the port
          ranges or ports can't overlap. If any other values are provided the request fails with HTTP
          status code 400. Default value will be *.
@@ -3453,10 +3780,298 @@ class NetworkSecurityGroupRule(_serialization.Model):
         self.source_port_ranges = source_port_ranges
 
 
+class NetworkSecurityPerimeter(_serialization.Model):
+    """Information about a network security perimeter (NSP).
+
+    :ivar id: Fully qualified Azure resource ID of the NSP resource.
+    :vartype id: str
+    :ivar perimeter_guid: Universal unique ID (UUID) of the network security perimeter.
+    :vartype perimeter_guid: str
+    :ivar location: Location of the network security perimeter.
+    :vartype location: str
+    """
+
+    _attribute_map = {
+        "id": {"key": "id", "type": "str"},
+        "perimeter_guid": {"key": "perimeterGuid", "type": "str"},
+        "location": {"key": "location", "type": "str"},
+    }
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,  # pylint: disable=redefined-builtin
+        perimeter_guid: Optional[str] = None,
+        location: Optional[str] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword id: Fully qualified Azure resource ID of the NSP resource.
+        :paramtype id: str
+        :keyword perimeter_guid: Universal unique ID (UUID) of the network security perimeter.
+        :paramtype perimeter_guid: str
+        :keyword location: Location of the network security perimeter.
+        :paramtype location: str
+        """
+        super().__init__(**kwargs)
+        self.id = id
+        self.perimeter_guid = perimeter_guid
+        self.location = location
+
+
+class Resource(_serialization.Model):
+    """Common fields that are returned in the response for all Azure Resource Manager resources.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
+    :vartype id: str
+    :ivar name: The name of the resource.
+    :vartype name: str
+    :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
+     "Microsoft.Storage/storageAccounts".
+    :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.batch.models.SystemData
+    """
+
+    _validation = {
+        "id": {"readonly": True},
+        "name": {"readonly": True},
+        "type": {"readonly": True},
+        "system_data": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "id": {"key": "id", "type": "str"},
+        "name": {"key": "name", "type": "str"},
+        "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
+    }
+
+    def __init__(self, **kwargs: Any) -> None:
+        """ """
+        super().__init__(**kwargs)
+        self.id = None
+        self.name = None
+        self.type = None
+        self.system_data = None
+
+
+class ProxyResource(Resource):
+    """The resource model definition for a Azure Resource Manager proxy resource. It will not have
+    tags and a location.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
+    :vartype id: str
+    :ivar name: The name of the resource.
+    :vartype name: str
+    :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
+     "Microsoft.Storage/storageAccounts".
+    :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.batch.models.SystemData
+    """
+
+
+class NetworkSecurityPerimeterConfiguration(ProxyResource):
+    """Network security perimeter (NSP) configuration resource.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
+    :vartype id: str
+    :ivar name: The name of the resource.
+    :vartype name: str
+    :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
+     "Microsoft.Storage/storageAccounts".
+    :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.batch.models.SystemData
+    :ivar properties: Network security configuration properties.
+    :vartype properties: ~azure.mgmt.batch.models.NetworkSecurityPerimeterConfigurationProperties
+    """
+
+    _validation = {
+        "id": {"readonly": True},
+        "name": {"readonly": True},
+        "type": {"readonly": True},
+        "system_data": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "id": {"key": "id", "type": "str"},
+        "name": {"key": "name", "type": "str"},
+        "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
+        "properties": {"key": "properties", "type": "NetworkSecurityPerimeterConfigurationProperties"},
+    }
+
+    def __init__(
+        self, *, properties: Optional["_models.NetworkSecurityPerimeterConfigurationProperties"] = None, **kwargs: Any
+    ) -> None:
+        """
+        :keyword properties: Network security configuration properties.
+        :paramtype properties: ~azure.mgmt.batch.models.NetworkSecurityPerimeterConfigurationProperties
+        """
+        super().__init__(**kwargs)
+        self.properties = properties
+
+
+class NetworkSecurityPerimeterConfigurationListResult(_serialization.Model):  # pylint: disable=name-too-long
+    """Result of a list NSP (network security perimeter) configurations request.
+
+    :ivar value: Array of network security perimeter results.
+    :vartype value: list[~azure.mgmt.batch.models.NetworkSecurityPerimeterConfiguration]
+    :ivar next_link: The link used to get the next page of results.
+    :vartype next_link: str
+    """
+
+    _attribute_map = {
+        "value": {"key": "value", "type": "[NetworkSecurityPerimeterConfiguration]"},
+        "next_link": {"key": "nextLink", "type": "str"},
+    }
+
+    def __init__(
+        self,
+        *,
+        value: Optional[List["_models.NetworkSecurityPerimeterConfiguration"]] = None,
+        next_link: Optional[str] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword value: Array of network security perimeter results.
+        :paramtype value: list[~azure.mgmt.batch.models.NetworkSecurityPerimeterConfiguration]
+        :keyword next_link: The link used to get the next page of results.
+        :paramtype next_link: str
+        """
+        super().__init__(**kwargs)
+        self.value = value
+        self.next_link = next_link
+
+
+class NetworkSecurityPerimeterConfigurationProperties(_serialization.Model):  # pylint: disable=name-too-long
+    """Network security configuration properties.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar provisioning_state: Provisioning state of a network security perimeter configuration that
+     is being created or updated. Known values are: "Succeeded", "Creating", "Updating", "Deleting",
+     "Accepted", "Failed", and "Canceled".
+    :vartype provisioning_state: str or
+     ~azure.mgmt.batch.models.NetworkSecurityPerimeterConfigurationProvisioningState
+    :ivar provisioning_issues: List of provisioning issues, if any.
+    :vartype provisioning_issues: list[~azure.mgmt.batch.models.ProvisioningIssue]
+    :ivar network_security_perimeter: Information about a network security perimeter (NSP).
+    :vartype network_security_perimeter: ~azure.mgmt.batch.models.NetworkSecurityPerimeter
+    :ivar resource_association: Information about resource association.
+    :vartype resource_association: ~azure.mgmt.batch.models.ResourceAssociation
+    :ivar profile: Network security perimeter configuration profile.
+    :vartype profile: ~azure.mgmt.batch.models.NetworkSecurityProfile
+    """
+
+    _validation = {
+        "provisioning_state": {"readonly": True},
+        "provisioning_issues": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "provisioning_state": {"key": "provisioningState", "type": "str"},
+        "provisioning_issues": {"key": "provisioningIssues", "type": "[ProvisioningIssue]"},
+        "network_security_perimeter": {"key": "networkSecurityPerimeter", "type": "NetworkSecurityPerimeter"},
+        "resource_association": {"key": "resourceAssociation", "type": "ResourceAssociation"},
+        "profile": {"key": "profile", "type": "NetworkSecurityProfile"},
+    }
+
+    def __init__(
+        self,
+        *,
+        network_security_perimeter: Optional["_models.NetworkSecurityPerimeter"] = None,
+        resource_association: Optional["_models.ResourceAssociation"] = None,
+        profile: Optional["_models.NetworkSecurityProfile"] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword network_security_perimeter: Information about a network security perimeter (NSP).
+        :paramtype network_security_perimeter: ~azure.mgmt.batch.models.NetworkSecurityPerimeter
+        :keyword resource_association: Information about resource association.
+        :paramtype resource_association: ~azure.mgmt.batch.models.ResourceAssociation
+        :keyword profile: Network security perimeter configuration profile.
+        :paramtype profile: ~azure.mgmt.batch.models.NetworkSecurityProfile
+        """
+        super().__init__(**kwargs)
+        self.provisioning_state = None
+        self.provisioning_issues = None
+        self.network_security_perimeter = network_security_perimeter
+        self.resource_association = resource_association
+        self.profile = profile
+
+
+class NetworkSecurityProfile(_serialization.Model):
+    """Network security perimeter configuration profile.
+
+    :ivar name: Name of the profile.
+    :vartype name: str
+    :ivar access_rules_version: Current access rules version.
+    :vartype access_rules_version: int
+    :ivar access_rules: List of Access Rules.
+    :vartype access_rules: list[~azure.mgmt.batch.models.AccessRule]
+    :ivar diagnostic_settings_version: Current diagnostic settings version.
+    :vartype diagnostic_settings_version: int
+    :ivar enabled_log_categories: List of log categories that are enabled.
+    :vartype enabled_log_categories: list[str]
+    """
+
+    _attribute_map = {
+        "name": {"key": "name", "type": "str"},
+        "access_rules_version": {"key": "accessRulesVersion", "type": "int"},
+        "access_rules": {"key": "accessRules", "type": "[AccessRule]"},
+        "diagnostic_settings_version": {"key": "diagnosticSettingsVersion", "type": "int"},
+        "enabled_log_categories": {"key": "enabledLogCategories", "type": "[str]"},
+    }
+
+    def __init__(
+        self,
+        *,
+        name: Optional[str] = None,
+        access_rules_version: Optional[int] = None,
+        access_rules: Optional[List["_models.AccessRule"]] = None,
+        diagnostic_settings_version: Optional[int] = None,
+        enabled_log_categories: Optional[List[str]] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword name: Name of the profile.
+        :paramtype name: str
+        :keyword access_rules_version: Current access rules version.
+        :paramtype access_rules_version: int
+        :keyword access_rules: List of Access Rules.
+        :paramtype access_rules: list[~azure.mgmt.batch.models.AccessRule]
+        :keyword diagnostic_settings_version: Current diagnostic settings version.
+        :paramtype diagnostic_settings_version: int
+        :keyword enabled_log_categories: List of log categories that are enabled.
+        :paramtype enabled_log_categories: list[str]
+        """
+        super().__init__(**kwargs)
+        self.name = name
+        self.access_rules_version = access_rules_version
+        self.access_rules = access_rules
+        self.diagnostic_settings_version = diagnostic_settings_version
+        self.enabled_log_categories = enabled_log_categories
+
+
 class NFSMountConfiguration(_serialization.Model):
     """Information used to connect to an NFS file system.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar source: The URI of the file system to mount. Required.
     :vartype source: str
@@ -3654,22 +4269,57 @@ class OSDisk(_serialization.Model):
     :ivar ephemeral_os_disk_settings: Specifies the ephemeral Disk Settings for the operating
      system disk used by the virtual machine.
     :vartype ephemeral_os_disk_settings: ~azure.mgmt.batch.models.DiffDiskSettings
+    :ivar caching: The type of caching to enable for the disk. Known values are: "None",
+     "ReadOnly", and "ReadWrite".
+    :vartype caching: str or ~azure.mgmt.batch.models.CachingType
+    :ivar managed_disk:
+    :vartype managed_disk: ~azure.mgmt.batch.models.ManagedDisk
+    :ivar disk_size_gb: The initial disk size in GB when creating new OS disk.
+    :vartype disk_size_gb: int
+    :ivar write_accelerator_enabled: Specifies whether writeAccelerator should be enabled or
+     disabled on the disk.
+    :vartype write_accelerator_enabled: bool
     """
 
     _attribute_map = {
         "ephemeral_os_disk_settings": {"key": "ephemeralOSDiskSettings", "type": "DiffDiskSettings"},
+        "caching": {"key": "caching", "type": "str"},
+        "managed_disk": {"key": "managedDisk", "type": "ManagedDisk"},
+        "disk_size_gb": {"key": "diskSizeGB", "type": "int"},
+        "write_accelerator_enabled": {"key": "writeAcceleratorEnabled", "type": "bool"},
     }
 
     def __init__(
-        self, *, ephemeral_os_disk_settings: Optional["_models.DiffDiskSettings"] = None, **kwargs: Any
+        self,
+        *,
+        ephemeral_os_disk_settings: Optional["_models.DiffDiskSettings"] = None,
+        caching: Optional[Union[str, "_models.CachingType"]] = None,
+        managed_disk: Optional["_models.ManagedDisk"] = None,
+        disk_size_gb: Optional[int] = None,
+        write_accelerator_enabled: Optional[bool] = None,
+        **kwargs: Any
     ) -> None:
         """
         :keyword ephemeral_os_disk_settings: Specifies the ephemeral Disk Settings for the operating
          system disk used by the virtual machine.
         :paramtype ephemeral_os_disk_settings: ~azure.mgmt.batch.models.DiffDiskSettings
+        :keyword caching: The type of caching to enable for the disk. Known values are: "None",
+         "ReadOnly", and "ReadWrite".
+        :paramtype caching: str or ~azure.mgmt.batch.models.CachingType
+        :keyword managed_disk:
+        :paramtype managed_disk: ~azure.mgmt.batch.models.ManagedDisk
+        :keyword disk_size_gb: The initial disk size in GB when creating new OS disk.
+        :paramtype disk_size_gb: int
+        :keyword write_accelerator_enabled: Specifies whether writeAccelerator should be enabled or
+         disabled on the disk.
+        :paramtype write_accelerator_enabled: bool
         """
         super().__init__(**kwargs)
         self.ephemeral_os_disk_settings = ephemeral_os_disk_settings
+        self.caching = caching
+        self.managed_disk = managed_disk
+        self.disk_size_gb = disk_size_gb
+        self.write_accelerator_enabled = write_accelerator_enabled
 
 
 class OutboundEnvironmentEndpoint(_serialization.Model):
@@ -3733,7 +4383,7 @@ class OutboundEnvironmentEndpointCollection(_serialization.Model):
         self.next_link = next_link
 
 
-class Pool(ProxyResource):  # pylint: disable=too-many-instance-attributes
+class Pool(AzureProxyResource):  # pylint: disable=too-many-instance-attributes
     """Contains information about a pool.
 
     Variables are only populated by the server, and will be ignored when sending a request.
@@ -3746,6 +4396,8 @@ class Pool(ProxyResource):  # pylint: disable=too-many-instance-attributes
     :vartype type: str
     :ivar etag: The ETag of the resource, used for concurrency statements.
     :vartype etag: str
+    :ivar tags: The tags of the resource.
+    :vartype tags: dict[str, str]
     :ivar identity: The type of identity used for the Batch Pool.
     :vartype identity: ~azure.mgmt.batch.models.BatchPoolIdentity
     :ivar display_name: The display name need not be unique and can contain any Unicode characters
@@ -3768,21 +4420,14 @@ class Pool(ProxyResource):  # pylint: disable=too-many-instance-attributes
     :ivar allocation_state_transition_time: The time at which the pool entered its current
      allocation state.
     :vartype allocation_state_transition_time: ~datetime.datetime
-    :ivar vm_size: For information about available sizes of virtual machines for Cloud Services
-     pools (pools created with cloudServiceConfiguration), see Sizes for Cloud Services
-     (https://azure.microsoft.com/documentation/articles/cloud-services-sizes-specs/). Batch
-     supports all Cloud Services VM sizes except ExtraSmall. For information about available VM
-     sizes for pools using images from the Virtual Machines Marketplace (pools created with
-     virtualMachineConfiguration) see Sizes for Virtual Machines (Linux)
+    :ivar vm_size: For information about available VM sizes, see Sizes for Virtual Machines (Linux)
      (https://azure.microsoft.com/documentation/articles/virtual-machines-linux-sizes/) or Sizes for
      Virtual Machines (Windows)
      (https://azure.microsoft.com/documentation/articles/virtual-machines-windows-sizes/). Batch
      supports all Azure VM sizes except STANDARD_A0 and those with premium storage (STANDARD_GS,
      STANDARD_DS, and STANDARD_DSV2 series).
     :vartype vm_size: str
-    :ivar deployment_configuration: Using CloudServiceConfiguration specifies that the nodes should
-     be creating using Azure Cloud Services (PaaS), while VirtualMachineConfiguration uses Azure
-     Virtual Machines (IaaS).
+    :ivar deployment_configuration: Deployment configuration properties.
     :vartype deployment_configuration: ~azure.mgmt.batch.models.DeploymentConfiguration
     :ivar current_dedicated_nodes: The number of dedicated compute nodes currently in the pool.
     :vartype current_dedicated_nodes: int
@@ -3849,6 +4494,13 @@ class Pool(ProxyResource):  # pylint: disable=too-many-instance-attributes
     :ivar current_node_communication_mode: Determines how a pool communicates with the Batch
      service. Known values are: "Default", "Classic", and "Simplified".
     :vartype current_node_communication_mode: str or ~azure.mgmt.batch.models.NodeCommunicationMode
+    :ivar upgrade_policy: Describes an upgrade policy - automatic, manual, or rolling.
+    :vartype upgrade_policy: ~azure.mgmt.batch.models.UpgradePolicy
+    :ivar resource_tags: The user-defined tags to be associated with the Azure Batch Pool. When
+     specified, these tags are propagated to the backing Azure resources associated with the pool.
+     This property can only be specified when the Batch account was created with the
+     poolAllocationMode property set to 'UserSubscription'.
+    :vartype resource_tags: dict[str, str]
     """
 
     _validation = {
@@ -3874,6 +4526,7 @@ class Pool(ProxyResource):  # pylint: disable=too-many-instance-attributes
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
         "etag": {"key": "etag", "type": "str"},
+        "tags": {"key": "tags", "type": "{str}"},
         "identity": {"key": "identity", "type": "BatchPoolIdentity"},
         "display_name": {"key": "properties.displayName", "type": "str"},
         "last_modified": {"key": "properties.lastModified", "type": "iso-8601"},
@@ -3902,11 +4555,14 @@ class Pool(ProxyResource):  # pylint: disable=too-many-instance-attributes
         "mount_configuration": {"key": "properties.mountConfiguration", "type": "[MountConfiguration]"},
         "target_node_communication_mode": {"key": "properties.targetNodeCommunicationMode", "type": "str"},
         "current_node_communication_mode": {"key": "properties.currentNodeCommunicationMode", "type": "str"},
+        "upgrade_policy": {"key": "properties.upgradePolicy", "type": "UpgradePolicy"},
+        "resource_tags": {"key": "properties.resourceTags", "type": "{str}"},
     }
 
     def __init__(  # pylint: disable=too-many-locals
         self,
         *,
+        tags: Optional[Dict[str, str]] = None,
         identity: Optional["_models.BatchPoolIdentity"] = None,
         display_name: Optional[str] = None,
         vm_size: Optional[str] = None,
@@ -3914,7 +4570,7 @@ class Pool(ProxyResource):  # pylint: disable=too-many-instance-attributes
         scale_settings: Optional["_models.ScaleSettings"] = None,
         inter_node_communication: Optional[Union[str, "_models.InterNodeCommunicationState"]] = None,
         network_configuration: Optional["_models.NetworkConfiguration"] = None,
-        task_slots_per_node: Optional[int] = None,
+        task_slots_per_node: int = 1,
         task_scheduling_policy: Optional["_models.TaskSchedulingPolicy"] = None,
         user_accounts: Optional[List["_models.UserAccount"]] = None,
         metadata: Optional[List["_models.MetadataItem"]] = None,
@@ -3924,29 +4580,26 @@ class Pool(ProxyResource):  # pylint: disable=too-many-instance-attributes
         application_licenses: Optional[List[str]] = None,
         mount_configuration: Optional[List["_models.MountConfiguration"]] = None,
         target_node_communication_mode: Optional[Union[str, "_models.NodeCommunicationMode"]] = None,
+        upgrade_policy: Optional["_models.UpgradePolicy"] = None,
+        resource_tags: Optional[Dict[str, str]] = None,
         **kwargs: Any
     ) -> None:
         """
+        :keyword tags: The tags of the resource.
+        :paramtype tags: dict[str, str]
         :keyword identity: The type of identity used for the Batch Pool.
         :paramtype identity: ~azure.mgmt.batch.models.BatchPoolIdentity
         :keyword display_name: The display name need not be unique and can contain any Unicode
          characters up to a maximum length of 1024.
         :paramtype display_name: str
-        :keyword vm_size: For information about available sizes of virtual machines for Cloud Services
-         pools (pools created with cloudServiceConfiguration), see Sizes for Cloud Services
-         (https://azure.microsoft.com/documentation/articles/cloud-services-sizes-specs/). Batch
-         supports all Cloud Services VM sizes except ExtraSmall. For information about available VM
-         sizes for pools using images from the Virtual Machines Marketplace (pools created with
-         virtualMachineConfiguration) see Sizes for Virtual Machines (Linux)
-         (https://azure.microsoft.com/documentation/articles/virtual-machines-linux-sizes/) or Sizes for
-         Virtual Machines (Windows)
+        :keyword vm_size: For information about available VM sizes, see Sizes for Virtual Machines
+         (Linux) (https://azure.microsoft.com/documentation/articles/virtual-machines-linux-sizes/) or
+         Sizes for Virtual Machines (Windows)
          (https://azure.microsoft.com/documentation/articles/virtual-machines-windows-sizes/). Batch
          supports all Azure VM sizes except STANDARD_A0 and those with premium storage (STANDARD_GS,
          STANDARD_DS, and STANDARD_DSV2 series).
         :paramtype vm_size: str
-        :keyword deployment_configuration: Using CloudServiceConfiguration specifies that the nodes
-         should be creating using Azure Cloud Services (PaaS), while VirtualMachineConfiguration uses
-         Azure Virtual Machines (IaaS).
+        :keyword deployment_configuration: Deployment configuration properties.
         :paramtype deployment_configuration: ~azure.mgmt.batch.models.DeploymentConfiguration
         :keyword scale_settings: Defines the desired size of the pool. This can either be 'fixedScale'
          where the requested targetDedicatedNodes is specified, or 'autoScale' which defines a formula
@@ -4000,8 +4653,15 @@ class Pool(ProxyResource):  # pylint: disable=too-many-instance-attributes
          are: "Default", "Classic", and "Simplified".
         :paramtype target_node_communication_mode: str or
          ~azure.mgmt.batch.models.NodeCommunicationMode
+        :keyword upgrade_policy: Describes an upgrade policy - automatic, manual, or rolling.
+        :paramtype upgrade_policy: ~azure.mgmt.batch.models.UpgradePolicy
+        :keyword resource_tags: The user-defined tags to be associated with the Azure Batch Pool. When
+         specified, these tags are propagated to the backing Azure resources associated with the pool.
+         This property can only be specified when the Batch account was created with the
+         poolAllocationMode property set to 'UserSubscription'.
+        :paramtype resource_tags: dict[str, str]
         """
-        super().__init__(**kwargs)
+        super().__init__(tags=tags, **kwargs)
         self.identity = identity
         self.display_name = display_name
         self.last_modified = None
@@ -4030,12 +4690,14 @@ class Pool(ProxyResource):  # pylint: disable=too-many-instance-attributes
         self.mount_configuration = mount_configuration
         self.target_node_communication_mode = target_node_communication_mode
         self.current_node_communication_mode = None
+        self.upgrade_policy = upgrade_policy
+        self.resource_tags = resource_tags
 
 
 class PoolEndpointConfiguration(_serialization.Model):
     """The endpoint configuration for a pool.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar inbound_nat_pools: The maximum number of inbound NAT pools per Batch pool is 5. If the
      maximum number of inbound NAT pools is exceeded the request fails with HTTP status code 400.
@@ -4068,7 +4730,7 @@ class PrivateEndpoint(_serialization.Model):
     Variables are only populated by the server, and will be ignored when sending a request.
 
     :ivar id: The ARM resource identifier of the private endpoint. This is of the form
-     /subscriptions/{subscription}/resourceGroups/{group}/providers/Microsoft.Network/privateEndpoints/{privateEndpoint}.
+     /subscriptions/{subscription}/resourceGroups/{group}/providers/Microsoft.Network/privateEndpoints/{privateEndpoint}.  # pylint: disable=line-too-long
     :vartype id: str
     """
 
@@ -4086,7 +4748,7 @@ class PrivateEndpoint(_serialization.Model):
         self.id = None
 
 
-class PrivateEndpointConnection(ProxyResource):
+class PrivateEndpointConnection(AzureProxyResource):
     """Contains information about a private link resource.
 
     Variables are only populated by the server, and will be ignored when sending a request.
@@ -4099,6 +4761,8 @@ class PrivateEndpointConnection(ProxyResource):
     :vartype type: str
     :ivar etag: The ETag of the resource, used for concurrency statements.
     :vartype etag: str
+    :ivar tags: The tags of the resource.
+    :vartype tags: dict[str, str]
     :ivar provisioning_state: The provisioning state of the private endpoint connection. Known
      values are: "Creating", "Updating", "Deleting", "Succeeded", "Failed", and "Cancelled".
     :vartype provisioning_state: str or
@@ -4128,6 +4792,7 @@ class PrivateEndpointConnection(ProxyResource):
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
         "etag": {"key": "etag", "type": "str"},
+        "tags": {"key": "tags", "type": "{str}"},
         "provisioning_state": {"key": "properties.provisioningState", "type": "str"},
         "private_endpoint": {"key": "properties.privateEndpoint", "type": "PrivateEndpoint"},
         "group_ids": {"key": "properties.groupIds", "type": "[str]"},
@@ -4140,23 +4805,26 @@ class PrivateEndpointConnection(ProxyResource):
     def __init__(
         self,
         *,
+        tags: Optional[Dict[str, str]] = None,
         private_link_service_connection_state: Optional["_models.PrivateLinkServiceConnectionState"] = None,
         **kwargs: Any
     ) -> None:
         """
+        :keyword tags: The tags of the resource.
+        :paramtype tags: dict[str, str]
         :keyword private_link_service_connection_state: The private link service connection state of
          the private endpoint connection.
         :paramtype private_link_service_connection_state:
          ~azure.mgmt.batch.models.PrivateLinkServiceConnectionState
         """
-        super().__init__(**kwargs)
+        super().__init__(tags=tags, **kwargs)
         self.provisioning_state = None
         self.private_endpoint = None
         self.group_ids = None
         self.private_link_service_connection_state = private_link_service_connection_state
 
 
-class PrivateLinkResource(ProxyResource):
+class PrivateLinkResource(AzureProxyResource):
     """Contains information about a private link resource.
 
     Variables are only populated by the server, and will be ignored when sending a request.
@@ -4169,6 +4837,8 @@ class PrivateLinkResource(ProxyResource):
     :vartype type: str
     :ivar etag: The ETag of the resource, used for concurrency statements.
     :vartype etag: str
+    :ivar tags: The tags of the resource.
+    :vartype tags: dict[str, str]
     :ivar group_id: The group id is used to establish the private link connection.
     :vartype group_id: str
     :ivar required_members: The list of required members that are used to establish the private
@@ -4193,14 +4863,18 @@ class PrivateLinkResource(ProxyResource):
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
         "etag": {"key": "etag", "type": "str"},
+        "tags": {"key": "tags", "type": "{str}"},
         "group_id": {"key": "properties.groupId", "type": "str"},
         "required_members": {"key": "properties.requiredMembers", "type": "[str]"},
         "required_zone_names": {"key": "properties.requiredZoneNames", "type": "[str]"},
     }
 
-    def __init__(self, **kwargs: Any) -> None:
-        """ """
-        super().__init__(**kwargs)
+    def __init__(self, *, tags: Optional[Dict[str, str]] = None, **kwargs: Any) -> None:
+        """
+        :keyword tags: The tags of the resource.
+        :paramtype tags: dict[str, str]
+        """
+        super().__init__(tags=tags, **kwargs)
         self.group_id = None
         self.required_members = None
         self.required_zone_names = None
@@ -4211,7 +4885,7 @@ class PrivateLinkServiceConnectionState(_serialization.Model):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar status: The status of the Batch private endpoint connection. Required. Known values are:
      "Approved", "Pending", "Rejected", and "Disconnected".
@@ -4251,6 +4925,87 @@ class PrivateLinkServiceConnectionState(_serialization.Model):
         self.status = status
         self.description = description
         self.actions_required = None
+
+
+class ProvisioningIssue(_serialization.Model):
+    """Describes a provisioning issue for a network security perimeter configuration.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar name: Name of the issue.
+    :vartype name: str
+    :ivar properties: Details of a provisioning issue for a network security perimeter (NSP)
+     configuration. Resource providers should generate separate provisioning issue elements for each
+     separate issue detected, and include a meaningful and distinctive description, as well as any
+     appropriate suggestedResourceIds and suggestedAccessRules.
+    :vartype properties: ~azure.mgmt.batch.models.ProvisioningIssueProperties
+    """
+
+    _validation = {
+        "name": {"readonly": True},
+        "properties": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "name": {"key": "name", "type": "str"},
+        "properties": {"key": "properties", "type": "ProvisioningIssueProperties"},
+    }
+
+    def __init__(self, **kwargs: Any) -> None:
+        """ """
+        super().__init__(**kwargs)
+        self.name = None
+        self.properties = None
+
+
+class ProvisioningIssueProperties(_serialization.Model):
+    """Details of a provisioning issue for a network security perimeter (NSP) configuration. Resource
+    providers should generate separate provisioning issue elements for each separate issue
+    detected, and include a meaningful and distinctive description, as well as any appropriate
+    suggestedResourceIds and suggestedAccessRules.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar issue_type: Type of issue. Known values are: "Unknown",
+     "ConfigurationPropagationFailure", "MissingPerimeterConfiguration", and
+     "MissingIdentityConfiguration".
+    :vartype issue_type: str or ~azure.mgmt.batch.models.IssueType
+    :ivar severity: Severity of the issue. Known values are: "Warning" and "Error".
+    :vartype severity: str or ~azure.mgmt.batch.models.Severity
+    :ivar description: Description of the issue.
+    :vartype description: str
+    :ivar suggested_resource_ids: Fully qualified resource IDs of suggested resources that can be
+     associated to the network security perimeter (NSP) to remediate the issue.
+    :vartype suggested_resource_ids: list[str]
+    :ivar suggested_access_rules: Access rules that can be added to the network security profile
+     (NSP) to remediate the issue.
+    :vartype suggested_access_rules: list[~azure.mgmt.batch.models.AccessRule]
+    """
+
+    _validation = {
+        "issue_type": {"readonly": True},
+        "severity": {"readonly": True},
+        "description": {"readonly": True},
+        "suggested_resource_ids": {"readonly": True},
+        "suggested_access_rules": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "issue_type": {"key": "issueType", "type": "str"},
+        "severity": {"key": "severity", "type": "str"},
+        "description": {"key": "description", "type": "str"},
+        "suggested_resource_ids": {"key": "suggestedResourceIds", "type": "[str]"},
+        "suggested_access_rules": {"key": "suggestedAccessRules", "type": "[AccessRule]"},
+    }
+
+    def __init__(self, **kwargs: Any) -> None:
+        """ """
+        super().__init__(**kwargs)
+        self.issue_type = None
+        self.severity = None
+        self.description = None
+        self.suggested_resource_ids = None
+        self.suggested_access_rules = None
 
 
 class PublicIPAddressConfiguration(_serialization.Model):
@@ -4298,7 +5053,7 @@ class PublicIPAddressConfiguration(_serialization.Model):
 class ResizeError(_serialization.Model):
     """An error that occurred when resizing a pool.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar code: An identifier for the error. Codes are invariant and are intended to be consumed
      programmatically. Required.
@@ -4411,6 +5166,40 @@ class ResizeOperationStatus(_serialization.Model):
         self.node_deallocation_option = node_deallocation_option
         self.start_time = start_time
         self.errors = errors
+
+
+class ResourceAssociation(_serialization.Model):
+    """Information about resource association.
+
+    :ivar name: Name of the resource association.
+    :vartype name: str
+    :ivar access_mode: Access mode of the resource association. Known values are: "Enforced",
+     "Learning", and "Audit".
+    :vartype access_mode: str or ~azure.mgmt.batch.models.ResourceAssociationAccessMode
+    """
+
+    _attribute_map = {
+        "name": {"key": "name", "type": "str"},
+        "access_mode": {"key": "accessMode", "type": "str"},
+    }
+
+    def __init__(
+        self,
+        *,
+        name: Optional[str] = None,
+        access_mode: Optional[Union[str, "_models.ResourceAssociationAccessMode"]] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword name: Name of the resource association.
+        :paramtype name: str
+        :keyword access_mode: Access mode of the resource association. Known values are: "Enforced",
+         "Learning", and "Audit".
+        :paramtype access_mode: str or ~azure.mgmt.batch.models.ResourceAssociationAccessMode
+        """
+        super().__init__(**kwargs)
+        self.name = name
+        self.access_mode = access_mode
 
 
 class ResourceFile(_serialization.Model):
@@ -4526,6 +5315,127 @@ class ResourceFile(_serialization.Model):
         self.identity_reference = identity_reference
 
 
+class RollingUpgradePolicy(_serialization.Model):
+    """The configuration parameters used while performing a rolling upgrade.
+
+    :ivar enable_cross_zone_upgrade: Allow VMSS to ignore AZ boundaries when constructing upgrade
+     batches. Take into consideration the Update Domain and maxBatchInstancePercent to determine the
+     batch size. If this field is not set, Azure Azure Batch will not set its default value. The
+     value of enableCrossZoneUpgrade on the created VirtualMachineScaleSet will be decided by the
+     default configurations on VirtualMachineScaleSet. This field is able to be set to true or false
+     only when using NodePlacementConfiguration as Zonal.
+    :vartype enable_cross_zone_upgrade: bool
+    :ivar max_batch_instance_percent: The maximum percent of total virtual machine instances that
+     will be upgraded simultaneously by the rolling upgrade in one batch. As this is a maximum,
+     unhealthy instances in previous or future batches can cause the percentage of instances in a
+     batch to decrease to ensure higher reliability. The value of this field should be between 5 and
+     100, inclusive. If both maxBatchInstancePercent and maxUnhealthyInstancePercent are assigned
+     with value, the value of maxBatchInstancePercent should not be more than
+     maxUnhealthyInstancePercent.
+    :vartype max_batch_instance_percent: int
+    :ivar max_unhealthy_instance_percent: The maximum percentage of the total virtual machine
+     instances in the scale set that can be simultaneously unhealthy, either as a result of being
+     upgraded, or by being found in an unhealthy state by the virtual machine health checks before
+     the rolling upgrade aborts. This constraint will be checked prior to starting any batch. The
+     value of this field should be between 5 and 100, inclusive. If both maxBatchInstancePercent and
+     maxUnhealthyInstancePercent are assigned with value, the value of maxBatchInstancePercent
+     should not be more than maxUnhealthyInstancePercent.
+    :vartype max_unhealthy_instance_percent: int
+    :ivar max_unhealthy_upgraded_instance_percent: The maximum percentage of upgraded virtual
+     machine instances that can be found to be in an unhealthy state. This check will happen after
+     each batch is upgraded. If this percentage is ever exceeded, the rolling update aborts. The
+     value of this field should be between 0 and 100, inclusive.
+    :vartype max_unhealthy_upgraded_instance_percent: int
+    :ivar pause_time_between_batches: The wait time between completing the update for all virtual
+     machines in one batch and starting the next batch. The time duration should be specified in ISO
+     8601 format.
+    :vartype pause_time_between_batches: str
+    :ivar prioritize_unhealthy_instances: Upgrade all unhealthy instances in a scale set before any
+     healthy instances.
+    :vartype prioritize_unhealthy_instances: bool
+    :ivar rollback_failed_instances_on_policy_breach: Rollback failed instances to previous model
+     if the Rolling Upgrade policy is violated.
+    :vartype rollback_failed_instances_on_policy_breach: bool
+    """
+
+    _validation = {
+        "max_batch_instance_percent": {"maximum": 100, "minimum": 5},
+        "max_unhealthy_instance_percent": {"maximum": 100, "minimum": 5},
+        "max_unhealthy_upgraded_instance_percent": {"maximum": 100, "minimum": 0},
+    }
+
+    _attribute_map = {
+        "enable_cross_zone_upgrade": {"key": "enableCrossZoneUpgrade", "type": "bool"},
+        "max_batch_instance_percent": {"key": "maxBatchInstancePercent", "type": "int"},
+        "max_unhealthy_instance_percent": {"key": "maxUnhealthyInstancePercent", "type": "int"},
+        "max_unhealthy_upgraded_instance_percent": {"key": "maxUnhealthyUpgradedInstancePercent", "type": "int"},
+        "pause_time_between_batches": {"key": "pauseTimeBetweenBatches", "type": "str"},
+        "prioritize_unhealthy_instances": {"key": "prioritizeUnhealthyInstances", "type": "bool"},
+        "rollback_failed_instances_on_policy_breach": {"key": "rollbackFailedInstancesOnPolicyBreach", "type": "bool"},
+    }
+
+    def __init__(
+        self,
+        *,
+        enable_cross_zone_upgrade: Optional[bool] = None,
+        max_batch_instance_percent: Optional[int] = None,
+        max_unhealthy_instance_percent: Optional[int] = None,
+        max_unhealthy_upgraded_instance_percent: Optional[int] = None,
+        pause_time_between_batches: Optional[str] = None,
+        prioritize_unhealthy_instances: Optional[bool] = None,
+        rollback_failed_instances_on_policy_breach: Optional[bool] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword enable_cross_zone_upgrade: Allow VMSS to ignore AZ boundaries when constructing
+         upgrade batches. Take into consideration the Update Domain and maxBatchInstancePercent to
+         determine the batch size. If this field is not set, Azure Azure Batch will not set its default
+         value. The value of enableCrossZoneUpgrade on the created VirtualMachineScaleSet will be
+         decided by the default configurations on VirtualMachineScaleSet. This field is able to be set
+         to true or false only when using NodePlacementConfiguration as Zonal.
+        :paramtype enable_cross_zone_upgrade: bool
+        :keyword max_batch_instance_percent: The maximum percent of total virtual machine instances
+         that will be upgraded simultaneously by the rolling upgrade in one batch. As this is a maximum,
+         unhealthy instances in previous or future batches can cause the percentage of instances in a
+         batch to decrease to ensure higher reliability. The value of this field should be between 5 and
+         100, inclusive. If both maxBatchInstancePercent and maxUnhealthyInstancePercent are assigned
+         with value, the value of maxBatchInstancePercent should not be more than
+         maxUnhealthyInstancePercent.
+        :paramtype max_batch_instance_percent: int
+        :keyword max_unhealthy_instance_percent: The maximum percentage of the total virtual machine
+         instances in the scale set that can be simultaneously unhealthy, either as a result of being
+         upgraded, or by being found in an unhealthy state by the virtual machine health checks before
+         the rolling upgrade aborts. This constraint will be checked prior to starting any batch. The
+         value of this field should be between 5 and 100, inclusive. If both maxBatchInstancePercent and
+         maxUnhealthyInstancePercent are assigned with value, the value of maxBatchInstancePercent
+         should not be more than maxUnhealthyInstancePercent.
+        :paramtype max_unhealthy_instance_percent: int
+        :keyword max_unhealthy_upgraded_instance_percent: The maximum percentage of upgraded virtual
+         machine instances that can be found to be in an unhealthy state. This check will happen after
+         each batch is upgraded. If this percentage is ever exceeded, the rolling update aborts. The
+         value of this field should be between 0 and 100, inclusive.
+        :paramtype max_unhealthy_upgraded_instance_percent: int
+        :keyword pause_time_between_batches: The wait time between completing the update for all
+         virtual machines in one batch and starting the next batch. The time duration should be
+         specified in ISO 8601 format.
+        :paramtype pause_time_between_batches: str
+        :keyword prioritize_unhealthy_instances: Upgrade all unhealthy instances in a scale set before
+         any healthy instances.
+        :paramtype prioritize_unhealthy_instances: bool
+        :keyword rollback_failed_instances_on_policy_breach: Rollback failed instances to previous
+         model if the Rolling Upgrade policy is violated.
+        :paramtype rollback_failed_instances_on_policy_breach: bool
+        """
+        super().__init__(**kwargs)
+        self.enable_cross_zone_upgrade = enable_cross_zone_upgrade
+        self.max_batch_instance_percent = max_batch_instance_percent
+        self.max_unhealthy_instance_percent = max_unhealthy_instance_percent
+        self.max_unhealthy_upgraded_instance_percent = max_unhealthy_upgraded_instance_percent
+        self.pause_time_between_batches = pause_time_between_batches
+        self.prioritize_unhealthy_instances = prioritize_unhealthy_instances
+        self.rollback_failed_instances_on_policy_breach = rollback_failed_instances_on_policy_breach
+
+
 class ScaleSettings(_serialization.Model):
     """Defines the desired size of the pool. This can either be 'fixedScale' where the requested
     targetDedicatedNodes is specified, or 'autoScale' which defines a formula which is periodically
@@ -4563,6 +5473,85 @@ class ScaleSettings(_serialization.Model):
         super().__init__(**kwargs)
         self.fixed_scale = fixed_scale
         self.auto_scale = auto_scale
+
+
+class SecurityProfile(_serialization.Model):
+    """Specifies the security profile settings for the virtual machine or virtual machine scale set.
+
+    :ivar security_type: Specifies the SecurityType of the virtual machine. It has to be set to any
+     specified value to enable UefiSettings. Known values are: "trustedLaunch" and "confidentialVM".
+    :vartype security_type: str or ~azure.mgmt.batch.models.SecurityTypes
+    :ivar encryption_at_host: This property can be used by user in the request to enable or disable
+     the Host Encryption for the virtual machine or virtual machine scale set. This will enable the
+     encryption for all the disks including Resource/Temp disk at host itself.
+    :vartype encryption_at_host: bool
+    :ivar uefi_settings: Specifies the security settings like secure boot and vTPM used while
+     creating the virtual machine.
+    :vartype uefi_settings: ~azure.mgmt.batch.models.UefiSettings
+    """
+
+    _attribute_map = {
+        "security_type": {"key": "securityType", "type": "str"},
+        "encryption_at_host": {"key": "encryptionAtHost", "type": "bool"},
+        "uefi_settings": {"key": "uefiSettings", "type": "UefiSettings"},
+    }
+
+    def __init__(
+        self,
+        *,
+        security_type: Optional[Union[str, "_models.SecurityTypes"]] = None,
+        encryption_at_host: Optional[bool] = None,
+        uefi_settings: Optional["_models.UefiSettings"] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword security_type: Specifies the SecurityType of the virtual machine. It has to be set to
+         any specified value to enable UefiSettings. Known values are: "trustedLaunch" and
+         "confidentialVM".
+        :paramtype security_type: str or ~azure.mgmt.batch.models.SecurityTypes
+        :keyword encryption_at_host: This property can be used by user in the request to enable or
+         disable the Host Encryption for the virtual machine or virtual machine scale set. This will
+         enable the encryption for all the disks including Resource/Temp disk at host itself.
+        :paramtype encryption_at_host: bool
+        :keyword uefi_settings: Specifies the security settings like secure boot and vTPM used while
+         creating the virtual machine.
+        :paramtype uefi_settings: ~azure.mgmt.batch.models.UefiSettings
+        """
+        super().__init__(**kwargs)
+        self.security_type = security_type
+        self.encryption_at_host = encryption_at_host
+        self.uefi_settings = uefi_settings
+
+
+class ServiceArtifactReference(_serialization.Model):
+    """Specifies the service artifact reference id used to set same image version for all virtual
+    machines in the scale set when using 'latest' image version.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar id: The service artifact reference id in the form of
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/galleries/{galleryName}/serviceArtifacts/{serviceArtifactName}/vmArtifactsProfiles/{vmArtifactsProfilesName}.  # pylint: disable=line-too-long
+     Required.
+    :vartype id: str
+    """
+
+    _validation = {
+        "id": {"required": True},
+    }
+
+    _attribute_map = {
+        "id": {"key": "id", "type": "str"},
+    }
+
+    def __init__(self, *, id: str, **kwargs: Any) -> None:  # pylint: disable=redefined-builtin
+        """
+        :keyword id: The service artifact reference id in the form of
+         /subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/galleries/{galleryName}/serviceArtifacts/{serviceArtifactName}/vmArtifactsProfiles/{vmArtifactsProfilesName}.  # pylint: disable=line-too-long
+         Required.
+        :paramtype id: str
+        """
+        super().__init__(**kwargs)
+        self.id = id
 
 
 class SkuCapability(_serialization.Model):
@@ -4618,7 +5607,7 @@ class StartTask(_serialization.Model):
      task once, and may then retry up to this limit. For example, if the maximum retry count is 3,
      Batch tries the task up to 4 times (one initial try and 3 retries). If the maximum retry count
      is 0, the Batch service does not retry the task. If the maximum retry count is -1, the Batch
-     service retries the task without limit.
+     service retries the task without limit. Default is 0.
     :vartype max_task_retry_count: int
     :ivar wait_for_success: If true and the start task fails on a compute node, the Batch service
      retries the start task up to its maximum retry count (maxTaskRetryCount). If the task has still
@@ -4653,7 +5642,7 @@ class StartTask(_serialization.Model):
         resource_files: Optional[List["_models.ResourceFile"]] = None,
         environment_settings: Optional[List["_models.EnvironmentSetting"]] = None,
         user_identity: Optional["_models.UserIdentity"] = None,
-        max_task_retry_count: Optional[int] = None,
+        max_task_retry_count: int = 0,
         wait_for_success: Optional[bool] = None,
         container_settings: Optional["_models.TaskContainerSettings"] = None,
         **kwargs: Any
@@ -4678,7 +5667,7 @@ class StartTask(_serialization.Model):
          the task once, and may then retry up to this limit. For example, if the maximum retry count is
          3, Batch tries the task up to 4 times (one initial try and 3 retries). If the maximum retry
          count is 0, the Batch service does not retry the task. If the maximum retry count is -1, the
-         Batch service retries the task without limit.
+         Batch service retries the task without limit. Default is 0.
         :paramtype max_task_retry_count: int
         :keyword wait_for_success: If true and the start task fails on a compute node, the Batch
          service retries the start task up to its maximum retry count (maxTaskRetryCount). If the task
@@ -4716,18 +5705,22 @@ class SupportedSku(_serialization.Model):
     :vartype family_name: str
     :ivar capabilities: A collection of capabilities which this SKU supports.
     :vartype capabilities: list[~azure.mgmt.batch.models.SkuCapability]
+    :ivar batch_support_end_of_life: The time when Azure Batch service will retire this SKU.
+    :vartype batch_support_end_of_life: ~datetime.datetime
     """
 
     _validation = {
         "name": {"readonly": True},
         "family_name": {"readonly": True},
         "capabilities": {"readonly": True},
+        "batch_support_end_of_life": {"readonly": True},
     }
 
     _attribute_map = {
         "name": {"key": "name", "type": "str"},
         "family_name": {"key": "familyName", "type": "str"},
         "capabilities": {"key": "capabilities", "type": "[SkuCapability]"},
+        "batch_support_end_of_life": {"key": "batchSupportEndOfLife", "type": "iso-8601"},
     }
 
     def __init__(self, **kwargs: Any) -> None:
@@ -4736,6 +5729,7 @@ class SupportedSku(_serialization.Model):
         self.name = None
         self.family_name = None
         self.capabilities = None
+        self.batch_support_end_of_life = None
 
 
 class SupportedSkusResult(_serialization.Model):
@@ -4743,7 +5737,7 @@ class SupportedSkusResult(_serialization.Model):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: The list of SKUs available for the Batch service in the location. Required.
     :vartype value: list[~azure.mgmt.batch.models.SupportedSku]
@@ -4771,10 +5765,74 @@ class SupportedSkusResult(_serialization.Model):
         self.next_link = None
 
 
+class SystemData(_serialization.Model):
+    """Metadata pertaining to creation and last modification of the resource.
+
+    :ivar created_by: The identity that created the resource.
+    :vartype created_by: str
+    :ivar created_by_type: The type of identity that created the resource. Known values are:
+     "User", "Application", "ManagedIdentity", and "Key".
+    :vartype created_by_type: str or ~azure.mgmt.batch.models.CreatedByType
+    :ivar created_at: The timestamp of resource creation (UTC).
+    :vartype created_at: ~datetime.datetime
+    :ivar last_modified_by: The identity that last modified the resource.
+    :vartype last_modified_by: str
+    :ivar last_modified_by_type: The type of identity that last modified the resource. Known values
+     are: "User", "Application", "ManagedIdentity", and "Key".
+    :vartype last_modified_by_type: str or ~azure.mgmt.batch.models.CreatedByType
+    :ivar last_modified_at: The timestamp of resource last modification (UTC).
+    :vartype last_modified_at: ~datetime.datetime
+    """
+
+    _attribute_map = {
+        "created_by": {"key": "createdBy", "type": "str"},
+        "created_by_type": {"key": "createdByType", "type": "str"},
+        "created_at": {"key": "createdAt", "type": "iso-8601"},
+        "last_modified_by": {"key": "lastModifiedBy", "type": "str"},
+        "last_modified_by_type": {"key": "lastModifiedByType", "type": "str"},
+        "last_modified_at": {"key": "lastModifiedAt", "type": "iso-8601"},
+    }
+
+    def __init__(
+        self,
+        *,
+        created_by: Optional[str] = None,
+        created_by_type: Optional[Union[str, "_models.CreatedByType"]] = None,
+        created_at: Optional[datetime.datetime] = None,
+        last_modified_by: Optional[str] = None,
+        last_modified_by_type: Optional[Union[str, "_models.CreatedByType"]] = None,
+        last_modified_at: Optional[datetime.datetime] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword created_by: The identity that created the resource.
+        :paramtype created_by: str
+        :keyword created_by_type: The type of identity that created the resource. Known values are:
+         "User", "Application", "ManagedIdentity", and "Key".
+        :paramtype created_by_type: str or ~azure.mgmt.batch.models.CreatedByType
+        :keyword created_at: The timestamp of resource creation (UTC).
+        :paramtype created_at: ~datetime.datetime
+        :keyword last_modified_by: The identity that last modified the resource.
+        :paramtype last_modified_by: str
+        :keyword last_modified_by_type: The type of identity that last modified the resource. Known
+         values are: "User", "Application", "ManagedIdentity", and "Key".
+        :paramtype last_modified_by_type: str or ~azure.mgmt.batch.models.CreatedByType
+        :keyword last_modified_at: The timestamp of resource last modification (UTC).
+        :paramtype last_modified_at: ~datetime.datetime
+        """
+        super().__init__(**kwargs)
+        self.created_by = created_by
+        self.created_by_type = created_by_type
+        self.created_at = created_at
+        self.last_modified_by = last_modified_by
+        self.last_modified_by_type = last_modified_by_type
+        self.last_modified_at = last_modified_at
+
+
 class TaskContainerSettings(_serialization.Model):
     """The container settings for a task.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar container_run_options: These additional options are supplied as arguments to the "docker
      create" command, in addition to those controlled by the Batch Service.
@@ -4788,6 +5846,11 @@ class TaskContainerSettings(_serialization.Model):
      default is 'taskWorkingDirectory'. Known values are: "TaskWorkingDirectory" and
      "ContainerImageDefault".
     :vartype working_directory: str or ~azure.mgmt.batch.models.ContainerWorkingDirectory
+    :ivar container_host_batch_bind_mounts: If this array is null or be not present, container task
+     will mount entire temporary disk drive in windows (or AZ_BATCH_NODE_ROOT_DIR in Linux). It
+     won't' mount any data paths into container if this array is set as empty.
+    :vartype container_host_batch_bind_mounts:
+     list[~azure.mgmt.batch.models.ContainerHostBatchBindMountEntry]
     """
 
     _validation = {
@@ -4799,6 +5862,10 @@ class TaskContainerSettings(_serialization.Model):
         "image_name": {"key": "imageName", "type": "str"},
         "registry": {"key": "registry", "type": "ContainerRegistry"},
         "working_directory": {"key": "workingDirectory", "type": "str"},
+        "container_host_batch_bind_mounts": {
+            "key": "containerHostBatchBindMounts",
+            "type": "[ContainerHostBatchBindMountEntry]",
+        },
     }
 
     def __init__(
@@ -4808,6 +5875,7 @@ class TaskContainerSettings(_serialization.Model):
         container_run_options: Optional[str] = None,
         registry: Optional["_models.ContainerRegistry"] = None,
         working_directory: Optional[Union[str, "_models.ContainerWorkingDirectory"]] = None,
+        container_host_batch_bind_mounts: Optional[List["_models.ContainerHostBatchBindMountEntry"]] = None,
         **kwargs: Any
     ) -> None:
         """
@@ -4824,21 +5892,27 @@ class TaskContainerSettings(_serialization.Model):
          The default is 'taskWorkingDirectory'. Known values are: "TaskWorkingDirectory" and
          "ContainerImageDefault".
         :paramtype working_directory: str or ~azure.mgmt.batch.models.ContainerWorkingDirectory
+        :keyword container_host_batch_bind_mounts: If this array is null or be not present, container
+         task will mount entire temporary disk drive in windows (or AZ_BATCH_NODE_ROOT_DIR in Linux). It
+         won't' mount any data paths into container if this array is set as empty.
+        :paramtype container_host_batch_bind_mounts:
+         list[~azure.mgmt.batch.models.ContainerHostBatchBindMountEntry]
         """
         super().__init__(**kwargs)
         self.container_run_options = container_run_options
         self.image_name = image_name
         self.registry = registry
         self.working_directory = working_directory
+        self.container_host_batch_bind_mounts = container_host_batch_bind_mounts
 
 
 class TaskSchedulingPolicy(_serialization.Model):
     """Specifies how tasks should be distributed across compute nodes.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
-    :ivar node_fill_type: How tasks should be distributed across compute nodes. Required. Known
-     values are: "Spread" and "Pack".
+    :ivar node_fill_type: How tasks should be distributed across compute nodes. Known values are:
+     "Spread" and "Pack".
     :vartype node_fill_type: str or ~azure.mgmt.batch.models.ComputeNodeFillType
     """
 
@@ -4850,20 +5924,112 @@ class TaskSchedulingPolicy(_serialization.Model):
         "node_fill_type": {"key": "nodeFillType", "type": "str"},
     }
 
-    def __init__(self, *, node_fill_type: Union[str, "_models.ComputeNodeFillType"], **kwargs: Any) -> None:
+    def __init__(self, *, node_fill_type: Union[str, "_models.ComputeNodeFillType"] = "Spread", **kwargs: Any) -> None:
         """
-        :keyword node_fill_type: How tasks should be distributed across compute nodes. Required. Known
-         values are: "Spread" and "Pack".
+        :keyword node_fill_type: How tasks should be distributed across compute nodes. Known values
+         are: "Spread" and "Pack".
         :paramtype node_fill_type: str or ~azure.mgmt.batch.models.ComputeNodeFillType
         """
         super().__init__(**kwargs)
         self.node_fill_type = node_fill_type
 
 
+class UefiSettings(_serialization.Model):
+    """Specifies the security settings like secure boot and vTPM used while creating the virtual
+    machine.
+
+    :ivar secure_boot_enabled: Specifies whether secure boot should be enabled on the virtual
+     machine.
+    :vartype secure_boot_enabled: bool
+    :ivar v_tpm_enabled: Specifies whether vTPM should be enabled on the virtual machine.
+    :vartype v_tpm_enabled: bool
+    """
+
+    _attribute_map = {
+        "secure_boot_enabled": {"key": "secureBootEnabled", "type": "bool"},
+        "v_tpm_enabled": {"key": "vTpmEnabled", "type": "bool"},
+    }
+
+    def __init__(
+        self, *, secure_boot_enabled: Optional[bool] = None, v_tpm_enabled: Optional[bool] = None, **kwargs: Any
+    ) -> None:
+        """
+        :keyword secure_boot_enabled: Specifies whether secure boot should be enabled on the virtual
+         machine.
+        :paramtype secure_boot_enabled: bool
+        :keyword v_tpm_enabled: Specifies whether vTPM should be enabled on the virtual machine.
+        :paramtype v_tpm_enabled: bool
+        """
+        super().__init__(**kwargs)
+        self.secure_boot_enabled = secure_boot_enabled
+        self.v_tpm_enabled = v_tpm_enabled
+
+
+class UpgradePolicy(_serialization.Model):
+    """Describes an upgrade policy - automatic, manual, or rolling.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar mode: Specifies the mode of an upgrade to virtual machines in the scale set.:code:`<br
+     />`:code:`<br />` Possible values are::code:`<br />`:code:`<br />` **Manual** - You  control
+     the application of updates to virtual machines in the scale set. You do this by using the
+     manualUpgrade action.:code:`<br />`:code:`<br />` **Automatic** - All virtual machines in the
+     scale set are automatically updated at the same time.:code:`<br />`:code:`<br />` **Rolling** -
+     Scale set performs updates in batches with an optional pause time in between. Required. Known
+     values are: "automatic", "manual", and "rolling".
+    :vartype mode: str or ~azure.mgmt.batch.models.UpgradeMode
+    :ivar automatic_os_upgrade_policy: The configuration parameters used for performing automatic
+     OS upgrade.
+    :vartype automatic_os_upgrade_policy: ~azure.mgmt.batch.models.AutomaticOSUpgradePolicy
+    :ivar rolling_upgrade_policy: The configuration parameters used while performing a rolling
+     upgrade.
+    :vartype rolling_upgrade_policy: ~azure.mgmt.batch.models.RollingUpgradePolicy
+    """
+
+    _validation = {
+        "mode": {"required": True},
+    }
+
+    _attribute_map = {
+        "mode": {"key": "mode", "type": "str"},
+        "automatic_os_upgrade_policy": {"key": "automaticOSUpgradePolicy", "type": "AutomaticOSUpgradePolicy"},
+        "rolling_upgrade_policy": {"key": "rollingUpgradePolicy", "type": "RollingUpgradePolicy"},
+    }
+
+    def __init__(
+        self,
+        *,
+        mode: Union[str, "_models.UpgradeMode"],
+        automatic_os_upgrade_policy: Optional["_models.AutomaticOSUpgradePolicy"] = None,
+        rolling_upgrade_policy: Optional["_models.RollingUpgradePolicy"] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword mode: Specifies the mode of an upgrade to virtual machines in the scale set.:code:`<br
+         />`:code:`<br />` Possible values are::code:`<br />`:code:`<br />` **Manual** - You  control
+         the application of updates to virtual machines in the scale set. You do this by using the
+         manualUpgrade action.:code:`<br />`:code:`<br />` **Automatic** - All virtual machines in the
+         scale set are automatically updated at the same time.:code:`<br />`:code:`<br />` **Rolling** -
+         Scale set performs updates in batches with an optional pause time in between. Required. Known
+         values are: "automatic", "manual", and "rolling".
+        :paramtype mode: str or ~azure.mgmt.batch.models.UpgradeMode
+        :keyword automatic_os_upgrade_policy: The configuration parameters used for performing
+         automatic OS upgrade.
+        :paramtype automatic_os_upgrade_policy: ~azure.mgmt.batch.models.AutomaticOSUpgradePolicy
+        :keyword rolling_upgrade_policy: The configuration parameters used while performing a rolling
+         upgrade.
+        :paramtype rolling_upgrade_policy: ~azure.mgmt.batch.models.RollingUpgradePolicy
+        """
+        super().__init__(**kwargs)
+        self.mode = mode
+        self.automatic_os_upgrade_policy = automatic_os_upgrade_policy
+        self.rolling_upgrade_policy = rolling_upgrade_policy
+
+
 class UserAccount(_serialization.Model):
     """Properties used to create a user on an Azure Batch node.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: The name of the user account. Names can contain any Unicode characters up to a
      maximum length of 20. Required.
@@ -4996,11 +6162,11 @@ class UserIdentity(_serialization.Model):
         self.auto_user = auto_user
 
 
-class VirtualMachineConfiguration(_serialization.Model):
+class VirtualMachineConfiguration(_serialization.Model):  # pylint: disable=too-many-instance-attributes
     """The configuration for compute nodes in a pool based on the Azure Virtual Machines
     infrastructure.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar image_reference: A reference to an Azure Virtual Machines Marketplace image or the Azure
      Image resource of a custom Virtual Machine. To get the list of all imageReferences verified by
@@ -5041,6 +6207,12 @@ class VirtualMachineConfiguration(_serialization.Model):
     :vartype extensions: list[~azure.mgmt.batch.models.VMExtension]
     :ivar os_disk: Contains configuration for ephemeral OSDisk settings.
     :vartype os_disk: ~azure.mgmt.batch.models.OSDisk
+    :ivar security_profile: Specifies the security profile settings for the virtual machine or
+     virtual machine scale set.
+    :vartype security_profile: ~azure.mgmt.batch.models.SecurityProfile
+    :ivar service_artifact_reference: The service artifact reference id in the form of
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/galleries/{galleryName}/serviceArtifacts/{serviceArtifactName}/vmArtifactsProfiles/{vmArtifactsProfilesName}.  # pylint: disable=line-too-long
+    :vartype service_artifact_reference: ~azure.mgmt.batch.models.ServiceArtifactReference
     """
 
     _validation = {
@@ -5059,6 +6231,8 @@ class VirtualMachineConfiguration(_serialization.Model):
         "node_placement_configuration": {"key": "nodePlacementConfiguration", "type": "NodePlacementConfiguration"},
         "extensions": {"key": "extensions", "type": "[VMExtension]"},
         "os_disk": {"key": "osDisk", "type": "OSDisk"},
+        "security_profile": {"key": "securityProfile", "type": "SecurityProfile"},
+        "service_artifact_reference": {"key": "serviceArtifactReference", "type": "ServiceArtifactReference"},
     }
 
     def __init__(
@@ -5074,6 +6248,8 @@ class VirtualMachineConfiguration(_serialization.Model):
         node_placement_configuration: Optional["_models.NodePlacementConfiguration"] = None,
         extensions: Optional[List["_models.VMExtension"]] = None,
         os_disk: Optional["_models.OSDisk"] = None,
+        security_profile: Optional["_models.SecurityProfile"] = None,
+        service_artifact_reference: Optional["_models.ServiceArtifactReference"] = None,
         **kwargs: Any
     ) -> None:
         """
@@ -5116,6 +6292,12 @@ class VirtualMachineConfiguration(_serialization.Model):
         :paramtype extensions: list[~azure.mgmt.batch.models.VMExtension]
         :keyword os_disk: Contains configuration for ephemeral OSDisk settings.
         :paramtype os_disk: ~azure.mgmt.batch.models.OSDisk
+        :keyword security_profile: Specifies the security profile settings for the virtual machine or
+         virtual machine scale set.
+        :paramtype security_profile: ~azure.mgmt.batch.models.SecurityProfile
+        :keyword service_artifact_reference: The service artifact reference id in the form of
+         /subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/galleries/{galleryName}/serviceArtifacts/{serviceArtifactName}/vmArtifactsProfiles/{vmArtifactsProfilesName}.  # pylint: disable=line-too-long
+        :paramtype service_artifact_reference: ~azure.mgmt.batch.models.ServiceArtifactReference
         """
         super().__init__(**kwargs)
         self.image_reference = image_reference
@@ -5128,6 +6310,8 @@ class VirtualMachineConfiguration(_serialization.Model):
         self.node_placement_configuration = node_placement_configuration
         self.extensions = extensions
         self.os_disk = os_disk
+        self.security_profile = security_profile
+        self.service_artifact_reference = service_artifact_reference
 
 
 class VirtualMachineFamilyCoreQuota(_serialization.Model):
@@ -5158,10 +6342,41 @@ class VirtualMachineFamilyCoreQuota(_serialization.Model):
         self.core_quota = None
 
 
+class VMDiskSecurityProfile(_serialization.Model):
+    """Specifies the security profile settings for the managed disk. **Note**\\ : It can only be set
+    for Confidential VMs and is required when using Confidential VMs.
+
+    :ivar security_encryption_type: Specifies the EncryptionType of the managed disk. It is set to
+     VMGuestStateOnly for encryption of just the VMGuestState blob, and NonPersistedTPM for not
+     persisting firmware state in the VMGuestState blob. **Note**\\ : It can be set for only
+     Confidential VMs and required when using Confidential VMs. Known values are: "NonPersistedTPM"
+     and "VMGuestStateOnly".
+    :vartype security_encryption_type: str or ~azure.mgmt.batch.models.SecurityEncryptionTypes
+    """
+
+    _attribute_map = {
+        "security_encryption_type": {"key": "securityEncryptionType", "type": "str"},
+    }
+
+    def __init__(
+        self, *, security_encryption_type: Optional[Union[str, "_models.SecurityEncryptionTypes"]] = None, **kwargs: Any
+    ) -> None:
+        """
+        :keyword security_encryption_type: Specifies the EncryptionType of the managed disk. It is set
+         to VMGuestStateOnly for encryption of just the VMGuestState blob, and NonPersistedTPM for not
+         persisting firmware state in the VMGuestState blob. **Note**\\ : It can be set for only
+         Confidential VMs and required when using Confidential VMs. Known values are: "NonPersistedTPM"
+         and "VMGuestStateOnly".
+        :paramtype security_encryption_type: str or ~azure.mgmt.batch.models.SecurityEncryptionTypes
+        """
+        super().__init__(**kwargs)
+        self.security_encryption_type = security_encryption_type
+
+
 class VMExtension(_serialization.Model):
     """The configuration for virtual machine extensions.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: The name of the virtual machine extension. Required.
     :vartype name: str
@@ -5280,9 +6495,8 @@ class WindowsConfiguration(_serialization.Model):
 class WindowsUserConfiguration(_serialization.Model):
     """Properties used to create a user account on a Windows node.
 
-    :ivar login_mode: Specifies login mode for the user. The default value for
-     VirtualMachineConfiguration pools is interactive mode and for CloudServiceConfiguration pools
-     is batch mode. Known values are: "Batch" and "Interactive".
+    :ivar login_mode: Specifies login mode for the user. The default value is Interactive. Known
+     values are: "Batch" and "Interactive".
     :vartype login_mode: str or ~azure.mgmt.batch.models.LoginMode
     """
 
@@ -5292,9 +6506,8 @@ class WindowsUserConfiguration(_serialization.Model):
 
     def __init__(self, *, login_mode: Optional[Union[str, "_models.LoginMode"]] = None, **kwargs: Any) -> None:
         """
-        :keyword login_mode: Specifies login mode for the user. The default value for
-         VirtualMachineConfiguration pools is interactive mode and for CloudServiceConfiguration pools
-         is batch mode. Known values are: "Batch" and "Interactive".
+        :keyword login_mode: Specifies login mode for the user. The default value is Interactive. Known
+         values are: "Batch" and "Interactive".
         :paramtype login_mode: str or ~azure.mgmt.batch.models.LoginMode
         """
         super().__init__(**kwargs)

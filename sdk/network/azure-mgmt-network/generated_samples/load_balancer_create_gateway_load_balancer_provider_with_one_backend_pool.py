@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.network import NetworkManagementClient
 
 """
@@ -96,12 +97,12 @@ def main():
                     }
                 ],
             },
-            "sku": {"name": "Premium"},
+            "sku": {"name": "Gateway"},
         },
     ).result()
     print(response)
 
 
-# x-ms-original-file: specification/network/resource-manager/Microsoft.Network/stable/2023-04-01/examples/LoadBalancerCreateGatewayLoadBalancerProviderWithOneBackendPool.json
+# x-ms-original-file: specification/network/resource-manager/Microsoft.Network/stable/2024-05-01/examples/LoadBalancerCreateGatewayLoadBalancerProviderWithOneBackendPool.json
 if __name__ == "__main__":
     main()

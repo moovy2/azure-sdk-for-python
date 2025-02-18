@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.azurestackhci import AzureStackHCIClient
 
 """
@@ -29,14 +30,13 @@ def main():
         subscription_id="fd3c3665-1729-4b7b-9a38-238e83b0f98b",
     )
 
-    response = client.arc_settings.begin_delete(
+    client.arc_settings.begin_delete(
         resource_group_name="test-rg",
         cluster_name="myCluster",
         arc_setting_name="default",
     ).result()
-    print(response)
 
 
-# x-ms-original-file: specification/azurestackhci/resource-manager/Microsoft.AzureStackHCI/preview/2021-09-01-preview/examples/DeleteArcSetting.json
+# x-ms-original-file: specification/azurestackhci/resource-manager/Microsoft.AzureStackHCI/StackHCI/stable/2024-04-01/examples/DeleteArcSetting.json
 if __name__ == "__main__":
     main()

@@ -13,7 +13,7 @@ from cryptography.hazmat.primitives.serialization import pkcs12
 
 # ----------------------------------------------------------------------------------------------------------
 # Prerequisites:
-# 1. An Azure Key Vault. (https://docs.microsoft.com/azure/key-vault/quick-create-cli)
+# 1. An Azure Key Vault. (https://learn.microsoft.com/azure/key-vault/quick-create-cli)
 #
 # 2. A service principal with certificate get, delete, and purge permissions, as well as secret get
 #    permissions.
@@ -85,6 +85,7 @@ async def run_sample():
     # Now we can clean up the vault by deleting, then purging, the certificate.
     print("\n.. Delete certificate")
     deleted_certificate = await certificate_client.delete_certificate(certificate_name=cert_name)
+    assert deleted_certificate.name
     print(f"Certificate with name '{deleted_certificate.name}' was deleted.")
 
     await certificate_client.purge_deleted_certificate(certificate_name=deleted_certificate.name)

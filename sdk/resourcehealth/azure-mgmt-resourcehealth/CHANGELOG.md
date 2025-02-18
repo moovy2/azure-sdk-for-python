@@ -1,5 +1,25 @@
 # Release History
 
+## 1.0.0b6 (2024-10-30)
+
+### Breaking Changes
+
+  - This package now only targets the latest Api-Version available on Azure and removes APIs of other Api-Version. After this change, the package can have much smaller size. If your application requires a specific and non-latest Api-Version, it's recommended to pin this package to the previous released version; If your application always only use latest Api-Version, please ignore this change.
+
+## 1.0.0b5 (2023-10-23)
+
+### Features Added
+
+  - Model Event has a new parameter arg_query
+  - Model Event has a new parameter event_sub_type
+  - Model Event has a new parameter maintenance_id
+  - Model Event has a new parameter maintenance_type
+  - Model EventImpactedResource has a new parameter maintenance_end_time
+  - Model EventImpactedResource has a new parameter maintenance_start_time
+  - Model EventImpactedResource has a new parameter resource_group
+  - Model EventImpactedResource has a new parameter resource_name
+  - Model EventImpactedResource has a new parameter status
+
 ## 1.0.0b4 (2023-05-19)
 
 ### Features Added

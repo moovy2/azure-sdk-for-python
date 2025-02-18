@@ -8,6 +8,12 @@
 
 from ._models_py3 import AgentUpdatePatchProperties
 from ._models_py3 import AgentUpdateProperties
+from ._models_py3 import AppAttachPackage
+from ._models_py3 import AppAttachPackageInfoProperties
+from ._models_py3 import AppAttachPackageList
+from ._models_py3 import AppAttachPackagePatch
+from ._models_py3 import AppAttachPackagePatchProperties
+from ._models_py3 import AppAttachPackageProperties
 from ._models_py3 import Application
 from ._models_py3 import ApplicationGroup
 from ._models_py3 import ApplicationGroupList
@@ -18,12 +24,16 @@ from ._models_py3 import CloudErrorProperties
 from ._models_py3 import Desktop
 from ._models_py3 import DesktopList
 from ._models_py3 import DesktopPatch
+from ._models_py3 import ErrorAdditionalInfo
+from ._models_py3 import ErrorDetail
+from ._models_py3 import ErrorResponse
 from ._models_py3 import ExpandMsixImage
 from ._models_py3 import ExpandMsixImageList
 from ._models_py3 import HostPool
 from ._models_py3 import HostPoolList
 from ._models_py3 import HostPoolPatch
 from ._models_py3 import Identity
+from ._models_py3 import ImportPackageInfoRequest
 from ._models_py3 import LogSpecification
 from ._models_py3 import MSIXImageURI
 from ._models_py3 import MSIXPackage
@@ -35,8 +45,18 @@ from ._models_py3 import MsixPackageApplications
 from ._models_py3 import MsixPackageDependencies
 from ._models_py3 import OperationProperties
 from ._models_py3 import Plan
+from ._models_py3 import PrivateEndpoint
+from ._models_py3 import PrivateEndpointConnection
+from ._models_py3 import PrivateEndpointConnectionListResultWithSystemData
+from ._models_py3 import PrivateEndpointConnectionWithSystemData
+from ._models_py3 import PrivateLinkResource
+from ._models_py3 import PrivateLinkResourceListResult
+from ._models_py3 import PrivateLinkServiceConnectionState
+from ._models_py3 import ProxyResource
 from ._models_py3 import RegistrationInfo
 from ._models_py3 import RegistrationInfoPatch
+from ._models_py3 import RegistrationTokenList
+from ._models_py3 import RegistrationTokenMinimal
 from ._models_py3 import Resource
 from ._models_py3 import ResourceModelWithAllowedPropertySet
 from ._models_py3 import ResourceModelWithAllowedPropertySetIdentity
@@ -49,6 +69,9 @@ from ._models_py3 import ScalingHostPoolReference
 from ._models_py3 import ScalingPlan
 from ._models_py3 import ScalingPlanList
 from ._models_py3 import ScalingPlanPatch
+from ._models_py3 import ScalingPlanPersonalSchedule
+from ._models_py3 import ScalingPlanPersonalScheduleList
+from ._models_py3 import ScalingPlanPersonalSchedulePatch
 from ._models_py3 import ScalingPlanPooledSchedule
 from ._models_py3 import ScalingPlanPooledScheduleList
 from ._models_py3 import ScalingPlanPooledSchedulePatch
@@ -65,32 +88,44 @@ from ._models_py3 import StartMenuItem
 from ._models_py3 import StartMenuItemList
 from ._models_py3 import SystemData
 from ._models_py3 import Time
+from ._models_py3 import TrackedResource
 from ._models_py3 import UserSession
 from ._models_py3 import UserSessionList
 from ._models_py3 import Workspace
 from ._models_py3 import WorkspaceList
 from ._models_py3 import WorkspacePatch
 
+from ._desktop_virtualization_mgmt_client_enums import AppAttachPackageArchitectures
 from ._desktop_virtualization_mgmt_client_enums import ApplicationGroupType
 from ._desktop_virtualization_mgmt_client_enums import ApplicationType
 from ._desktop_virtualization_mgmt_client_enums import CommandLineSetting
 from ._desktop_virtualization_mgmt_client_enums import CreatedByType
 from ._desktop_virtualization_mgmt_client_enums import DayOfWeek
+from ._desktop_virtualization_mgmt_client_enums import FailHealthCheckOnStagingFailure
 from ._desktop_virtualization_mgmt_client_enums import HealthCheckName
 from ._desktop_virtualization_mgmt_client_enums import HealthCheckResult
 from ._desktop_virtualization_mgmt_client_enums import HostPoolType
+from ._desktop_virtualization_mgmt_client_enums import HostpoolPublicNetworkAccess
 from ._desktop_virtualization_mgmt_client_enums import LoadBalancerType
+from ._desktop_virtualization_mgmt_client_enums import PackageTimestamped
 from ._desktop_virtualization_mgmt_client_enums import PersonalDesktopAssignmentType
 from ._desktop_virtualization_mgmt_client_enums import PreferredAppGroupType
+from ._desktop_virtualization_mgmt_client_enums import PrivateEndpointConnectionProvisioningState
+from ._desktop_virtualization_mgmt_client_enums import PrivateEndpointServiceConnectionStatus
+from ._desktop_virtualization_mgmt_client_enums import ProvisioningState
+from ._desktop_virtualization_mgmt_client_enums import PublicNetworkAccess
 from ._desktop_virtualization_mgmt_client_enums import RegistrationTokenOperation
 from ._desktop_virtualization_mgmt_client_enums import RemoteApplicationType
 from ._desktop_virtualization_mgmt_client_enums import SSOSecretType
 from ._desktop_virtualization_mgmt_client_enums import ScalingHostPoolType
 from ._desktop_virtualization_mgmt_client_enums import ScalingScheduleDaysOfWeekItem
+from ._desktop_virtualization_mgmt_client_enums import SessionHandlingOperation
 from ._desktop_virtualization_mgmt_client_enums import SessionHostComponentUpdateType
 from ._desktop_virtualization_mgmt_client_enums import SessionHostLoadBalancingAlgorithm
 from ._desktop_virtualization_mgmt_client_enums import SessionState
+from ._desktop_virtualization_mgmt_client_enums import SetStartVMOnConnect
 from ._desktop_virtualization_mgmt_client_enums import SkuTier
+from ._desktop_virtualization_mgmt_client_enums import StartupBehavior
 from ._desktop_virtualization_mgmt_client_enums import Status
 from ._desktop_virtualization_mgmt_client_enums import StopHostsWhen
 from ._desktop_virtualization_mgmt_client_enums import UpdateState
@@ -101,6 +136,12 @@ from ._patch import patch_sdk as _patch_sdk
 __all__ = [
     "AgentUpdatePatchProperties",
     "AgentUpdateProperties",
+    "AppAttachPackage",
+    "AppAttachPackageInfoProperties",
+    "AppAttachPackageList",
+    "AppAttachPackagePatch",
+    "AppAttachPackagePatchProperties",
+    "AppAttachPackageProperties",
     "Application",
     "ApplicationGroup",
     "ApplicationGroupList",
@@ -111,12 +152,16 @@ __all__ = [
     "Desktop",
     "DesktopList",
     "DesktopPatch",
+    "ErrorAdditionalInfo",
+    "ErrorDetail",
+    "ErrorResponse",
     "ExpandMsixImage",
     "ExpandMsixImageList",
     "HostPool",
     "HostPoolList",
     "HostPoolPatch",
     "Identity",
+    "ImportPackageInfoRequest",
     "LogSpecification",
     "MSIXImageURI",
     "MSIXPackage",
@@ -128,8 +173,18 @@ __all__ = [
     "MsixPackageDependencies",
     "OperationProperties",
     "Plan",
+    "PrivateEndpoint",
+    "PrivateEndpointConnection",
+    "PrivateEndpointConnectionListResultWithSystemData",
+    "PrivateEndpointConnectionWithSystemData",
+    "PrivateLinkResource",
+    "PrivateLinkResourceListResult",
+    "PrivateLinkServiceConnectionState",
+    "ProxyResource",
     "RegistrationInfo",
     "RegistrationInfoPatch",
+    "RegistrationTokenList",
+    "RegistrationTokenMinimal",
     "Resource",
     "ResourceModelWithAllowedPropertySet",
     "ResourceModelWithAllowedPropertySetIdentity",
@@ -142,6 +197,9 @@ __all__ = [
     "ScalingPlan",
     "ScalingPlanList",
     "ScalingPlanPatch",
+    "ScalingPlanPersonalSchedule",
+    "ScalingPlanPersonalScheduleList",
+    "ScalingPlanPersonalSchedulePatch",
     "ScalingPlanPooledSchedule",
     "ScalingPlanPooledScheduleList",
     "ScalingPlanPooledSchedulePatch",
@@ -158,31 +216,43 @@ __all__ = [
     "StartMenuItemList",
     "SystemData",
     "Time",
+    "TrackedResource",
     "UserSession",
     "UserSessionList",
     "Workspace",
     "WorkspaceList",
     "WorkspacePatch",
+    "AppAttachPackageArchitectures",
     "ApplicationGroupType",
     "ApplicationType",
     "CommandLineSetting",
     "CreatedByType",
     "DayOfWeek",
+    "FailHealthCheckOnStagingFailure",
     "HealthCheckName",
     "HealthCheckResult",
     "HostPoolType",
+    "HostpoolPublicNetworkAccess",
     "LoadBalancerType",
+    "PackageTimestamped",
     "PersonalDesktopAssignmentType",
     "PreferredAppGroupType",
+    "PrivateEndpointConnectionProvisioningState",
+    "PrivateEndpointServiceConnectionStatus",
+    "ProvisioningState",
+    "PublicNetworkAccess",
     "RegistrationTokenOperation",
     "RemoteApplicationType",
     "SSOSecretType",
     "ScalingHostPoolType",
     "ScalingScheduleDaysOfWeekItem",
+    "SessionHandlingOperation",
     "SessionHostComponentUpdateType",
     "SessionHostLoadBalancingAlgorithm",
     "SessionState",
+    "SetStartVMOnConnect",
     "SkuTier",
+    "StartupBehavior",
     "Status",
     "StopHostsWhen",
     "UpdateState",

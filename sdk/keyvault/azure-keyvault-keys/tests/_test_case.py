@@ -9,8 +9,11 @@ import pytest
 from azure.core.pipeline import Pipeline
 from azure.core.pipeline.transport import HttpRequest, RequestsTransport
 from azure.keyvault.keys import KeyReleasePolicy
-from azure.keyvault.keys._shared.client_base import DEFAULT_VERSION, ApiVersion
+from azure.keyvault.keys._shared.client_base import ApiVersion
 from devtools_testutils import AzureRecordedTestCase
+
+
+HSM_SUPPORTED_VERSIONS = {ApiVersion.V7_2, ApiVersion.V7_3, ApiVersion.V7_4, ApiVersion.V7_5}
 
 
 def get_attestation_token(attestation_uri):
@@ -41,11 +44,10 @@ def get_release_policy(attestation_uri, **kwargs):
 def get_test_parameters(only_hsm=False, only_vault=False, api_versions=None):
     """generates a list of parameter pairs for test case parameterization, where [x, y] = [api_version, is_hsm]"""
     combinations = []
-    versions = api_versions or pytest.api_version
-    hsm_supported_versions = {ApiVersion.V7_2, ApiVersion.V7_3, ApiVersion.V7_4}
+    versions = api_versions or pytest.api_version  # pytest.api_version -> [DEFAULT_VERSION] if live, ApiVersion if not
 
     for api_version in versions:
-        if not only_vault and api_version in hsm_supported_versions:
+        if not only_vault and api_version in HSM_SUPPORTED_VERSIONS:
             combinations.append([api_version, True])
         if not only_hsm:
             combinations.append([api_version, False])
@@ -53,7 +55,7 @@ def get_test_parameters(only_hsm=False, only_vault=False, api_versions=None):
 
 
 def is_public_cloud():
-    return ".microsoftonline.com" in os.getenv("AZURE_AUTHORITY_HOST", "")
+    return ".microsoftonline.com" in os.getenv("AZURE_AUTHORITY_HOST", "https://login.microsoftonline.com/")
 
 
 class KeysClientPreparer(AzureRecordedTestCase):
@@ -65,7 +67,8 @@ class KeysClientPreparer(AzureRecordedTestCase):
         if self.is_live:
             self.vault_url = os.environ["AZURE_KEYVAULT_URL"]
             self.vault_url = self.vault_url.rstrip("/")
-            self.managed_hsm_url = os.environ.get("AZURE_MANAGEDHSM_URL", None)
+            hsm = os.environ.get("AZURE_MANAGEDHSM_URL")
+            self.managed_hsm_url = hsm if hsm else None
             if self.managed_hsm_url:
                 self.managed_hsm_url = self.managed_hsm_url.rstrip("/")
         else:
@@ -77,7 +80,7 @@ class KeysClientPreparer(AzureRecordedTestCase):
     def __call__(self, fn):
         def _preparer(test_class, api_version, is_hsm, **kwargs):
 
-            self._skip_if_not_configured(api_version, is_hsm)
+            self._skip_if_not_configured(is_hsm)
             if not self.is_logging_enabled:
                 kwargs.update({"logging_enable": False})
             endpoint_url = self.managed_hsm_url if is_hsm else self.vault_url
@@ -98,13 +101,10 @@ class KeysClientPreparer(AzureRecordedTestCase):
 
     def _set_mgmt_settings_real_values(self):
         if self.is_live:
-            os.environ["AZURE_TENANT_ID"] = os.environ["KEYVAULT_TENANT_ID"]
-            os.environ["AZURE_CLIENT_ID"] = os.environ["KEYVAULT_CLIENT_ID"]
-            os.environ["AZURE_CLIENT_SECRET"] = os.environ["KEYVAULT_CLIENT_SECRET"]
+            os.environ["AZURE_TENANT_ID"] = os.getenv("KEYVAULT_TENANT_ID", "")  # empty in pipelines
+            os.environ["AZURE_CLIENT_ID"] = os.getenv("KEYVAULT_CLIENT_ID", "")  # empty in pipelines
+            os.environ["AZURE_CLIENT_SECRET"] = os.getenv("KEYVAULT_CLIENT_SECRET", "")  # empty for user-based auth
 
-    def _skip_if_not_configured(self, api_version, is_hsm):
-
-        if self.is_live and api_version != DEFAULT_VERSION:
-            pytest.skip("This test only uses the default API version for live tests")
+    def _skip_if_not_configured(self, is_hsm):
         if self.is_live and is_hsm and self.managed_hsm_url is None:
             pytest.skip("No HSM endpoint for live testing")

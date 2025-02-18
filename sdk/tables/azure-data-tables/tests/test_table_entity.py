@@ -17,6 +17,7 @@ from devtools_testutils import AzureRecordedTestCase, recorded_by_proxy
 
 from azure.data.tables import (
     TableServiceClient,
+    TableClient,
     generate_table_sas,
     TableEntity,
     EntityProperty,
@@ -375,7 +376,7 @@ class TestTableEntity(AzureRecordedTestCase, TableTestCase):
             # Act
             resp = self.table.create_entity(
                 entity=entity,
-                headers={"Accept": "application/json;odata=fullmetadata"},
+                headers=headers,
             )
             received_entity = self.table.get_entity(
                 row_key=entity["RowKey"], partition_key=entity["PartitionKey"], headers=headers
@@ -416,12 +417,22 @@ class TestTableEntity(AzureRecordedTestCase, TableTestCase):
             dict32["large"] = EntityProperty(2**31, EdmType.INT32)
 
             # Assert
-            with pytest.raises(TypeError):
+            with pytest.raises(HttpResponseError) as error:
                 self.table.create_entity(entity=dict32)
+            assert "Operation returned an invalid status 'Bad Request'" in str(error.value)
+            assert (
+                '"code":"InvalidInput","message":{"lang":"en-US","value":"An error occurred while processing this request.'
+                in str(error.value)
+            )
 
             dict32["large"] = EntityProperty(-(2**31 + 1), EdmType.INT32)
-            with pytest.raises(TypeError):
+            with pytest.raises(HttpResponseError) as error:
                 self.table.create_entity(entity=dict32)
+            assert "Operation returned an invalid status 'Bad Request'" in str(error.value)
+            assert (
+                '"code":"InvalidInput","message":{"lang":"en-US","value":"An error occurred while processing this request.'
+                in str(error.value)
+            )
         finally:
             self._tear_down()
 
@@ -438,12 +449,22 @@ class TestTableEntity(AzureRecordedTestCase, TableTestCase):
             dict64["large"] = EntityProperty(2**63, EdmType.INT64)
 
             # Assert
-            with pytest.raises(TypeError):
+            with pytest.raises(HttpResponseError) as error:
                 self.table.create_entity(entity=dict64)
+            assert "Operation returned an invalid status 'Bad Request'" in str(error.value)
+            assert (
+                '"code":"InvalidInput","message":{"lang":"en-US","value":"An error occurred while processing this request.'
+                in str(error.value)
+            )
 
             dict64["large"] = EntityProperty(-(2**63 + 1), EdmType.INT64)
-            with pytest.raises(TypeError):
+            with pytest.raises(HttpResponseError) as error:
                 self.table.create_entity(entity=dict64)
+            assert "Operation returned an invalid status 'Bad Request'" in str(error.value)
+            assert (
+                '"code":"InvalidInput","message":{"lang":"en-US","value":"An error occurred while processing this request.'
+                in str(error.value)
+            )
         finally:
             self._tear_down()
 
@@ -590,9 +611,9 @@ class TestTableEntity(AzureRecordedTestCase, TableTestCase):
 
             self.table.create_entity(entity=entity)
             resp_entity = self.table.get_entity(partition_key=pk, row_key=rk)
-            assert str(entity["test1"]) == resp_entity["test1"]
-            assert str(entity["test2"]) == resp_entity["test2"]
-            assert str(entity["test3"]) == resp_entity["test3"]
+            assert entity["test1"].value == resp_entity["test1"]
+            assert entity["test2"].value == resp_entity["test2"]
+            assert entity["test3"].value == resp_entity["test3"]
 
         finally:
             self._tear_down()
@@ -833,12 +854,10 @@ class TestTableEntity(AzureRecordedTestCase, TableTestCase):
         try:
             entity = self._create_random_base_entity_dict()
 
-            # Act
             sent_entity = self._create_updated_entity_dict(entity["PartitionKey"], entity["RowKey"])
-            with pytest.raises(ResourceNotFoundError):
+            with pytest.raises(ResourceNotFoundError) as ex:
                 self.table.update_entity(mode=UpdateMode.REPLACE, entity=sent_entity)
-
-            # Assert
+            assert ex.value.response.status_code == 404
         finally:
             self._tear_down()
 
@@ -870,17 +889,29 @@ class TestTableEntity(AzureRecordedTestCase, TableTestCase):
         # Arrange
         self._set_up(tables_storage_account_name, tables_primary_storage_account_key)
         try:
-            entity, _ = self._insert_random_entity()
-
+            # Test when the entity not exists
+            entity = self._create_random_base_entity_dict()
             sent_entity = self._create_updated_entity_dict(entity["PartitionKey"], entity["RowKey"])
-            with pytest.raises(ResourceModifiedError):
+            with pytest.raises(ResourceNotFoundError) as ex:
                 self.table.update_entity(
                     mode=UpdateMode.REPLACE,
                     entity=sent_entity,
                     etag="W/\"datetime'2012-06-15T22%3A51%3A44.9662825Z'\"",
                     match_condition=MatchConditions.IfNotModified,
                 )
-            # Assert
+            assert ex.value.response.status_code == 404
+
+            # Test when the entity exists
+            entity, _ = self._insert_random_entity()
+            sent_entity = self._create_updated_entity_dict(entity["PartitionKey"], entity["RowKey"])
+            with pytest.raises(ResourceModifiedError) as ex:
+                self.table.update_entity(
+                    mode=UpdateMode.REPLACE,
+                    entity=sent_entity,
+                    etag="W/\"datetime'2012-06-15T22%3A51%3A44.9662825Z'\"",
+                    match_condition=MatchConditions.IfNotModified,
+                )
+            assert ex.value.response.status_code == 412
         finally:
             self._tear_down()
 
@@ -994,13 +1025,11 @@ class TestTableEntity(AzureRecordedTestCase, TableTestCase):
         self._set_up(tables_storage_account_name, tables_primary_storage_account_key)
         try:
             entity = self._create_random_base_entity_dict()
-
-            # Act
             sent_entity = self._create_updated_entity_dict(entity["PartitionKey"], entity["RowKey"])
-            with pytest.raises(ResourceNotFoundError):
-                self.table.update_entity(mode=UpdateMode.MERGE, entity=sent_entity)
 
-            # Assert
+            with pytest.raises(ResourceNotFoundError) as ex:
+                self.table.update_entity(mode=UpdateMode.MERGE, entity=sent_entity)
+            assert ex.value.response.status_code == 404
         finally:
             self._tear_down()
 
@@ -1031,19 +1060,31 @@ class TestTableEntity(AzureRecordedTestCase, TableTestCase):
         # Arrange
         self._set_up(tables_storage_account_name, tables_primary_storage_account_key)
         try:
-            entity, _ = self._insert_random_entity()
-
-            # Act
+            # Test when the entity not exists
+            entity = self._create_random_base_entity_dict()
             sent_entity = self._create_updated_entity_dict(entity["PartitionKey"], entity["RowKey"])
-            with pytest.raises(ResourceModifiedError):
+
+            with pytest.raises(ResourceNotFoundError) as ex:
                 self.table.update_entity(
                     mode=UpdateMode.MERGE,
                     entity=sent_entity,
                     etag="W/\"datetime'2012-06-15T22%3A51%3A44.9662825Z'\"",
                     match_condition=MatchConditions.IfNotModified,
                 )
+            assert ex.value.response.status_code == 404
 
-            # Assert
+            # Test when the entity exists
+            entity, _ = self._insert_random_entity()
+            sent_entity = self._create_updated_entity_dict(entity["PartitionKey"], entity["RowKey"])
+
+            with pytest.raises(ResourceModifiedError) as ex:
+                self.table.update_entity(
+                    mode=UpdateMode.MERGE,
+                    entity=sent_entity,
+                    etag="W/\"datetime'2012-06-15T22%3A51%3A44.9662825Z'\"",
+                    match_condition=MatchConditions.IfNotModified,
+                )
+            assert ex.value.response.status_code == 412
         finally:
             self._tear_down()
 
@@ -1056,12 +1097,12 @@ class TestTableEntity(AzureRecordedTestCase, TableTestCase):
             entity, _ = self._insert_random_entity()
 
             # Act
-            resp = self.table.delete_entity(partition_key=entity["PartitionKey"], row_key=entity["RowKey"])
+            self.table.delete_entity(partition_key=entity["PartitionKey"], row_key=entity["RowKey"])
 
             # Assert
-            assert resp is None
-            with pytest.raises(ResourceNotFoundError):
+            with pytest.raises(ResourceNotFoundError) as ex:
                 self.table.get_entity(entity["PartitionKey"], entity["RowKey"])
+            assert ex.value.response.status_code == 404
         finally:
             self._tear_down()
 
@@ -1085,14 +1126,14 @@ class TestTableEntity(AzureRecordedTestCase, TableTestCase):
             entity, etag = self._insert_random_entity()
 
             # Act
-            resp = self.table.delete_entity(
+            self.table.delete_entity(
                 entity["PartitionKey"], entity["RowKey"], etag=etag, match_condition=MatchConditions.IfNotModified
             )
 
             # Assert
-            assert resp is None
-            with pytest.raises(ResourceNotFoundError):
+            with pytest.raises(ResourceNotFoundError) as ex:
                 self.table.get_entity(entity["PartitionKey"], entity["RowKey"])
+            assert ex.value.response.status_code == 404
         finally:
             self._tear_down()
 
@@ -1102,18 +1143,23 @@ class TestTableEntity(AzureRecordedTestCase, TableTestCase):
         # Arrange
         self._set_up(tables_storage_account_name, tables_primary_storage_account_key)
         try:
-            entity, _ = self._insert_random_entity()
+            entity = self._create_random_base_entity_dict()
+            self.table.delete_entity(
+                entity["PartitionKey"],
+                entity["RowKey"],
+                etag="W/\"datetime'2012-06-15T22%3A51%3A44.9662825Z'\"",
+                match_condition=MatchConditions.IfNotModified,
+            )
 
-            # Act
-            with pytest.raises(ResourceModifiedError):
+            entity, _ = self._insert_random_entity()
+            with pytest.raises(ResourceModifiedError) as ex:
                 self.table.delete_entity(
                     entity["PartitionKey"],
                     entity["RowKey"],
                     etag="W/\"datetime'2012-06-15T22%3A51%3A44.9662825Z'\"",
                     match_condition=MatchConditions.IfNotModified,
                 )
-
-            # Assert
+            ex.value.response.status_code == 412
         finally:
             self._tear_down()
 
@@ -1175,6 +1221,9 @@ class TestTableEntity(AzureRecordedTestCase, TableTestCase):
             entity, _ = self._insert_random_entity(rk="")
             self.table.delete_entity(entity)
             entity, _ = self._insert_random_entity(pk="", rk="")
+            result = self.table.get_entity("", "")
+            assert result["PartitionKey"] == ""
+            assert result["RowKey"] == ""
             self.table.delete_entity(partition_key="", row_key="")
             res = self.table.list_entities()
             assert len(list(res)) == 0
@@ -2168,3 +2217,25 @@ class TestTableEntity(AzureRecordedTestCase, TableTestCase):
         with pytest.raises(ClientAuthenticationError):
             for _ in client.list_tables():
                 pass
+
+    @tables_decorator
+    @recorded_by_proxy
+    def test_get_entity_with_flatten_metadata(self, tables_storage_account_name, tables_primary_storage_account_key):
+        table_name = self._get_table_reference("table")
+        url = self.account_url(tables_storage_account_name, "table")
+        entity = {"PartitionKey": "pk", "RowKey": "rk", "Value": "foobar", "Answer": 42}
+
+        with TableClient(url, table_name, credential=tables_primary_storage_account_key) as client:
+            client.create_table()
+            client.create_entity(entity)
+            received_entity1 = client.get_entity("pk", "rk")
+            assert received_entity1.metadata
+
+        with TableClient(
+            url, table_name, credential=tables_primary_storage_account_key, flatten_result_entity=True
+        ) as client:
+            received_entity2 = client.get_entity("pk", "rk")
+            assert received_entity2.metadata == received_entity1.metadata
+            for key, value in received_entity1.metadata.items():
+                assert received_entity2[key] == value
+            client.delete_table()

@@ -1,4 +1,4 @@
-# pylint: disable=too-many-lines
+# pylint: disable=too-many-lines,too-many-statements
 # coding=utf-8
 # --------------------------------------------------------------------------
 # Copyright (c) Microsoft Corporation. All rights reserved.
@@ -26,7 +26,7 @@ from azure.core.utils import case_insensitive_dict
 
 from .. import models as _models
 from .._serialization import Serializer
-from .._vendor import _convert_request, _format_url_section
+from .._vendor import _convert_request
 
 T = TypeVar("T")
 ClsType = Optional[Callable[[PipelineResponse[HttpRequest, HttpResponse], T, Dict[str, Any]], Any]]
@@ -68,7 +68,7 @@ def build_create_or_update_request(link_connection_name: str, **kwargs: Any) -> 
         "linkConnectionName": _SERIALIZER.url("link_connection_name", link_connection_name, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["api-version"] = _SERIALIZER.query("api_version", api_version, "str")
@@ -94,7 +94,7 @@ def build_get_request(link_connection_name: str, **kwargs: Any) -> HttpRequest:
         "linkConnectionName": _SERIALIZER.url("link_connection_name", link_connection_name, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["api-version"] = _SERIALIZER.query("api_version", api_version, "str")
@@ -118,7 +118,7 @@ def build_delete_request(link_connection_name: str, **kwargs: Any) -> HttpReques
         "linkConnectionName": _SERIALIZER.url("link_connection_name", link_connection_name, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["api-version"] = _SERIALIZER.query("api_version", api_version, "str")
@@ -143,7 +143,7 @@ def build_edit_tables_request(link_connection_name: str, **kwargs: Any) -> HttpR
         "linkConnectionName": _SERIALIZER.url("link_connection_name", link_connection_name, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["api-version"] = _SERIALIZER.query("api_version", api_version, "str")
@@ -169,7 +169,7 @@ def build_start_request(link_connection_name: str, **kwargs: Any) -> HttpRequest
         "linkConnectionName": _SERIALIZER.url("link_connection_name", link_connection_name, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["api-version"] = _SERIALIZER.query("api_version", api_version, "str")
@@ -193,7 +193,7 @@ def build_stop_request(link_connection_name: str, **kwargs: Any) -> HttpRequest:
         "linkConnectionName": _SERIALIZER.url("link_connection_name", link_connection_name, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["api-version"] = _SERIALIZER.query("api_version", api_version, "str")
@@ -217,7 +217,7 @@ def build_get_detailed_status_request(link_connection_name: str, **kwargs: Any) 
         "linkConnectionName": _SERIALIZER.url("link_connection_name", link_connection_name, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["api-version"] = _SERIALIZER.query("api_version", api_version, "str")
@@ -241,7 +241,7 @@ def build_list_link_tables_request(link_connection_name: str, **kwargs: Any) -> 
         "linkConnectionName": _SERIALIZER.url("link_connection_name", link_connection_name, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["api-version"] = _SERIALIZER.query("api_version", api_version, "str")
@@ -266,7 +266,7 @@ def build_query_table_status_request(link_connection_name: str, **kwargs: Any) -
         "linkConnectionName": _SERIALIZER.url("link_connection_name", link_connection_name, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["api-version"] = _SERIALIZER.query("api_version", api_version, "str")
@@ -279,7 +279,9 @@ def build_query_table_status_request(link_connection_name: str, **kwargs: Any) -
     return HttpRequest(method="POST", url=_url, params=_params, headers=_headers, **kwargs)
 
 
-def build_update_landing_zone_credential_request(link_connection_name: str, **kwargs: Any) -> HttpRequest:
+def build_update_landing_zone_credential_request(  # pylint: disable=name-too-long
+    link_connection_name: str, **kwargs: Any
+) -> HttpRequest:
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
@@ -293,7 +295,7 @@ def build_update_landing_zone_credential_request(link_connection_name: str, **kw
         "linkConnectionName": _SERIALIZER.url("link_connection_name", link_connection_name, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["api-version"] = _SERIALIZER.query("api_version", api_version, "str")
@@ -319,7 +321,7 @@ def build_pause_request(link_connection_name: str, **kwargs: Any) -> HttpRequest
         "linkConnectionName": _SERIALIZER.url("link_connection_name", link_connection_name, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["api-version"] = _SERIALIZER.query("api_version", api_version, "str")
@@ -343,7 +345,7 @@ def build_resume_request(link_connection_name: str, **kwargs: Any) -> HttpReques
         "linkConnectionName": _SERIALIZER.url("link_connection_name", link_connection_name, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["api-version"] = _SERIALIZER.query("api_version", api_version, "str")
@@ -377,7 +379,6 @@ class LinkConnectionOperations:
     def list_by_workspace(self, **kwargs: Any) -> Iterable["_models.LinkConnectionResource"]:
         """List link connections.
 
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: An iterator like instance of either LinkConnectionResource or the result of
          cls(response)
         :rtype: ~azure.core.paging.ItemPaged[~azure.synapse.artifacts.models.LinkConnectionResource]
@@ -400,31 +401,30 @@ class LinkConnectionOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_list_by_workspace_request(
+                _request = build_list_by_workspace_request(
                     api_version=api_version,
-                    template_url=self.list_by_workspace.metadata["url"],
                     headers=_headers,
                     params=_params,
                 )
-                request = _convert_request(request)
+                _request = _convert_request(_request)
                 path_format_arguments = {
                     "endpoint": self._serialize.url(
                         "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
             else:
-                request = HttpRequest("GET", next_link)
-                request = _convert_request(request)
+                _request = HttpRequest("GET", next_link)
+                _request = _convert_request(_request)
                 path_format_arguments = {
                     "endpoint": self._serialize.url(
                         "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
-                request.method = "GET"
-            return request
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
+                _request.method = "GET"
+            return _request
 
         def extract_data(pipeline_response):
             deserialized = self._deserialize("LinkConnectionListResponse", pipeline_response)
@@ -434,11 +434,11 @@ class LinkConnectionOperations:
             return deserialized.next_link or None, iter(list_of_elem)
 
         def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -449,8 +449,6 @@ class LinkConnectionOperations:
             return pipeline_response
 
         return ItemPaged(get_next, extract_data)
-
-    list_by_workspace.metadata = {"url": "/linkconnections"}
 
     @overload
     def create_or_update(
@@ -470,7 +468,6 @@ class LinkConnectionOperations:
         :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
          Default value is "application/json".
         :paramtype content_type: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: LinkConnectionResource or the result of cls(response)
         :rtype: ~azure.synapse.artifacts.models.LinkConnectionResource
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -478,18 +475,22 @@ class LinkConnectionOperations:
 
     @overload
     def create_or_update(
-        self, link_connection_name: str, link_connection: IO, *, content_type: str = "application/json", **kwargs: Any
+        self,
+        link_connection_name: str,
+        link_connection: IO[bytes],
+        *,
+        content_type: str = "application/json",
+        **kwargs: Any
     ) -> _models.LinkConnectionResource:
         """Creates or updates a link connection.
 
         :param link_connection_name: The link connection name. Required.
         :type link_connection_name: str
         :param link_connection: Link connection resource definition. Required.
-        :type link_connection: IO
+        :type link_connection: IO[bytes]
         :keyword content_type: Body Parameter content-type. Content type parameter for binary body.
          Default value is "application/json".
         :paramtype content_type: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: LinkConnectionResource or the result of cls(response)
         :rtype: ~azure.synapse.artifacts.models.LinkConnectionResource
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -497,19 +498,18 @@ class LinkConnectionOperations:
 
     @distributed_trace
     def create_or_update(
-        self, link_connection_name: str, link_connection: Union[_models.LinkConnectionResource, IO], **kwargs: Any
+        self,
+        link_connection_name: str,
+        link_connection: Union[_models.LinkConnectionResource, IO[bytes]],
+        **kwargs: Any
     ) -> _models.LinkConnectionResource:
         """Creates or updates a link connection.
 
         :param link_connection_name: The link connection name. Required.
         :type link_connection_name: str
         :param link_connection: Link connection resource definition. Is either a LinkConnectionResource
-         type or a IO type. Required.
-        :type link_connection: ~azure.synapse.artifacts.models.LinkConnectionResource or IO
-        :keyword content_type: Body Parameter content-type. Known values are: 'application/json'.
-         Default value is None.
-        :paramtype content_type: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
+         type or a IO[bytes] type. Required.
+        :type link_connection: ~azure.synapse.artifacts.models.LinkConnectionResource or IO[bytes]
         :return: LinkConnectionResource or the result of cls(response)
         :rtype: ~azure.synapse.artifacts.models.LinkConnectionResource
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -537,25 +537,24 @@ class LinkConnectionOperations:
         else:
             _json = self._serialize.body(link_connection, "LinkConnectionResource")
 
-        request = build_create_or_update_request(
+        _request = build_create_or_update_request(
             link_connection_name=link_connection_name,
             api_version=api_version,
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.create_or_update.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
+        _request = _convert_request(_request)
         path_format_arguments = {
             "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -567,11 +566,9 @@ class LinkConnectionOperations:
         deserialized = self._deserialize("LinkConnectionResource", pipeline_response)
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {})  # type: ignore
 
-        return deserialized
-
-    create_or_update.metadata = {"url": "/linkconnections/{linkConnectionName}"}
+        return deserialized  # type: ignore
 
     @distributed_trace
     def get(self, link_connection_name: str, **kwargs: Any) -> _models.LinkConnectionResource:
@@ -579,7 +576,6 @@ class LinkConnectionOperations:
 
         :param link_connection_name: The link connection name. Required.
         :type link_connection_name: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: LinkConnectionResource or the result of cls(response)
         :rtype: ~azure.synapse.artifacts.models.LinkConnectionResource
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -598,22 +594,21 @@ class LinkConnectionOperations:
         api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2023-04-18-preview"))
         cls: ClsType[_models.LinkConnectionResource] = kwargs.pop("cls", None)
 
-        request = build_get_request(
+        _request = build_get_request(
             link_connection_name=link_connection_name,
             api_version=api_version,
-            template_url=self.get.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
+        _request = _convert_request(_request)
         path_format_arguments = {
             "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -625,11 +620,9 @@ class LinkConnectionOperations:
         deserialized = self._deserialize("LinkConnectionResource", pipeline_response)
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {})  # type: ignore
 
-        return deserialized
-
-    get.metadata = {"url": "/linkconnections/{linkConnectionName}"}
+        return deserialized  # type: ignore
 
     @distributed_trace
     def delete(  # pylint: disable=inconsistent-return-statements
@@ -639,7 +632,6 @@ class LinkConnectionOperations:
 
         :param link_connection_name: The link connection name. Required.
         :type link_connection_name: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: None or the result of cls(response)
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -658,22 +650,21 @@ class LinkConnectionOperations:
         api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2023-04-18-preview"))
         cls: ClsType[None] = kwargs.pop("cls", None)
 
-        request = build_delete_request(
+        _request = build_delete_request(
             link_connection_name=link_connection_name,
             api_version=api_version,
-            template_url=self.delete.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
+        _request = _convert_request(_request)
         path_format_arguments = {
             "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -683,9 +674,7 @@ class LinkConnectionOperations:
             raise HttpResponseError(response=response)
 
         if cls:
-            return cls(pipeline_response, None, {})
-
-    delete.metadata = {"url": "/linkconnections/{linkConnectionName}"}
+            return cls(pipeline_response, None, {})  # type: ignore
 
     @distributed_trace
     def edit_tables(  # pylint: disable=inconsistent-return-statements
@@ -697,7 +686,6 @@ class LinkConnectionOperations:
         :type link_connection_name: str
         :param link_tables: Edit link tables request. Default value is None.
         :type link_tables: list[~azure.synapse.artifacts.models.LinkTableRequest]
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: None or the result of cls(response)
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -720,24 +708,23 @@ class LinkConnectionOperations:
         _edit_tables_request = _models.EditTablesRequest(link_tables=link_tables)
         _json = self._serialize.body(_edit_tables_request, "EditTablesRequest")
 
-        request = build_edit_tables_request(
+        _request = build_edit_tables_request(
             link_connection_name=link_connection_name,
             api_version=api_version,
             content_type=content_type,
             json=_json,
-            template_url=self.edit_tables.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
+        _request = _convert_request(_request)
         path_format_arguments = {
             "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -747,9 +734,7 @@ class LinkConnectionOperations:
             raise HttpResponseError(response=response)
 
         if cls:
-            return cls(pipeline_response, None, {})
-
-    edit_tables.metadata = {"url": "/linkconnections/{linkConnectionName}/edittables"}
+            return cls(pipeline_response, None, {})  # type: ignore
 
     @distributed_trace
     def start(self, link_connection_name: str, **kwargs: Any) -> None:  # pylint: disable=inconsistent-return-statements
@@ -758,7 +743,6 @@ class LinkConnectionOperations:
 
         :param link_connection_name: The link connection name. Required.
         :type link_connection_name: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: None or the result of cls(response)
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -777,22 +761,21 @@ class LinkConnectionOperations:
         api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2023-04-18-preview"))
         cls: ClsType[None] = kwargs.pop("cls", None)
 
-        request = build_start_request(
+        _request = build_start_request(
             link_connection_name=link_connection_name,
             api_version=api_version,
-            template_url=self.start.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
+        _request = _convert_request(_request)
         path_format_arguments = {
             "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -802,9 +785,7 @@ class LinkConnectionOperations:
             raise HttpResponseError(response=response)
 
         if cls:
-            return cls(pipeline_response, None, {})
-
-    start.metadata = {"url": "/linkconnections/{linkConnectionName}/start"}
+            return cls(pipeline_response, None, {})  # type: ignore
 
     @distributed_trace
     def stop(self, link_connection_name: str, **kwargs: Any) -> None:  # pylint: disable=inconsistent-return-statements
@@ -813,7 +794,6 @@ class LinkConnectionOperations:
 
         :param link_connection_name: The link connection name. Required.
         :type link_connection_name: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: None or the result of cls(response)
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -832,22 +812,21 @@ class LinkConnectionOperations:
         api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2023-04-18-preview"))
         cls: ClsType[None] = kwargs.pop("cls", None)
 
-        request = build_stop_request(
+        _request = build_stop_request(
             link_connection_name=link_connection_name,
             api_version=api_version,
-            template_url=self.stop.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
+        _request = _convert_request(_request)
         path_format_arguments = {
             "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -857,9 +836,7 @@ class LinkConnectionOperations:
             raise HttpResponseError(response=response)
 
         if cls:
-            return cls(pipeline_response, None, {})
-
-    stop.metadata = {"url": "/linkconnections/{linkConnectionName}/stop"}
+            return cls(pipeline_response, None, {})  # type: ignore
 
     @distributed_trace
     def get_detailed_status(self, link_connection_name: str, **kwargs: Any) -> _models.LinkConnectionDetailedStatus:
@@ -867,7 +844,6 @@ class LinkConnectionOperations:
 
         :param link_connection_name: The link connection name. Required.
         :type link_connection_name: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: LinkConnectionDetailedStatus or the result of cls(response)
         :rtype: ~azure.synapse.artifacts.models.LinkConnectionDetailedStatus
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -886,22 +862,21 @@ class LinkConnectionOperations:
         api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2023-04-18-preview"))
         cls: ClsType[_models.LinkConnectionDetailedStatus] = kwargs.pop("cls", None)
 
-        request = build_get_detailed_status_request(
+        _request = build_get_detailed_status_request(
             link_connection_name=link_connection_name,
             api_version=api_version,
-            template_url=self.get_detailed_status.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
+        _request = _convert_request(_request)
         path_format_arguments = {
             "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -913,11 +888,9 @@ class LinkConnectionOperations:
         deserialized = self._deserialize("LinkConnectionDetailedStatus", pipeline_response)
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {})  # type: ignore
 
-        return deserialized
-
-    get_detailed_status.metadata = {"url": "/linkconnections/{linkConnectionName}/detailedstatus"}
+        return deserialized  # type: ignore
 
     @distributed_trace
     def list_link_tables(self, link_connection_name: str, **kwargs: Any) -> _models.LinkTableListResponse:
@@ -925,7 +898,6 @@ class LinkConnectionOperations:
 
         :param link_connection_name: The link connection name. Required.
         :type link_connection_name: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: LinkTableListResponse or the result of cls(response)
         :rtype: ~azure.synapse.artifacts.models.LinkTableListResponse
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -944,22 +916,21 @@ class LinkConnectionOperations:
         api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2023-04-18-preview"))
         cls: ClsType[_models.LinkTableListResponse] = kwargs.pop("cls", None)
 
-        request = build_list_link_tables_request(
+        _request = build_list_link_tables_request(
             link_connection_name=link_connection_name,
             api_version=api_version,
-            template_url=self.list_link_tables.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
+        _request = _convert_request(_request)
         path_format_arguments = {
             "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -971,11 +942,9 @@ class LinkConnectionOperations:
         deserialized = self._deserialize("LinkTableListResponse", pipeline_response)
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {})  # type: ignore
 
-        return deserialized
-
-    list_link_tables.metadata = {"url": "/linkconnections/{linkConnectionName}/linktables"}
+        return deserialized  # type: ignore
 
     @overload
     def query_table_status(
@@ -995,7 +964,6 @@ class LinkConnectionOperations:
         :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
          Default value is "application/json".
         :paramtype content_type: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: LinkConnectionQueryTableStatus or the result of cls(response)
         :rtype: ~azure.synapse.artifacts.models.LinkConnectionQueryTableStatus
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -1005,7 +973,7 @@ class LinkConnectionOperations:
     def query_table_status(
         self,
         link_connection_name: str,
-        query_table_status_request: IO,
+        query_table_status_request: IO[bytes],
         *,
         content_type: str = "application/json",
         **kwargs: Any
@@ -1015,11 +983,10 @@ class LinkConnectionOperations:
         :param link_connection_name: The link connection name. Required.
         :type link_connection_name: str
         :param query_table_status_request: Query table status request. Required.
-        :type query_table_status_request: IO
+        :type query_table_status_request: IO[bytes]
         :keyword content_type: Body Parameter content-type. Content type parameter for binary body.
          Default value is "application/json".
         :paramtype content_type: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: LinkConnectionQueryTableStatus or the result of cls(response)
         :rtype: ~azure.synapse.artifacts.models.LinkConnectionQueryTableStatus
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -1029,7 +996,7 @@ class LinkConnectionOperations:
     def query_table_status(
         self,
         link_connection_name: str,
-        query_table_status_request: Union[_models.QueryTableStatusRequest, IO],
+        query_table_status_request: Union[_models.QueryTableStatusRequest, IO[bytes]],
         **kwargs: Any
     ) -> _models.LinkConnectionQueryTableStatus:
         """Query the link table status of a link connection.
@@ -1037,12 +1004,9 @@ class LinkConnectionOperations:
         :param link_connection_name: The link connection name. Required.
         :type link_connection_name: str
         :param query_table_status_request: Query table status request. Is either a
-         QueryTableStatusRequest type or a IO type. Required.
-        :type query_table_status_request: ~azure.synapse.artifacts.models.QueryTableStatusRequest or IO
-        :keyword content_type: Body Parameter content-type. Known values are: 'application/json'.
-         Default value is None.
-        :paramtype content_type: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
+         QueryTableStatusRequest type or a IO[bytes] type. Required.
+        :type query_table_status_request: ~azure.synapse.artifacts.models.QueryTableStatusRequest or
+         IO[bytes]
         :return: LinkConnectionQueryTableStatus or the result of cls(response)
         :rtype: ~azure.synapse.artifacts.models.LinkConnectionQueryTableStatus
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -1070,25 +1034,24 @@ class LinkConnectionOperations:
         else:
             _json = self._serialize.body(query_table_status_request, "QueryTableStatusRequest")
 
-        request = build_query_table_status_request(
+        _request = build_query_table_status_request(
             link_connection_name=link_connection_name,
             api_version=api_version,
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.query_table_status.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
+        _request = _convert_request(_request)
         path_format_arguments = {
             "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -1100,11 +1063,9 @@ class LinkConnectionOperations:
         deserialized = self._deserialize("LinkConnectionQueryTableStatus", pipeline_response)
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {})  # type: ignore
 
-        return deserialized
-
-    query_table_status.metadata = {"url": "/linkconnections/{linkConnectionName}/querytablestatus"}
+        return deserialized  # type: ignore
 
     @distributed_trace
     def update_landing_zone_credential(  # pylint: disable=inconsistent-return-statements
@@ -1116,7 +1077,6 @@ class LinkConnectionOperations:
         :type link_connection_name: str
         :param sas_token: Landing zone's sas token. Default value is None.
         :type sas_token: ~azure.synapse.artifacts.models.SecureString
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: None or the result of cls(response)
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -1139,24 +1099,23 @@ class LinkConnectionOperations:
         _update_landing_zone_credential_request = _models.UpdateLandingZoneCredential(sas_token=sas_token)
         _json = self._serialize.body(_update_landing_zone_credential_request, "UpdateLandingZoneCredential")
 
-        request = build_update_landing_zone_credential_request(
+        _request = build_update_landing_zone_credential_request(
             link_connection_name=link_connection_name,
             api_version=api_version,
             content_type=content_type,
             json=_json,
-            template_url=self.update_landing_zone_credential.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
+        _request = _convert_request(_request)
         path_format_arguments = {
             "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -1166,11 +1125,7 @@ class LinkConnectionOperations:
             raise HttpResponseError(response=response)
 
         if cls:
-            return cls(pipeline_response, None, {})
-
-    update_landing_zone_credential.metadata = {
-        "url": "/linkconnections/{linkConnectionName}/updateLandingZoneCredential"
-    }
+            return cls(pipeline_response, None, {})  # type: ignore
 
     @distributed_trace
     def pause(self, link_connection_name: str, **kwargs: Any) -> None:  # pylint: disable=inconsistent-return-statements
@@ -1179,7 +1134,6 @@ class LinkConnectionOperations:
 
         :param link_connection_name: The link connection name. Required.
         :type link_connection_name: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: None or the result of cls(response)
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -1198,22 +1152,21 @@ class LinkConnectionOperations:
         api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2023-04-18-preview"))
         cls: ClsType[None] = kwargs.pop("cls", None)
 
-        request = build_pause_request(
+        _request = build_pause_request(
             link_connection_name=link_connection_name,
             api_version=api_version,
-            template_url=self.pause.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
+        _request = _convert_request(_request)
         path_format_arguments = {
             "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -1223,9 +1176,7 @@ class LinkConnectionOperations:
             raise HttpResponseError(response=response)
 
         if cls:
-            return cls(pipeline_response, None, {})
-
-    pause.metadata = {"url": "/linkconnections/{linkConnectionName}/pause"}
+            return cls(pipeline_response, None, {})  # type: ignore
 
     @distributed_trace
     def resume(  # pylint: disable=inconsistent-return-statements
@@ -1236,7 +1187,6 @@ class LinkConnectionOperations:
 
         :param link_connection_name: The link connection name. Required.
         :type link_connection_name: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: None or the result of cls(response)
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -1255,22 +1205,21 @@ class LinkConnectionOperations:
         api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2023-04-18-preview"))
         cls: ClsType[None] = kwargs.pop("cls", None)
 
-        request = build_resume_request(
+        _request = build_resume_request(
             link_connection_name=link_connection_name,
             api_version=api_version,
-            template_url=self.resume.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
+        _request = _convert_request(_request)
         path_format_arguments = {
             "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -1280,6 +1229,4 @@ class LinkConnectionOperations:
             raise HttpResponseError(response=response)
 
         if cls:
-            return cls(pipeline_response, None, {})
-
-    resume.metadata = {"url": "/linkconnections/{linkConnectionName}/resume"}
+            return cls(pipeline_response, None, {})  # type: ignore

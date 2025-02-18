@@ -50,7 +50,7 @@ from azure.core.pipeline.policies import (
     SansIOHTTPPolicy,
     SensitiveHeaderCleanupPolicy,
 )
-from azure.core.pipeline.transport._base import PipelineClientBase
+from azure.core.pipeline.transport._base import PipelineClientBase, _format_url_section
 from azure.core.pipeline.transport import (
     HttpTransport,
     RequestsTransport,
@@ -70,6 +70,8 @@ def test_default_http_logging_policy(http_request):
     assert http_logging_policy.allowed_header_names == HttpLoggingPolicy.DEFAULT_HEADERS_WHITELIST
     assert http_logging_policy.allowed_header_names == HttpLoggingPolicy.DEFAULT_HEADERS_ALLOWLIST
     assert "WWW-Authenticate" in http_logging_policy.allowed_header_names
+    assert "x-vss-e2eid" in http_logging_policy.allowed_header_names
+    assert "x-msedge-ref" in http_logging_policy.allowed_header_names
     # Testing I can replace the set entirely
     HttpLoggingPolicy.DEFAULT_HEADERS_ALLOWLIST = set(HttpLoggingPolicy.DEFAULT_HEADERS_ALLOWLIST)
     HttpLoggingPolicy.DEFAULT_HEADERS_WHITELIST = set(HttpLoggingPolicy.DEFAULT_HEADERS_ALLOWLIST)
@@ -202,6 +204,18 @@ def test_format_url_double_query():
     client = PipelineClientBase("https://bing.com/path?query=testvalue&x=2ndvalue")
     formatted = client.format_url("/subpath?a=X&c=Y")
     assert formatted == "https://bing.com/path/subpath?query=testvalue&x=2ndvalue&a=X&c=Y"
+
+
+def test_format_url_braces_with_dot():
+    base_url = "https://bing.com/{aaa.bbb}"
+    with pytest.raises(ValueError):
+        url = _format_url_section(base_url)
+
+
+def test_format_url_single_brace():
+    base_url = "https://bing.com/{aaa.bbb"
+    with pytest.raises(ValueError):
+        url = _format_url_section(base_url)
 
 
 def test_format_incorrect_endpoint():

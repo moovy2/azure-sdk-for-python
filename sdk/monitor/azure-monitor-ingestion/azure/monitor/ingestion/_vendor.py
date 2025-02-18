@@ -6,27 +6,14 @@
 # --------------------------------------------------------------------------
 
 from abc import ABC
-from typing import List, TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 from ._configuration import LogsIngestionClientConfiguration
 
 if TYPE_CHECKING:
-    # pylint: disable=unused-import,ungrouped-imports
     from azure.core import PipelineClient
 
     from ._serialization import Deserializer, Serializer
-
-
-def _format_url_section(template, **kwargs):
-    components = template.split("/")
-    while components:
-        try:
-            return template.format(**kwargs)
-        except KeyError as key:
-            # Need the cast, as for some reasons "split" is typed as list[str | Any]
-            formatted_components = cast(List[str], template.split("/"))
-            components = [c for c in formatted_components if "{}".format(key.args[0]) not in c]
-            template = "/".join(components)
 
 
 class LogsIngestionClientMixinABC(ABC):

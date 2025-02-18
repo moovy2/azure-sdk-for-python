@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.web import WebSiteManagementClient
 
 """
@@ -29,14 +30,13 @@ def main():
         subscription_id="34adfa4f-cedf-4dc0-ba29-b6d1a69ab345",
     )
 
-    response = client.static_sites.reset_static_site_api_key(
+    client.static_sites.reset_static_site_api_key(
         resource_group_name="rg",
         name="testStaticSite0",
         reset_properties_envelope={"properties": {"repositoryToken": "repoToken123", "shouldUpdateRepository": True}},
     )
-    print(response)
 
 
-# x-ms-original-file: specification/web/resource-manager/Microsoft.Web/stable/2022-09-01/examples/ResetStaticSiteApiKey.json
+# x-ms-original-file: specification/web/resource-manager/Microsoft.Web/stable/2024-04-01/examples/ResetStaticSiteApiKey.json
 if __name__ == "__main__":
     main()

@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.elasticsan import ElasticSanMgmtClient
 
 """
@@ -34,11 +35,11 @@ def main():
         elastic_san_name="elasticsanname",
         volume_group_name="volumegroupname",
         volume_name="volumename",
-        parameters={"properties": {"sizeGiB": 23}},
+        parameters={"properties": {"sizeGiB": 9}},
     ).result()
     print(response)
 
 
-# x-ms-original-file: specification/elasticsan/resource-manager/Microsoft.ElasticSan/preview/2022-12-01-preview/examples/Volumes_Create_MinimumSet_Gen.json
+# x-ms-original-file: specification/elasticsan/resource-manager/Microsoft.ElasticSan/preview/2024-06-01-preview/examples/Volumes_Create_MinimumSet_Gen.json
 if __name__ == "__main__":
     main()

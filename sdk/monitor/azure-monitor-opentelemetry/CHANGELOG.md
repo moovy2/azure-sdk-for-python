@@ -1,6 +1,174 @@
 # Release History
 
-## 1.0.0b16 (Unreleased)
+## 1.6.5 (2025-02-14)
+
+### Features Added
+
+- Add more diagnostic log options
+    ([#39701](https://github.com/Azure/azure-sdk-for-python/pull/39701))
+- Only add OpenTelemetry LoggingHandler if current logger does not have it
+    ([#38549](https://github.com/Azure/azure-sdk-for-python/pull/38549))
+- Distro to automatically configure event logger provider
+    ([#38543](https://github.com/Azure/azure-sdk-for-python/pull/38543))
+- Configure live metrics first in pipeline to detect statsbeat usage
+    ([#38556](https://github.com/Azure/azure-sdk-for-python/pull/38556))
+- Ignore backoff warning from distro if in functions environment
+    ([#38787](https://github.com/Azure/azure-sdk-for-python/pull/38787))
+
+## 1.6.4 (2024-11-06)
+
+### Bugs Fixed
+
+- Fixed bug caused by migration from pkg_resources to importlib-metadata
+    ([#38371](https://github.com/Azure/azure-sdk-for-python/pull/38371))
+
+## 1.6.3 (2024-11-04)
+
+### Features Added
+
+- Enable Azure AI Inference instrumentation
+    ([#38071](https://github.com/Azure/azure-sdk-for-python/pull/38071))
+
+### Other Changes
+
+- Added AAD auth samples to distro
+    ([#37352](https://github.com/Azure/azure-sdk-for-python/pull/37352))
+
+## 1.6.2 (2024-09-05)
+
+### Bugs Fixed
+
+- Update OTel sdk and instrumentations to fix fastapi bug
+    ([#37206](https://github.com/Azure/azure-sdk-for-python/pull/37206))
+
+## 1.6.1 (2024-07-30)
+
+### Other Changes
+
+- Support for Python 3.12
+    ([#36482](https://github.com/Azure/azure-sdk-for-python/pull/36482))
+
+## 1.6.0 (2024-06-06)
+
+### Features Added
+
+- Enable views configuration
+    ([#35932](https://github.com/Azure/azure-sdk-for-python/pull/35932))
+- Rework autoinstrumentation: Configure exporters and samplers directly
+    ([#35890](https://github.com/Azure/azure-sdk-for-python/pull/35890))
+
+## 1.5.0 (2024-05-31)
+
+### Features Added
+
+- Enable live metrics feature
+    ([#35566](https://github.com/Azure/azure-sdk-for-python/pull/35566))
+
+## 1.4.2 (2024-05-20)
+
+### Features Added
+
+- Add diagnostics for sdk detection and backoff
+    ([#35610](https://github.com/Azure/azure-sdk-for-python/pull/35610))
+
+### Breaking Changes
+
+### Bugs Fixed
+
+### Other Changes
+
+## 1.4.1 (2024-04-25)
+
+### Features Added
+
+- Enable sampling for attach
+    ([#35218](https://github.com/Azure/azure-sdk-for-python/pull/35218))
+
+## 1.4.0 (2024-04-09)
+
+### Features Added
+
+- Adding diagnostic warning when distro detects RP attach
+    ([#34971](https://github.com/Azure/azure-sdk-for-python/pull/34971))
+- Added `resource` parameter
+    ([#34900](https://github.com/Azure/azure-sdk-for-python/pull/34900))
+
+### Other Changes
+
+- Updated FastAPI sample
+    ([#34738](https://github.com/Azure/azure-sdk-for-python/pull/34738))
+- Refactored constants and utils
+    ([#35066](https://github.com/Azure/azure-sdk-for-python/pull/35066))
+
+## 1.3.0 (2024-02-29)
+
+### Features Added
+
+- Add custom span processors configuration option
+    ([#34326](https://github.com/Azure/azure-sdk-for-python/pull/34326))
+
+### Other Changes
+
+- Update configure_azure_monitor signature and Django sample
+    ([#33834](https://github.com/Azure/azure-sdk-for-python/pull/33834))
+- Remove support for Python 3.7
+    ([#34252](https://github.com/Azure/azure-sdk-for-python/pull/34252))
+
+## 1.2.0 (2024-01-18)
+
+### Other Changes
+
+- Implement distro detection for statsbeat feature
+    ([#33761](https://github.com/Azure/azure-sdk-for-python/pull/33761))
+- Fix siteName in diagnostic logging
+    ([#33808](https://github.com/Azure/azure-sdk-for-python/pull/33808))
+- Update min dependency versions opentelemetry-resource-detector-azure~=0.1.1, exporter~=1.0.0b21, OTel SDK/API~= 1.21
+    ([#33866](https://github.com/Azure/azure-sdk-for-python/pull/33866))
+- Update configure_azure_monitor signature and Django sample
+    ([#33834](https://github.com/Azure/azure-sdk-for-python/pull/33834))
+
+## 1.1.1 (2023-12-04)
+
+### Features Added
+
+- Add App Service Resource Detector to Auto-Instrumentation.
+    ([#33340](https://github.com/Azure/azure-sdk-for-python/pull/33340))
+- Default Resource Detector environment variable to enable configuration.
+    ([#33305](https://github.com/Azure/azure-sdk-for-python/pull/33305))
+    ([#33373](https://github.com/Azure/azure-sdk-for-python/pull/33373))
+    ([#33390](https://github.com/Azure/azure-sdk-for-python/pull/33390))
+
+## 1.1.0 (2023-11-08)
+
+### Features Added
+
+- Add ability to specify which logger to export telemetry for via `logger_name` configuration
+    ([#32192](https://github.com/Azure/azure-sdk-for-python/pull/32192))
+- Add message ids for AppLens
+    ([#32195](https://github.com/Azure/azure-sdk-for-python/pull/32195))
+- Allow OTEL_PYTHON_DISABLED_INSTRUMENTATIONS functionality for Azure Core Tracing in Auto-instrumentation
+    ([#32331](https://github.com/Azure/azure-sdk-for-python/pull/32331))
+- Add instrumentation_options
+    ([#31793](https://github.com/Azure/azure-sdk-for-python/pull/31793))
+
+### Bugs Fixed
+
+- Updated django samples with clearly artificial secret key
+    ([#32698](https://github.com/Azure/azure-sdk-for-python/pull/32698))
+
+## 1.0.0 (2023-09-12)
+
+### Features Added
+
+- Add Azure resource detectors
+    ([#32087](https://github.com/Azure/azure-sdk-for-python/pull/32087))
+
+### Other Changes
+
+- The `autoinstrumentation', 'diagnostics' and 'util' subnamespaces have been made internal.
+    ([#31931](https://github.com/Azure/azure-sdk-for-python/pull/31931))
+
+## 1.0.0b16 (2023-08-28)
 
 ### Features Added
 
@@ -12,12 +180,8 @@
     ([#31744](https://github.com/Azure/azure-sdk-for-python/pull/31740))
 - Add preview warning for Autoinstrumentation entry points
     ([#31767](https://github.com/Azure/azure-sdk-for-python/pull/31767))
-
-### Breaking Changes
-
-### Bugs Fixed
-
-### Other Changes
+- Bandit and pylint
+    ([#31881](https://github.com/Azure/azure-sdk-for-python/pull/31881))
 
 ## 1.0.0b15 (2023-07-17)
 

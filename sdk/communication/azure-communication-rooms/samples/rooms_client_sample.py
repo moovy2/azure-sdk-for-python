@@ -30,44 +30,41 @@ import sys
 from datetime import datetime, timedelta
 from azure.core.exceptions import HttpResponseError
 from azure.communication.identity import CommunicationIdentityClient
-from azure.communication.rooms import (
-    ParticipantRole,
-    RoomsClient,
-    RoomParticipant
-)
+from azure.communication.rooms import ParticipantRole, RoomsClient, RoomParticipant
 
 sys.path.append("..")
+
 
 class RoomsSample(object):
 
     def setUp(self):
-        self.connection_string = os.getenv("COMMUNICATION_SAMPLES_CONNECTION_STRING")
+        # [START auth_from_connection_string]
+        self.connection_string = os.getenv("COMMUNICATION_CONNECTION_STRING_ROOMS")
 
         self.rooms_client = RoomsClient.from_connection_string(self.connection_string)
-        self.identity_client = CommunicationIdentityClient.from_connection_string(
-            self.connection_string)
+        # [END auth_from_connection_string]
+        self.identity_client = CommunicationIdentityClient.from_connection_string(self.connection_string)
         self.rooms = []
         self.participant_1 = RoomParticipant(
-            communication_identifier=self.identity_client.create_user(),
-            role=ParticipantRole.PRESENTER)
+            communication_identifier=self.identity_client.create_user(), role=ParticipantRole.PRESENTER
+        )
         self.participant_2 = RoomParticipant(
-            communication_identifier=self.identity_client.create_user(),
-            role=ParticipantRole.CONSUMER)
+            communication_identifier=self.identity_client.create_user(), role=ParticipantRole.CONSUMER
+        )
 
     def tearDown(self):
         self.delete_room_all_rooms()
 
     def create_single_room(self):
 
-        valid_from =  datetime.now()
+        valid_from = datetime.now()
         valid_until = valid_from + timedelta(weeks=4)
         participants = [self.participant_1]
 
         try:
             create_room_response = self.rooms_client.create_room(
-                valid_from=valid_from,
-                valid_until=valid_until,
-                participants=participants)
+                valid_from=valid_from, valid_until=valid_until, participants=participants
+            )
             self.printRoom(response=create_room_response)
 
             # all created room to a list
@@ -86,13 +83,56 @@ class RoomsSample(object):
         except HttpResponseError as ex:
             print(ex)
 
+    # Starting in 1.1.0b1 release,create_room function also takes pstn_dial_out_enabled as parameter
+    def create_room_with_pstn_attribute(self):
+
+        valid_from = datetime.now()
+        valid_until = valid_from + timedelta(weeks=4)
+        participants = [self.participant_1]
+        pstn_dial_out_enabled = True
+
+        try:
+            create_room_response = self.rooms_client.create_room(
+                valid_from=valid_from,
+                valid_until=valid_until,
+                participants=participants,
+                pstn_dial_out_enabled=pstn_dial_out_enabled,
+            )
+            self.printRoom(response=create_room_response)
+
+            # all created room to a list
+            self.rooms.append(create_room_response.id)
+
+        except HttpResponseError as ex:
+            print(ex)
+
     def update_single_room(self, room_id):
         # set attributes you want to change
-        valid_from =  datetime.now()
+        valid_from = datetime.now()
         valid_until = valid_from + timedelta(weeks=7)
 
         try:
-            update_room_response = self.rooms_client.update_room(room_id=room_id, valid_from=valid_from, valid_until=valid_until)
+            update_room_response = self.rooms_client.update_room(
+                room_id=room_id, valid_from=valid_from, valid_until=valid_until
+            )
+            self.printRoom(response=update_room_response)
+        except HttpResponseError as ex:
+            print(ex)
+
+    # Starting in 1.1.0b1 release,update_room function also takes pstn_dial_out_enabled as parameter
+    def update_room_with_pstn_attribute(self, room_id):
+        # set attributes you want to change
+        valid_from = datetime.now()
+        valid_until = valid_from + timedelta(weeks=7)
+        pstn_dial_out_enabled = True
+
+        try:
+            update_room_response = self.rooms_client.update_room(
+                room_id=room_id,
+                valid_from=valid_from,
+                valid_until=valid_until,
+                pstn_dial_out_enabled=pstn_dial_out_enabled,
+            )
             self.printRoom(response=update_room_response)
         except HttpResponseError as ex:
             print(ex)
@@ -100,9 +140,9 @@ class RoomsSample(object):
     def add_or_update_participants(self, room_id):
         self.participant_1.role = ParticipantRole.ATTENDEE
         participants = [
-            self.participant_1, # Update participant_1 role from Presenter to Attendee
-            self.participant_2  # Add participant_2 to room
-            ]
+            self.participant_1,  # Update participant_1 role from Presenter to Attendee
+            self.participant_2,  # Add participant_2 to room
+        ]
 
         try:
             self.rooms_client.add_or_update_participants(room_id=room_id, participants=participants)
@@ -145,19 +185,19 @@ class RoomsSample(object):
         print("valid_until: ", response.valid_until)
 
     def convert_participant_list_to_string(self, participants):
-        result = ''
+        result = ""
         for p in participants:
-            result += "id: {}\n role: {}\n".format(
-                p.communication_identifier.properties["id"], p.role)
+            result += "id: {}\n role: {}\n".format(p.communication_identifier.properties["id"], p.role)
         return result
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     sample = RoomsSample()
     sample.setUp()
     sample.create_single_room()
     sample.create_single_room_with_default_attributes()
     if len(sample.rooms) > 0:
-        sample.get_room(room_id=sample.rooms[0] )
+        sample.get_room(room_id=sample.rooms[0])
         sample.update_single_room(room_id=sample.rooms[0])
         sample.add_or_update_participants(room_id=sample.rooms[0])
         sample.list_participants(room_id=sample.rooms[0])

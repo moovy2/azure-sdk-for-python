@@ -8,7 +8,7 @@ from azure.keyvault.administration import KeyVaultSetting, KeyVaultSettingType
 
 # ----------------------------------------------------------------------------------------------------------
 # Prerequisites:
-# 1. A managed HSM (https://docs.microsoft.com/azure/key-vault/managed-hsm/quick-create-cli)
+# 1. A managed HSM (https://learn.microsoft.com/azure/key-vault/managed-hsm/quick-create-cli)
 #
 # 2. azure-keyvault-administration and azure-identity libraries (pip install these)
 #
@@ -45,6 +45,7 @@ for setting in settings:
     if setting.setting_type == KeyVaultSettingType.BOOLEAN:
         boolean_setting = setting
     print(f"{setting.name}: {setting.value} (type: {setting.setting_type})")
+assert boolean_setting
 
 # Now, let's flip the value of a boolean setting
 # The `value` property is a string, but you can get the value of a boolean setting as a bool with `getboolean`

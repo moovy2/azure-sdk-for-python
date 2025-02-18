@@ -3,12 +3,13 @@
 # Licensed under the MIT License.
 # ------------------------------------
 import os
+
 from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential
 
 # ----------------------------------------------------------------------------------------------------------
 # Prerequisites:
-# 1. An Azure Key Vault (https://docs.microsoft.com/azure/key-vault/quick-create-cli)
+# 1. An Azure Key Vault (https://learn.microsoft.com/azure/key-vault/quick-create-cli)
 #
 # 2. azure-keyvault-secrets and azure-identity libraries (pip install these)
 #
@@ -18,7 +19,7 @@ from azure.identity import DefaultAzureCredential
 # ----------------------------------------------------------------------------------------------------------
 # Sample - demonstrates deleting and purging a vault(secret) resource for Azure Key Vault.
 # The vault has to be soft-delete enabled to perform one of the following operations. See
-# https://docs.microsoft.com/azure/key-vault/key-vault-ovw-soft-delete for more information about soft-delete.
+# https://learn.microsoft.com/azure/key-vault/key-vault-ovw-soft-delete for more information about soft-delete.
 #
 # 1. Create a secret (set_secret)
 #
@@ -40,6 +41,8 @@ client = SecretClient(vault_url=VAULT_URL, credential=credential)
 print("\n.. Create Secret")
 bank_secret = client.set_secret("recoverPurgeBankSecretName", "recoverPurgeSecretValue1")
 storage_secret = client.set_secret("recoverPurgeStorageSecretName", "recoverPurgeSecretValue2")
+assert bank_secret.name
+assert storage_secret.name
 print(f"Secret with name '{bank_secret.name}' was created.")
 print(f"Secret with name '{storage_secret.name}' was created.")
 

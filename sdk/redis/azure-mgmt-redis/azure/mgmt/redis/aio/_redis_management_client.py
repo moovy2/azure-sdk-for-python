@@ -8,14 +8,19 @@
 
 from copy import deepcopy
 from typing import Any, Awaitable, TYPE_CHECKING
+from typing_extensions import Self
 
+from azure.core.pipeline import policies
 from azure.core.rest import AsyncHttpResponse, HttpRequest
 from azure.mgmt.core import AsyncARMPipelineClient
+from azure.mgmt.core.policies import AsyncARMAutoResourceProviderRegistrationPolicy
 
 from .. import models as _models
 from .._serialization import Deserializer, Serializer
 from ._configuration import RedisManagementClientConfiguration
 from .operations import (
+    AccessPolicyAssignmentOperations,
+    AccessPolicyOperations,
     AsyncOperationStatusOperations,
     FirewallRulesOperations,
     LinkedServerOperations,
@@ -27,11 +32,10 @@ from .operations import (
 )
 
 if TYPE_CHECKING:
-    # pylint: disable=unused-import,ungrouped-imports
     from azure.core.credentials_async import AsyncTokenCredential
 
 
-class RedisManagementClient:  # pylint: disable=client-accepts-api-version-keyword,too-many-instance-attributes
+class RedisManagementClient:  # pylint: disable=too-many-instance-attributes
     """REST API for Azure Redis Cache Service.
 
     :ivar operations: Operations operations
@@ -51,14 +55,18 @@ class RedisManagementClient:  # pylint: disable=client-accepts-api-version-keywo
     :vartype private_link_resources: azure.mgmt.redis.aio.operations.PrivateLinkResourcesOperations
     :ivar async_operation_status: AsyncOperationStatusOperations operations
     :vartype async_operation_status: azure.mgmt.redis.aio.operations.AsyncOperationStatusOperations
+    :ivar access_policy: AccessPolicyOperations operations
+    :vartype access_policy: azure.mgmt.redis.aio.operations.AccessPolicyOperations
+    :ivar access_policy_assignment: AccessPolicyAssignmentOperations operations
+    :vartype access_policy_assignment:
+     azure.mgmt.redis.aio.operations.AccessPolicyAssignmentOperations
     :param credential: Credential needed for the client to connect to Azure. Required.
     :type credential: ~azure.core.credentials_async.AsyncTokenCredential
-    :param subscription_id: Gets subscription credentials which uniquely identify the Microsoft
-     Azure subscription. The subscription ID forms part of the URI for every service call. Required.
+    :param subscription_id: The ID of the target subscription. Required.
     :type subscription_id: str
     :param base_url: Service URL. Default value is "https://management.azure.com".
     :type base_url: str
-    :keyword api_version: Api Version. Default value is "2023-04-01". Note that overriding this
+    :keyword api_version: Api Version. Default value is "2024-11-01". Note that overriding this
      default value may result in unsupported behavior.
     :paramtype api_version: str
     :keyword int polling_interval: Default waiting time between two polls for LRO operations if no
@@ -75,7 +83,25 @@ class RedisManagementClient:  # pylint: disable=client-accepts-api-version-keywo
         self._config = RedisManagementClientConfiguration(
             credential=credential, subscription_id=subscription_id, **kwargs
         )
-        self._client: AsyncARMPipelineClient = AsyncARMPipelineClient(base_url=base_url, config=self._config, **kwargs)
+        _policies = kwargs.pop("policies", None)
+        if _policies is None:
+            _policies = [
+                policies.RequestIdPolicy(**kwargs),
+                self._config.headers_policy,
+                self._config.user_agent_policy,
+                self._config.proxy_policy,
+                policies.ContentDecodePolicy(**kwargs),
+                AsyncARMAutoResourceProviderRegistrationPolicy(),
+                self._config.redirect_policy,
+                self._config.retry_policy,
+                self._config.authentication_policy,
+                self._config.custom_hook_policy,
+                self._config.logging_policy,
+                policies.DistributedTracingPolicy(**kwargs),
+                policies.SensitiveHeaderCleanupPolicy(**kwargs) if self._config.redirect_policy else None,
+                self._config.http_logging_policy,
+            ]
+        self._client: AsyncARMPipelineClient = AsyncARMPipelineClient(base_url=base_url, policies=_policies, **kwargs)
 
         client_models = {k: v for k, v in _models.__dict__.items() if isinstance(v, type)}
         self._serialize = Serializer(client_models)
@@ -95,8 +121,14 @@ class RedisManagementClient:  # pylint: disable=client-accepts-api-version-keywo
         self.async_operation_status = AsyncOperationStatusOperations(
             self._client, self._config, self._serialize, self._deserialize
         )
+        self.access_policy = AccessPolicyOperations(self._client, self._config, self._serialize, self._deserialize)
+        self.access_policy_assignment = AccessPolicyAssignmentOperations(
+            self._client, self._config, self._serialize, self._deserialize
+        )
 
-    def _send_request(self, request: HttpRequest, **kwargs: Any) -> Awaitable[AsyncHttpResponse]:
+    def _send_request(
+        self, request: HttpRequest, *, stream: bool = False, **kwargs: Any
+    ) -> Awaitable[AsyncHttpResponse]:
         """Runs the network request through the client's chained policies.
 
         >>> from azure.core.rest import HttpRequest
@@ -116,12 +148,12 @@ class RedisManagementClient:  # pylint: disable=client-accepts-api-version-keywo
 
         request_copy = deepcopy(request)
         request_copy.url = self._client.format_url(request_copy.url)
-        return self._client.send_request(request_copy, **kwargs)
+        return self._client.send_request(request_copy, stream=stream, **kwargs)  # type: ignore
 
     async def close(self) -> None:
         await self._client.close()
 
-    async def __aenter__(self) -> "RedisManagementClient":
+    async def __aenter__(self) -> Self:
         await self._client.__aenter__()
         return self
 

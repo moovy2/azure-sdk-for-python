@@ -5,12 +5,12 @@ import os
 from contextlib import contextmanager
 from enum import Enum
 from pathlib import Path
-from typing import Iterable, List, Optional, Union
+from typing import Any, Generator, List, Optional, Union
 
 from azure.ai.ml._utils._arm_id_utils import is_ARM_id_for_resource, is_registry_id_for_resource
 from azure.ai.ml._utils._asset_utils import IgnoreFile, get_ignore_file
 from azure.ai.ml._utils.utils import is_private_preview_enabled
-from azure.ai.ml.constants._common import AzureMLResourceType
+from azure.ai.ml.constants._common import BASE_PATH_CONTEXT_KEY, AzureMLResourceType
 from azure.ai.ml.entities._assets import Code
 from azure.ai.ml.entities._validation import MutableValidationResult
 
@@ -40,7 +40,7 @@ class ComponentIgnoreFile(IgnoreFile):
         skip_ignore_file: bool = False,
         extra_ignore_list: Optional[List[IgnoreFile]] = None,
     ):
-        self._base_path = Path(directory_path)
+        self._base_path: Union[str, Path] = Path(directory_path)
         self._extra_ignore_list: List[IgnoreFile] = extra_ignore_list or []
         # only the additional include file in root directory is ignored
         # additional include files in subdirectories are not processed so keep them
@@ -58,7 +58,7 @@ class ComponentIgnoreFile(IgnoreFile):
         return True
 
     @property
-    def base_path(self) -> Path:
+    def base_path(self) -> Union[str, Path]:
         """Get the base path of the ignore file.
 
         :return: The base path.
@@ -91,7 +91,8 @@ class ComponentIgnoreFile(IgnoreFile):
         for ignore_file in self._extra_ignore_list:
             if ignore_file.is_file_excluded(file_path):
                 return True
-        return super(ComponentIgnoreFile, self).is_file_excluded(file_path)
+        res: bool = super(ComponentIgnoreFile, self).is_file_excluded(file_path)
+        return res
 
     def merge(self, other_path: Path) -> "ComponentIgnoreFile":
         """Merge the ignore list from another ComponentIgnoreFile object.
@@ -115,7 +116,8 @@ class ComponentIgnoreFile(IgnoreFile):
         """
         if not super(ComponentIgnoreFile, self).exists():
             return self._COMPONENT_CODE_IGNORES
-        return super(ComponentIgnoreFile, self)._get_ignore_list() + self._COMPONENT_CODE_IGNORES
+        res: list = super(ComponentIgnoreFile, self)._get_ignore_list() + self._COMPONENT_CODE_IGNORES
+        return res
 
 
 class CodeType(Enum):
@@ -128,7 +130,7 @@ class CodeType(Enum):
     UNKNOWN = "unknown"
 
 
-def _get_code_type(origin_code_value) -> CodeType:
+def _get_code_type(origin_code_value: Optional[str]) -> CodeType:
     if origin_code_value is None:
         return CodeType.NONE
     if not isinstance(origin_code_value, str):
@@ -164,8 +166,8 @@ class ComponentCodeMixin:
         :return: The base path
         :rtype: Path
         """
-        if hasattr(self, "base_path"):
-            return Path(self.base_path)
+        if hasattr(self, BASE_PATH_CONTEXT_KEY):
+            return Path(getattr(self, BASE_PATH_CONTEXT_KEY))
         raise NotImplementedError(
             "Component must have a base_path attribute to use ComponentCodeMixin. "
             "Please set base_path in __init__ or override _get_base_path_for_code."
@@ -190,6 +192,16 @@ class ComponentCodeMixin:
         """
         return getattr(self, self._get_code_field_name(), None)
 
+    def _fill_back_code_value(self, value: str) -> None:
+        """Fill resolved code value back to the component.
+
+        :param value: resolved code value
+        :type value: str
+        :return: no return
+        :rtype: None
+        """
+        return setattr(self, self._get_code_field_name(), value)
+
     def _get_origin_code_in_str(self) -> Optional[str]:
         """Get origin code value in str to simplify following logic."""
         origin_code_value = self._get_origin_code_value()
@@ -200,7 +212,7 @@ class ComponentCodeMixin:
         return str(origin_code_value)
 
     def _append_diagnostics_and_check_if_origin_code_reliable_for_local_path_validation(
-        self, base_validation_result: MutableValidationResult = None
+        self, base_validation_result: Optional[MutableValidationResult] = None
     ) -> bool:
         """Append diagnostics from customized validation logic to the base validation result and check if origin code
         value is valid for path validation.
@@ -232,7 +244,7 @@ class ComponentCodeMixin:
         return code_type == CodeType.LOCAL
 
     @contextmanager
-    def _build_code(self) -> Iterable[Optional[Code]]:
+    def _build_code(self) -> Generator:
         """Create a Code object if necessary based on origin code value and yield it.
 
         :return: If built code is the same as its origin value, do nothing and yield None.
@@ -246,14 +258,18 @@ class ComponentCodeMixin:
             # git also need to be resolved into arm id
             yield Code(path=origin_code_value)
         elif code_type in [CodeType.LOCAL, CodeType.NONE]:
-            with self._try_build_local_code() as code:
+            code: Any
+            # false-positive by pylint, hence disable it
+            # (https://github.com/pylint-dev/pylint/blob/main/doc/data/messages
+            # /c/contextmanager-generator-missing-cleanup/details.rst)
+            with self._try_build_local_code() as code:  # pylint:disable=contextmanager-generator-missing-cleanup
                 yield code
         else:
             # arm id, None and unknown need no extra resolution
             yield None
 
     @contextmanager
-    def _try_build_local_code(self) -> Iterable[Optional[Code]]:
+    def _try_build_local_code(self) -> Generator:
         """Extract the logic of _build_code for local code for further override.
 
         :return: The Code object if could be constructed, None otherwise
@@ -264,7 +280,9 @@ class ComponentCodeMixin:
             yield None
         else:
             base_path = self._get_base_path_for_code()
-            absolute_path = origin_code_value if os.path.isabs(origin_code_value) else base_path / origin_code_value
+            absolute_path: Union[str, Path] = (
+                origin_code_value if os.path.isabs(origin_code_value) else base_path / origin_code_value
+            )
 
             yield Code(
                 base_path=base_path,
@@ -272,7 +290,7 @@ class ComponentCodeMixin:
                 ignore_file=ComponentIgnoreFile(absolute_path),
             )
 
-    def _with_local_code(self):
+    def _with_local_code(self) -> bool:
         # TODO: remove this method after we have a better way to do this judge in cache_utils
         origin_code_value = self._get_origin_code_in_str()
         code_type = _get_code_type(origin_code_value)

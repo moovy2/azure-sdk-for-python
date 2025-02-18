@@ -140,7 +140,7 @@ class PipelineClient(PipelineClientBase, Generic[HTTPRequestType, HTTPResponseTy
                 [
                     config.logging_policy,
                     DistributedTracingPolicy(**kwargs),
-                    SensitiveHeaderCleanupPolicy(**kwargs) if config.redirect_policy else None,
+                    (SensitiveHeaderCleanupPolicy(**kwargs) if config.redirect_policy else None),
                     config.http_logging_policy or HttpLoggingPolicy(**kwargs),
                 ]
             )
@@ -172,13 +172,14 @@ class PipelineClient(PipelineClientBase, Generic[HTTPRequestType, HTTPResponseTy
                 policies = policies_1
 
         if transport is None:
-            from .pipeline.transport import RequestsTransport  # pylint: disable=no-name-in-module
+            # Use private import for better typing, mypy and pyright don't like PEP562
+            from .pipeline.transport._requests_basic import RequestsTransport
 
             transport = RequestsTransport(**kwargs)
 
         return Pipeline(transport, policies)
 
-    def send_request(self, request: HTTPRequestType, **kwargs: Any) -> HTTPResponseType:
+    def send_request(self, request: HTTPRequestType, *, stream: bool = False, **kwargs: Any) -> HTTPResponseType:
         """Method that runs the network request through the client's chained policies.
 
         >>> from azure.core.rest import HttpRequest
@@ -193,9 +194,8 @@ class PipelineClient(PipelineClientBase, Generic[HTTPRequestType, HTTPResponseTy
         :return: The response of your network call. Does not do error handling on your response.
         :rtype: ~azure.core.rest.HttpResponse
         """
-        stream = kwargs.pop("stream", False)  # want to add default value
         return_pipeline_response = kwargs.pop("_return_pipeline_response", False)
-        pipeline_response = self._pipeline.run(request, stream=stream, **kwargs)  # pylint: disable=protected-access
+        pipeline_response = self._pipeline.run(request, stream=stream, **kwargs)
         if return_pipeline_response:
             return pipeline_response  # type: ignore  # This is a private API we don't want to type in signature
         return pipeline_response.http_response

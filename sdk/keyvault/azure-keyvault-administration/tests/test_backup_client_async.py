@@ -6,13 +6,15 @@ import asyncio
 
 import pytest
 from azure.core.exceptions import ResourceExistsError
+from azure.keyvault.administration._internal.client_base import DEFAULT_VERSION
 from devtools_testutils import set_bodiless_matcher
 from devtools_testutils.aio import recorded_by_proxy_async
 
-from _async_test_case import KeyVaultBackupClientPreparer, get_decorator
+from _async_test_case import KeyVaultBackupClientPreparer, KeyVaultBackupClientSasPreparer, get_decorator
 from _shared.test_case_async import KeyVaultTestCase
 
 all_api_versions = get_decorator(is_async=True)
+only_default = get_decorator(is_async=True, api_versions=[DEFAULT_VERSION])
 
 
 class TestBackupClientTests(KeyVaultTestCase):
@@ -22,26 +24,25 @@ class TestBackupClientTests(KeyVaultTestCase):
          return self.create_client_from_credential(KeyClient, credential=credential, vault_url=vault_uri, **kwargs )
 
     @pytest.mark.asyncio
-    @pytest.mark.parametrize("api_version", all_api_versions)
+    @pytest.mark.parametrize("api_version", only_default)
     @KeyVaultBackupClientPreparer()
     @recorded_by_proxy_async
     async def test_full_backup_and_restore(self, client, **kwargs):
         set_bodiless_matcher()
         # backup the vault
         container_uri = kwargs.pop("container_uri")
-        sas_token = kwargs.pop("sas_token")
-        backup_poller = await client.begin_backup(container_uri, sas_token)
+        backup_poller = await client.begin_backup(container_uri, use_managed_identity=True)
         backup_operation = await backup_poller.result()
         assert backup_operation.folder_url
 
         # restore the backup
-        restore_poller = await client.begin_restore(backup_operation.folder_url, sas_token)
+        restore_poller = await client.begin_restore(backup_operation.folder_url, use_managed_identity=True)
         await restore_poller.wait()
         if self.is_live:
             await asyncio.sleep(60)  # additional waiting to avoid conflicts with resources in other tests
 
     @pytest.mark.asyncio
-    @pytest.mark.parametrize("api_version", all_api_versions)
+    @pytest.mark.parametrize("api_version", only_default)
     @KeyVaultBackupClientPreparer()
     @recorded_by_proxy_async
     async def test_full_backup_and_restore_rehydration(self, client, **kwargs):
@@ -49,12 +50,11 @@ class TestBackupClientTests(KeyVaultTestCase):
 
         # backup the vault
         container_uri = kwargs.pop("container_uri")
-        sas_token = kwargs.pop("sas_token")
-        backup_poller = await client.begin_backup(container_uri, sas_token)
+        backup_poller = await client.begin_backup(blob_storage_url=container_uri, use_managed_identity=True)
 
         # create a new poller from a continuation token
         token = backup_poller.continuation_token()
-        rehydrated = await client.begin_backup(container_uri, sas_token, continuation_token=token)
+        rehydrated = await client.begin_backup(container_uri, use_managed_identity=True, continuation_token=token)
 
         rehydrated_operation = await rehydrated.result()
         assert rehydrated_operation.folder_url
@@ -62,11 +62,13 @@ class TestBackupClientTests(KeyVaultTestCase):
         assert backup_operation.folder_url == rehydrated_operation.folder_url
 
         # restore the backup
-        restore_poller = await client.begin_restore(backup_operation.folder_url, sas_token)
+        restore_poller = await client.begin_restore(backup_operation.folder_url, use_managed_identity=True)
 
         # create a new poller from a continuation token
         token = restore_poller.continuation_token()
-        rehydrated = await client.begin_restore(backup_operation.folder_url, sas_token, continuation_token=token)
+        rehydrated = await client.begin_restore(
+            backup_operation.folder_url, use_managed_identity=True, continuation_token=token
+        )
 
         await rehydrated.wait()
         await restore_poller.wait()
@@ -74,7 +76,7 @@ class TestBackupClientTests(KeyVaultTestCase):
             await asyncio.sleep(60)  # additional waiting to avoid conflicts with resources in other tests
 
     @pytest.mark.asyncio
-    @pytest.mark.parametrize("api_version", all_api_versions)
+    @pytest.mark.parametrize("api_version", only_default)
     @KeyVaultBackupClientPreparer()
     @recorded_by_proxy_async
     async def test_selective_key_restore(self, client, **kwargs):
@@ -87,12 +89,13 @@ class TestBackupClientTests(KeyVaultTestCase):
 
         # backup the vault
         container_uri = kwargs.pop("container_uri")
-        sas_token = kwargs.pop("sas_token")
-        backup_poller = await client.begin_backup(container_uri, sas_token)
+        backup_poller = await client.begin_backup(container_uri, use_managed_identity=True)
         backup_operation = await backup_poller.result()
 
         # restore the key
-        restore_poller = await client.begin_restore(backup_operation.folder_url, sas_token, key_name=key_name)
+        restore_poller = await client.begin_restore(
+            backup_operation.folder_url, use_managed_identity=True, key_name=key_name
+        )
         await restore_poller.wait()
 
         # delete the key
@@ -102,7 +105,7 @@ class TestBackupClientTests(KeyVaultTestCase):
             await asyncio.sleep(60)  # additional waiting to avoid conflicts with resources in other tests
 
     @pytest.mark.asyncio
-    @pytest.mark.parametrize("api_version", all_api_versions)
+    @pytest.mark.parametrize("api_version", only_default)
     @KeyVaultBackupClientPreparer()
     @recorded_by_proxy_async
     async def test_backup_client_polling(self, client, **kwargs):
@@ -110,12 +113,11 @@ class TestBackupClientTests(KeyVaultTestCase):
 
         # backup the vault
         container_uri = kwargs.pop("container_uri")
-        sas_token = kwargs.pop("sas_token")
-        backup_poller = await client.begin_backup(container_uri, sas_token)
+        backup_poller = await client.begin_backup(container_uri, use_managed_identity=True)
         
         # create a new poller from a continuation token
         token = backup_poller.continuation_token()
-        rehydrated = await client.begin_backup(container_uri, sas_token, continuation_token=token)
+        rehydrated = await client.begin_backup(container_uri, use_managed_identity=True, continuation_token=token)
 
         # check that pollers and polling methods behave as expected
         if self.is_live:
@@ -131,16 +133,18 @@ class TestBackupClientTests(KeyVaultTestCase):
         assert backup_operation.folder_url == rehydrated_operation.folder_url
 
         # rehydrate a poller with a continuation token of a completed operation
-        late_rehydrated = await client.begin_backup(container_uri, sas_token, continuation_token=token)
+        late_rehydrated = await client.begin_backup(container_uri, use_managed_identity=True, continuation_token=token)
         assert late_rehydrated.status() == "Succeeded"
         await late_rehydrated.wait()
 
         # restore the backup
-        restore_poller = await client.begin_restore(backup_operation.folder_url, sas_token)
+        restore_poller = await client.begin_restore(backup_operation.folder_url, use_managed_identity=True)
 
         # create a new poller from a continuation token
         token = restore_poller.continuation_token()
-        rehydrated = await client.begin_restore(backup_operation.folder_url, sas_token, continuation_token=token)
+        rehydrated = await client.begin_restore(
+            backup_operation.folder_url, use_managed_identity=True, continuation_token=token
+        )
 
         # check that pollers and polling methods behave as expected
         if self.is_live:
@@ -154,5 +158,23 @@ class TestBackupClientTests(KeyVaultTestCase):
         await restore_poller.wait()
         assert restore_poller.status() == "Succeeded" and restore_poller.polling_method().status() == "Succeeded"
 
+        if self.is_live:
+            await asyncio.sleep(60)  # additional waiting to avoid conflicts with resources in other tests
+
+    @pytest.mark.live_test_only
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("api_version", only_default)
+    @KeyVaultBackupClientSasPreparer()
+    async def test_backup_restore_sas(self, client, **kwargs):
+        # backup the vault
+        container_uri = kwargs.pop("container_uri")
+        sas_token = kwargs.pop("sas_token")
+        backup_poller = await client.begin_backup(container_uri, sas_token)
+        backup_operation = await backup_poller.result()
+        assert backup_operation.folder_url
+
+        # restore the backup
+        restore_poller = await client.begin_restore(backup_operation.folder_url, sas_token)
+        await restore_poller.wait()
         if self.is_live:
             await asyncio.sleep(60)  # additional waiting to avoid conflicts with resources in other tests

@@ -1,7 +1,7 @@
 trigger: none
 
-stages:
-  - template: /eng/pipelines/templates/stages/archetype-sdk-tests.yml
+extends:
+    template: /eng/pipelines/templates/stages/archetype-sdk-tests.yml
     parameters:
       BuildTargetingString: "azure-communication-phonenumbers"
       JobName: phonenumbers
@@ -9,18 +9,11 @@ stages:
       CloudConfig:
         Public:
           SubscriptionConfigurations:
-            - $(sub-config-azure-cloud-test-resources)
             - $(sub-config-communication-services-cloud-test-resources-common)
             - $(sub-config-communication-services-cloud-test-resources-python)
           MatrixReplace:
             - TestSamples=.*/true
-        Int:
-          SubscriptionConfigurations:
-            - $(sub-config-communication-int-test-resources-common)
-            - $(sub-config-communication-int-test-resources-python)
-          MatrixReplace:
-            - COMMUNICATION_SKIP_CAPABILITIES_LIVE_TEST=false/true
-      Clouds: Public,Int
+      Clouds: Public
       EnvVars:
         AZURE_SKIP_LIVE_RECORDING: 'True'
         AZURE_TEST_RUN_LIVE: 'true'

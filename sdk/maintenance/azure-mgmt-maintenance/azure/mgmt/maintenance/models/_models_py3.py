@@ -78,7 +78,7 @@ class ApplyUpdate(Resource):
      information.
     :vartype system_data: ~azure.mgmt.maintenance.models.SystemData
     :ivar status: The status. Known values are: "Pending", "InProgress", "Completed", "RetryNow",
-     and "RetryLater".
+     "RetryLater", "NoUpdatesPending", "Cancel", and "Cancelled".
     :vartype status: str or ~azure.mgmt.maintenance.models.UpdateStatus
     :ivar resource_id: The resourceId.
     :vartype resource_id: str
@@ -113,7 +113,7 @@ class ApplyUpdate(Resource):
     ) -> None:
         """
         :keyword status: The status. Known values are: "Pending", "InProgress", "Completed",
-         "RetryNow", and "RetryLater".
+         "RetryNow", "RetryLater", "NoUpdatesPending", "Cancel", and "Cancelled".
         :paramtype status: str or ~azure.mgmt.maintenance.models.UpdateStatus
         :keyword resource_id: The resourceId.
         :paramtype resource_id: str
@@ -796,6 +796,26 @@ class OperationsListResult(_serialization.Model):
         self.value = value
 
 
+class ScheduledEventApproveResponse(_serialization.Model):
+    """Response of scheduled event acknowledge.
+
+    :ivar value: Successfully Approved.
+    :vartype value: str
+    """
+
+    _attribute_map = {
+        "value": {"key": "value", "type": "str"},
+    }
+
+    def __init__(self, *, value: Optional[str] = None, **kwargs: Any) -> None:
+        """
+        :keyword value: Successfully Approved.
+        :paramtype value: str
+        """
+        super().__init__(**kwargs)
+        self.value = value
+
+
 class SystemData(_serialization.Model):
     """Metadata pertaining to creation and last modification of the resource.
 
@@ -904,7 +924,7 @@ class Update(_serialization.Model):
      "Redeploy".
     :vartype impact_type: str or ~azure.mgmt.maintenance.models.ImpactType
     :ivar status: The status. Known values are: "Pending", "InProgress", "Completed", "RetryNow",
-     and "RetryLater".
+     "RetryLater", "NoUpdatesPending", "Cancel", and "Cancelled".
     :vartype status: str or ~azure.mgmt.maintenance.models.UpdateStatus
     :ivar impact_duration_in_sec: Duration of impact in seconds.
     :vartype impact_duration_in_sec: int
@@ -943,7 +963,7 @@ class Update(_serialization.Model):
          "Redeploy".
         :paramtype impact_type: str or ~azure.mgmt.maintenance.models.ImpactType
         :keyword status: The status. Known values are: "Pending", "InProgress", "Completed",
-         "RetryNow", and "RetryLater".
+         "RetryNow", "RetryLater", "NoUpdatesPending", "Cancel", and "Cancelled".
         :paramtype status: str or ~azure.mgmt.maintenance.models.UpdateStatus
         :keyword impact_duration_in_sec: Duration of impact in seconds.
         :paramtype impact_duration_in_sec: int

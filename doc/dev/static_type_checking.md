@@ -5,6 +5,8 @@ It also walks through the setup necessary to run mypy and pyright, static type c
 
 For the TL;DR version, please see the [Static Type Checking Cheat Sheet](https://github.com/Azure/azure-sdk-for-python/blob/main/doc/dev/static_type_checking_cheat_sheet.md).
 
+> Note: If you are seeing typing errors in **generated code**, please first try to regenerate with the latest version of the generator. If typing errors persist, open an issue in the [generator repo](https://github.com/Azure/autorest.python).
+
 ## Table of contents
   - [Intro to typing in Python](#intro-to-typing-in-python)
   - [Typing a client library](#typing-a-client-library)
@@ -181,7 +183,7 @@ environment run in CI and brings in the third party stub packages necessary. To 
 
 ### Run mypy
 
-mypy is currently pinned to version [1.0.0](https://pypi.org/project/mypy/1.0.0/).
+mypy is currently pinned to version [1.9.0](https://pypi.org/project/mypy/1.9.0/).
 
 To run mypy on your library, run the tox mypy env at the package level:
 
@@ -189,7 +191,7 @@ To run mypy on your library, run the tox mypy env at the package level:
 
 If you don't want to use `tox` you can also install and run mypy on its own:
 
-`pip install mypy==1.0.0`
+`pip install mypy==1.9.0`
 
 `.../azure-sdk-for-python/sdk/textanalytics/azure-ai-textanalytics>mypy azure`
 

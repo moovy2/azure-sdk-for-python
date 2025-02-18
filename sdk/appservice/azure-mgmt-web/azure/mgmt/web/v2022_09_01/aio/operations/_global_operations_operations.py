@@ -1,4 +1,3 @@
-# pylint: disable=too-many-lines
 # coding=utf-8
 # --------------------------------------------------------------------------
 # Copyright (c) Microsoft Corporation. All rights reserved.
@@ -18,25 +17,22 @@ from azure.core.exceptions import (
     map_error,
 )
 from azure.core.pipeline import PipelineResponse
-from azure.core.pipeline.transport import AsyncHttpResponse
-from azure.core.rest import HttpRequest
+from azure.core.rest import AsyncHttpResponse, HttpRequest
 from azure.core.tracing.decorator_async import distributed_trace_async
 from azure.core.utils import case_insensitive_dict
 from azure.mgmt.core.exceptions import ARMErrorFormat
 
 from ... import models as _models
-from ..._vendor import _convert_request
 from ...operations._global_operations_operations import (
     build_get_deleted_web_app_request,
     build_get_deleted_web_app_snapshots_request,
     build_get_subscription_operation_with_async_response_request,
 )
-from .._vendor import WebSiteManagementClientMixinABC
 
-if sys.version_info >= (3, 8):
-    from typing import Literal  # pylint: disable=no-name-in-module, ungrouped-imports
+if sys.version_info >= (3, 9):
+    from collections.abc import MutableMapping
 else:
-    from typing_extensions import Literal  # type: ignore  # pylint: disable=ungrouped-imports
+    from typing import MutableMapping  # type: ignore
 T = TypeVar("T")
 ClsType = Optional[Callable[[PipelineResponse[HttpRequest, AsyncHttpResponse], T, Dict[str, Any]], Any]]
 
@@ -59,6 +55,7 @@ class GlobalOperations:
         self._config = input_args.pop(0) if input_args else kwargs.pop("config")
         self._serialize = input_args.pop(0) if input_args else kwargs.pop("serializer")
         self._deserialize = input_args.pop(0) if input_args else kwargs.pop("deserializer")
+        self._api_version = input_args.pop(0) if input_args else kwargs.pop("api_version")
 
     @distributed_trace_async
     async def get_deleted_web_app(self, deleted_site_id: str, **kwargs: Any) -> _models.DeletedSite:
@@ -68,12 +65,11 @@ class GlobalOperations:
 
         :param deleted_site_id: The numeric ID of the deleted app, e.g. 12345. Required.
         :type deleted_site_id: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: DeletedSite or the result of cls(response)
         :rtype: ~azure.mgmt.web.v2022_09_01.models.DeletedSite
         :raises ~azure.core.exceptions.HttpResponseError:
         """
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -84,23 +80,21 @@ class GlobalOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[_models.DeletedSite] = kwargs.pop("cls", None)
 
-        request = build_get_deleted_web_app_request(
+        _request = build_get_deleted_web_app_request(
             deleted_site_id=deleted_site_id,
             subscription_id=self._config.subscription_id,
             api_version=api_version,
-            template_url=self.get_deleted_web_app.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
-        request.url = self._client.format_url(request.url)
+        _request.url = self._client.format_url(_request.url)
 
         _stream = False
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -110,16 +104,12 @@ class GlobalOperations:
             error = self._deserialize.failsafe_deserialize(_models.DefaultErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
-        deserialized = self._deserialize("DeletedSite", pipeline_response)
+        deserialized = self._deserialize("DeletedSite", pipeline_response.http_response)
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {})  # type: ignore
 
-        return deserialized
-
-    get_deleted_web_app.metadata = {
-        "url": "/subscriptions/{subscriptionId}/providers/Microsoft.Web/deletedSites/{deletedSiteId}"
-    }
+        return deserialized  # type: ignore
 
     @distributed_trace_async
     async def get_deleted_web_app_snapshots(self, deleted_site_id: str, **kwargs: Any) -> List[_models.Snapshot]:
@@ -129,12 +119,11 @@ class GlobalOperations:
 
         :param deleted_site_id: The numeric ID of the deleted app, e.g. 12345. Required.
         :type deleted_site_id: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: list of Snapshot or the result of cls(response)
         :rtype: list[~azure.mgmt.web.v2022_09_01.models.Snapshot]
         :raises ~azure.core.exceptions.HttpResponseError:
         """
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -145,23 +134,21 @@ class GlobalOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[List[_models.Snapshot]] = kwargs.pop("cls", None)
 
-        request = build_get_deleted_web_app_snapshots_request(
+        _request = build_get_deleted_web_app_snapshots_request(
             deleted_site_id=deleted_site_id,
             subscription_id=self._config.subscription_id,
             api_version=api_version,
-            template_url=self.get_deleted_web_app_snapshots.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
-        request.url = self._client.format_url(request.url)
+        _request.url = self._client.format_url(_request.url)
 
         _stream = False
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -171,19 +158,15 @@ class GlobalOperations:
             error = self._deserialize.failsafe_deserialize(_models.DefaultErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
-        deserialized = self._deserialize("[Snapshot]", pipeline_response)
+        deserialized = self._deserialize("[Snapshot]", pipeline_response.http_response)
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {})  # type: ignore
 
-        return deserialized
-
-    get_deleted_web_app_snapshots.metadata = {
-        "url": "/subscriptions/{subscriptionId}/providers/Microsoft.Web/deletedSites/{deletedSiteId}/snapshots"
-    }
+        return deserialized  # type: ignore
 
     @distributed_trace_async
-    async def get_subscription_operation_with_async_response(  # pylint: disable=inconsistent-return-statements
+    async def get_subscription_operation_with_async_response(  # pylint: disable=name-too-long
         self, location: str, operation_id: str, **kwargs: Any
     ) -> None:
         """Gets an operation in a subscription and given region.
@@ -194,12 +177,11 @@ class GlobalOperations:
         :type location: str
         :param operation_id: Operation Id. Required.
         :type operation_id: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: None or the result of cls(response)
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
         """
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -210,24 +192,22 @@ class GlobalOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[None] = kwargs.pop("cls", None)
 
-        request = build_get_subscription_operation_with_async_response_request(
+        _request = build_get_subscription_operation_with_async_response_request(
             location=location,
             operation_id=operation_id,
             subscription_id=self._config.subscription_id,
             api_version=api_version,
-            template_url=self.get_subscription_operation_with_async_response.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
-        request.url = self._client.format_url(request.url)
+        _request.url = self._client.format_url(_request.url)
 
         _stream = False
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -238,8 +218,4 @@ class GlobalOperations:
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if cls:
-            return cls(pipeline_response, None, {})
-
-    get_subscription_operation_with_async_response.metadata = {
-        "url": "/subscriptions/{subscriptionId}/providers/Microsoft.Web/locations/{location}/operations/{operationId}"
-    }
+            return cls(pipeline_response, None, {})  # type: ignore

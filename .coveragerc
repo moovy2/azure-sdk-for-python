@@ -6,6 +6,7 @@ omit =
 	*/test*
 	env*
 	*/_serialization.py
+	*/azure/ai/ml/_restclient
 
 [paths]
 source =
@@ -24,3 +25,5 @@ omit =
 	*/test*
 	env*
 	*/_serialization.py
+	*/sms/_shared/*
+	*/azure/ai/ml/_restclient/*

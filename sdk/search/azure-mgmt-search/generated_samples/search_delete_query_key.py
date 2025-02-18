@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.search import SearchManagementClient
 
 """
@@ -29,14 +30,13 @@ def main():
         subscription_id="subid",
     )
 
-    response = client.query_keys.delete(
+    client.query_keys.delete(
         resource_group_name="rg1",
         search_service_name="mysearchservice",
         key="<a query API key>",
     )
-    print(response)
 
 
-# x-ms-original-file: specification/search/resource-manager/Microsoft.Search/stable/2022-09-01/examples/SearchDeleteQueryKey.json
+# x-ms-original-file: specification/search/resource-manager/Microsoft.Search/preview/2024-06-01-preview/examples/SearchDeleteQueryKey.json
 if __name__ == "__main__":
     main()

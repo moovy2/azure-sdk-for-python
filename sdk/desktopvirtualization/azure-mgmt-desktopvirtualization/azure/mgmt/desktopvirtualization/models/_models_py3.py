@@ -8,15 +8,9 @@
 # --------------------------------------------------------------------------
 
 import datetime
-import sys
-from typing import Any, Dict, List, Optional, TYPE_CHECKING, Union
+from typing import Any, Dict, List, Literal, Optional, TYPE_CHECKING, Union
 
 from .. import _serialization
-
-if sys.version_info >= (3, 8):
-    from typing import Literal  # pylint: disable=no-name-in-module, ungrouped-imports
-else:
-    from typing_extensions import Literal  # type: ignore  # pylint: disable=ungrouped-imports
 
 if TYPE_CHECKING:
     # pylint: disable=unused-import,ungrouped-imports
@@ -138,26 +132,31 @@ class Resource(_serialization.Model):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     """
 
     _validation = {
         "id": {"readonly": True},
         "name": {"readonly": True},
         "type": {"readonly": True},
+        "system_data": {"readonly": True},
     }
 
     _attribute_map = {
         "id": {"key": "id", "type": "str"},
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
     }
 
     def __init__(self, **kwargs: Any) -> None:
@@ -166,6 +165,457 @@ class Resource(_serialization.Model):
         self.id = None
         self.name = None
         self.type = None
+        self.system_data = None
+
+
+class TrackedResource(Resource):
+    """The resource model definition for an Azure Resource Manager tracked top level resource which
+    has 'tags' and a 'location'.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
+    :vartype id: str
+    :ivar name: The name of the resource.
+    :vartype name: str
+    :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
+     "Microsoft.Storage/storageAccounts".
+    :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
+    :ivar tags: Resource tags.
+    :vartype tags: dict[str, str]
+    :ivar location: The geo-location where the resource lives. Required.
+    :vartype location: str
+    """
+
+    _validation = {
+        "id": {"readonly": True},
+        "name": {"readonly": True},
+        "type": {"readonly": True},
+        "system_data": {"readonly": True},
+        "location": {"required": True},
+    }
+
+    _attribute_map = {
+        "id": {"key": "id", "type": "str"},
+        "name": {"key": "name", "type": "str"},
+        "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
+        "tags": {"key": "tags", "type": "{str}"},
+        "location": {"key": "location", "type": "str"},
+    }
+
+    def __init__(self, *, location: str, tags: Optional[Dict[str, str]] = None, **kwargs: Any) -> None:
+        """
+        :keyword tags: Resource tags.
+        :paramtype tags: dict[str, str]
+        :keyword location: The geo-location where the resource lives. Required.
+        :paramtype location: str
+        """
+        super().__init__(**kwargs)
+        self.tags = tags
+        self.location = location
+
+
+class AppAttachPackage(TrackedResource):
+    """Schema for App Attach Package properties.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
+    :vartype id: str
+    :ivar name: The name of the resource.
+    :vartype name: str
+    :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
+     "Microsoft.Storage/storageAccounts".
+    :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
+    :ivar tags: Resource tags.
+    :vartype tags: dict[str, str]
+    :ivar location: The geo-location where the resource lives. Required.
+    :vartype location: str
+    :ivar properties: Detailed properties for App Attach Package. Required.
+    :vartype properties: ~azure.mgmt.desktopvirtualization.models.AppAttachPackageProperties
+    """
+
+    _validation = {
+        "id": {"readonly": True},
+        "name": {"readonly": True},
+        "type": {"readonly": True},
+        "system_data": {"readonly": True},
+        "location": {"required": True},
+        "properties": {"required": True},
+    }
+
+    _attribute_map = {
+        "id": {"key": "id", "type": "str"},
+        "name": {"key": "name", "type": "str"},
+        "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
+        "tags": {"key": "tags", "type": "{str}"},
+        "location": {"key": "location", "type": "str"},
+        "properties": {"key": "properties", "type": "AppAttachPackageProperties"},
+    }
+
+    def __init__(
+        self,
+        *,
+        location: str,
+        properties: "_models.AppAttachPackageProperties",
+        tags: Optional[Dict[str, str]] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword tags: Resource tags.
+        :paramtype tags: dict[str, str]
+        :keyword location: The geo-location where the resource lives. Required.
+        :paramtype location: str
+        :keyword properties: Detailed properties for App Attach Package. Required.
+        :paramtype properties: ~azure.mgmt.desktopvirtualization.models.AppAttachPackageProperties
+        """
+        super().__init__(tags=tags, location=location, **kwargs)
+        self.properties = properties
+
+
+class AppAttachPackageInfoProperties(_serialization.Model):  # pylint: disable=too-many-instance-attributes
+    """Schema for Import Package Information properties.
+
+    :ivar package_alias: Alias of App Attach Package. Assigned at import time.
+    :vartype package_alias: str
+    :ivar image_path: VHD/CIM image path on Network Share.
+    :vartype image_path: str
+    :ivar package_name: Package Name from appxmanifest.xml.
+    :vartype package_name: str
+    :ivar package_family_name: Package Family Name from appxmanifest.xml. Contains Package Name and
+     Publisher name.
+    :vartype package_family_name: str
+    :ivar package_full_name: Package Full Name from appxmanifest.xml.
+    :vartype package_full_name: str
+    :ivar display_name: User friendly Name to be displayed in the portal.
+    :vartype display_name: str
+    :ivar package_relative_path: Relative Path to the package inside the image.
+    :vartype package_relative_path: str
+    :ivar is_regular_registration: Specifies how to register Package in feed.
+    :vartype is_regular_registration: bool
+    :ivar is_active: Make this version of the package the active one across the hostpool.
+    :vartype is_active: bool
+    :ivar package_dependencies: List of package dependencies.
+    :vartype package_dependencies:
+     list[~azure.mgmt.desktopvirtualization.models.MsixPackageDependencies]
+    :ivar version: Package version found in the appxmanifest.xml.
+    :vartype version: str
+    :ivar last_updated: Date Package was last updated, found in the appxmanifest.xml.
+    :vartype last_updated: ~datetime.datetime
+    :ivar package_applications: List of package applications.
+    :vartype package_applications:
+     list[~azure.mgmt.desktopvirtualization.models.MsixPackageApplications]
+    :ivar certificate_name: Certificate name found in the appxmanifest.xml.
+    :vartype certificate_name: str
+    :ivar certificate_expiry: Date certificate expires, found in the appxmanifest.xml.
+    :vartype certificate_expiry: ~datetime.datetime
+    :ivar is_package_timestamped: Is package timestamped so it can ignore the certificate expiry
+     date. Known values are: "Timestamped" and "NotTimestamped".
+    :vartype is_package_timestamped: str or
+     ~azure.mgmt.desktopvirtualization.models.PackageTimestamped
+    """
+
+    _attribute_map = {
+        "package_alias": {"key": "packageAlias", "type": "str"},
+        "image_path": {"key": "imagePath", "type": "str"},
+        "package_name": {"key": "packageName", "type": "str"},
+        "package_family_name": {"key": "packageFamilyName", "type": "str"},
+        "package_full_name": {"key": "packageFullName", "type": "str"},
+        "display_name": {"key": "displayName", "type": "str"},
+        "package_relative_path": {"key": "packageRelativePath", "type": "str"},
+        "is_regular_registration": {"key": "isRegularRegistration", "type": "bool"},
+        "is_active": {"key": "isActive", "type": "bool"},
+        "package_dependencies": {"key": "packageDependencies", "type": "[MsixPackageDependencies]"},
+        "version": {"key": "version", "type": "str"},
+        "last_updated": {"key": "lastUpdated", "type": "iso-8601"},
+        "package_applications": {"key": "packageApplications", "type": "[MsixPackageApplications]"},
+        "certificate_name": {"key": "certificateName", "type": "str"},
+        "certificate_expiry": {"key": "certificateExpiry", "type": "iso-8601"},
+        "is_package_timestamped": {"key": "isPackageTimestamped", "type": "str"},
+    }
+
+    def __init__(
+        self,
+        *,
+        package_alias: Optional[str] = None,
+        image_path: Optional[str] = None,
+        package_name: Optional[str] = None,
+        package_family_name: Optional[str] = None,
+        package_full_name: Optional[str] = None,
+        display_name: Optional[str] = None,
+        package_relative_path: Optional[str] = None,
+        is_regular_registration: Optional[bool] = None,
+        is_active: Optional[bool] = None,
+        package_dependencies: Optional[List["_models.MsixPackageDependencies"]] = None,
+        version: Optional[str] = None,
+        last_updated: Optional[datetime.datetime] = None,
+        package_applications: Optional[List["_models.MsixPackageApplications"]] = None,
+        certificate_name: Optional[str] = None,
+        certificate_expiry: Optional[datetime.datetime] = None,
+        is_package_timestamped: Optional[Union[str, "_models.PackageTimestamped"]] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword package_alias: Alias of App Attach Package. Assigned at import time.
+        :paramtype package_alias: str
+        :keyword image_path: VHD/CIM image path on Network Share.
+        :paramtype image_path: str
+        :keyword package_name: Package Name from appxmanifest.xml.
+        :paramtype package_name: str
+        :keyword package_family_name: Package Family Name from appxmanifest.xml. Contains Package Name
+         and Publisher name.
+        :paramtype package_family_name: str
+        :keyword package_full_name: Package Full Name from appxmanifest.xml.
+        :paramtype package_full_name: str
+        :keyword display_name: User friendly Name to be displayed in the portal.
+        :paramtype display_name: str
+        :keyword package_relative_path: Relative Path to the package inside the image.
+        :paramtype package_relative_path: str
+        :keyword is_regular_registration: Specifies how to register Package in feed.
+        :paramtype is_regular_registration: bool
+        :keyword is_active: Make this version of the package the active one across the hostpool.
+        :paramtype is_active: bool
+        :keyword package_dependencies: List of package dependencies.
+        :paramtype package_dependencies:
+         list[~azure.mgmt.desktopvirtualization.models.MsixPackageDependencies]
+        :keyword version: Package version found in the appxmanifest.xml.
+        :paramtype version: str
+        :keyword last_updated: Date Package was last updated, found in the appxmanifest.xml.
+        :paramtype last_updated: ~datetime.datetime
+        :keyword package_applications: List of package applications.
+        :paramtype package_applications:
+         list[~azure.mgmt.desktopvirtualization.models.MsixPackageApplications]
+        :keyword certificate_name: Certificate name found in the appxmanifest.xml.
+        :paramtype certificate_name: str
+        :keyword certificate_expiry: Date certificate expires, found in the appxmanifest.xml.
+        :paramtype certificate_expiry: ~datetime.datetime
+        :keyword is_package_timestamped: Is package timestamped so it can ignore the certificate expiry
+         date. Known values are: "Timestamped" and "NotTimestamped".
+        :paramtype is_package_timestamped: str or
+         ~azure.mgmt.desktopvirtualization.models.PackageTimestamped
+        """
+        super().__init__(**kwargs)
+        self.package_alias = package_alias
+        self.image_path = image_path
+        self.package_name = package_name
+        self.package_family_name = package_family_name
+        self.package_full_name = package_full_name
+        self.display_name = display_name
+        self.package_relative_path = package_relative_path
+        self.is_regular_registration = is_regular_registration
+        self.is_active = is_active
+        self.package_dependencies = package_dependencies
+        self.version = version
+        self.last_updated = last_updated
+        self.package_applications = package_applications
+        self.certificate_name = certificate_name
+        self.certificate_expiry = certificate_expiry
+        self.is_package_timestamped = is_package_timestamped
+
+
+class AppAttachPackageList(_serialization.Model):
+    """List of App Attach Package definitions.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar value: List of App Attach Package definitions.
+    :vartype value: list[~azure.mgmt.desktopvirtualization.models.AppAttachPackage]
+    :ivar next_link: Link to the next page of results.
+    :vartype next_link: str
+    """
+
+    _validation = {
+        "next_link": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "value": {"key": "value", "type": "[AppAttachPackage]"},
+        "next_link": {"key": "nextLink", "type": "str"},
+    }
+
+    def __init__(self, *, value: Optional[List["_models.AppAttachPackage"]] = None, **kwargs: Any) -> None:
+        """
+        :keyword value: List of App Attach Package definitions.
+        :paramtype value: list[~azure.mgmt.desktopvirtualization.models.AppAttachPackage]
+        """
+        super().__init__(**kwargs)
+        self.value = value
+        self.next_link = None
+
+
+class AppAttachPackagePatch(Resource):
+    """Schema for updatable App Attach Package properties.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
+    :vartype id: str
+    :ivar name: The name of the resource.
+    :vartype name: str
+    :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
+     "Microsoft.Storage/storageAccounts".
+    :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
+    :ivar properties: Detailed properties for App Attach Package.
+    :vartype properties: ~azure.mgmt.desktopvirtualization.models.AppAttachPackagePatchProperties
+    """
+
+    _validation = {
+        "id": {"readonly": True},
+        "name": {"readonly": True},
+        "type": {"readonly": True},
+        "system_data": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "id": {"key": "id", "type": "str"},
+        "name": {"key": "name", "type": "str"},
+        "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
+        "properties": {"key": "properties", "type": "AppAttachPackagePatchProperties"},
+    }
+
+    def __init__(
+        self, *, properties: Optional["_models.AppAttachPackagePatchProperties"] = None, **kwargs: Any
+    ) -> None:
+        """
+        :keyword properties: Detailed properties for App Attach Package.
+        :paramtype properties: ~azure.mgmt.desktopvirtualization.models.AppAttachPackagePatchProperties
+        """
+        super().__init__(**kwargs)
+        self.properties = properties
+
+
+class AppAttachPackagePatchProperties(_serialization.Model):
+    """Schema for patchable fields on an App Attach Package.
+
+    :ivar image: Detailed properties for App Attach Package.
+    :vartype image: ~azure.mgmt.desktopvirtualization.models.AppAttachPackageInfoProperties
+    :ivar host_pool_references: List of Hostpool resource Ids.
+    :vartype host_pool_references: list[str]
+    :ivar key_vault_url: URL path to certificate name located in keyVault.
+    :vartype key_vault_url: str
+    :ivar fail_health_check_on_staging_failure: Parameter indicating how the health check should
+     behave if this package fails staging. Known values are: "Unhealthy", "NeedsAssistance", and
+     "DoNotFail".
+    :vartype fail_health_check_on_staging_failure: str or
+     ~azure.mgmt.desktopvirtualization.models.FailHealthCheckOnStagingFailure
+    """
+
+    _attribute_map = {
+        "image": {"key": "image", "type": "AppAttachPackageInfoProperties"},
+        "host_pool_references": {"key": "hostPoolReferences", "type": "[str]"},
+        "key_vault_url": {"key": "keyVaultURL", "type": "str"},
+        "fail_health_check_on_staging_failure": {"key": "failHealthCheckOnStagingFailure", "type": "str"},
+    }
+
+    def __init__(
+        self,
+        *,
+        image: Optional["_models.AppAttachPackageInfoProperties"] = None,
+        host_pool_references: Optional[List[str]] = None,
+        key_vault_url: Optional[str] = None,
+        fail_health_check_on_staging_failure: Optional[Union[str, "_models.FailHealthCheckOnStagingFailure"]] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword image: Detailed properties for App Attach Package.
+        :paramtype image: ~azure.mgmt.desktopvirtualization.models.AppAttachPackageInfoProperties
+        :keyword host_pool_references: List of Hostpool resource Ids.
+        :paramtype host_pool_references: list[str]
+        :keyword key_vault_url: URL path to certificate name located in keyVault.
+        :paramtype key_vault_url: str
+        :keyword fail_health_check_on_staging_failure: Parameter indicating how the health check should
+         behave if this package fails staging. Known values are: "Unhealthy", "NeedsAssistance", and
+         "DoNotFail".
+        :paramtype fail_health_check_on_staging_failure: str or
+         ~azure.mgmt.desktopvirtualization.models.FailHealthCheckOnStagingFailure
+        """
+        super().__init__(**kwargs)
+        self.image = image
+        self.host_pool_references = host_pool_references
+        self.key_vault_url = key_vault_url
+        self.fail_health_check_on_staging_failure = fail_health_check_on_staging_failure
+
+
+class AppAttachPackageProperties(_serialization.Model):
+    """Schema for App Attach Package properties.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar provisioning_state: The provisioning state of the App Attach Package. Known values are:
+     "Succeeded", "Provisioning", "Failed", and "Canceled".
+    :vartype provisioning_state: str or ~azure.mgmt.desktopvirtualization.models.ProvisioningState
+    :ivar image: Detailed properties for App Attach Package.
+    :vartype image: ~azure.mgmt.desktopvirtualization.models.AppAttachPackageInfoProperties
+    :ivar host_pool_references: List of Hostpool resource Ids.
+    :vartype host_pool_references: list[str]
+    :ivar key_vault_url: URL path to certificate name located in keyVault.
+    :vartype key_vault_url: str
+    :ivar fail_health_check_on_staging_failure: Parameter indicating how the health check should
+     behave if this package fails staging. Known values are: "Unhealthy", "NeedsAssistance", and
+     "DoNotFail".
+    :vartype fail_health_check_on_staging_failure: str or
+     ~azure.mgmt.desktopvirtualization.models.FailHealthCheckOnStagingFailure
+    """
+
+    _validation = {
+        "provisioning_state": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "provisioning_state": {"key": "provisioningState", "type": "str"},
+        "image": {"key": "image", "type": "AppAttachPackageInfoProperties"},
+        "host_pool_references": {"key": "hostPoolReferences", "type": "[str]"},
+        "key_vault_url": {"key": "keyVaultURL", "type": "str"},
+        "fail_health_check_on_staging_failure": {"key": "failHealthCheckOnStagingFailure", "type": "str"},
+    }
+
+    def __init__(
+        self,
+        *,
+        image: Optional["_models.AppAttachPackageInfoProperties"] = None,
+        host_pool_references: Optional[List[str]] = None,
+        key_vault_url: Optional[str] = None,
+        fail_health_check_on_staging_failure: Optional[Union[str, "_models.FailHealthCheckOnStagingFailure"]] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword image: Detailed properties for App Attach Package.
+        :paramtype image: ~azure.mgmt.desktopvirtualization.models.AppAttachPackageInfoProperties
+        :keyword host_pool_references: List of Hostpool resource Ids.
+        :paramtype host_pool_references: list[str]
+        :keyword key_vault_url: URL path to certificate name located in keyVault.
+        :paramtype key_vault_url: str
+        :keyword fail_health_check_on_staging_failure: Parameter indicating how the health check should
+         behave if this package fails staging. Known values are: "Unhealthy", "NeedsAssistance", and
+         "DoNotFail".
+        :paramtype fail_health_check_on_staging_failure: str or
+         ~azure.mgmt.desktopvirtualization.models.FailHealthCheckOnStagingFailure
+        """
+        super().__init__(**kwargs)
+        self.provisioning_state = None
+        self.image = image
+        self.host_pool_references = host_pool_references
+        self.key_vault_url = key_vault_url
+        self.fail_health_check_on_staging_failure = fail_health_check_on_staging_failure
 
 
 class Application(Resource):  # pylint: disable=too-many-instance-attributes
@@ -173,17 +623,18 @@ class Application(Resource):  # pylint: disable=too-many-instance-attributes
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
-    :ivar system_data: Metadata pertaining to creation and last modification of the resource.
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
     :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     :ivar object_id: ObjectId of Application. (internal use).
     :vartype object_id: str
@@ -303,7 +754,6 @@ class Application(Resource):  # pylint: disable=too-many-instance-attributes
         :paramtype icon_index: int
         """
         super().__init__(**kwargs)
-        self.system_data = None
         self.object_id = None
         self.description = description
         self.friendly_name = friendly_name
@@ -320,21 +770,28 @@ class Application(Resource):  # pylint: disable=too-many-instance-attributes
         self.icon_content = None
 
 
-class ResourceModelWithAllowedPropertySet(_serialization.Model):  # pylint: disable=too-many-instance-attributes
+class ResourceModelWithAllowedPropertySet(TrackedResource):  # pylint: disable=too-many-instance-attributes
     """The resource model definition containing the full set of allowed properties for a resource.
     Except properties bag, there cannot be a top level property outside of this set.
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    All required parameters must be populated in order to send to server.
+
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
-    :ivar location: The geo-location where the resource lives.
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
+    :ivar tags: Resource tags.
+    :vartype tags: dict[str, str]
+    :ivar location: The geo-location where the resource lives. Required.
     :vartype location: str
     :ivar managed_by: The fully qualified resource ID of the resource that manages this resource.
      Indicates if this resource is managed by another Azure resource. If this is present, complete
@@ -342,7 +799,7 @@ class ResourceModelWithAllowedPropertySet(_serialization.Model):  # pylint: disa
      managed by another resource.
     :vartype managed_by: str
     :ivar kind: Metadata used by portal/tooling/etc to render different UX experiences for
-     resources of the same type; e.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
+     resources of the same type. E.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
      the resource provider must validate and persist this value.
     :vartype kind: str
     :ivar etag: The etag field is *not* required. If it is provided in the response body, it must
@@ -351,8 +808,6 @@ class ResourceModelWithAllowedPropertySet(_serialization.Model):  # pylint: disa
      the etag (section 14.19), If-Match (section 14.24), If-None-Match (section 14.26), and If-Range
      (section 14.27) header fields.
     :vartype etag: str
-    :ivar tags: Resource tags.
-    :vartype tags: dict[str, str]
     :ivar identity:
     :vartype identity:
      ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetIdentity
@@ -366,6 +821,8 @@ class ResourceModelWithAllowedPropertySet(_serialization.Model):  # pylint: disa
         "id": {"readonly": True},
         "name": {"readonly": True},
         "type": {"readonly": True},
+        "system_data": {"readonly": True},
+        "location": {"required": True},
         "kind": {"pattern": r"^[-\w\._,\(\)]+$"},
         "etag": {"readonly": True},
     }
@@ -374,11 +831,12 @@ class ResourceModelWithAllowedPropertySet(_serialization.Model):  # pylint: disa
         "id": {"key": "id", "type": "str"},
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
+        "tags": {"key": "tags", "type": "{str}"},
         "location": {"key": "location", "type": "str"},
         "managed_by": {"key": "managedBy", "type": "str"},
         "kind": {"key": "kind", "type": "str"},
         "etag": {"key": "etag", "type": "str"},
-        "tags": {"key": "tags", "type": "{str}"},
         "identity": {"key": "identity", "type": "ResourceModelWithAllowedPropertySetIdentity"},
         "sku": {"key": "sku", "type": "ResourceModelWithAllowedPropertySetSku"},
         "plan": {"key": "plan", "type": "ResourceModelWithAllowedPropertySetPlan"},
@@ -387,17 +845,19 @@ class ResourceModelWithAllowedPropertySet(_serialization.Model):  # pylint: disa
     def __init__(
         self,
         *,
-        location: Optional[str] = None,
+        location: str,
+        tags: Optional[Dict[str, str]] = None,
         managed_by: Optional[str] = None,
         kind: Optional[str] = None,
-        tags: Optional[Dict[str, str]] = None,
         identity: Optional["_models.ResourceModelWithAllowedPropertySetIdentity"] = None,
         sku: Optional["_models.ResourceModelWithAllowedPropertySetSku"] = None,
         plan: Optional["_models.ResourceModelWithAllowedPropertySetPlan"] = None,
         **kwargs: Any
     ) -> None:
         """
-        :keyword location: The geo-location where the resource lives.
+        :keyword tags: Resource tags.
+        :paramtype tags: dict[str, str]
+        :keyword location: The geo-location where the resource lives. Required.
         :paramtype location: str
         :keyword managed_by: The fully qualified resource ID of the resource that manages this
          resource. Indicates if this resource is managed by another Azure resource. If this is present,
@@ -405,11 +865,9 @@ class ResourceModelWithAllowedPropertySet(_serialization.Model):  # pylint: disa
          it is managed by another resource.
         :paramtype managed_by: str
         :keyword kind: Metadata used by portal/tooling/etc to render different UX experiences for
-         resources of the same type; e.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
+         resources of the same type. E.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
          the resource provider must validate and persist this value.
         :paramtype kind: str
-        :keyword tags: Resource tags.
-        :paramtype tags: dict[str, str]
         :keyword identity:
         :paramtype identity:
          ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetIdentity
@@ -419,15 +877,10 @@ class ResourceModelWithAllowedPropertySet(_serialization.Model):  # pylint: disa
         :paramtype plan:
          ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetPlan
         """
-        super().__init__(**kwargs)
-        self.id = None
-        self.name = None
-        self.type = None
-        self.location = location
+        super().__init__(tags=tags, location=location, **kwargs)
         self.managed_by = managed_by
         self.kind = kind
         self.etag = None
-        self.tags = tags
         self.identity = identity
         self.sku = sku
         self.plan = plan
@@ -438,17 +891,22 @@ class ApplicationGroup(ResourceModelWithAllowedPropertySet):  # pylint: disable=
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
-    :ivar location: The geo-location where the resource lives.
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
+    :ivar tags: Resource tags.
+    :vartype tags: dict[str, str]
+    :ivar location: The geo-location where the resource lives. Required.
     :vartype location: str
     :ivar managed_by: The fully qualified resource ID of the resource that manages this resource.
      Indicates if this resource is managed by another Azure resource. If this is present, complete
@@ -456,7 +914,7 @@ class ApplicationGroup(ResourceModelWithAllowedPropertySet):  # pylint: disable=
      managed by another resource.
     :vartype managed_by: str
     :ivar kind: Metadata used by portal/tooling/etc to render different UX experiences for
-     resources of the same type; e.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
+     resources of the same type. E.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
      the resource provider must validate and persist this value.
     :vartype kind: str
     :ivar etag: The etag field is *not* required. If it is provided in the response body, it must
@@ -465,8 +923,6 @@ class ApplicationGroup(ResourceModelWithAllowedPropertySet):  # pylint: disable=
      the etag (section 14.19), If-Match (section 14.24), If-None-Match (section 14.26), and If-Range
      (section 14.27) header fields.
     :vartype etag: str
-    :ivar tags: Resource tags.
-    :vartype tags: dict[str, str]
     :ivar identity:
     :vartype identity:
      ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetIdentity
@@ -474,8 +930,6 @@ class ApplicationGroup(ResourceModelWithAllowedPropertySet):  # pylint: disable=
     :vartype sku: ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetSku
     :ivar plan:
     :vartype plan: ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetPlan
-    :ivar system_data: Metadata pertaining to creation and last modification of the resource.
-    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     :ivar object_id: ObjectId of ApplicationGroup. (internal use).
     :vartype object_id: str
     :ivar description: Description of ApplicationGroup.
@@ -492,15 +946,18 @@ class ApplicationGroup(ResourceModelWithAllowedPropertySet):  # pylint: disable=
      ~azure.mgmt.desktopvirtualization.models.ApplicationGroupType
     :ivar cloud_pc_resource: Is cloud pc resource.
     :vartype cloud_pc_resource: bool
+    :ivar show_in_feed: Boolean representing whether the applicationGroup is show in the feed.
+    :vartype show_in_feed: bool
     """
 
     _validation = {
         "id": {"readonly": True},
         "name": {"readonly": True},
         "type": {"readonly": True},
+        "system_data": {"readonly": True},
+        "location": {"required": True},
         "kind": {"pattern": r"^[-\w\._,\(\)]+$"},
         "etag": {"readonly": True},
-        "system_data": {"readonly": True},
         "object_id": {"readonly": True},
         "host_pool_arm_path": {"required": True},
         "workspace_arm_path": {"readonly": True},
@@ -512,15 +969,15 @@ class ApplicationGroup(ResourceModelWithAllowedPropertySet):  # pylint: disable=
         "id": {"key": "id", "type": "str"},
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
+        "tags": {"key": "tags", "type": "{str}"},
         "location": {"key": "location", "type": "str"},
         "managed_by": {"key": "managedBy", "type": "str"},
         "kind": {"key": "kind", "type": "str"},
         "etag": {"key": "etag", "type": "str"},
-        "tags": {"key": "tags", "type": "{str}"},
         "identity": {"key": "identity", "type": "ResourceModelWithAllowedPropertySetIdentity"},
         "sku": {"key": "sku", "type": "ResourceModelWithAllowedPropertySetSku"},
         "plan": {"key": "plan", "type": "ResourceModelWithAllowedPropertySetPlan"},
-        "system_data": {"key": "systemData", "type": "SystemData"},
         "object_id": {"key": "properties.objectId", "type": "str"},
         "description": {"key": "properties.description", "type": "str"},
         "friendly_name": {"key": "properties.friendlyName", "type": "str"},
@@ -528,26 +985,30 @@ class ApplicationGroup(ResourceModelWithAllowedPropertySet):  # pylint: disable=
         "workspace_arm_path": {"key": "properties.workspaceArmPath", "type": "str"},
         "application_group_type": {"key": "properties.applicationGroupType", "type": "str"},
         "cloud_pc_resource": {"key": "properties.cloudPcResource", "type": "bool"},
+        "show_in_feed": {"key": "properties.showInFeed", "type": "bool"},
     }
 
     def __init__(
         self,
         *,
+        location: str,
         host_pool_arm_path: str,
         application_group_type: Union[str, "_models.ApplicationGroupType"],
-        location: Optional[str] = None,
+        tags: Optional[Dict[str, str]] = None,
         managed_by: Optional[str] = None,
         kind: Optional[str] = None,
-        tags: Optional[Dict[str, str]] = None,
         identity: Optional["_models.ResourceModelWithAllowedPropertySetIdentity"] = None,
         sku: Optional["_models.ResourceModelWithAllowedPropertySetSku"] = None,
         plan: Optional["_models.ResourceModelWithAllowedPropertySetPlan"] = None,
         description: Optional[str] = None,
         friendly_name: Optional[str] = None,
+        show_in_feed: Optional[bool] = None,
         **kwargs: Any
     ) -> None:
         """
-        :keyword location: The geo-location where the resource lives.
+        :keyword tags: Resource tags.
+        :paramtype tags: dict[str, str]
+        :keyword location: The geo-location where the resource lives. Required.
         :paramtype location: str
         :keyword managed_by: The fully qualified resource ID of the resource that manages this
          resource. Indicates if this resource is managed by another Azure resource. If this is present,
@@ -555,11 +1016,9 @@ class ApplicationGroup(ResourceModelWithAllowedPropertySet):  # pylint: disable=
          it is managed by another resource.
         :paramtype managed_by: str
         :keyword kind: Metadata used by portal/tooling/etc to render different UX experiences for
-         resources of the same type; e.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
+         resources of the same type. E.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
          the resource provider must validate and persist this value.
         :paramtype kind: str
-        :keyword tags: Resource tags.
-        :paramtype tags: dict[str, str]
         :keyword identity:
         :paramtype identity:
          ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetIdentity
@@ -578,18 +1037,19 @@ class ApplicationGroup(ResourceModelWithAllowedPropertySet):  # pylint: disable=
          "RemoteApp" and "Desktop".
         :paramtype application_group_type: str or
          ~azure.mgmt.desktopvirtualization.models.ApplicationGroupType
+        :keyword show_in_feed: Boolean representing whether the applicationGroup is show in the feed.
+        :paramtype show_in_feed: bool
         """
         super().__init__(
+            tags=tags,
             location=location,
             managed_by=managed_by,
             kind=kind,
-            tags=tags,
             identity=identity,
             sku=sku,
             plan=plan,
             **kwargs
         )
-        self.system_data = None
         self.object_id = None
         self.description = description
         self.friendly_name = friendly_name
@@ -597,6 +1057,7 @@ class ApplicationGroup(ResourceModelWithAllowedPropertySet):  # pylint: disable=
         self.workspace_arm_path = None
         self.application_group_type = application_group_type
         self.cloud_pc_resource = None
+        self.show_in_feed = show_in_feed
 
 
 class ApplicationGroupList(_serialization.Model):
@@ -634,35 +1095,43 @@ class ApplicationGroupPatch(Resource):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     :ivar tags: tags to be updated.
     :vartype tags: dict[str, str]
     :ivar description: Description of ApplicationGroup.
     :vartype description: str
     :ivar friendly_name: Friendly name of ApplicationGroup.
     :vartype friendly_name: str
+    :ivar show_in_feed: Boolean representing whether the applicationGroup is show in the feed.
+    :vartype show_in_feed: bool
     """
 
     _validation = {
         "id": {"readonly": True},
         "name": {"readonly": True},
         "type": {"readonly": True},
+        "system_data": {"readonly": True},
     }
 
     _attribute_map = {
         "id": {"key": "id", "type": "str"},
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
         "tags": {"key": "tags", "type": "{str}"},
         "description": {"key": "properties.description", "type": "str"},
         "friendly_name": {"key": "properties.friendlyName", "type": "str"},
+        "show_in_feed": {"key": "properties.showInFeed", "type": "bool"},
     }
 
     def __init__(
@@ -671,6 +1140,7 @@ class ApplicationGroupPatch(Resource):
         tags: Optional[Dict[str, str]] = None,
         description: Optional[str] = None,
         friendly_name: Optional[str] = None,
+        show_in_feed: Optional[bool] = None,
         **kwargs: Any
     ) -> None:
         """
@@ -680,11 +1150,14 @@ class ApplicationGroupPatch(Resource):
         :paramtype description: str
         :keyword friendly_name: Friendly name of ApplicationGroup.
         :paramtype friendly_name: str
+        :keyword show_in_feed: Boolean representing whether the applicationGroup is show in the feed.
+        :paramtype show_in_feed: bool
         """
         super().__init__(**kwargs)
         self.tags = tags
         self.description = description
         self.friendly_name = friendly_name
+        self.show_in_feed = show_in_feed
 
 
 class ApplicationList(_serialization.Model):
@@ -865,15 +1338,16 @@ class Desktop(Resource):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
-    :ivar system_data: Metadata pertaining to creation and last modification of the resource.
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
     :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     :ivar object_id: ObjectId of Desktop. (internal use).
     :vartype object_id: str
@@ -919,7 +1393,6 @@ class Desktop(Resource):
         :paramtype friendly_name: str
         """
         super().__init__(**kwargs)
-        self.system_data = None
         self.object_id = None
         self.description = description
         self.friendly_name = friendly_name
@@ -996,19 +1469,114 @@ class DesktopPatch(_serialization.Model):
         self.friendly_name = friendly_name
 
 
+class ErrorAdditionalInfo(_serialization.Model):
+    """The resource management error additional info.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar type: The additional info type.
+    :vartype type: str
+    :ivar info: The additional info.
+    :vartype info: JSON
+    """
+
+    _validation = {
+        "type": {"readonly": True},
+        "info": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "type": {"key": "type", "type": "str"},
+        "info": {"key": "info", "type": "object"},
+    }
+
+    def __init__(self, **kwargs: Any) -> None:
+        """ """
+        super().__init__(**kwargs)
+        self.type = None
+        self.info = None
+
+
+class ErrorDetail(_serialization.Model):
+    """The error detail.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar code: The error code.
+    :vartype code: str
+    :ivar message: The error message.
+    :vartype message: str
+    :ivar target: The error target.
+    :vartype target: str
+    :ivar details: The error details.
+    :vartype details: list[~azure.mgmt.desktopvirtualization.models.ErrorDetail]
+    :ivar additional_info: The error additional info.
+    :vartype additional_info: list[~azure.mgmt.desktopvirtualization.models.ErrorAdditionalInfo]
+    """
+
+    _validation = {
+        "code": {"readonly": True},
+        "message": {"readonly": True},
+        "target": {"readonly": True},
+        "details": {"readonly": True},
+        "additional_info": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "code": {"key": "code", "type": "str"},
+        "message": {"key": "message", "type": "str"},
+        "target": {"key": "target", "type": "str"},
+        "details": {"key": "details", "type": "[ErrorDetail]"},
+        "additional_info": {"key": "additionalInfo", "type": "[ErrorAdditionalInfo]"},
+    }
+
+    def __init__(self, **kwargs: Any) -> None:
+        """ """
+        super().__init__(**kwargs)
+        self.code = None
+        self.message = None
+        self.target = None
+        self.details = None
+        self.additional_info = None
+
+
+class ErrorResponse(_serialization.Model):
+    """Common error response for all Azure Resource Manager APIs to return error details for failed
+    operations. (This also follows the OData error response format.).
+
+    :ivar error: The error object.
+    :vartype error: ~azure.mgmt.desktopvirtualization.models.ErrorDetail
+    """
+
+    _attribute_map = {
+        "error": {"key": "error", "type": "ErrorDetail"},
+    }
+
+    def __init__(self, *, error: Optional["_models.ErrorDetail"] = None, **kwargs: Any) -> None:
+        """
+        :keyword error: The error object.
+        :paramtype error: ~azure.mgmt.desktopvirtualization.models.ErrorDetail
+        """
+        super().__init__(**kwargs)
+        self.error = error
+
+
 class ExpandMsixImage(Resource):  # pylint: disable=too-many-instance-attributes
     """Represents the definition of contents retrieved after expanding the MSIX Image.
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     :ivar package_alias: Alias of MSIX Package.
     :vartype package_alias: str
     :ivar image_path: VHD/CIM image path on Network Share.
@@ -1031,25 +1599,31 @@ class ExpandMsixImage(Resource):  # pylint: disable=too-many-instance-attributes
     :ivar package_dependencies: List of package dependencies.
     :vartype package_dependencies:
      list[~azure.mgmt.desktopvirtualization.models.MsixPackageDependencies]
-    :ivar version: Package Version found in the appxmanifest.xml.
+    :ivar version: Package version found in the appxmanifest.xml.
     :vartype version: str
     :ivar last_updated: Date Package was last updated, found in the appxmanifest.xml.
     :vartype last_updated: ~datetime.datetime
     :ivar package_applications: List of package applications.
     :vartype package_applications:
      list[~azure.mgmt.desktopvirtualization.models.MsixPackageApplications]
+    :ivar certificate_name: Certificate name found in the appxmanifest.xml.
+    :vartype certificate_name: str
+    :ivar certificate_expiry: Date certificate expires, found in the appxmanifest.xml.
+    :vartype certificate_expiry: ~datetime.datetime
     """
 
     _validation = {
         "id": {"readonly": True},
         "name": {"readonly": True},
         "type": {"readonly": True},
+        "system_data": {"readonly": True},
     }
 
     _attribute_map = {
         "id": {"key": "id", "type": "str"},
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
         "package_alias": {"key": "properties.packageAlias", "type": "str"},
         "image_path": {"key": "properties.imagePath", "type": "str"},
         "package_name": {"key": "properties.packageName", "type": "str"},
@@ -1063,6 +1637,8 @@ class ExpandMsixImage(Resource):  # pylint: disable=too-many-instance-attributes
         "version": {"key": "properties.version", "type": "str"},
         "last_updated": {"key": "properties.lastUpdated", "type": "iso-8601"},
         "package_applications": {"key": "properties.packageApplications", "type": "[MsixPackageApplications]"},
+        "certificate_name": {"key": "properties.certificateName", "type": "str"},
+        "certificate_expiry": {"key": "properties.certificateExpiry", "type": "iso-8601"},
     }
 
     def __init__(
@@ -1081,6 +1657,8 @@ class ExpandMsixImage(Resource):  # pylint: disable=too-many-instance-attributes
         version: Optional[str] = None,
         last_updated: Optional[datetime.datetime] = None,
         package_applications: Optional[List["_models.MsixPackageApplications"]] = None,
+        certificate_name: Optional[str] = None,
+        certificate_expiry: Optional[datetime.datetime] = None,
         **kwargs: Any
     ) -> None:
         """
@@ -1106,13 +1684,17 @@ class ExpandMsixImage(Resource):  # pylint: disable=too-many-instance-attributes
         :keyword package_dependencies: List of package dependencies.
         :paramtype package_dependencies:
          list[~azure.mgmt.desktopvirtualization.models.MsixPackageDependencies]
-        :keyword version: Package Version found in the appxmanifest.xml.
+        :keyword version: Package version found in the appxmanifest.xml.
         :paramtype version: str
         :keyword last_updated: Date Package was last updated, found in the appxmanifest.xml.
         :paramtype last_updated: ~datetime.datetime
         :keyword package_applications: List of package applications.
         :paramtype package_applications:
          list[~azure.mgmt.desktopvirtualization.models.MsixPackageApplications]
+        :keyword certificate_name: Certificate name found in the appxmanifest.xml.
+        :paramtype certificate_name: str
+        :keyword certificate_expiry: Date certificate expires, found in the appxmanifest.xml.
+        :paramtype certificate_expiry: ~datetime.datetime
         """
         super().__init__(**kwargs)
         self.package_alias = package_alias
@@ -1128,6 +1710,8 @@ class ExpandMsixImage(Resource):  # pylint: disable=too-many-instance-attributes
         self.version = version
         self.last_updated = last_updated
         self.package_applications = package_applications
+        self.certificate_name = certificate_name
+        self.certificate_expiry = certificate_expiry
 
 
 class ExpandMsixImageList(_serialization.Model):
@@ -1165,17 +1749,22 @@ class HostPool(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-many
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
-    :ivar location: The geo-location where the resource lives.
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
+    :ivar tags: Resource tags.
+    :vartype tags: dict[str, str]
+    :ivar location: The geo-location where the resource lives. Required.
     :vartype location: str
     :ivar managed_by: The fully qualified resource ID of the resource that manages this resource.
      Indicates if this resource is managed by another Azure resource. If this is present, complete
@@ -1183,7 +1772,7 @@ class HostPool(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-many
      managed by another resource.
     :vartype managed_by: str
     :ivar kind: Metadata used by portal/tooling/etc to render different UX experiences for
-     resources of the same type; e.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
+     resources of the same type. E.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
      the resource provider must validate and persist this value.
     :vartype kind: str
     :ivar etag: The etag field is *not* required. If it is provided in the response body, it must
@@ -1192,8 +1781,6 @@ class HostPool(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-many
      the etag (section 14.19), If-Match (section 14.24), If-None-Match (section 14.26), and If-Range
      (section 14.27) header fields.
     :vartype etag: str
-    :ivar tags: Resource tags.
-    :vartype tags: dict[str, str]
     :ivar identity:
     :vartype identity:
      ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetIdentity
@@ -1201,8 +1788,6 @@ class HostPool(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-many
     :vartype sku: ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetSku
     :ivar plan:
     :vartype plan: ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetPlan
-    :ivar system_data: Metadata pertaining to creation and last modification of the resource.
-    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     :ivar object_id: ObjectId of HostPool. (internal use).
     :vartype object_id: str
     :ivar friendly_name: Friendly name of HostPool.
@@ -1233,6 +1818,8 @@ class HostPool(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-many
     :vartype vm_template: str
     :ivar application_group_references: List of applicationGroup links.
     :vartype application_group_references: list[str]
+    :ivar app_attach_package_references: List of App Attach Package links.
+    :vartype app_attach_package_references: list[str]
     :ivar ssoadfs_authority: URL to customer ADFS server for signing WVD SSO certificates.
     :vartype ssoadfs_authority: str
     :ivar sso_client_id: ClientId for the registered Relying Party used to issue WVD SSO
@@ -1253,39 +1840,52 @@ class HostPool(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-many
     :vartype start_vm_on_connect: bool
     :ivar cloud_pc_resource: Is cloud pc resource.
     :vartype cloud_pc_resource: bool
+    :ivar public_network_access: Enabled allows this resource to be accessed from both public and
+     private networks, Disabled allows this resource to only be accessed via private endpoints.
+     Known values are: "Enabled", "Disabled", "EnabledForSessionHostsOnly", and
+     "EnabledForClientsOnly".
+    :vartype public_network_access: str or
+     ~azure.mgmt.desktopvirtualization.models.HostpoolPublicNetworkAccess
     :ivar agent_update: The session host configuration for updating agent, monitoring agent, and
      stack component.
     :vartype agent_update: ~azure.mgmt.desktopvirtualization.models.AgentUpdateProperties
+    :ivar private_endpoint_connections: List of private endpoint connection associated with the
+     specified resource.
+    :vartype private_endpoint_connections:
+     list[~azure.mgmt.desktopvirtualization.models.PrivateEndpointConnection]
     """
 
     _validation = {
         "id": {"readonly": True},
         "name": {"readonly": True},
         "type": {"readonly": True},
+        "system_data": {"readonly": True},
+        "location": {"required": True},
         "kind": {"pattern": r"^[-\w\._,\(\)]+$"},
         "etag": {"readonly": True},
-        "system_data": {"readonly": True},
         "object_id": {"readonly": True},
         "host_pool_type": {"required": True},
         "load_balancer_type": {"required": True},
         "application_group_references": {"readonly": True},
+        "app_attach_package_references": {"readonly": True},
         "preferred_app_group_type": {"required": True},
         "cloud_pc_resource": {"readonly": True},
+        "private_endpoint_connections": {"readonly": True},
     }
 
     _attribute_map = {
         "id": {"key": "id", "type": "str"},
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
+        "tags": {"key": "tags", "type": "{str}"},
         "location": {"key": "location", "type": "str"},
         "managed_by": {"key": "managedBy", "type": "str"},
         "kind": {"key": "kind", "type": "str"},
         "etag": {"key": "etag", "type": "str"},
-        "tags": {"key": "tags", "type": "{str}"},
         "identity": {"key": "identity", "type": "ResourceModelWithAllowedPropertySetIdentity"},
         "sku": {"key": "sku", "type": "ResourceModelWithAllowedPropertySetSku"},
         "plan": {"key": "plan", "type": "ResourceModelWithAllowedPropertySetPlan"},
-        "system_data": {"key": "systemData", "type": "SystemData"},
         "object_id": {"key": "properties.objectId", "type": "str"},
         "friendly_name": {"key": "properties.friendlyName", "type": "str"},
         "description": {"key": "properties.description", "type": "str"},
@@ -1299,6 +1899,7 @@ class HostPool(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-many
         "registration_info": {"key": "properties.registrationInfo", "type": "RegistrationInfo"},
         "vm_template": {"key": "properties.vmTemplate", "type": "str"},
         "application_group_references": {"key": "properties.applicationGroupReferences", "type": "[str]"},
+        "app_attach_package_references": {"key": "properties.appAttachPackageReferences", "type": "[str]"},
         "ssoadfs_authority": {"key": "properties.ssoadfsAuthority", "type": "str"},
         "sso_client_id": {"key": "properties.ssoClientId", "type": "str"},
         "sso_client_secret_key_vault_path": {"key": "properties.ssoClientSecretKeyVaultPath", "type": "str"},
@@ -1306,19 +1907,24 @@ class HostPool(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-many
         "preferred_app_group_type": {"key": "properties.preferredAppGroupType", "type": "str"},
         "start_vm_on_connect": {"key": "properties.startVMOnConnect", "type": "bool"},
         "cloud_pc_resource": {"key": "properties.cloudPcResource", "type": "bool"},
+        "public_network_access": {"key": "properties.publicNetworkAccess", "type": "str"},
         "agent_update": {"key": "properties.agentUpdate", "type": "AgentUpdateProperties"},
+        "private_endpoint_connections": {
+            "key": "properties.privateEndpointConnections",
+            "type": "[PrivateEndpointConnection]",
+        },
     }
 
     def __init__(  # pylint: disable=too-many-locals
         self,
         *,
+        location: str,
         host_pool_type: Union[str, "_models.HostPoolType"],
         load_balancer_type: Union[str, "_models.LoadBalancerType"],
         preferred_app_group_type: Union[str, "_models.PreferredAppGroupType"],
-        location: Optional[str] = None,
+        tags: Optional[Dict[str, str]] = None,
         managed_by: Optional[str] = None,
         kind: Optional[str] = None,
-        tags: Optional[Dict[str, str]] = None,
         identity: Optional["_models.ResourceModelWithAllowedPropertySetIdentity"] = None,
         sku: Optional["_models.ResourceModelWithAllowedPropertySetSku"] = None,
         plan: Optional["_models.ResourceModelWithAllowedPropertySetPlan"] = None,
@@ -1336,11 +1942,14 @@ class HostPool(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-many
         sso_client_secret_key_vault_path: Optional[str] = None,
         sso_secret_type: Optional[Union[str, "_models.SSOSecretType"]] = None,
         start_vm_on_connect: Optional[bool] = None,
+        public_network_access: Optional[Union[str, "_models.HostpoolPublicNetworkAccess"]] = None,
         agent_update: Optional["_models.AgentUpdateProperties"] = None,
         **kwargs: Any
     ) -> None:
         """
-        :keyword location: The geo-location where the resource lives.
+        :keyword tags: Resource tags.
+        :paramtype tags: dict[str, str]
+        :keyword location: The geo-location where the resource lives. Required.
         :paramtype location: str
         :keyword managed_by: The fully qualified resource ID of the resource that manages this
          resource. Indicates if this resource is managed by another Azure resource. If this is present,
@@ -1348,11 +1957,9 @@ class HostPool(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-many
          it is managed by another resource.
         :paramtype managed_by: str
         :keyword kind: Metadata used by portal/tooling/etc to render different UX experiences for
-         resources of the same type; e.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
+         resources of the same type. E.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
          the resource provider must validate and persist this value.
         :paramtype kind: str
-        :keyword tags: Resource tags.
-        :paramtype tags: dict[str, str]
         :keyword identity:
         :paramtype identity:
          ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetIdentity
@@ -1405,21 +2012,26 @@ class HostPool(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-many
          ~azure.mgmt.desktopvirtualization.models.PreferredAppGroupType
         :keyword start_vm_on_connect: The flag to turn on/off StartVMOnConnect feature.
         :paramtype start_vm_on_connect: bool
+        :keyword public_network_access: Enabled allows this resource to be accessed from both public
+         and private networks, Disabled allows this resource to only be accessed via private endpoints.
+         Known values are: "Enabled", "Disabled", "EnabledForSessionHostsOnly", and
+         "EnabledForClientsOnly".
+        :paramtype public_network_access: str or
+         ~azure.mgmt.desktopvirtualization.models.HostpoolPublicNetworkAccess
         :keyword agent_update: The session host configuration for updating agent, monitoring agent, and
          stack component.
         :paramtype agent_update: ~azure.mgmt.desktopvirtualization.models.AgentUpdateProperties
         """
         super().__init__(
+            tags=tags,
             location=location,
             managed_by=managed_by,
             kind=kind,
-            tags=tags,
             identity=identity,
             sku=sku,
             plan=plan,
             **kwargs
         )
-        self.system_data = None
         self.object_id = None
         self.friendly_name = friendly_name
         self.description = description
@@ -1433,6 +2045,7 @@ class HostPool(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-many
         self.registration_info = registration_info
         self.vm_template = vm_template
         self.application_group_references = None
+        self.app_attach_package_references = None
         self.ssoadfs_authority = ssoadfs_authority
         self.sso_client_id = sso_client_id
         self.sso_client_secret_key_vault_path = sso_client_secret_key_vault_path
@@ -1440,7 +2053,9 @@ class HostPool(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-many
         self.preferred_app_group_type = preferred_app_group_type
         self.start_vm_on_connect = start_vm_on_connect
         self.cloud_pc_resource = None
+        self.public_network_access = public_network_access
         self.agent_update = agent_update
+        self.private_endpoint_connections = None
 
 
 class HostPoolList(_serialization.Model):
@@ -1478,14 +2093,17 @@ class HostPoolPatch(Resource):  # pylint: disable=too-many-instance-attributes
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     :ivar tags: tags to be updated.
     :vartype tags: dict[str, str]
     :ivar friendly_name: Friendly name of HostPool.
@@ -1528,6 +2146,11 @@ class HostPoolPatch(Resource):  # pylint: disable=too-many-instance-attributes
      ~azure.mgmt.desktopvirtualization.models.PreferredAppGroupType
     :ivar start_vm_on_connect: The flag to turn on/off StartVMOnConnect feature.
     :vartype start_vm_on_connect: bool
+    :ivar public_network_access: Enabled to allow this resource to be access from the public
+     network. Known values are: "Enabled", "Disabled", "EnabledForSessionHostsOnly", and
+     "EnabledForClientsOnly".
+    :vartype public_network_access: str or
+     ~azure.mgmt.desktopvirtualization.models.HostpoolPublicNetworkAccess
     :ivar agent_update: The session host configuration for updating agent, monitoring agent, and
      stack component.
     :vartype agent_update: ~azure.mgmt.desktopvirtualization.models.AgentUpdatePatchProperties
@@ -1537,12 +2160,14 @@ class HostPoolPatch(Resource):  # pylint: disable=too-many-instance-attributes
         "id": {"readonly": True},
         "name": {"readonly": True},
         "type": {"readonly": True},
+        "system_data": {"readonly": True},
     }
 
     _attribute_map = {
         "id": {"key": "id", "type": "str"},
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
         "tags": {"key": "tags", "type": "{str}"},
         "friendly_name": {"key": "properties.friendlyName", "type": "str"},
         "description": {"key": "properties.description", "type": "str"},
@@ -1560,6 +2185,7 @@ class HostPoolPatch(Resource):  # pylint: disable=too-many-instance-attributes
         "sso_secret_type": {"key": "properties.ssoSecretType", "type": "str"},
         "preferred_app_group_type": {"key": "properties.preferredAppGroupType", "type": "str"},
         "start_vm_on_connect": {"key": "properties.startVMOnConnect", "type": "bool"},
+        "public_network_access": {"key": "properties.publicNetworkAccess", "type": "str"},
         "agent_update": {"key": "properties.agentUpdate", "type": "AgentUpdatePatchProperties"},
     }
 
@@ -1583,6 +2209,7 @@ class HostPoolPatch(Resource):  # pylint: disable=too-many-instance-attributes
         sso_secret_type: Optional[Union[str, "_models.SSOSecretType"]] = None,
         preferred_app_group_type: Optional[Union[str, "_models.PreferredAppGroupType"]] = None,
         start_vm_on_connect: Optional[bool] = None,
+        public_network_access: Optional[Union[str, "_models.HostpoolPublicNetworkAccess"]] = None,
         agent_update: Optional["_models.AgentUpdatePatchProperties"] = None,
         **kwargs: Any
     ) -> None:
@@ -1629,6 +2256,11 @@ class HostPoolPatch(Resource):  # pylint: disable=too-many-instance-attributes
          ~azure.mgmt.desktopvirtualization.models.PreferredAppGroupType
         :keyword start_vm_on_connect: The flag to turn on/off StartVMOnConnect feature.
         :paramtype start_vm_on_connect: bool
+        :keyword public_network_access: Enabled to allow this resource to be access from the public
+         network. Known values are: "Enabled", "Disabled", "EnabledForSessionHostsOnly", and
+         "EnabledForClientsOnly".
+        :paramtype public_network_access: str or
+         ~azure.mgmt.desktopvirtualization.models.HostpoolPublicNetworkAccess
         :keyword agent_update: The session host configuration for updating agent, monitoring agent, and
          stack component.
         :paramtype agent_update: ~azure.mgmt.desktopvirtualization.models.AgentUpdatePatchProperties
@@ -1651,6 +2283,7 @@ class HostPoolPatch(Resource):  # pylint: disable=too-many-instance-attributes
         self.sso_secret_type = sso_secret_type
         self.preferred_app_group_type = preferred_app_group_type
         self.start_vm_on_connect = start_vm_on_connect
+        self.public_network_access = public_network_access
         self.agent_update = agent_update
 
 
@@ -1659,9 +2292,9 @@ class Identity(_serialization.Model):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    :ivar principal_id: The principal ID of resource identity.
+    :ivar principal_id: The principal ID of resource identity. The value must be an UUID.
     :vartype principal_id: str
-    :ivar tenant_id: The tenant ID of resource.
+    :ivar tenant_id: The tenant ID of resource. The value must be an UUID.
     :vartype tenant_id: str
     :ivar type: The identity type. Default value is "SystemAssigned".
     :vartype type: str
@@ -1687,6 +2320,42 @@ class Identity(_serialization.Model):
         self.principal_id = None
         self.tenant_id = None
         self.type = type
+
+
+class ImportPackageInfoRequest(_serialization.Model):
+    """Information to import app attach package.
+
+    :ivar path: URI to Image.
+    :vartype path: str
+    :ivar package_architecture: Possible device architectures that an app attach package can be
+     configured for. Known values are: "ARM", "ARM64", "x86", "x64", "Neutral", "x86a64", and "ALL".
+    :vartype package_architecture: str or
+     ~azure.mgmt.desktopvirtualization.models.AppAttachPackageArchitectures
+    """
+
+    _attribute_map = {
+        "path": {"key": "path", "type": "str"},
+        "package_architecture": {"key": "packageArchitecture", "type": "str"},
+    }
+
+    def __init__(
+        self,
+        *,
+        path: Optional[str] = None,
+        package_architecture: Optional[Union[str, "_models.AppAttachPackageArchitectures"]] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword path: URI to Image.
+        :paramtype path: str
+        :keyword package_architecture: Possible device architectures that an app attach package can be
+         configured for. Known values are: "ARM", "ARM64", "x86", "x64", "Neutral", "x86a64", and "ALL".
+        :paramtype package_architecture: str or
+         ~azure.mgmt.desktopvirtualization.models.AppAttachPackageArchitectures
+        """
+        super().__init__(**kwargs)
+        self.path = path
+        self.package_architecture = package_architecture
 
 
 class LogSpecification(_serialization.Model):
@@ -1821,15 +2490,16 @@ class MSIXPackage(Resource):  # pylint: disable=too-many-instance-attributes
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
-    :ivar system_data: Metadata pertaining to creation and last modification of the resource.
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
     :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     :ivar image_path: VHD/CIM image path on Network Share.
     :vartype image_path: str
@@ -1849,7 +2519,7 @@ class MSIXPackage(Resource):  # pylint: disable=too-many-instance-attributes
     :ivar package_dependencies: List of package dependencies.
     :vartype package_dependencies:
      list[~azure.mgmt.desktopvirtualization.models.MsixPackageDependencies]
-    :ivar version: Package Version found in the appxmanifest.xml.
+    :ivar version: Package version found in the appxmanifest.xml.
     :vartype version: str
     :ivar last_updated: Date Package was last updated, found in the appxmanifest.xml.
     :vartype last_updated: ~datetime.datetime
@@ -1918,7 +2588,7 @@ class MSIXPackage(Resource):  # pylint: disable=too-many-instance-attributes
         :keyword package_dependencies: List of package dependencies.
         :paramtype package_dependencies:
          list[~azure.mgmt.desktopvirtualization.models.MsixPackageDependencies]
-        :keyword version: Package Version found in the appxmanifest.xml.
+        :keyword version: Package version found in the appxmanifest.xml.
         :paramtype version: str
         :keyword last_updated: Date Package was last updated, found in the appxmanifest.xml.
         :paramtype last_updated: ~datetime.datetime
@@ -1927,7 +2597,6 @@ class MSIXPackage(Resource):  # pylint: disable=too-many-instance-attributes
          list[~azure.mgmt.desktopvirtualization.models.MsixPackageApplications]
         """
         super().__init__(**kwargs)
-        self.system_data = None
         self.image_path = image_path
         self.package_name = package_name
         self.package_family_name = package_family_name
@@ -2084,14 +2753,17 @@ class MSIXPackagePatch(Resource):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     :ivar is_active: Set a version of the package to be active across hostpool.
     :vartype is_active: bool
     :ivar is_regular_registration: Set Registration mode. Regular or Delayed.
@@ -2104,12 +2776,14 @@ class MSIXPackagePatch(Resource):
         "id": {"readonly": True},
         "name": {"readonly": True},
         "type": {"readonly": True},
+        "system_data": {"readonly": True},
     }
 
     _attribute_map = {
         "id": {"key": "id", "type": "str"},
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
         "is_active": {"key": "properties.isActive", "type": "bool"},
         "is_regular_registration": {"key": "properties.isRegularRegistration", "type": "bool"},
         "display_name": {"key": "properties.displayName", "type": "str"},
@@ -2162,7 +2836,7 @@ class OperationProperties(_serialization.Model):
 class Plan(_serialization.Model):
     """Plan for the resource.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: A user defined name of the 3rd Party Artifact that is being procured. Required.
     :vartype name: str
@@ -2224,6 +2898,319 @@ class Plan(_serialization.Model):
         self.product = product
         self.promotion_code = promotion_code
         self.version = version
+
+
+class PrivateEndpoint(_serialization.Model):
+    """The private endpoint resource.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar id: The ARM identifier for private endpoint.
+    :vartype id: str
+    """
+
+    _validation = {
+        "id": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "id": {"key": "id", "type": "str"},
+    }
+
+    def __init__(self, **kwargs: Any) -> None:
+        """ """
+        super().__init__(**kwargs)
+        self.id = None
+
+
+class PrivateEndpointConnection(Resource):
+    """The private endpoint connection resource.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
+    :vartype id: str
+    :ivar name: The name of the resource.
+    :vartype name: str
+    :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
+     "Microsoft.Storage/storageAccounts".
+    :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
+    :ivar group_ids: The group ids for the private endpoint resource.
+    :vartype group_ids: list[str]
+    :ivar private_endpoint: The private endpoint resource.
+    :vartype private_endpoint: ~azure.mgmt.desktopvirtualization.models.PrivateEndpoint
+    :ivar private_link_service_connection_state: A collection of information about the state of the
+     connection between service consumer and provider.
+    :vartype private_link_service_connection_state:
+     ~azure.mgmt.desktopvirtualization.models.PrivateLinkServiceConnectionState
+    :ivar provisioning_state: The provisioning state of the private endpoint connection resource.
+     Known values are: "Succeeded", "Creating", "Deleting", and "Failed".
+    :vartype provisioning_state: str or
+     ~azure.mgmt.desktopvirtualization.models.PrivateEndpointConnectionProvisioningState
+    """
+
+    _validation = {
+        "id": {"readonly": True},
+        "name": {"readonly": True},
+        "type": {"readonly": True},
+        "system_data": {"readonly": True},
+        "group_ids": {"readonly": True},
+        "provisioning_state": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "id": {"key": "id", "type": "str"},
+        "name": {"key": "name", "type": "str"},
+        "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
+        "group_ids": {"key": "properties.groupIds", "type": "[str]"},
+        "private_endpoint": {"key": "properties.privateEndpoint", "type": "PrivateEndpoint"},
+        "private_link_service_connection_state": {
+            "key": "properties.privateLinkServiceConnectionState",
+            "type": "PrivateLinkServiceConnectionState",
+        },
+        "provisioning_state": {"key": "properties.provisioningState", "type": "str"},
+    }
+
+    def __init__(
+        self,
+        *,
+        private_endpoint: Optional["_models.PrivateEndpoint"] = None,
+        private_link_service_connection_state: Optional["_models.PrivateLinkServiceConnectionState"] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword private_endpoint: The private endpoint resource.
+        :paramtype private_endpoint: ~azure.mgmt.desktopvirtualization.models.PrivateEndpoint
+        :keyword private_link_service_connection_state: A collection of information about the state of
+         the connection between service consumer and provider.
+        :paramtype private_link_service_connection_state:
+         ~azure.mgmt.desktopvirtualization.models.PrivateLinkServiceConnectionState
+        """
+        super().__init__(**kwargs)
+        self.group_ids = None
+        self.private_endpoint = private_endpoint
+        self.private_link_service_connection_state = private_link_service_connection_state
+        self.provisioning_state = None
+
+
+class PrivateEndpointConnectionListResultWithSystemData(_serialization.Model):  # pylint: disable=name-too-long
+    """List of private endpoint connection associated with the specified storage account.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar value: Array of private endpoint connections.
+    :vartype value:
+     list[~azure.mgmt.desktopvirtualization.models.PrivateEndpointConnectionWithSystemData]
+    :ivar next_link: Link to the next page of results.
+    :vartype next_link: str
+    """
+
+    _validation = {
+        "next_link": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "value": {"key": "value", "type": "[PrivateEndpointConnectionWithSystemData]"},
+        "next_link": {"key": "nextLink", "type": "str"},
+    }
+
+    def __init__(
+        self, *, value: Optional[List["_models.PrivateEndpointConnectionWithSystemData"]] = None, **kwargs: Any
+    ) -> None:
+        """
+        :keyword value: Array of private endpoint connections.
+        :paramtype value:
+         list[~azure.mgmt.desktopvirtualization.models.PrivateEndpointConnectionWithSystemData]
+        """
+        super().__init__(**kwargs)
+        self.value = value
+        self.next_link = None
+
+
+class PrivateEndpointConnectionWithSystemData(PrivateEndpointConnection):
+    """The Private Endpoint Connection resource.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
+    :vartype id: str
+    :ivar name: The name of the resource.
+    :vartype name: str
+    :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
+     "Microsoft.Storage/storageAccounts".
+    :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
+    :ivar group_ids: The group ids for the private endpoint resource.
+    :vartype group_ids: list[str]
+    :ivar private_endpoint: The private endpoint resource.
+    :vartype private_endpoint: ~azure.mgmt.desktopvirtualization.models.PrivateEndpoint
+    :ivar private_link_service_connection_state: A collection of information about the state of the
+     connection between service consumer and provider.
+    :vartype private_link_service_connection_state:
+     ~azure.mgmt.desktopvirtualization.models.PrivateLinkServiceConnectionState
+    :ivar provisioning_state: The provisioning state of the private endpoint connection resource.
+     Known values are: "Succeeded", "Creating", "Deleting", and "Failed".
+    :vartype provisioning_state: str or
+     ~azure.mgmt.desktopvirtualization.models.PrivateEndpointConnectionProvisioningState
+    """
+
+
+class PrivateLinkResource(Resource):
+    """A private link resource.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
+    :vartype id: str
+    :ivar name: The name of the resource.
+    :vartype name: str
+    :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
+     "Microsoft.Storage/storageAccounts".
+    :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
+    :ivar group_id: The private link resource group id.
+    :vartype group_id: str
+    :ivar required_members: The private link resource required member names.
+    :vartype required_members: list[str]
+    :ivar required_zone_names: The private link resource Private link DNS zone name.
+    :vartype required_zone_names: list[str]
+    """
+
+    _validation = {
+        "id": {"readonly": True},
+        "name": {"readonly": True},
+        "type": {"readonly": True},
+        "system_data": {"readonly": True},
+        "group_id": {"readonly": True},
+        "required_members": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "id": {"key": "id", "type": "str"},
+        "name": {"key": "name", "type": "str"},
+        "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
+        "group_id": {"key": "properties.groupId", "type": "str"},
+        "required_members": {"key": "properties.requiredMembers", "type": "[str]"},
+        "required_zone_names": {"key": "properties.requiredZoneNames", "type": "[str]"},
+    }
+
+    def __init__(self, *, required_zone_names: Optional[List[str]] = None, **kwargs: Any) -> None:
+        """
+        :keyword required_zone_names: The private link resource Private link DNS zone name.
+        :paramtype required_zone_names: list[str]
+        """
+        super().__init__(**kwargs)
+        self.group_id = None
+        self.required_members = None
+        self.required_zone_names = required_zone_names
+
+
+class PrivateLinkResourceListResult(_serialization.Model):
+    """A list of private link resources.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar value: Array of private link resources.
+    :vartype value: list[~azure.mgmt.desktopvirtualization.models.PrivateLinkResource]
+    :ivar next_link: Link to the next page of results.
+    :vartype next_link: str
+    """
+
+    _validation = {
+        "next_link": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "value": {"key": "value", "type": "[PrivateLinkResource]"},
+        "next_link": {"key": "nextLink", "type": "str"},
+    }
+
+    def __init__(self, *, value: Optional[List["_models.PrivateLinkResource"]] = None, **kwargs: Any) -> None:
+        """
+        :keyword value: Array of private link resources.
+        :paramtype value: list[~azure.mgmt.desktopvirtualization.models.PrivateLinkResource]
+        """
+        super().__init__(**kwargs)
+        self.value = value
+        self.next_link = None
+
+
+class PrivateLinkServiceConnectionState(_serialization.Model):
+    """A collection of information about the state of the connection between service consumer and
+    provider.
+
+    :ivar status: Indicates whether the connection has been Approved/Rejected/Removed by the owner
+     of the service. Known values are: "Pending", "Approved", and "Rejected".
+    :vartype status: str or
+     ~azure.mgmt.desktopvirtualization.models.PrivateEndpointServiceConnectionStatus
+    :ivar description: The reason for approval/rejection of the connection.
+    :vartype description: str
+    :ivar actions_required: A message indicating if changes on the service provider require any
+     updates on the consumer.
+    :vartype actions_required: str
+    """
+
+    _attribute_map = {
+        "status": {"key": "status", "type": "str"},
+        "description": {"key": "description", "type": "str"},
+        "actions_required": {"key": "actionsRequired", "type": "str"},
+    }
+
+    def __init__(
+        self,
+        *,
+        status: Optional[Union[str, "_models.PrivateEndpointServiceConnectionStatus"]] = None,
+        description: Optional[str] = None,
+        actions_required: Optional[str] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword status: Indicates whether the connection has been Approved/Rejected/Removed by the
+         owner of the service. Known values are: "Pending", "Approved", and "Rejected".
+        :paramtype status: str or
+         ~azure.mgmt.desktopvirtualization.models.PrivateEndpointServiceConnectionStatus
+        :keyword description: The reason for approval/rejection of the connection.
+        :paramtype description: str
+        :keyword actions_required: A message indicating if changes on the service provider require any
+         updates on the consumer.
+        :paramtype actions_required: str
+        """
+        super().__init__(**kwargs)
+        self.status = status
+        self.description = description
+        self.actions_required = actions_required
+
+
+class ProxyResource(Resource):
+    """The resource model definition for a Azure Resource Manager proxy resource. It will not have
+    tags and a location.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
+    :vartype id: str
+    :ivar name: The name of the resource.
+    :vartype name: str
+    :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
+     "Microsoft.Storage/storageAccounts".
+    :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
+    """
 
 
 class RegistrationInfo(_serialization.Model):
@@ -2305,42 +3292,82 @@ class RegistrationInfoPatch(_serialization.Model):
         self.registration_token_operation = registration_token_operation
 
 
-class ResourceModelWithAllowedPropertySetIdentity(Identity):
+class RegistrationTokenList(_serialization.Model):
+    """List of RegistrationToken definitions.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar value: List of RegistrationToken definitions.
+    :vartype value: list[~azure.mgmt.desktopvirtualization.models.RegistrationTokenMinimal]
+    :ivar next_link: Link to the next page of results.
+    :vartype next_link: str
+    """
+
+    _validation = {
+        "next_link": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "value": {"key": "value", "type": "[RegistrationTokenMinimal]"},
+        "next_link": {"key": "nextLink", "type": "str"},
+    }
+
+    def __init__(self, *, value: Optional[List["_models.RegistrationTokenMinimal"]] = None, **kwargs: Any) -> None:
+        """
+        :keyword value: List of RegistrationToken definitions.
+        :paramtype value: list[~azure.mgmt.desktopvirtualization.models.RegistrationTokenMinimal]
+        """
+        super().__init__(**kwargs)
+        self.value = value
+        self.next_link = None
+
+
+class RegistrationTokenMinimal(_serialization.Model):
+    """Represents a Minimal set of properties for RegistrationToken definition.
+
+    :ivar expiration_time: Expiration time of registration token.
+    :vartype expiration_time: ~datetime.datetime
+    :ivar token: The registration token base64 encoded string.
+    :vartype token: str
+    """
+
+    _attribute_map = {
+        "expiration_time": {"key": "expirationTime", "type": "iso-8601"},
+        "token": {"key": "token", "type": "str"},
+    }
+
+    def __init__(
+        self, *, expiration_time: Optional[datetime.datetime] = None, token: Optional[str] = None, **kwargs: Any
+    ) -> None:
+        """
+        :keyword expiration_time: Expiration time of registration token.
+        :paramtype expiration_time: ~datetime.datetime
+        :keyword token: The registration token base64 encoded string.
+        :paramtype token: str
+        """
+        super().__init__(**kwargs)
+        self.expiration_time = expiration_time
+        self.token = token
+
+
+class ResourceModelWithAllowedPropertySetIdentity(Identity):  # pylint: disable=name-too-long
     """ResourceModelWithAllowedPropertySetIdentity.
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    :ivar principal_id: The principal ID of resource identity.
+    :ivar principal_id: The principal ID of resource identity. The value must be an UUID.
     :vartype principal_id: str
-    :ivar tenant_id: The tenant ID of resource.
+    :ivar tenant_id: The tenant ID of resource. The value must be an UUID.
     :vartype tenant_id: str
     :ivar type: The identity type. Default value is "SystemAssigned".
     :vartype type: str
     """
 
-    _validation = {
-        "principal_id": {"readonly": True},
-        "tenant_id": {"readonly": True},
-    }
-
-    _attribute_map = {
-        "principal_id": {"key": "principalId", "type": "str"},
-        "tenant_id": {"key": "tenantId", "type": "str"},
-        "type": {"key": "type", "type": "str"},
-    }
-
-    def __init__(self, *, type: Optional[Literal["SystemAssigned"]] = None, **kwargs: Any) -> None:
-        """
-        :keyword type: The identity type. Default value is "SystemAssigned".
-        :paramtype type: str
-        """
-        super().__init__(type=type, **kwargs)
-
 
 class ResourceModelWithAllowedPropertySetPlan(Plan):
     """ResourceModelWithAllowedPropertySetPlan.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: A user defined name of the 3rd Party Artifact that is being procured. Required.
     :vartype name: str
@@ -2357,56 +3384,13 @@ class ResourceModelWithAllowedPropertySetPlan(Plan):
     :vartype version: str
     """
 
-    _validation = {
-        "name": {"required": True},
-        "publisher": {"required": True},
-        "product": {"required": True},
-    }
-
-    _attribute_map = {
-        "name": {"key": "name", "type": "str"},
-        "publisher": {"key": "publisher", "type": "str"},
-        "product": {"key": "product", "type": "str"},
-        "promotion_code": {"key": "promotionCode", "type": "str"},
-        "version": {"key": "version", "type": "str"},
-    }
-
-    def __init__(
-        self,
-        *,
-        name: str,
-        publisher: str,
-        product: str,
-        promotion_code: Optional[str] = None,
-        version: Optional[str] = None,
-        **kwargs: Any
-    ) -> None:
-        """
-        :keyword name: A user defined name of the 3rd Party Artifact that is being procured. Required.
-        :paramtype name: str
-        :keyword publisher: The publisher of the 3rd Party Artifact that is being bought. E.g.
-         NewRelic. Required.
-        :paramtype publisher: str
-        :keyword product: The 3rd Party artifact that is being procured. E.g. NewRelic. Product maps to
-         the OfferID specified for the artifact at the time of Data Market onboarding. Required.
-        :paramtype product: str
-        :keyword promotion_code: A publisher provided promotion code as provisioned in Data Market for
-         the said product/artifact.
-        :paramtype promotion_code: str
-        :keyword version: The version of the desired product/artifact.
-        :paramtype version: str
-        """
-        super().__init__(
-            name=name, publisher=publisher, product=product, promotion_code=promotion_code, version=version, **kwargs
-        )
-
 
 class Sku(_serialization.Model):
     """The resource model definition representing SKU.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
-    :ivar name: The name of the SKU. Ex - P3. It is typically a letter+number code. Required.
+    :ivar name: The name of the SKU. E.g. P3. It is typically a letter+number code. Required.
     :vartype name: str
     :ivar tier: This field is required to be implemented by the Resource Provider if the service
      has more than one tier, but is not required on a PUT. Known values are: "Free", "Basic",
@@ -2446,7 +3430,7 @@ class Sku(_serialization.Model):
         **kwargs: Any
     ) -> None:
         """
-        :keyword name: The name of the SKU. Ex - P3. It is typically a letter+number code. Required.
+        :keyword name: The name of the SKU. E.g. P3. It is typically a letter+number code. Required.
         :paramtype name: str
         :keyword tier: This field is required to be implemented by the Resource Provider if the service
          has more than one tier, but is not required on a PUT. Known values are: "Free", "Basic",
@@ -2473,9 +3457,9 @@ class Sku(_serialization.Model):
 class ResourceModelWithAllowedPropertySetSku(Sku):
     """ResourceModelWithAllowedPropertySetSku.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
-    :ivar name: The name of the SKU. Ex - P3. It is typically a letter+number code. Required.
+    :ivar name: The name of the SKU. E.g. P3. It is typically a letter+number code. Required.
     :vartype name: str
     :ivar tier: This field is required to be implemented by the Resource Provider if the service
      has more than one tier, but is not required on a PUT. Known values are: "Free", "Basic",
@@ -2491,47 +3475,6 @@ class ResourceModelWithAllowedPropertySetSku(Sku):
      If scale out/in is not possible for the resource this may be omitted.
     :vartype capacity: int
     """
-
-    _validation = {
-        "name": {"required": True},
-    }
-
-    _attribute_map = {
-        "name": {"key": "name", "type": "str"},
-        "tier": {"key": "tier", "type": "str"},
-        "size": {"key": "size", "type": "str"},
-        "family": {"key": "family", "type": "str"},
-        "capacity": {"key": "capacity", "type": "int"},
-    }
-
-    def __init__(
-        self,
-        *,
-        name: str,
-        tier: Optional[Union[str, "_models.SkuTier"]] = None,
-        size: Optional[str] = None,
-        family: Optional[str] = None,
-        capacity: Optional[int] = None,
-        **kwargs: Any
-    ) -> None:
-        """
-        :keyword name: The name of the SKU. Ex - P3. It is typically a letter+number code. Required.
-        :paramtype name: str
-        :keyword tier: This field is required to be implemented by the Resource Provider if the service
-         has more than one tier, but is not required on a PUT. Known values are: "Free", "Basic",
-         "Standard", and "Premium".
-        :paramtype tier: str or ~azure.mgmt.desktopvirtualization.models.SkuTier
-        :keyword size: The SKU size. When the name field is the combination of tier and some other
-         value, this would be the standalone code.
-        :paramtype size: str
-        :keyword family: If the service has different generations of hardware, for the same SKU, then
-         that can be captured here.
-        :paramtype family: str
-        :keyword capacity: If the SKU supports scale out/in then the capacity integer should be
-         included. If scale out/in is not possible for the resource this may be omitted.
-        :paramtype capacity: int
-        """
-        super().__init__(name=name, tier=tier, size=size, family=family, capacity=capacity, **kwargs)
 
 
 class ResourceProviderOperation(_serialization.Model):
@@ -2689,17 +3632,22 @@ class ScalingPlan(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-m
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
-    :ivar location: The geo-location where the resource lives.
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
+    :ivar tags: Resource tags.
+    :vartype tags: dict[str, str]
+    :ivar location: The geo-location where the resource lives. Required.
     :vartype location: str
     :ivar managed_by: The fully qualified resource ID of the resource that manages this resource.
      Indicates if this resource is managed by another Azure resource. If this is present, complete
@@ -2707,7 +3655,7 @@ class ScalingPlan(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-m
      managed by another resource.
     :vartype managed_by: str
     :ivar kind: Metadata used by portal/tooling/etc to render different UX experiences for
-     resources of the same type; e.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
+     resources of the same type. E.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
      the resource provider must validate and persist this value.
     :vartype kind: str
     :ivar etag: The etag field is *not* required. If it is provided in the response body, it must
@@ -2716,8 +3664,6 @@ class ScalingPlan(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-m
      the etag (section 14.19), If-Match (section 14.24), If-None-Match (section 14.26), and If-Range
      (section 14.27) header fields.
     :vartype etag: str
-    :ivar tags: Resource tags.
-    :vartype tags: dict[str, str]
     :ivar identity:
     :vartype identity:
      ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetIdentity
@@ -2725,8 +3671,6 @@ class ScalingPlan(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-m
     :vartype sku: ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetSku
     :ivar plan:
     :vartype plan: ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetPlan
-    :ivar system_data: Metadata pertaining to creation and last modification of the resource.
-    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     :ivar object_id: ObjectId of scaling plan. (internal use).
     :vartype object_id: str
     :ivar description: Description of scaling plan.
@@ -2750,9 +3694,10 @@ class ScalingPlan(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-m
         "id": {"readonly": True},
         "name": {"readonly": True},
         "type": {"readonly": True},
+        "system_data": {"readonly": True},
+        "location": {"required": True},
         "kind": {"pattern": r"^[-\w\._,\(\)]+$"},
         "etag": {"readonly": True},
-        "system_data": {"readonly": True},
         "object_id": {"readonly": True},
         "time_zone": {"required": True},
     }
@@ -2761,15 +3706,15 @@ class ScalingPlan(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-m
         "id": {"key": "id", "type": "str"},
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
+        "tags": {"key": "tags", "type": "{str}"},
         "location": {"key": "location", "type": "str"},
         "managed_by": {"key": "managedBy", "type": "str"},
         "kind": {"key": "kind", "type": "str"},
         "etag": {"key": "etag", "type": "str"},
-        "tags": {"key": "tags", "type": "{str}"},
         "identity": {"key": "identity", "type": "ResourceModelWithAllowedPropertySetIdentity"},
         "sku": {"key": "sku", "type": "ResourceModelWithAllowedPropertySetSku"},
         "plan": {"key": "plan", "type": "ResourceModelWithAllowedPropertySetPlan"},
-        "system_data": {"key": "systemData", "type": "SystemData"},
         "object_id": {"key": "properties.objectId", "type": "str"},
         "description": {"key": "properties.description", "type": "str"},
         "friendly_name": {"key": "properties.friendlyName", "type": "str"},
@@ -2783,11 +3728,11 @@ class ScalingPlan(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-m
     def __init__(
         self,
         *,
+        location: str,
         time_zone: str,
-        location: Optional[str] = None,
+        tags: Optional[Dict[str, str]] = None,
         managed_by: Optional[str] = None,
         kind: Optional[str] = None,
-        tags: Optional[Dict[str, str]] = None,
         identity: Optional["_models.ResourceModelWithAllowedPropertySetIdentity"] = None,
         sku: Optional["_models.ResourceModelWithAllowedPropertySetSku"] = None,
         plan: Optional["_models.ResourceModelWithAllowedPropertySetPlan"] = None,
@@ -2800,7 +3745,9 @@ class ScalingPlan(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-m
         **kwargs: Any
     ) -> None:
         """
-        :keyword location: The geo-location where the resource lives.
+        :keyword tags: Resource tags.
+        :paramtype tags: dict[str, str]
+        :keyword location: The geo-location where the resource lives. Required.
         :paramtype location: str
         :keyword managed_by: The fully qualified resource ID of the resource that manages this
          resource. Indicates if this resource is managed by another Azure resource. If this is present,
@@ -2808,11 +3755,9 @@ class ScalingPlan(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-m
          it is managed by another resource.
         :paramtype managed_by: str
         :keyword kind: Metadata used by portal/tooling/etc to render different UX experiences for
-         resources of the same type; e.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
+         resources of the same type. E.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
          the resource provider must validate and persist this value.
         :paramtype kind: str
-        :keyword tags: Resource tags.
-        :paramtype tags: dict[str, str]
         :keyword identity:
         :paramtype identity:
          ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetIdentity
@@ -2838,16 +3783,15 @@ class ScalingPlan(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-m
          list[~azure.mgmt.desktopvirtualization.models.ScalingHostPoolReference]
         """
         super().__init__(
+            tags=tags,
             location=location,
             managed_by=managed_by,
             kind=kind,
-            tags=tags,
             identity=identity,
             sku=sku,
             plan=plan,
             **kwargs
         )
-        self.system_data = None
         self.object_id = None
         self.description = description
         self.friendly_name = friendly_name
@@ -2957,20 +3901,640 @@ class ScalingPlanPatch(_serialization.Model):
         self.host_pool_references = host_pool_references
 
 
-class ScalingPlanPooledSchedule(Resource):  # pylint: disable=too-many-instance-attributes
-    """Represents a ScalingPlanPooledSchedule definition.
+class ScalingPlanPersonalSchedule(ProxyResource):  # pylint: disable=too-many-instance-attributes
+    """Represents a ScalingPlanPersonalSchedule definition.
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
-    :ivar system_data: Metadata pertaining to creation and last modification of the resource.
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
+    :ivar days_of_week: Set of days of the week on which this schedule is active.
+    :vartype days_of_week: list[str or ~azure.mgmt.desktopvirtualization.models.DayOfWeek]
+    :ivar ramp_up_start_time: Starting time for ramp up period.
+    :vartype ramp_up_start_time: ~azure.mgmt.desktopvirtualization.models.Time
+    :ivar ramp_up_auto_start_hosts: The desired startup behavior during the ramp up period for
+     personal vms in the hostpool. Known values are: "None", "WithAssignedUser", and "All".
+    :vartype ramp_up_auto_start_hosts: str or
+     ~azure.mgmt.desktopvirtualization.models.StartupBehavior
+    :ivar ramp_up_start_vm_on_connect: The desired configuration of Start VM On Connect for the
+     hostpool during the ramp up phase. If this is disabled, session hosts must be turned on using
+     rampUpAutoStartHosts or by turning them on manually. Known values are: "Enable" and "Disable".
+    :vartype ramp_up_start_vm_on_connect: str or
+     ~azure.mgmt.desktopvirtualization.models.SetStartVMOnConnect
+    :ivar ramp_up_action_on_disconnect: Action to be taken after a user disconnect during the ramp
+     up period. Known values are: "None", "Deallocate", and "Hibernate".
+    :vartype ramp_up_action_on_disconnect: str or
+     ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+    :ivar ramp_up_minutes_to_wait_on_disconnect: The time in minutes to wait before performing the
+     desired session handling action when a user disconnects during the ramp up period.
+    :vartype ramp_up_minutes_to_wait_on_disconnect: int
+    :ivar ramp_up_action_on_logoff: Action to be taken after a logoff during the ramp up period.
+     Known values are: "None", "Deallocate", and "Hibernate".
+    :vartype ramp_up_action_on_logoff: str or
+     ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+    :ivar ramp_up_minutes_to_wait_on_logoff: The time in minutes to wait before performing the
+     desired session handling action when a user logs off during the ramp up period.
+    :vartype ramp_up_minutes_to_wait_on_logoff: int
+    :ivar peak_start_time: Starting time for peak period.
+    :vartype peak_start_time: ~azure.mgmt.desktopvirtualization.models.Time
+    :ivar peak_start_vm_on_connect: The desired configuration of Start VM On Connect for the
+     hostpool during the peak phase. Known values are: "Enable" and "Disable".
+    :vartype peak_start_vm_on_connect: str or
+     ~azure.mgmt.desktopvirtualization.models.SetStartVMOnConnect
+    :ivar peak_action_on_disconnect: Action to be taken after a user disconnect during the peak
+     period. Known values are: "None", "Deallocate", and "Hibernate".
+    :vartype peak_action_on_disconnect: str or
+     ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+    :ivar peak_minutes_to_wait_on_disconnect: The time in minutes to wait before performing the
+     desired session handling action when a user disconnects during the peak period.
+    :vartype peak_minutes_to_wait_on_disconnect: int
+    :ivar peak_action_on_logoff: Action to be taken after a logoff during the peak period. Known
+     values are: "None", "Deallocate", and "Hibernate".
+    :vartype peak_action_on_logoff: str or
+     ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+    :ivar peak_minutes_to_wait_on_logoff: The time in minutes to wait before performing the desired
+     session handling action when a user logs off during the peak period.
+    :vartype peak_minutes_to_wait_on_logoff: int
+    :ivar ramp_down_start_time: Starting time for ramp down period.
+    :vartype ramp_down_start_time: ~azure.mgmt.desktopvirtualization.models.Time
+    :ivar ramp_down_start_vm_on_connect: The desired configuration of Start VM On Connect for the
+     hostpool during the ramp down phase. Known values are: "Enable" and "Disable".
+    :vartype ramp_down_start_vm_on_connect: str or
+     ~azure.mgmt.desktopvirtualization.models.SetStartVMOnConnect
+    :ivar ramp_down_action_on_disconnect: Action to be taken after a user disconnect during the
+     ramp down period. Known values are: "None", "Deallocate", and "Hibernate".
+    :vartype ramp_down_action_on_disconnect: str or
+     ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+    :ivar ramp_down_minutes_to_wait_on_disconnect: The time in minutes to wait before performing
+     the desired session handling action when a user disconnects during the ramp down period.
+    :vartype ramp_down_minutes_to_wait_on_disconnect: int
+    :ivar ramp_down_action_on_logoff: Action to be taken after a logoff during the ramp down
+     period. Known values are: "None", "Deallocate", and "Hibernate".
+    :vartype ramp_down_action_on_logoff: str or
+     ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+    :ivar ramp_down_minutes_to_wait_on_logoff: The time in minutes to wait before performing the
+     desired session handling action when a user logs off during the ramp down period.
+    :vartype ramp_down_minutes_to_wait_on_logoff: int
+    :ivar off_peak_start_time: Starting time for off-peak period.
+    :vartype off_peak_start_time: ~azure.mgmt.desktopvirtualization.models.Time
+    :ivar off_peak_start_vm_on_connect: The desired configuration of Start VM On Connect for the
+     hostpool during the off-peak phase. Known values are: "Enable" and "Disable".
+    :vartype off_peak_start_vm_on_connect: str or
+     ~azure.mgmt.desktopvirtualization.models.SetStartVMOnConnect
+    :ivar off_peak_action_on_disconnect: Action to be taken after a user disconnect during the
+     off-peak period. Known values are: "None", "Deallocate", and "Hibernate".
+    :vartype off_peak_action_on_disconnect: str or
+     ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+    :ivar off_peak_minutes_to_wait_on_disconnect: The time in minutes to wait before performing the
+     desired session handling action when a user disconnects during the off-peak period.
+    :vartype off_peak_minutes_to_wait_on_disconnect: int
+    :ivar off_peak_action_on_logoff: Action to be taken after a logoff during the off-peak period.
+     Known values are: "None", "Deallocate", and "Hibernate".
+    :vartype off_peak_action_on_logoff: str or
+     ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+    :ivar off_peak_minutes_to_wait_on_logoff: The time in minutes to wait before performing the
+     desired session handling action when a user logs off during the off-peak period.
+    :vartype off_peak_minutes_to_wait_on_logoff: int
+    """
+
+    _validation = {
+        "id": {"readonly": True},
+        "name": {"readonly": True},
+        "type": {"readonly": True},
+        "system_data": {"readonly": True},
+        "ramp_up_minutes_to_wait_on_disconnect": {"minimum": 0},
+        "ramp_up_minutes_to_wait_on_logoff": {"minimum": 0},
+        "peak_minutes_to_wait_on_disconnect": {"minimum": 0},
+        "peak_minutes_to_wait_on_logoff": {"minimum": 0},
+        "ramp_down_minutes_to_wait_on_disconnect": {"minimum": 0},
+        "ramp_down_minutes_to_wait_on_logoff": {"minimum": 0},
+        "off_peak_minutes_to_wait_on_disconnect": {"minimum": 0},
+        "off_peak_minutes_to_wait_on_logoff": {"minimum": 0},
+    }
+
+    _attribute_map = {
+        "id": {"key": "id", "type": "str"},
+        "name": {"key": "name", "type": "str"},
+        "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
+        "days_of_week": {"key": "properties.daysOfWeek", "type": "[str]"},
+        "ramp_up_start_time": {"key": "properties.rampUpStartTime", "type": "Time"},
+        "ramp_up_auto_start_hosts": {"key": "properties.rampUpAutoStartHosts", "type": "str"},
+        "ramp_up_start_vm_on_connect": {"key": "properties.rampUpStartVMOnConnect", "type": "str"},
+        "ramp_up_action_on_disconnect": {"key": "properties.rampUpActionOnDisconnect", "type": "str"},
+        "ramp_up_minutes_to_wait_on_disconnect": {"key": "properties.rampUpMinutesToWaitOnDisconnect", "type": "int"},
+        "ramp_up_action_on_logoff": {"key": "properties.rampUpActionOnLogoff", "type": "str"},
+        "ramp_up_minutes_to_wait_on_logoff": {"key": "properties.rampUpMinutesToWaitOnLogoff", "type": "int"},
+        "peak_start_time": {"key": "properties.peakStartTime", "type": "Time"},
+        "peak_start_vm_on_connect": {"key": "properties.peakStartVMOnConnect", "type": "str"},
+        "peak_action_on_disconnect": {"key": "properties.peakActionOnDisconnect", "type": "str"},
+        "peak_minutes_to_wait_on_disconnect": {"key": "properties.peakMinutesToWaitOnDisconnect", "type": "int"},
+        "peak_action_on_logoff": {"key": "properties.peakActionOnLogoff", "type": "str"},
+        "peak_minutes_to_wait_on_logoff": {"key": "properties.peakMinutesToWaitOnLogoff", "type": "int"},
+        "ramp_down_start_time": {"key": "properties.rampDownStartTime", "type": "Time"},
+        "ramp_down_start_vm_on_connect": {"key": "properties.rampDownStartVMOnConnect", "type": "str"},
+        "ramp_down_action_on_disconnect": {"key": "properties.rampDownActionOnDisconnect", "type": "str"},
+        "ramp_down_minutes_to_wait_on_disconnect": {
+            "key": "properties.rampDownMinutesToWaitOnDisconnect",
+            "type": "int",
+        },
+        "ramp_down_action_on_logoff": {"key": "properties.rampDownActionOnLogoff", "type": "str"},
+        "ramp_down_minutes_to_wait_on_logoff": {"key": "properties.rampDownMinutesToWaitOnLogoff", "type": "int"},
+        "off_peak_start_time": {"key": "properties.offPeakStartTime", "type": "Time"},
+        "off_peak_start_vm_on_connect": {"key": "properties.offPeakStartVMOnConnect", "type": "str"},
+        "off_peak_action_on_disconnect": {"key": "properties.offPeakActionOnDisconnect", "type": "str"},
+        "off_peak_minutes_to_wait_on_disconnect": {"key": "properties.offPeakMinutesToWaitOnDisconnect", "type": "int"},
+        "off_peak_action_on_logoff": {"key": "properties.offPeakActionOnLogoff", "type": "str"},
+        "off_peak_minutes_to_wait_on_logoff": {"key": "properties.offPeakMinutesToWaitOnLogoff", "type": "int"},
+    }
+
+    def __init__(  # pylint: disable=too-many-locals
+        self,
+        *,
+        days_of_week: Optional[List[Union[str, "_models.DayOfWeek"]]] = None,
+        ramp_up_start_time: Optional["_models.Time"] = None,
+        ramp_up_auto_start_hosts: Optional[Union[str, "_models.StartupBehavior"]] = None,
+        ramp_up_start_vm_on_connect: Optional[Union[str, "_models.SetStartVMOnConnect"]] = None,
+        ramp_up_action_on_disconnect: Optional[Union[str, "_models.SessionHandlingOperation"]] = None,
+        ramp_up_minutes_to_wait_on_disconnect: Optional[int] = None,
+        ramp_up_action_on_logoff: Optional[Union[str, "_models.SessionHandlingOperation"]] = None,
+        ramp_up_minutes_to_wait_on_logoff: Optional[int] = None,
+        peak_start_time: Optional["_models.Time"] = None,
+        peak_start_vm_on_connect: Optional[Union[str, "_models.SetStartVMOnConnect"]] = None,
+        peak_action_on_disconnect: Optional[Union[str, "_models.SessionHandlingOperation"]] = None,
+        peak_minutes_to_wait_on_disconnect: Optional[int] = None,
+        peak_action_on_logoff: Optional[Union[str, "_models.SessionHandlingOperation"]] = None,
+        peak_minutes_to_wait_on_logoff: Optional[int] = None,
+        ramp_down_start_time: Optional["_models.Time"] = None,
+        ramp_down_start_vm_on_connect: Optional[Union[str, "_models.SetStartVMOnConnect"]] = None,
+        ramp_down_action_on_disconnect: Optional[Union[str, "_models.SessionHandlingOperation"]] = None,
+        ramp_down_minutes_to_wait_on_disconnect: Optional[int] = None,
+        ramp_down_action_on_logoff: Optional[Union[str, "_models.SessionHandlingOperation"]] = None,
+        ramp_down_minutes_to_wait_on_logoff: Optional[int] = None,
+        off_peak_start_time: Optional["_models.Time"] = None,
+        off_peak_start_vm_on_connect: Optional[Union[str, "_models.SetStartVMOnConnect"]] = None,
+        off_peak_action_on_disconnect: Optional[Union[str, "_models.SessionHandlingOperation"]] = None,
+        off_peak_minutes_to_wait_on_disconnect: Optional[int] = None,
+        off_peak_action_on_logoff: Optional[Union[str, "_models.SessionHandlingOperation"]] = None,
+        off_peak_minutes_to_wait_on_logoff: Optional[int] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword days_of_week: Set of days of the week on which this schedule is active.
+        :paramtype days_of_week: list[str or ~azure.mgmt.desktopvirtualization.models.DayOfWeek]
+        :keyword ramp_up_start_time: Starting time for ramp up period.
+        :paramtype ramp_up_start_time: ~azure.mgmt.desktopvirtualization.models.Time
+        :keyword ramp_up_auto_start_hosts: The desired startup behavior during the ramp up period for
+         personal vms in the hostpool. Known values are: "None", "WithAssignedUser", and "All".
+        :paramtype ramp_up_auto_start_hosts: str or
+         ~azure.mgmt.desktopvirtualization.models.StartupBehavior
+        :keyword ramp_up_start_vm_on_connect: The desired configuration of Start VM On Connect for the
+         hostpool during the ramp up phase. If this is disabled, session hosts must be turned on using
+         rampUpAutoStartHosts or by turning them on manually. Known values are: "Enable" and "Disable".
+        :paramtype ramp_up_start_vm_on_connect: str or
+         ~azure.mgmt.desktopvirtualization.models.SetStartVMOnConnect
+        :keyword ramp_up_action_on_disconnect: Action to be taken after a user disconnect during the
+         ramp up period. Known values are: "None", "Deallocate", and "Hibernate".
+        :paramtype ramp_up_action_on_disconnect: str or
+         ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+        :keyword ramp_up_minutes_to_wait_on_disconnect: The time in minutes to wait before performing
+         the desired session handling action when a user disconnects during the ramp up period.
+        :paramtype ramp_up_minutes_to_wait_on_disconnect: int
+        :keyword ramp_up_action_on_logoff: Action to be taken after a logoff during the ramp up period.
+         Known values are: "None", "Deallocate", and "Hibernate".
+        :paramtype ramp_up_action_on_logoff: str or
+         ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+        :keyword ramp_up_minutes_to_wait_on_logoff: The time in minutes to wait before performing the
+         desired session handling action when a user logs off during the ramp up period.
+        :paramtype ramp_up_minutes_to_wait_on_logoff: int
+        :keyword peak_start_time: Starting time for peak period.
+        :paramtype peak_start_time: ~azure.mgmt.desktopvirtualization.models.Time
+        :keyword peak_start_vm_on_connect: The desired configuration of Start VM On Connect for the
+         hostpool during the peak phase. Known values are: "Enable" and "Disable".
+        :paramtype peak_start_vm_on_connect: str or
+         ~azure.mgmt.desktopvirtualization.models.SetStartVMOnConnect
+        :keyword peak_action_on_disconnect: Action to be taken after a user disconnect during the peak
+         period. Known values are: "None", "Deallocate", and "Hibernate".
+        :paramtype peak_action_on_disconnect: str or
+         ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+        :keyword peak_minutes_to_wait_on_disconnect: The time in minutes to wait before performing the
+         desired session handling action when a user disconnects during the peak period.
+        :paramtype peak_minutes_to_wait_on_disconnect: int
+        :keyword peak_action_on_logoff: Action to be taken after a logoff during the peak period. Known
+         values are: "None", "Deallocate", and "Hibernate".
+        :paramtype peak_action_on_logoff: str or
+         ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+        :keyword peak_minutes_to_wait_on_logoff: The time in minutes to wait before performing the
+         desired session handling action when a user logs off during the peak period.
+        :paramtype peak_minutes_to_wait_on_logoff: int
+        :keyword ramp_down_start_time: Starting time for ramp down period.
+        :paramtype ramp_down_start_time: ~azure.mgmt.desktopvirtualization.models.Time
+        :keyword ramp_down_start_vm_on_connect: The desired configuration of Start VM On Connect for
+         the hostpool during the ramp down phase. Known values are: "Enable" and "Disable".
+        :paramtype ramp_down_start_vm_on_connect: str or
+         ~azure.mgmt.desktopvirtualization.models.SetStartVMOnConnect
+        :keyword ramp_down_action_on_disconnect: Action to be taken after a user disconnect during the
+         ramp down period. Known values are: "None", "Deallocate", and "Hibernate".
+        :paramtype ramp_down_action_on_disconnect: str or
+         ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+        :keyword ramp_down_minutes_to_wait_on_disconnect: The time in minutes to wait before performing
+         the desired session handling action when a user disconnects during the ramp down period.
+        :paramtype ramp_down_minutes_to_wait_on_disconnect: int
+        :keyword ramp_down_action_on_logoff: Action to be taken after a logoff during the ramp down
+         period. Known values are: "None", "Deallocate", and "Hibernate".
+        :paramtype ramp_down_action_on_logoff: str or
+         ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+        :keyword ramp_down_minutes_to_wait_on_logoff: The time in minutes to wait before performing the
+         desired session handling action when a user logs off during the ramp down period.
+        :paramtype ramp_down_minutes_to_wait_on_logoff: int
+        :keyword off_peak_start_time: Starting time for off-peak period.
+        :paramtype off_peak_start_time: ~azure.mgmt.desktopvirtualization.models.Time
+        :keyword off_peak_start_vm_on_connect: The desired configuration of Start VM On Connect for the
+         hostpool during the off-peak phase. Known values are: "Enable" and "Disable".
+        :paramtype off_peak_start_vm_on_connect: str or
+         ~azure.mgmt.desktopvirtualization.models.SetStartVMOnConnect
+        :keyword off_peak_action_on_disconnect: Action to be taken after a user disconnect during the
+         off-peak period. Known values are: "None", "Deallocate", and "Hibernate".
+        :paramtype off_peak_action_on_disconnect: str or
+         ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+        :keyword off_peak_minutes_to_wait_on_disconnect: The time in minutes to wait before performing
+         the desired session handling action when a user disconnects during the off-peak period.
+        :paramtype off_peak_minutes_to_wait_on_disconnect: int
+        :keyword off_peak_action_on_logoff: Action to be taken after a logoff during the off-peak
+         period. Known values are: "None", "Deallocate", and "Hibernate".
+        :paramtype off_peak_action_on_logoff: str or
+         ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+        :keyword off_peak_minutes_to_wait_on_logoff: The time in minutes to wait before performing the
+         desired session handling action when a user logs off during the off-peak period.
+        :paramtype off_peak_minutes_to_wait_on_logoff: int
+        """
+        super().__init__(**kwargs)
+        self.days_of_week = days_of_week
+        self.ramp_up_start_time = ramp_up_start_time
+        self.ramp_up_auto_start_hosts = ramp_up_auto_start_hosts
+        self.ramp_up_start_vm_on_connect = ramp_up_start_vm_on_connect
+        self.ramp_up_action_on_disconnect = ramp_up_action_on_disconnect
+        self.ramp_up_minutes_to_wait_on_disconnect = ramp_up_minutes_to_wait_on_disconnect
+        self.ramp_up_action_on_logoff = ramp_up_action_on_logoff
+        self.ramp_up_minutes_to_wait_on_logoff = ramp_up_minutes_to_wait_on_logoff
+        self.peak_start_time = peak_start_time
+        self.peak_start_vm_on_connect = peak_start_vm_on_connect
+        self.peak_action_on_disconnect = peak_action_on_disconnect
+        self.peak_minutes_to_wait_on_disconnect = peak_minutes_to_wait_on_disconnect
+        self.peak_action_on_logoff = peak_action_on_logoff
+        self.peak_minutes_to_wait_on_logoff = peak_minutes_to_wait_on_logoff
+        self.ramp_down_start_time = ramp_down_start_time
+        self.ramp_down_start_vm_on_connect = ramp_down_start_vm_on_connect
+        self.ramp_down_action_on_disconnect = ramp_down_action_on_disconnect
+        self.ramp_down_minutes_to_wait_on_disconnect = ramp_down_minutes_to_wait_on_disconnect
+        self.ramp_down_action_on_logoff = ramp_down_action_on_logoff
+        self.ramp_down_minutes_to_wait_on_logoff = ramp_down_minutes_to_wait_on_logoff
+        self.off_peak_start_time = off_peak_start_time
+        self.off_peak_start_vm_on_connect = off_peak_start_vm_on_connect
+        self.off_peak_action_on_disconnect = off_peak_action_on_disconnect
+        self.off_peak_minutes_to_wait_on_disconnect = off_peak_minutes_to_wait_on_disconnect
+        self.off_peak_action_on_logoff = off_peak_action_on_logoff
+        self.off_peak_minutes_to_wait_on_logoff = off_peak_minutes_to_wait_on_logoff
+
+
+class ScalingPlanPersonalScheduleList(_serialization.Model):
+    """List of ScalingPlanPersonalSchedule definitions.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar value: List of ScalingPlanPersonalSchedule definitions.
+    :vartype value: list[~azure.mgmt.desktopvirtualization.models.ScalingPlanPersonalSchedule]
+    :ivar next_link: Link to the next page of results.
+    :vartype next_link: str
+    """
+
+    _validation = {
+        "next_link": {"readonly": True},
+    }
+
+    _attribute_map = {
+        "value": {"key": "value", "type": "[ScalingPlanPersonalSchedule]"},
+        "next_link": {"key": "nextLink", "type": "str"},
+    }
+
+    def __init__(self, *, value: Optional[List["_models.ScalingPlanPersonalSchedule"]] = None, **kwargs: Any) -> None:
+        """
+        :keyword value: List of ScalingPlanPersonalSchedule definitions.
+        :paramtype value: list[~azure.mgmt.desktopvirtualization.models.ScalingPlanPersonalSchedule]
+        """
+        super().__init__(**kwargs)
+        self.value = value
+        self.next_link = None
+
+
+class ScalingPlanPersonalSchedulePatch(_serialization.Model):  # pylint: disable=too-many-instance-attributes
+    """ScalingPlanPersonalSchedule properties that can be patched.
+
+    :ivar days_of_week: Set of days of the week on which this schedule is active.
+    :vartype days_of_week: list[str or ~azure.mgmt.desktopvirtualization.models.DayOfWeek]
+    :ivar ramp_up_start_time: Starting time for ramp up period.
+    :vartype ramp_up_start_time: ~azure.mgmt.desktopvirtualization.models.Time
+    :ivar ramp_up_auto_start_hosts: The desired startup behavior during the ramp up period for
+     personal vms in the hostpool. Known values are: "None", "WithAssignedUser", and "All".
+    :vartype ramp_up_auto_start_hosts: str or
+     ~azure.mgmt.desktopvirtualization.models.StartupBehavior
+    :ivar ramp_up_start_vm_on_connect: The desired configuration of Start VM On Connect for the
+     hostpool during the ramp up phase. If this is disabled, session hosts must be turned on using
+     rampUpAutoStartHosts or by turning them on manually. Known values are: "Enable" and "Disable".
+    :vartype ramp_up_start_vm_on_connect: str or
+     ~azure.mgmt.desktopvirtualization.models.SetStartVMOnConnect
+    :ivar ramp_up_action_on_disconnect: Action to be taken after a user disconnect during the ramp
+     up period. Known values are: "None", "Deallocate", and "Hibernate".
+    :vartype ramp_up_action_on_disconnect: str or
+     ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+    :ivar ramp_up_minutes_to_wait_on_disconnect: The time in minutes to wait before performing the
+     desired session handling action when a user disconnects during the ramp up period.
+    :vartype ramp_up_minutes_to_wait_on_disconnect: int
+    :ivar ramp_up_action_on_logoff: Action to be taken after a logoff during the ramp up period.
+     Known values are: "None", "Deallocate", and "Hibernate".
+    :vartype ramp_up_action_on_logoff: str or
+     ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+    :ivar ramp_up_minutes_to_wait_on_logoff: The time in minutes to wait before performing the
+     desired session handling action when a user logs off during the ramp up period.
+    :vartype ramp_up_minutes_to_wait_on_logoff: int
+    :ivar peak_start_time: Starting time for peak period.
+    :vartype peak_start_time: ~azure.mgmt.desktopvirtualization.models.Time
+    :ivar peak_start_vm_on_connect: The desired configuration of Start VM On Connect for the
+     hostpool during the peak phase. Known values are: "Enable" and "Disable".
+    :vartype peak_start_vm_on_connect: str or
+     ~azure.mgmt.desktopvirtualization.models.SetStartVMOnConnect
+    :ivar peak_action_on_disconnect: Action to be taken after a user disconnect during the peak
+     period. Known values are: "None", "Deallocate", and "Hibernate".
+    :vartype peak_action_on_disconnect: str or
+     ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+    :ivar peak_minutes_to_wait_on_disconnect: The time in minutes to wait before performing the
+     desired session handling action when a user disconnects during the peak period.
+    :vartype peak_minutes_to_wait_on_disconnect: int
+    :ivar peak_action_on_logoff: Action to be taken after a logoff during the peak period. Known
+     values are: "None", "Deallocate", and "Hibernate".
+    :vartype peak_action_on_logoff: str or
+     ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+    :ivar peak_minutes_to_wait_on_logoff: The time in minutes to wait before performing the desired
+     session handling action when a user logs off during the peak period.
+    :vartype peak_minutes_to_wait_on_logoff: int
+    :ivar ramp_down_start_time: Starting time for ramp down period.
+    :vartype ramp_down_start_time: ~azure.mgmt.desktopvirtualization.models.Time
+    :ivar ramp_down_start_vm_on_connect: The desired configuration of Start VM On Connect for the
+     hostpool during the ramp down phase. Known values are: "Enable" and "Disable".
+    :vartype ramp_down_start_vm_on_connect: str or
+     ~azure.mgmt.desktopvirtualization.models.SetStartVMOnConnect
+    :ivar ramp_down_action_on_disconnect: Action to be taken after a user disconnect during the
+     ramp down period. Known values are: "None", "Deallocate", and "Hibernate".
+    :vartype ramp_down_action_on_disconnect: str or
+     ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+    :ivar ramp_down_minutes_to_wait_on_disconnect: The time in minutes to wait before performing
+     the desired session handling action when a user disconnects during the ramp down period.
+    :vartype ramp_down_minutes_to_wait_on_disconnect: int
+    :ivar ramp_down_action_on_logoff: Action to be taken after a logoff during the ramp down
+     period. Known values are: "None", "Deallocate", and "Hibernate".
+    :vartype ramp_down_action_on_logoff: str or
+     ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+    :ivar ramp_down_minutes_to_wait_on_logoff: The time in minutes to wait before performing the
+     desired session handling action when a user logs off during the ramp down period.
+    :vartype ramp_down_minutes_to_wait_on_logoff: int
+    :ivar off_peak_start_time: Starting time for off-peak period.
+    :vartype off_peak_start_time: ~azure.mgmt.desktopvirtualization.models.Time
+    :ivar off_peak_start_vm_on_connect: The desired configuration of Start VM On Connect for the
+     hostpool during the off-peak phase. Known values are: "Enable" and "Disable".
+    :vartype off_peak_start_vm_on_connect: str or
+     ~azure.mgmt.desktopvirtualization.models.SetStartVMOnConnect
+    :ivar off_peak_action_on_disconnect: Action to be taken after a user disconnect during the
+     off-peak period. Known values are: "None", "Deallocate", and "Hibernate".
+    :vartype off_peak_action_on_disconnect: str or
+     ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+    :ivar off_peak_minutes_to_wait_on_disconnect: The time in minutes to wait before performing the
+     desired session handling action when a user disconnects during the off-peak period.
+    :vartype off_peak_minutes_to_wait_on_disconnect: int
+    :ivar off_peak_action_on_logoff: Action to be taken after a logoff during the off-peak period.
+     Known values are: "None", "Deallocate", and "Hibernate".
+    :vartype off_peak_action_on_logoff: str or
+     ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+    :ivar off_peak_minutes_to_wait_on_logoff: The time in minutes to wait before performing the
+     desired session handling action when a user logs off during the off-peak period.
+    :vartype off_peak_minutes_to_wait_on_logoff: int
+    """
+
+    _validation = {
+        "ramp_up_minutes_to_wait_on_disconnect": {"minimum": 0},
+        "ramp_up_minutes_to_wait_on_logoff": {"minimum": 0},
+        "peak_minutes_to_wait_on_disconnect": {"minimum": 0},
+        "peak_minutes_to_wait_on_logoff": {"minimum": 0},
+        "ramp_down_minutes_to_wait_on_disconnect": {"minimum": 0},
+        "ramp_down_minutes_to_wait_on_logoff": {"minimum": 0},
+        "off_peak_minutes_to_wait_on_disconnect": {"minimum": 0},
+        "off_peak_minutes_to_wait_on_logoff": {"minimum": 0},
+    }
+
+    _attribute_map = {
+        "days_of_week": {"key": "properties.daysOfWeek", "type": "[str]"},
+        "ramp_up_start_time": {"key": "properties.rampUpStartTime", "type": "Time"},
+        "ramp_up_auto_start_hosts": {"key": "properties.rampUpAutoStartHosts", "type": "str"},
+        "ramp_up_start_vm_on_connect": {"key": "properties.rampUpStartVMOnConnect", "type": "str"},
+        "ramp_up_action_on_disconnect": {"key": "properties.rampUpActionOnDisconnect", "type": "str"},
+        "ramp_up_minutes_to_wait_on_disconnect": {"key": "properties.rampUpMinutesToWaitOnDisconnect", "type": "int"},
+        "ramp_up_action_on_logoff": {"key": "properties.rampUpActionOnLogoff", "type": "str"},
+        "ramp_up_minutes_to_wait_on_logoff": {"key": "properties.rampUpMinutesToWaitOnLogoff", "type": "int"},
+        "peak_start_time": {"key": "properties.peakStartTime", "type": "Time"},
+        "peak_start_vm_on_connect": {"key": "properties.peakStartVMOnConnect", "type": "str"},
+        "peak_action_on_disconnect": {"key": "properties.peakActionOnDisconnect", "type": "str"},
+        "peak_minutes_to_wait_on_disconnect": {"key": "properties.peakMinutesToWaitOnDisconnect", "type": "int"},
+        "peak_action_on_logoff": {"key": "properties.peakActionOnLogoff", "type": "str"},
+        "peak_minutes_to_wait_on_logoff": {"key": "properties.peakMinutesToWaitOnLogoff", "type": "int"},
+        "ramp_down_start_time": {"key": "properties.rampDownStartTime", "type": "Time"},
+        "ramp_down_start_vm_on_connect": {"key": "properties.rampDownStartVMOnConnect", "type": "str"},
+        "ramp_down_action_on_disconnect": {"key": "properties.rampDownActionOnDisconnect", "type": "str"},
+        "ramp_down_minutes_to_wait_on_disconnect": {
+            "key": "properties.rampDownMinutesToWaitOnDisconnect",
+            "type": "int",
+        },
+        "ramp_down_action_on_logoff": {"key": "properties.rampDownActionOnLogoff", "type": "str"},
+        "ramp_down_minutes_to_wait_on_logoff": {"key": "properties.rampDownMinutesToWaitOnLogoff", "type": "int"},
+        "off_peak_start_time": {"key": "properties.offPeakStartTime", "type": "Time"},
+        "off_peak_start_vm_on_connect": {"key": "properties.offPeakStartVMOnConnect", "type": "str"},
+        "off_peak_action_on_disconnect": {"key": "properties.offPeakActionOnDisconnect", "type": "str"},
+        "off_peak_minutes_to_wait_on_disconnect": {"key": "properties.offPeakMinutesToWaitOnDisconnect", "type": "int"},
+        "off_peak_action_on_logoff": {"key": "properties.offPeakActionOnLogoff", "type": "str"},
+        "off_peak_minutes_to_wait_on_logoff": {"key": "properties.offPeakMinutesToWaitOnLogoff", "type": "int"},
+    }
+
+    def __init__(  # pylint: disable=too-many-locals
+        self,
+        *,
+        days_of_week: Optional[List[Union[str, "_models.DayOfWeek"]]] = None,
+        ramp_up_start_time: Optional["_models.Time"] = None,
+        ramp_up_auto_start_hosts: Optional[Union[str, "_models.StartupBehavior"]] = None,
+        ramp_up_start_vm_on_connect: Optional[Union[str, "_models.SetStartVMOnConnect"]] = None,
+        ramp_up_action_on_disconnect: Optional[Union[str, "_models.SessionHandlingOperation"]] = None,
+        ramp_up_minutes_to_wait_on_disconnect: Optional[int] = None,
+        ramp_up_action_on_logoff: Optional[Union[str, "_models.SessionHandlingOperation"]] = None,
+        ramp_up_minutes_to_wait_on_logoff: Optional[int] = None,
+        peak_start_time: Optional["_models.Time"] = None,
+        peak_start_vm_on_connect: Optional[Union[str, "_models.SetStartVMOnConnect"]] = None,
+        peak_action_on_disconnect: Optional[Union[str, "_models.SessionHandlingOperation"]] = None,
+        peak_minutes_to_wait_on_disconnect: Optional[int] = None,
+        peak_action_on_logoff: Optional[Union[str, "_models.SessionHandlingOperation"]] = None,
+        peak_minutes_to_wait_on_logoff: Optional[int] = None,
+        ramp_down_start_time: Optional["_models.Time"] = None,
+        ramp_down_start_vm_on_connect: Optional[Union[str, "_models.SetStartVMOnConnect"]] = None,
+        ramp_down_action_on_disconnect: Optional[Union[str, "_models.SessionHandlingOperation"]] = None,
+        ramp_down_minutes_to_wait_on_disconnect: Optional[int] = None,
+        ramp_down_action_on_logoff: Optional[Union[str, "_models.SessionHandlingOperation"]] = None,
+        ramp_down_minutes_to_wait_on_logoff: Optional[int] = None,
+        off_peak_start_time: Optional["_models.Time"] = None,
+        off_peak_start_vm_on_connect: Optional[Union[str, "_models.SetStartVMOnConnect"]] = None,
+        off_peak_action_on_disconnect: Optional[Union[str, "_models.SessionHandlingOperation"]] = None,
+        off_peak_minutes_to_wait_on_disconnect: Optional[int] = None,
+        off_peak_action_on_logoff: Optional[Union[str, "_models.SessionHandlingOperation"]] = None,
+        off_peak_minutes_to_wait_on_logoff: Optional[int] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword days_of_week: Set of days of the week on which this schedule is active.
+        :paramtype days_of_week: list[str or ~azure.mgmt.desktopvirtualization.models.DayOfWeek]
+        :keyword ramp_up_start_time: Starting time for ramp up period.
+        :paramtype ramp_up_start_time: ~azure.mgmt.desktopvirtualization.models.Time
+        :keyword ramp_up_auto_start_hosts: The desired startup behavior during the ramp up period for
+         personal vms in the hostpool. Known values are: "None", "WithAssignedUser", and "All".
+        :paramtype ramp_up_auto_start_hosts: str or
+         ~azure.mgmt.desktopvirtualization.models.StartupBehavior
+        :keyword ramp_up_start_vm_on_connect: The desired configuration of Start VM On Connect for the
+         hostpool during the ramp up phase. If this is disabled, session hosts must be turned on using
+         rampUpAutoStartHosts or by turning them on manually. Known values are: "Enable" and "Disable".
+        :paramtype ramp_up_start_vm_on_connect: str or
+         ~azure.mgmt.desktopvirtualization.models.SetStartVMOnConnect
+        :keyword ramp_up_action_on_disconnect: Action to be taken after a user disconnect during the
+         ramp up period. Known values are: "None", "Deallocate", and "Hibernate".
+        :paramtype ramp_up_action_on_disconnect: str or
+         ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+        :keyword ramp_up_minutes_to_wait_on_disconnect: The time in minutes to wait before performing
+         the desired session handling action when a user disconnects during the ramp up period.
+        :paramtype ramp_up_minutes_to_wait_on_disconnect: int
+        :keyword ramp_up_action_on_logoff: Action to be taken after a logoff during the ramp up period.
+         Known values are: "None", "Deallocate", and "Hibernate".
+        :paramtype ramp_up_action_on_logoff: str or
+         ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+        :keyword ramp_up_minutes_to_wait_on_logoff: The time in minutes to wait before performing the
+         desired session handling action when a user logs off during the ramp up period.
+        :paramtype ramp_up_minutes_to_wait_on_logoff: int
+        :keyword peak_start_time: Starting time for peak period.
+        :paramtype peak_start_time: ~azure.mgmt.desktopvirtualization.models.Time
+        :keyword peak_start_vm_on_connect: The desired configuration of Start VM On Connect for the
+         hostpool during the peak phase. Known values are: "Enable" and "Disable".
+        :paramtype peak_start_vm_on_connect: str or
+         ~azure.mgmt.desktopvirtualization.models.SetStartVMOnConnect
+        :keyword peak_action_on_disconnect: Action to be taken after a user disconnect during the peak
+         period. Known values are: "None", "Deallocate", and "Hibernate".
+        :paramtype peak_action_on_disconnect: str or
+         ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+        :keyword peak_minutes_to_wait_on_disconnect: The time in minutes to wait before performing the
+         desired session handling action when a user disconnects during the peak period.
+        :paramtype peak_minutes_to_wait_on_disconnect: int
+        :keyword peak_action_on_logoff: Action to be taken after a logoff during the peak period. Known
+         values are: "None", "Deallocate", and "Hibernate".
+        :paramtype peak_action_on_logoff: str or
+         ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+        :keyword peak_minutes_to_wait_on_logoff: The time in minutes to wait before performing the
+         desired session handling action when a user logs off during the peak period.
+        :paramtype peak_minutes_to_wait_on_logoff: int
+        :keyword ramp_down_start_time: Starting time for ramp down period.
+        :paramtype ramp_down_start_time: ~azure.mgmt.desktopvirtualization.models.Time
+        :keyword ramp_down_start_vm_on_connect: The desired configuration of Start VM On Connect for
+         the hostpool during the ramp down phase. Known values are: "Enable" and "Disable".
+        :paramtype ramp_down_start_vm_on_connect: str or
+         ~azure.mgmt.desktopvirtualization.models.SetStartVMOnConnect
+        :keyword ramp_down_action_on_disconnect: Action to be taken after a user disconnect during the
+         ramp down period. Known values are: "None", "Deallocate", and "Hibernate".
+        :paramtype ramp_down_action_on_disconnect: str or
+         ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+        :keyword ramp_down_minutes_to_wait_on_disconnect: The time in minutes to wait before performing
+         the desired session handling action when a user disconnects during the ramp down period.
+        :paramtype ramp_down_minutes_to_wait_on_disconnect: int
+        :keyword ramp_down_action_on_logoff: Action to be taken after a logoff during the ramp down
+         period. Known values are: "None", "Deallocate", and "Hibernate".
+        :paramtype ramp_down_action_on_logoff: str or
+         ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+        :keyword ramp_down_minutes_to_wait_on_logoff: The time in minutes to wait before performing the
+         desired session handling action when a user logs off during the ramp down period.
+        :paramtype ramp_down_minutes_to_wait_on_logoff: int
+        :keyword off_peak_start_time: Starting time for off-peak period.
+        :paramtype off_peak_start_time: ~azure.mgmt.desktopvirtualization.models.Time
+        :keyword off_peak_start_vm_on_connect: The desired configuration of Start VM On Connect for the
+         hostpool during the off-peak phase. Known values are: "Enable" and "Disable".
+        :paramtype off_peak_start_vm_on_connect: str or
+         ~azure.mgmt.desktopvirtualization.models.SetStartVMOnConnect
+        :keyword off_peak_action_on_disconnect: Action to be taken after a user disconnect during the
+         off-peak period. Known values are: "None", "Deallocate", and "Hibernate".
+        :paramtype off_peak_action_on_disconnect: str or
+         ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+        :keyword off_peak_minutes_to_wait_on_disconnect: The time in minutes to wait before performing
+         the desired session handling action when a user disconnects during the off-peak period.
+        :paramtype off_peak_minutes_to_wait_on_disconnect: int
+        :keyword off_peak_action_on_logoff: Action to be taken after a logoff during the off-peak
+         period. Known values are: "None", "Deallocate", and "Hibernate".
+        :paramtype off_peak_action_on_logoff: str or
+         ~azure.mgmt.desktopvirtualization.models.SessionHandlingOperation
+        :keyword off_peak_minutes_to_wait_on_logoff: The time in minutes to wait before performing the
+         desired session handling action when a user logs off during the off-peak period.
+        :paramtype off_peak_minutes_to_wait_on_logoff: int
+        """
+        super().__init__(**kwargs)
+        self.days_of_week = days_of_week
+        self.ramp_up_start_time = ramp_up_start_time
+        self.ramp_up_auto_start_hosts = ramp_up_auto_start_hosts
+        self.ramp_up_start_vm_on_connect = ramp_up_start_vm_on_connect
+        self.ramp_up_action_on_disconnect = ramp_up_action_on_disconnect
+        self.ramp_up_minutes_to_wait_on_disconnect = ramp_up_minutes_to_wait_on_disconnect
+        self.ramp_up_action_on_logoff = ramp_up_action_on_logoff
+        self.ramp_up_minutes_to_wait_on_logoff = ramp_up_minutes_to_wait_on_logoff
+        self.peak_start_time = peak_start_time
+        self.peak_start_vm_on_connect = peak_start_vm_on_connect
+        self.peak_action_on_disconnect = peak_action_on_disconnect
+        self.peak_minutes_to_wait_on_disconnect = peak_minutes_to_wait_on_disconnect
+        self.peak_action_on_logoff = peak_action_on_logoff
+        self.peak_minutes_to_wait_on_logoff = peak_minutes_to_wait_on_logoff
+        self.ramp_down_start_time = ramp_down_start_time
+        self.ramp_down_start_vm_on_connect = ramp_down_start_vm_on_connect
+        self.ramp_down_action_on_disconnect = ramp_down_action_on_disconnect
+        self.ramp_down_minutes_to_wait_on_disconnect = ramp_down_minutes_to_wait_on_disconnect
+        self.ramp_down_action_on_logoff = ramp_down_action_on_logoff
+        self.ramp_down_minutes_to_wait_on_logoff = ramp_down_minutes_to_wait_on_logoff
+        self.off_peak_start_time = off_peak_start_time
+        self.off_peak_start_vm_on_connect = off_peak_start_vm_on_connect
+        self.off_peak_action_on_disconnect = off_peak_action_on_disconnect
+        self.off_peak_minutes_to_wait_on_disconnect = off_peak_minutes_to_wait_on_disconnect
+        self.off_peak_action_on_logoff = off_peak_action_on_logoff
+        self.off_peak_minutes_to_wait_on_logoff = off_peak_minutes_to_wait_on_logoff
+
+
+class ScalingPlanPooledSchedule(Resource):  # pylint: disable=too-many-instance-attributes
+    """Represents a ScalingPlanPooledSchedule definition.
+
+    Variables are only populated by the server, and will be ignored when sending a request.
+
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
+    :vartype id: str
+    :ivar name: The name of the resource.
+    :vartype name: str
+    :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
+     "Microsoft.Storage/storageAccounts".
+    :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
     :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     :ivar days_of_week: Set of days of the week on which this schedule is active.
     :vartype days_of_week: list[str or ~azure.mgmt.desktopvirtualization.models.DayOfWeek]
@@ -3027,7 +4591,7 @@ class ScalingPlanPooledSchedule(Resource):  # pylint: disable=too-many-instance-
         "ramp_up_minimum_hosts_pct": {"maximum": 100, "minimum": 0},
         "ramp_up_capacity_threshold_pct": {"maximum": 100, "minimum": 1},
         "ramp_down_minimum_hosts_pct": {"maximum": 100, "minimum": 0},
-        "ramp_down_capacity_threshold_pct": {"maximum": 100, "minimum": 0},
+        "ramp_down_capacity_threshold_pct": {"maximum": 100, "minimum": 1},
     }
 
     _attribute_map = {
@@ -3125,7 +4689,6 @@ class ScalingPlanPooledSchedule(Resource):  # pylint: disable=too-many-instance-
          ~azure.mgmt.desktopvirtualization.models.SessionHostLoadBalancingAlgorithm
         """
         super().__init__(**kwargs)
-        self.system_data = None
         self.days_of_week = days_of_week
         self.ramp_up_start_time = ramp_up_start_time
         self.ramp_up_load_balancing_algorithm = ramp_up_load_balancing_algorithm
@@ -3180,14 +4743,17 @@ class ScalingPlanPooledSchedulePatch(Resource):  # pylint: disable=too-many-inst
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     :ivar days_of_week: Set of days of the week on which this schedule is active.
     :vartype days_of_week: list[str or ~azure.mgmt.desktopvirtualization.models.DayOfWeek]
     :ivar ramp_up_start_time: Starting time for ramp up period.
@@ -3239,16 +4805,18 @@ class ScalingPlanPooledSchedulePatch(Resource):  # pylint: disable=too-many-inst
         "id": {"readonly": True},
         "name": {"readonly": True},
         "type": {"readonly": True},
+        "system_data": {"readonly": True},
         "ramp_up_minimum_hosts_pct": {"maximum": 100, "minimum": 0},
         "ramp_up_capacity_threshold_pct": {"maximum": 100, "minimum": 1},
         "ramp_down_minimum_hosts_pct": {"maximum": 100, "minimum": 0},
-        "ramp_down_capacity_threshold_pct": {"maximum": 100, "minimum": 0},
+        "ramp_down_capacity_threshold_pct": {"maximum": 100, "minimum": 1},
     }
 
     _attribute_map = {
         "id": {"key": "id", "type": "str"},
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
         "days_of_week": {"key": "properties.daysOfWeek", "type": "[str]"},
         "ramp_up_start_time": {"key": "properties.rampUpStartTime", "type": "Time"},
         "ramp_up_load_balancing_algorithm": {"key": "properties.rampUpLoadBalancingAlgorithm", "type": "str"},
@@ -3415,7 +4983,7 @@ class ScalingSchedule(_serialization.Model):  # pylint: disable=too-many-instanc
         "ramp_up_minimum_hosts_pct": {"maximum": 100, "minimum": 0},
         "ramp_up_capacity_threshold_pct": {"maximum": 100, "minimum": 1},
         "ramp_down_minimum_hosts_pct": {"maximum": 100, "minimum": 0},
-        "ramp_down_capacity_threshold_pct": {"maximum": 100, "minimum": 0},
+        "ramp_down_capacity_threshold_pct": {"maximum": 100, "minimum": 1},
     }
 
     _attribute_map = {
@@ -3587,15 +5155,16 @@ class SessionHost(Resource):  # pylint: disable=too-many-instance-attributes
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
-    :ivar system_data: Metadata pertaining to creation and last modification of the resource.
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
     :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     :ivar object_id: ObjectId of SessionHost. (internal use).
     :vartype object_id: str
@@ -3723,7 +5292,6 @@ class SessionHost(Resource):  # pylint: disable=too-many-instance-attributes
         :paramtype update_error_message: str
         """
         super().__init__(**kwargs)
-        self.system_data = None
         self.object_id = None
         self.last_heart_beat = last_heart_beat
         self.sessions = sessions
@@ -3853,14 +5421,17 @@ class SessionHostPatch(Resource):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     :ivar allow_new_session: Allow a new session.
     :vartype allow_new_session: bool
     :ivar assigned_user: User assigned to SessionHost.
@@ -3873,12 +5444,14 @@ class SessionHostPatch(Resource):
         "id": {"readonly": True},
         "name": {"readonly": True},
         "type": {"readonly": True},
+        "system_data": {"readonly": True},
     }
 
     _attribute_map = {
         "id": {"key": "id", "type": "str"},
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
         "allow_new_session": {"key": "properties.allowNewSession", "type": "bool"},
         "assigned_user": {"key": "properties.assignedUser", "type": "str"},
         "friendly_name": {"key": "properties.friendlyName", "type": "str"},
@@ -3911,14 +5484,17 @@ class StartMenuItem(Resource):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     :ivar app_alias: Alias of StartMenuItem.
     :vartype app_alias: str
     :ivar file_path: Path to the file of StartMenuItem.
@@ -3935,12 +5511,14 @@ class StartMenuItem(Resource):
         "id": {"readonly": True},
         "name": {"readonly": True},
         "type": {"readonly": True},
+        "system_data": {"readonly": True},
     }
 
     _attribute_map = {
         "id": {"key": "id", "type": "str"},
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
         "app_alias": {"key": "properties.appAlias", "type": "str"},
         "file_path": {"key": "properties.filePath", "type": "str"},
         "command_line_arguments": {"key": "properties.commandLineArguments", "type": "str"},
@@ -4075,7 +5653,7 @@ class SystemData(_serialization.Model):
 class Time(_serialization.Model):
     """The time for a scaling action to occur.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar hour: The hour. Required.
     :vartype hour: int
@@ -4110,15 +5688,16 @@ class UserSession(Resource):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
-    :ivar system_data: Metadata pertaining to creation and last modification of the resource.
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
     :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     :ivar object_id: ObjectId of user session. (internal use).
     :vartype object_id: str
@@ -4182,7 +5761,6 @@ class UserSession(Resource):
         :paramtype create_time: ~datetime.datetime
         """
         super().__init__(**kwargs)
-        self.system_data = None
         self.object_id = None
         self.user_principal_name = user_principal_name
         self.application_type = application_type
@@ -4226,15 +5804,22 @@ class Workspace(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-man
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+    All required parameters must be populated in order to send to server.
+
+    :ivar id: Fully qualified resource ID for the resource. E.g.
+     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}".  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
     :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
      "Microsoft.Storage/storageAccounts".
     :vartype type: str
-    :ivar location: The geo-location where the resource lives.
+    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
+     information.
+    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
+    :ivar tags: Resource tags.
+    :vartype tags: dict[str, str]
+    :ivar location: The geo-location where the resource lives. Required.
     :vartype location: str
     :ivar managed_by: The fully qualified resource ID of the resource that manages this resource.
      Indicates if this resource is managed by another Azure resource. If this is present, complete
@@ -4242,7 +5827,7 @@ class Workspace(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-man
      managed by another resource.
     :vartype managed_by: str
     :ivar kind: Metadata used by portal/tooling/etc to render different UX experiences for
-     resources of the same type; e.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
+     resources of the same type. E.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
      the resource provider must validate and persist this value.
     :vartype kind: str
     :ivar etag: The etag field is *not* required. If it is provided in the response body, it must
@@ -4251,8 +5836,6 @@ class Workspace(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-man
      the etag (section 14.19), If-Match (section 14.24), If-None-Match (section 14.26), and If-Range
      (section 14.27) header fields.
     :vartype etag: str
-    :ivar tags: Resource tags.
-    :vartype tags: dict[str, str]
     :ivar identity:
     :vartype identity:
      ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetIdentity
@@ -4260,8 +5843,6 @@ class Workspace(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-man
     :vartype sku: ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetSku
     :ivar plan:
     :vartype plan: ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetPlan
-    :ivar system_data: Metadata pertaining to creation and last modification of the resource.
-    :vartype system_data: ~azure.mgmt.desktopvirtualization.models.SystemData
     :ivar object_id: ObjectId of Workspace. (internal use).
     :vartype object_id: str
     :ivar description: Description of Workspace.
@@ -4272,56 +5853,75 @@ class Workspace(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-man
     :vartype application_group_references: list[str]
     :ivar cloud_pc_resource: Is cloud pc resource.
     :vartype cloud_pc_resource: bool
+    :ivar public_network_access: Enabled allows this resource to be accessed from both public and
+     private networks, Disabled allows this resource to only be accessed via private endpoints.
+     Known values are: "Enabled" and "Disabled".
+    :vartype public_network_access: str or
+     ~azure.mgmt.desktopvirtualization.models.PublicNetworkAccess
+    :ivar private_endpoint_connections: List of private endpoint connection associated with the
+     specified resource.
+    :vartype private_endpoint_connections:
+     list[~azure.mgmt.desktopvirtualization.models.PrivateEndpointConnection]
     """
 
     _validation = {
         "id": {"readonly": True},
         "name": {"readonly": True},
         "type": {"readonly": True},
+        "system_data": {"readonly": True},
+        "location": {"required": True},
         "kind": {"pattern": r"^[-\w\._,\(\)]+$"},
         "etag": {"readonly": True},
-        "system_data": {"readonly": True},
         "object_id": {"readonly": True},
         "cloud_pc_resource": {"readonly": True},
+        "private_endpoint_connections": {"readonly": True},
     }
 
     _attribute_map = {
         "id": {"key": "id", "type": "str"},
         "name": {"key": "name", "type": "str"},
         "type": {"key": "type", "type": "str"},
+        "system_data": {"key": "systemData", "type": "SystemData"},
+        "tags": {"key": "tags", "type": "{str}"},
         "location": {"key": "location", "type": "str"},
         "managed_by": {"key": "managedBy", "type": "str"},
         "kind": {"key": "kind", "type": "str"},
         "etag": {"key": "etag", "type": "str"},
-        "tags": {"key": "tags", "type": "{str}"},
         "identity": {"key": "identity", "type": "ResourceModelWithAllowedPropertySetIdentity"},
         "sku": {"key": "sku", "type": "ResourceModelWithAllowedPropertySetSku"},
         "plan": {"key": "plan", "type": "ResourceModelWithAllowedPropertySetPlan"},
-        "system_data": {"key": "systemData", "type": "SystemData"},
         "object_id": {"key": "properties.objectId", "type": "str"},
         "description": {"key": "properties.description", "type": "str"},
         "friendly_name": {"key": "properties.friendlyName", "type": "str"},
         "application_group_references": {"key": "properties.applicationGroupReferences", "type": "[str]"},
         "cloud_pc_resource": {"key": "properties.cloudPcResource", "type": "bool"},
+        "public_network_access": {"key": "properties.publicNetworkAccess", "type": "str"},
+        "private_endpoint_connections": {
+            "key": "properties.privateEndpointConnections",
+            "type": "[PrivateEndpointConnection]",
+        },
     }
 
     def __init__(
         self,
         *,
-        location: Optional[str] = None,
+        location: str,
+        tags: Optional[Dict[str, str]] = None,
         managed_by: Optional[str] = None,
         kind: Optional[str] = None,
-        tags: Optional[Dict[str, str]] = None,
         identity: Optional["_models.ResourceModelWithAllowedPropertySetIdentity"] = None,
         sku: Optional["_models.ResourceModelWithAllowedPropertySetSku"] = None,
         plan: Optional["_models.ResourceModelWithAllowedPropertySetPlan"] = None,
         description: Optional[str] = None,
         friendly_name: Optional[str] = None,
         application_group_references: Optional[List[str]] = None,
+        public_network_access: Optional[Union[str, "_models.PublicNetworkAccess"]] = None,
         **kwargs: Any
     ) -> None:
         """
-        :keyword location: The geo-location where the resource lives.
+        :keyword tags: Resource tags.
+        :paramtype tags: dict[str, str]
+        :keyword location: The geo-location where the resource lives. Required.
         :paramtype location: str
         :keyword managed_by: The fully qualified resource ID of the resource that manages this
          resource. Indicates if this resource is managed by another Azure resource. If this is present,
@@ -4329,11 +5929,9 @@ class Workspace(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-man
          it is managed by another resource.
         :paramtype managed_by: str
         :keyword kind: Metadata used by portal/tooling/etc to render different UX experiences for
-         resources of the same type; e.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
+         resources of the same type. E.g. ApiApps are a kind of Microsoft.Web/sites type.  If supported,
          the resource provider must validate and persist this value.
         :paramtype kind: str
-        :keyword tags: Resource tags.
-        :paramtype tags: dict[str, str]
         :keyword identity:
         :paramtype identity:
          ~azure.mgmt.desktopvirtualization.models.ResourceModelWithAllowedPropertySetIdentity
@@ -4348,23 +5946,29 @@ class Workspace(ResourceModelWithAllowedPropertySet):  # pylint: disable=too-man
         :paramtype friendly_name: str
         :keyword application_group_references: List of applicationGroup resource Ids.
         :paramtype application_group_references: list[str]
+        :keyword public_network_access: Enabled allows this resource to be accessed from both public
+         and private networks, Disabled allows this resource to only be accessed via private endpoints.
+         Known values are: "Enabled" and "Disabled".
+        :paramtype public_network_access: str or
+         ~azure.mgmt.desktopvirtualization.models.PublicNetworkAccess
         """
         super().__init__(
+            tags=tags,
             location=location,
             managed_by=managed_by,
             kind=kind,
-            tags=tags,
             identity=identity,
             sku=sku,
             plan=plan,
             **kwargs
         )
-        self.system_data = None
         self.object_id = None
         self.description = description
         self.friendly_name = friendly_name
         self.application_group_references = application_group_references
         self.cloud_pc_resource = None
+        self.public_network_access = public_network_access
+        self.private_endpoint_connections = None
 
 
 class WorkspaceList(_serialization.Model):
@@ -4408,6 +6012,10 @@ class WorkspacePatch(_serialization.Model):
     :vartype friendly_name: str
     :ivar application_group_references: List of applicationGroup links.
     :vartype application_group_references: list[str]
+    :ivar public_network_access: Enabled to allow this resource to be access from the public
+     network. Known values are: "Enabled" and "Disabled".
+    :vartype public_network_access: str or
+     ~azure.mgmt.desktopvirtualization.models.PublicNetworkAccess
     """
 
     _attribute_map = {
@@ -4415,6 +6023,7 @@ class WorkspacePatch(_serialization.Model):
         "description": {"key": "properties.description", "type": "str"},
         "friendly_name": {"key": "properties.friendlyName", "type": "str"},
         "application_group_references": {"key": "properties.applicationGroupReferences", "type": "[str]"},
+        "public_network_access": {"key": "properties.publicNetworkAccess", "type": "str"},
     }
 
     def __init__(
@@ -4424,6 +6033,7 @@ class WorkspacePatch(_serialization.Model):
         description: Optional[str] = None,
         friendly_name: Optional[str] = None,
         application_group_references: Optional[List[str]] = None,
+        public_network_access: Optional[Union[str, "_models.PublicNetworkAccess"]] = None,
         **kwargs: Any
     ) -> None:
         """
@@ -4435,9 +6045,14 @@ class WorkspacePatch(_serialization.Model):
         :paramtype friendly_name: str
         :keyword application_group_references: List of applicationGroup links.
         :paramtype application_group_references: list[str]
+        :keyword public_network_access: Enabled to allow this resource to be access from the public
+         network. Known values are: "Enabled" and "Disabled".
+        :paramtype public_network_access: str or
+         ~azure.mgmt.desktopvirtualization.models.PublicNetworkAccess
         """
         super().__init__(**kwargs)
         self.tags = tags
         self.description = description
         self.friendly_name = friendly_name
         self.application_group_references = application_group_references
+        self.public_network_access = public_network_access

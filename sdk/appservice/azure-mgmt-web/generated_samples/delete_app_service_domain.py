@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.web import WebSiteManagementClient
 
 """
@@ -29,13 +30,12 @@ def main():
         subscription_id="34adfa4f-cedf-4dc0-ba29-b6d1a69ab345",
     )
 
-    response = client.domains.delete(
+    client.domains.delete(
         resource_group_name="testrg123",
         domain_name="example.com",
     )
-    print(response)
 
 
-# x-ms-original-file: specification/web/resource-manager/Microsoft.DomainRegistration/stable/2022-09-01/examples/DeleteAppServiceDomain.json
+# x-ms-original-file: specification/web/resource-manager/Microsoft.DomainRegistration/stable/2024-04-01/examples/DeleteAppServiceDomain.json
 if __name__ == "__main__":
     main()

@@ -4,13 +4,14 @@
 # ------------------------------------
 import asyncio
 import os
+
 from azure.keyvault.certificates import CertificatePolicy
 from azure.keyvault.certificates.aio import CertificateClient
 from azure.identity.aio import DefaultAzureCredential
 
 # ----------------------------------------------------------------------------------------------------------
 # Prerequisites:
-# 1. An Azure Key Vault (https://docs.microsoft.com/azure/key-vault/quick-create-cli)
+# 1. An Azure Key Vault (https://learn.microsoft.com/azure/key-vault/quick-create-cli)
 #
 # 2. azure-keyvault-certificates and azure-identity packages (pip install these)
 #
@@ -56,6 +57,7 @@ async def run_sample():
     # The storage account was closed, need to delete its credentials from the Key Vault.
     print("\n.. Delete a Certificate")
     deleted_bank_certificate = await client.delete_certificate(bank_cert_name)
+    assert deleted_bank_certificate.name
     # To ensure certificate is deleted on the server side.
     await asyncio.sleep(30)
 

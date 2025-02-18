@@ -6,7 +6,10 @@
 # Changes may cause incorrect behavior and will be lost if the code is regenerated.
 # --------------------------------------------------------------------------
 
+from typing import Any, IO, Union
+
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.mobilenetwork import MobileNetworkManagementClient
 
 """
@@ -37,6 +40,10 @@ def main():
             "properties": {
                 "controlPlaneAccessInterface": {"name": "N2"},
                 "coreNetworkTechnology": "5GC",
+                "eventHub": {
+                    "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg1/providers/Microsoft.EventHub/namespaces/contosoNamespace/eventHubs/contosoHub",
+                    "reportingInterval": 60,
+                },
                 "installation": {"desiredState": "Installed"},
                 "localDiagnosticsAccess": {
                     "authenticationType": "AAD",
@@ -56,6 +63,10 @@ def main():
                     },
                     "type": "AKS-HCI",
                 },
+                "signaling": {
+                    "nasEncryption": ["NEA2/EEA2", "NEA1/EEA1", "NEA0/EEA0"],
+                    "nasReroute": {"macroMmeGroupId": 1024},
+                },
                 "sites": [
                     {
                         "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg1/providers/Microsoft.MobileNetwork/mobileNetworks/testMobileNetwork/sites/testSite"
@@ -70,6 +81,6 @@ def main():
     print(response)
 
 
-# x-ms-original-file: specification/mobilenetwork/resource-manager/Microsoft.MobileNetwork/stable/2023-06-01/examples/PacketCoreControlPlaneCreate.json
+# x-ms-original-file: specification/mobilenetwork/resource-manager/Microsoft.MobileNetwork/stable/2024-04-01/examples/PacketCoreControlPlaneCreate.json
 if __name__ == "__main__":
     main()

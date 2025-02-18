@@ -6,20 +6,27 @@
 import logging
 import six
 import os
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 import urllib.parse as url_parse
 
 from azure.core.exceptions import HttpResponseError, ResourceNotFoundError
 from azure.core.pipeline.policies import ContentDecodePolicy
 
 # the functions we patch
-from azure.core.pipeline.transport import RequestsTransport
-
-# the trimming function to clean up incoming arguments to the test function we are wrapping
-from azure_devtools.scenario_tests.utilities import trim_kwargs_from_test_function
+try:
+    from azure.core.pipeline.transport import RequestsTransport
+except:
+    pass
 
 from .config import PROXY_URL
-from .helpers import get_http_client, get_test_id, is_live, is_live_and_not_recording, set_recording_id
+from .helpers import (
+    get_http_client,
+    get_test_id,
+    is_live,
+    is_live_and_not_recording,
+    set_recording_id,
+    trim_kwargs_from_test_function,  # to clean up incoming arguments to the test function we are wrapping
+)
 from .proxy_startup import discovered_roots
 from urllib3.exceptions import HTTPError
 import json
@@ -38,7 +45,7 @@ PLAYBACK_START_URL = "{}/playback/start".format(PROXY_URL)
 PLAYBACK_STOP_URL = "{}/playback/stop".format(PROXY_URL)
 
 
-def get_recording_assets(test_id: str) -> str:
+def get_recording_assets(test_id: str) -> Optional[str]:
     """Used to retrieve the assets.json given a PYTEST_CURRENT_TEST test id."""
     for root in discovered_roots:
         current_dir = os.path.dirname(test_id)

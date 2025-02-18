@@ -4,6 +4,7 @@
 # ------------------------------------
 import base64
 import os
+
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.certificates import CertificateClient, CertificatePolicy
 from azure.keyvault.secrets import SecretClient
@@ -11,7 +12,7 @@ from cryptography.hazmat.primitives.serialization import pkcs12
 
 # ----------------------------------------------------------------------------------------------------------
 # Prerequisites:
-# 1. An Azure Key Vault. (https://docs.microsoft.com/azure/key-vault/quick-create-cli)
+# 1. An Azure Key Vault. (https://learn.microsoft.com/azure/key-vault/quick-create-cli)
 #
 # 2. A service principal with certificate get, delete, and purge permissions, as well as secret get
 #    permissions.
@@ -87,6 +88,7 @@ delete_operation_poller = certificate_client.begin_delete_certificate(
     certificate_name=cert_name
 )
 deleted_certificate = delete_operation_poller.result()
+assert deleted_certificate.name
 delete_operation_poller.wait()
 print(f"Certificate with name '{deleted_certificate.name}' was deleted.")
 

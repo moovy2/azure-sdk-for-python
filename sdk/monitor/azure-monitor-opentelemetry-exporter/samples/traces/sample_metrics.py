@@ -6,6 +6,7 @@ Only certain instrumentations support metrics collection, refer to https://githu
 for the full list. Calls made with the underlying instrumented libraries will track metrics information in the
 metrics explorer view in Application Insights.
 """
+# mypy: disable-error-code="attr-defined"
 import flask
 import os
 import requests
@@ -41,17 +42,17 @@ app = flask.Flask(__name__)
 trace.set_tracer_provider(TracerProvider())
 tracer = trace.get_tracer(__name__)
 span_processor = BatchSpanProcessor(
-    AzureMonitorTraceExporter.from_connection_string(
-        os.environ["APPLICATIONINSIGHTS_CONNECTION_STRING"]
-    )
+    AzureMonitorTraceExporter.from_connection_string(os.environ["APPLICATIONINSIGHTS_CONNECTION_STRING"])
 )
 trace.get_tracer_provider().add_span_processor(span_processor)
+
 
 @app.route("/")
 def test():
     success_response = requests.get("https://httpstat.us/200", timeout=5)
     failure_response = requests.get("https://httpstat.us/404", timeout=5)
     return "Test flask request"
+
 
 if __name__ == "__main__":
     app.run(host="localhost", port=8080, threaded=True)

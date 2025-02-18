@@ -5,7 +5,7 @@
 
 from ._test_base import _SendTopicTest
 
-from azure_devtools.perfstress_tests import get_random_bytes
+from devtools_testutils.perfstress_tests import get_random_bytes
 
 from azure.servicebus import ServiceBusMessage
 
@@ -25,6 +25,6 @@ class SendTopicMessageBatchTest(_SendTopicTest):
     async def run_batch_async(self) -> int:
         batch = await self.async_sender.create_message_batch()
         for _ in range(self.args.batch_size):
-            batch.add_message(ServiceBusMessage(self.data))        
+            batch.add_message(ServiceBusMessage(self.data))
         await self.async_sender.send_messages(batch)
         return self.args.batch_size

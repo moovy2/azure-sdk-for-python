@@ -22,7 +22,7 @@ _Unset: Any = object()
 DataType = TypeVar("DataType")
 
 
-class CloudEvent(Generic[DataType]):  # pylint:disable=too-many-instance-attributes
+class CloudEvent(Generic[DataType]):
     """Properties of the CloudEvent 1.0 Schema.
     All required parameters must be populated in order to send to Azure.
 
@@ -57,13 +57,13 @@ class CloudEvent(Generic[DataType]):  # pylint:disable=too-many-instance-attribu
     """Identifies the context in which an event happened. The combination of id and source must
        be unique for each distinct event. If publishing to a domain topic, source must be the domain topic name."""
 
-    type: str  # pylint: disable=redefined-builtin
+    type: str
     """Type of event related to the originating occurrence."""
 
     specversion: str = "1.0"
     """The version of the CloudEvent spec. Defaults to "1.0" """
 
-    id: str  # pylint: disable=redefined-builtin
+    id: str
     """An identifier for the event. The combination of id and source must be
        unique for each distinct event. If not provided, a random UUID will be generated and used."""
 
@@ -192,32 +192,32 @@ class CloudEvent(Generic[DataType]):  # pylint:disable=too-many-instance-attribu
         except KeyError as err:
             # https://github.com/cloudevents/spec Cloud event spec requires source, type,
             # specversion. We autopopulate everything other than source, type.
-            if not all(_ in event for _ in ("source", "type")):
-                if all(
-                    _ in event
-                    for _ in (
-                        "subject",
-                        "eventType",
-                        "data",
-                        "dataVersion",
-                        "id",
-                        "eventTime",
-                    )
-                ):
-                    raise ValueError(
-                        "The event you are trying to parse follows the Eventgrid Schema. You can parse"
-                        + " EventGrid events using EventGridEvent.from_dict method in the azure-eventgrid library."
-                    ) from err
+            # So we will assume the KeyError is coming from source/type access.
+            if all(
+                key in event
+                for key in (
+                    "subject",
+                    "eventType",
+                    "data",
+                    "dataVersion",
+                    "id",
+                    "eventTime",
+                )
+            ):
                 raise ValueError(
-                    "The event does not conform to the cloud event spec https://github.com/cloudevents/spec."
-                    + " The `source` and `type` params are required."
+                    "The event you are trying to parse follows the Eventgrid Schema. You can parse"
+                    + " EventGrid events using EventGridEvent.from_dict method in the azure-eventgrid library."
                 ) from err
+            raise ValueError(
+                "The event does not conform to the cloud event spec https://github.com/cloudevents/spec."
+                + " The `source` and `type` params are required."
+            ) from err
         return event_obj
 
     @classmethod
     def from_json(cls, event: Any) -> CloudEvent[DataType]:
-        """
-        Returns the deserialized CloudEvent object when a json payload is provided.
+        """Returns the deserialized CloudEvent object when a json payload is provided.
+
         :param event: The json string that should be converted into a CloudEvent. This can also be
          a storage QueueMessage, eventhub's EventData or ServiceBusMessage
         :type event: object

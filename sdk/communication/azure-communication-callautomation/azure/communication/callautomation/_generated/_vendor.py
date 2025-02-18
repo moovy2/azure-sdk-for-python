@@ -11,13 +11,12 @@ from typing import TYPE_CHECKING
 from ._configuration import AzureCommunicationCallAutomationServiceConfiguration
 
 if TYPE_CHECKING:
-    # pylint: disable=unused-import,ungrouped-imports
     from azure.core import PipelineClient
 
     from ._serialization import Deserializer, Serializer
 
 
-class AzureCommunicationCallAutomationServiceMixinABC(ABC):
+class AzureCommunicationCallAutomationServiceMixinABC(ABC):  # pylint: disable=name-too-long
     """DO NOT use this class. It is for internal typing use only."""
 
     _client: "PipelineClient"

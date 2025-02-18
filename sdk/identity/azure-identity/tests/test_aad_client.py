@@ -3,6 +3,7 @@
 # Licensed under the MIT License.
 # ------------------------------------
 import functools
+from unittest.mock import Mock, patch
 
 from azure.core.exceptions import ClientAuthenticationError, ServiceRequestError
 from azure.identity._constants import EnvironmentVariables
@@ -14,11 +15,6 @@ from urllib.parse import urlparse
 
 from helpers import build_aad_response, mock_response
 from test_certificate_credential import PEM_CERT_PATH
-
-try:
-    from unittest.mock import Mock, patch
-except ImportError:  # python < 3.3
-    from mock import Mock, patch  # type: ignore
 
 
 BASE_CLASS_METHODS = [
@@ -45,7 +41,7 @@ def test_error_reporting():
         functools.partial(client.obtain_token_by_refresh_token, ("scope",), "refresh token"),
     ]
 
-    # exceptions raised for AAD errors should contain AAD's error description
+    # exceptions raised for Microsoft Entra errors should contain Microsoft Entra's error description
     for fn in fns:
         with pytest.raises(ClientAuthenticationError) as ex:
             fn()
@@ -81,10 +77,10 @@ def test_exceptions_do_not_expose_secrets():
             assert transport.send.call_count == 1
             transport.send.reset_mock()
 
-    # AAD errors shouldn't provoke exceptions exposing secrets
+    # Microsoft Entra errors shouldn't provoke exceptions exposing secrets
     assert_secrets_not_exposed()
 
-    # neither should unexpected AAD responses
+    # neither should unexpected Microsoft Entra responses
     del body["error"]
     assert_secrets_not_exposed()
 
@@ -106,6 +102,9 @@ def test_request_url(authority):
 
     client.obtain_token_by_authorization_code("scope", "code", "uri")
     client.obtain_token_by_refresh_token("scope", "refresh token")
+
+    # obtain_token_by_refresh_token is client_secret safe
+    client.obtain_token_by_refresh_token("scope", "refresh token", client_secret="secret")
 
     # authority can be configured via environment variable
     with patch.dict("os.environ", {EnvironmentVariables.AZURE_AUTHORITY_HOST: authority}, clear=True):
@@ -193,7 +192,7 @@ def test_refresh_token():
 
 
 def test_evicts_invalid_refresh_token():
-    """when AAD rejects a refresh token, the client should evict that token from its cache"""
+    """when Microsoft Entra ID rejects a refresh token, the client should evict that token from its cache"""
 
     tenant_id = "tenant-id"
     client_id = "client-id"
@@ -202,8 +201,8 @@ def test_evicts_invalid_refresh_token():
     cache = TokenCache()
     cache.add({"response": build_aad_response(uid="id1", utid="tid1", access_token="*", refresh_token=invalid_token)})
     cache.add({"response": build_aad_response(uid="id2", utid="tid2", access_token="*", refresh_token="...")})
-    assert len(cache.find(TokenCache.CredentialType.REFRESH_TOKEN)) == 2
-    assert len(cache.find(TokenCache.CredentialType.REFRESH_TOKEN, query={"secret": invalid_token})) == 1
+    assert len(list(cache.search(TokenCache.CredentialType.REFRESH_TOKEN))) == 2
+    assert len(list(cache.search(TokenCache.CredentialType.REFRESH_TOKEN, query={"secret": invalid_token}))) == 1
 
     def send(request, **_):
         assert request.data["refresh_token"] == invalid_token
@@ -216,8 +215,8 @@ def test_evicts_invalid_refresh_token():
         client.obtain_token_by_refresh_token(scopes=("scope",), refresh_token=invalid_token)
 
     assert transport.send.call_count == 1
-    assert len(cache.find(TokenCache.CredentialType.REFRESH_TOKEN)) == 1
-    assert len(cache.find(TokenCache.CredentialType.REFRESH_TOKEN, query={"secret": invalid_token})) == 0
+    assert len(list(cache.search(TokenCache.CredentialType.REFRESH_TOKEN))) == 1
+    assert len(list(cache.search(TokenCache.CredentialType.REFRESH_TOKEN, query={"secret": invalid_token}))) == 0
 
 
 def test_retries_token_requests():

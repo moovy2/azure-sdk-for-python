@@ -1,5 +1,215 @@
 # Release History
 
+## 4.0.0b20 (2024-11-04)
+
+### Features Added
+
+  - Model `DistributedAvailabilityGroup` added property `distributed_availability_group_name`
+  - Model `DistributedAvailabilityGroup` added property `partner_link_role`
+  - Model `DistributedAvailabilityGroup` added property `partner_availability_group_name`
+  - Model `DistributedAvailabilityGroup` added property `partner_endpoint`
+  - Model `DistributedAvailabilityGroup` added property `instance_link_role`
+  - Model `DistributedAvailabilityGroup` added property `instance_availability_group_name`
+  - Model `DistributedAvailabilityGroup` added property `failover_mode`
+  - Model `DistributedAvailabilityGroup` added property `seeding_mode`
+  - Model `DistributedAvailabilityGroup` added property `databases`
+  - Added model `CertificateInfo`
+  - Added model `DistributedAvailabilityGroupDatabase`
+  - Added model `DistributedAvailabilityGroupSetRole`
+  - Added model `DistributedAvailabilityGroupsFailoverRequest`
+  - Added enum `FailoverModeType`
+  - Added enum `FailoverType`
+  - Added enum `InstanceRole`
+  - Added enum `LinkRole`
+  - Added enum `ReplicaConnectedState`
+  - Added enum `ReplicaSynchronizationHealth`
+  - Added enum `ReplicationModeType`
+  - Added enum `RoleChangeType`
+  - Added enum `SeedingModeType`
+  - Operation group `DistributedAvailabilityGroupsOperations` added method `begin_failover`
+  - Operation group `DistributedAvailabilityGroupsOperations` added method `begin_set_role`
+
+### Breaking Changes
+
+  - Model `DistributedAvailabilityGroup` deleted or renamed its instance variable `target_database`
+  - Model `DistributedAvailabilityGroup` deleted or renamed its instance variable `source_endpoint`
+  - Model `DistributedAvailabilityGroup` deleted or renamed its instance variable `primary_availability_group_name`
+  - Model `DistributedAvailabilityGroup` deleted or renamed its instance variable `secondary_availability_group_name`
+  - Model `DistributedAvailabilityGroup` deleted or renamed its instance variable `source_replica_id`
+  - Model `DistributedAvailabilityGroup` deleted or renamed its instance variable `target_replica_id`
+  - Model `DistributedAvailabilityGroup` deleted or renamed its instance variable `link_state`
+  - Model `DistributedAvailabilityGroup` deleted or renamed its instance variable `last_hardened_lsn`
+  - Deleted or renamed model `ReplicationMode`
+
+## 4.0.0b19 (2024-09-09)
+
+### Features Added
+
+  - The 'ReplicationLinksOperations' method 'begin_create_or_update' was added in the current version
+  - The 'ReplicationLinksOperations' method 'begin_update' was added in the current version
+  - The model or publicly exposed class 'ColumnDataType' had property 'INT' added in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroup' had property 'target_database' added in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroup' had property 'source_endpoint' added in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroup' had property 'primary_availability_group_name' added in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroup' had property 'secondary_availability_group_name' added in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroup' had property 'source_replica_id' added in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroup' had property 'target_replica_id' added in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroup' had property 'link_state' added in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroup' had property 'last_hardened_lsn' added in the current version
+  - The model or publicly exposed class 'FailoverGroup' had property 'secondary_type' added in the current version
+  - The model or publicly exposed class 'FailoverGroupUpdate' had property 'secondary_type' added in the current version
+  - The model or publicly exposed class 'ManagedInstance' had property 'storage_iops' added in the current version
+  - The model or publicly exposed class 'ManagedInstance' had property 'storage_throughput_mbps' added in the current version
+  - The model or publicly exposed class 'ManagedInstanceUpdate' had property 'storage_iops' added in the current version
+  - The model or publicly exposed class 'ManagedInstanceUpdate' had property 'storage_throughput_mbps' added in the current version
+  - The model or publicly exposed class 'ReplicationLink' had property 'partner_database_id' added in the current version
+  - The model or publicly exposed class 'FailoverGroupDatabasesSecondaryType' was added in the current version
+  - The model or publicly exposed class 'ReplicationLinkUpdate' was added in the current version
+  - The model or publicly exposed class 'ReplicationMode' was added in the current version
+  - The 'ReplicationLinksOperations' method 'begin_create_or_update' was added in the current version
+  - The 'ReplicationLinksOperations' method 'begin_update' was added in the current version
+
+### Breaking Changes
+
+  - The 'DistributedAvailabilityGroupsOperations' method 'begin_failover' was deleted or renamed in the current version
+  - The 'DistributedAvailabilityGroupsOperations' method 'begin_set_role' was deleted or renamed in the current version
+  - The 'ColumnDataType' enum had its value 'INT_ENUM' deleted or renamed in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroup' had its instance variable 'distributed_availability_group_name' deleted or renamed in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroup' had its instance variable 'partner_link_role' deleted or renamed in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroup' had its instance variable 'partner_availability_group_name' deleted or renamed in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroup' had its instance variable 'partner_endpoint' deleted or renamed in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroup' had its instance variable 'instance_link_role' deleted or renamed in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroup' had its instance variable 'instance_availability_group_name' deleted or renamed in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroup' had its instance variable 'failover_mode' deleted or renamed in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroup' had its instance variable 'seeding_mode' deleted or renamed in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroup' had its instance variable 'databases' deleted or renamed in the current version
+  - The model or publicly exposed class 'ManagedInstance' had its instance variable 'storage_i_ops' deleted or renamed in the current version
+  - The model or publicly exposed class 'ManagedInstance' had its instance variable 'storage_throughput_m_bps' deleted or renamed in the current version
+  - The model or publicly exposed class 'ManagedInstanceUpdate' had its instance variable 'storage_i_ops' deleted or renamed in the current version
+  - The model or publicly exposed class 'ManagedInstanceUpdate' had its instance variable 'storage_throughput_m_bps' deleted or renamed in the current version
+  - The model or publicly exposed class 'CertificateInfo' was deleted or renamed in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroupDatabase' was deleted or renamed in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroupSetRole' was deleted or renamed in the current version
+  - The model or publicly exposed class 'DistributedAvailabilityGroupsFailoverRequest' was deleted or renamed in the current version
+  - The model or publicly exposed class 'FailoverModeType' was deleted or renamed in the current version
+  - The model or publicly exposed class 'FailoverType' was deleted or renamed in the current version
+  - The model or publicly exposed class 'InstanceRole' was deleted or renamed in the current version
+  - The model or publicly exposed class 'LinkRole' was deleted or renamed in the current version
+  - The model or publicly exposed class 'ReplicaConnectedState' was deleted or renamed in the current version
+  - The model or publicly exposed class 'ReplicaSynchronizationHealth' was deleted or renamed in the current version
+  - The model or publicly exposed class 'ReplicationModeType' was deleted or renamed in the current version
+  - The model or publicly exposed class 'RoleChangeType' was deleted or renamed in the current version
+  - The model or publicly exposed class 'SeedingModeType' was deleted or renamed in the current version
+  - The 'DistributedAvailabilityGroupsOperations' method 'begin_failover' was deleted or renamed in the current version
+  - The 'DistributedAvailabilityGroupsOperations' method 'begin_set_role' was deleted or renamed in the current version
+
+## 4.0.0b18 (2024-07-11)
+
+### Bugs Fixed
+
+  - Fix import error when import from azure.mgmt.sql.aio
+
+## 4.0.0b17 (2024-05-20)
+
+### Features Added
+
+  - Model DatabaseOperation has a new parameter operation_phase_details
+
+## 4.0.0b16 (2024-04-07)
+
+### Features Added
+
+  - Added operation DistributedAvailabilityGroupsOperations.begin_failover
+  - Added operation DistributedAvailabilityGroupsOperations.begin_set_role
+  - Model DistributedAvailabilityGroup has a new parameter databases
+  - Model DistributedAvailabilityGroup has a new parameter distributed_availability_group_name
+  - Model DistributedAvailabilityGroup has a new parameter failover_mode
+  - Model DistributedAvailabilityGroup has a new parameter instance_availability_group_name
+  - Model DistributedAvailabilityGroup has a new parameter instance_link_role
+  - Model DistributedAvailabilityGroup has a new parameter partner_availability_group_name
+  - Model DistributedAvailabilityGroup has a new parameter partner_endpoint
+  - Model DistributedAvailabilityGroup has a new parameter partner_link_role
+  - Model DistributedAvailabilityGroup has a new parameter seeding_mode
+
+### Breaking Changes
+
+  - Model DistributedAvailabilityGroup no longer has parameter last_hardened_lsn
+  - Model DistributedAvailabilityGroup no longer has parameter link_state
+  - Model DistributedAvailabilityGroup no longer has parameter primary_availability_group_name
+  - Model DistributedAvailabilityGroup no longer has parameter secondary_availability_group_name
+  - Model DistributedAvailabilityGroup no longer has parameter source_endpoint
+  - Model DistributedAvailabilityGroup no longer has parameter source_replica_id
+  - Model DistributedAvailabilityGroup no longer has parameter target_database
+  - Model DistributedAvailabilityGroup no longer has parameter target_replica_id
+
+## 4.0.0b15 (2024-01-11)
+
+### Features Added
+
+  - Added operation ManagedInstancesOperations.begin_refresh_status
+  - Model ManagedInstance has a new parameter authentication_metadata
+  - Model ManagedInstance has a new parameter create_time
+  - Model ManagedInstance has a new parameter database_format
+  - Model ManagedInstance has a new parameter external_governance_status
+  - Model ManagedInstance has a new parameter hybrid_secondary_usage
+  - Model ManagedInstance has a new parameter hybrid_secondary_usage_detected
+  - Model ManagedInstance has a new parameter is_general_purpose_v2
+  - Model ManagedInstance has a new parameter pricing_model
+  - Model ManagedInstance has a new parameter storage_i_ops
+  - Model ManagedInstance has a new parameter storage_throughput_m_bps
+  - Model ManagedInstance has a new parameter virtual_cluster_id
+  - Model ManagedInstanceUpdate has a new parameter authentication_metadata
+  - Model ManagedInstanceUpdate has a new parameter create_time
+  - Model ManagedInstanceUpdate has a new parameter database_format
+  - Model ManagedInstanceUpdate has a new parameter external_governance_status
+  - Model ManagedInstanceUpdate has a new parameter hybrid_secondary_usage
+  - Model ManagedInstanceUpdate has a new parameter hybrid_secondary_usage_detected
+  - Model ManagedInstanceUpdate has a new parameter is_general_purpose_v2
+  - Model ManagedInstanceUpdate has a new parameter pricing_model
+  - Model ManagedInstanceUpdate has a new parameter storage_i_ops
+  - Model ManagedInstanceUpdate has a new parameter storage_throughput_m_bps
+  - Model ManagedInstanceUpdate has a new parameter virtual_cluster_id
+
+## 4.0.0b14 (2023-12-18)
+
+### Features Added
+
+  - Added operation LongTermRetentionBackupsOperations.begin_change_access_tier
+  - Added operation LongTermRetentionBackupsOperations.begin_change_access_tier_by_resource_group
+  - Model LongTermRetentionBackup has a new parameter backup_storage_access_tier
+  - Model LongTermRetentionBackup has a new parameter is_backup_immutable
+  - Model LongTermRetentionPolicy has a new parameter backup_storage_access_tier
+  - Model LongTermRetentionPolicy has a new parameter make_backups_immutable
+
+## 4.0.0b13 (2023-11-17)
+
+### Features Added
+
+  - Added operation group JobPrivateEndpointsOperations
+  - Model FailoverGroupReadOnlyEndpoint has a new parameter target_server
+  - Model FailoverGroupUpdate has a new parameter partner_servers
+  - Model InstancePool has a new parameter dns_zone
+  - Model InstancePool has a new parameter maintenance_configuration_id
+  - Model InstancePoolUpdate has a new parameter dns_zone
+  - Model InstancePoolUpdate has a new parameter license_type
+  - Model InstancePoolUpdate has a new parameter maintenance_configuration_id
+  - Model InstancePoolUpdate has a new parameter sku
+  - Model InstancePoolUpdate has a new parameter subnet_id
+  - Model InstancePoolUpdate has a new parameter v_cores
+  - Model Server has a new parameter is_i_pv6_enabled
+  - Model ServerUpdate has a new parameter is_i_pv6_enabled
+
+## 4.0.0b12 (2023-08-30)
+
+### Features Added
+
+  - Model Database has a new parameter encryption_protector_auto_rotation
+  - Model Database has a new parameter free_limit_exhaustion_behavior
+  - Model Database has a new parameter use_free_limit
+  - Model DatabaseUpdate has a new parameter encryption_protector_auto_rotation
+  - Model DatabaseUpdate has a new parameter free_limit_exhaustion_behavior
+  - Model DatabaseUpdate has a new parameter use_free_limit
+
 ## 4.0.0b11 (2023-07-28)
 
 ### Features Added

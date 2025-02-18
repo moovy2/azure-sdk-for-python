@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.web import WebSiteManagementClient
 
 """
@@ -29,15 +30,14 @@ def main():
         subscription_id="34adfa4f-cedf-4dc0-ba29-b6d1a69ab345",
     )
 
-    response = client.workflow_triggers.begin_run(
+    client.workflow_triggers.begin_run(
         resource_group_name="test-resource-group",
         name="test-name",
         workflow_name="test-workflow",
         trigger_name="recurrence",
     ).result()
-    print(response)
 
 
-# x-ms-original-file: specification/web/resource-manager/Microsoft.Web/stable/2022-09-01/examples/WorkflowTriggers_Run.json
+# x-ms-original-file: specification/web/resource-manager/Microsoft.Web/stable/2024-04-01/examples/WorkflowTriggers_Run.json
 if __name__ == "__main__":
     main()

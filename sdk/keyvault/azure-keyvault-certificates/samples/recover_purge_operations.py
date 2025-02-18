@@ -3,13 +3,13 @@
 # Licensed under the MIT License.
 # ------------------------------------
 import os
-import time
+
 from azure.keyvault.certificates import CertificateClient, CertificatePolicy
 from azure.identity import DefaultAzureCredential
 
 # ----------------------------------------------------------------------------------------------------------
 # Prerequisites:
-# 1. An Azure Key Vault (https://docs.microsoft.com/azure/key-vault/quick-create-cli)
+# 1. An Azure Key Vault (https://learn.microsoft.com/azure/key-vault/quick-create-cli)
 #
 # 2. azure-keyvault-certificates and azure-identity packages (pip install these)
 #
@@ -58,6 +58,7 @@ print(f"Certificate with name '{storage_certificate.name}' was created.")
 print("\n.. Delete a Certificate")
 deleted_bank_poller = client.begin_delete_certificate(bank_cert_name)
 deleted_bank_certificate = deleted_bank_poller.result()
+assert deleted_bank_certificate.name
 # To ensure certificate is deleted on the server side.
 deleted_bank_poller.wait()
 

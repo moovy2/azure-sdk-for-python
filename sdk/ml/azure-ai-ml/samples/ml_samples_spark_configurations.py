@@ -20,14 +20,14 @@ import os
 
 class SparkConfigurationOptions(object):
     def ml_spark_config(self):
-        from azure.identity import DefaultAzureCredential
-
         from azure.ai.ml import MLClient
+        from azure.identity import DefaultAzureCredential
 
         subscription_id = os.environ["AZURE_SUBSCRIPTION_ID"]
         resource_group = os.environ["RESOURCE_GROUP_NAME"]
         credential = DefaultAzureCredential()
-        ml_client = MLClient(credential, subscription_id, resource_group, workspace_name="test-ws1")
+        workspace_name = "test-ws1"
+        ml_client = MLClient(credential, subscription_id, resource_group, workspace_name=workspace_name)
 
         cpu_cluster = ml_client.compute.get("cpu-cluster")
 
@@ -40,9 +40,10 @@ class SparkConfigurationOptions(object):
         )
 
         monitor_definition = MonitorDefinition(
-            compute=SparkResourceConfiguration(instance_type="standard_e4s_v3", runtime_version="3.2"),
+            compute=SparkResourceConfiguration(instance_type="standard_e4s_v3", runtime_version="3.3"),
             monitoring_target=MonitoringTarget(
-                endpoint_deployment_id="azureml:fraud_detection_endpoint:fraud_detection_deployment"
+                ml_task="Classification",
+                endpoint_deployment_id="azureml:fraud_detection_endpoint:fraud_detection_deployment",
             ),
             alert_notification=AlertNotification(emails=["abc@example.com", "def@example.com"]),
         )
@@ -70,7 +71,7 @@ class SparkConfigurationOptions(object):
             py_files=["utils.zip"],
             files=["my_files.txt"],
             args="--file_input ${{inputs.file_input}}",
-            base_path="./tests/test_configs/dsl_pipeline/spark_job_in_pipeline",
+            base_path="./sdk/ml/azure-ai-ml/tests/test_configs/dsl_pipeline/spark_job_in_pipeline",
         )
 
         # [END spark_component_definition]
@@ -87,7 +88,7 @@ class SparkConfigurationOptions(object):
         from azure.ai.ml.entities import SparkJob
 
         spark_job = SparkJob(
-            code="./tests/test_configs/dsl_pipeline/spark_job_in_pipeline/basic_src",
+            code="./sdk/ml/azure-ai-ml/tests/test_configs/dsl_pipeline/spark_job_in_pipeline/basic_src",
             entry={"file": "sampleword.py"},
             conf={
                 "spark.driver.cores": 2,
@@ -158,7 +159,7 @@ class SparkConfigurationOptions(object):
         node = spark(
             experiment_name="builder-spark-experiment-name",
             description="simply spark description",
-            code="./tests/test_configs/spark_job/basic_spark_job/src",
+            code="./sdk/ml/azure-ai-ml/tests/test_configs/spark_job/basic_spark_job/src",
             entry={"file": "./main.py"},
             jars=["simple-1.1.1.jar"],
             driver_cores=1,
@@ -185,7 +186,7 @@ class SparkConfigurationOptions(object):
             args="--input1 ${{inputs.input1}} --output1 ${{outputs.output1}} --my_sample_rate 0.01",
             resources={
                 "instance_type": "Standard_E8S_V3",
-                "runtime_version": "3.2.0",
+                "runtime_version": "3.3.0",
             },
         )
 
@@ -194,7 +195,7 @@ class SparkConfigurationOptions(object):
         # [START spark_function_configuration_2]
 
         node = spark(
-            code="./tests/test_configs/spark_job/basic_spark_job/src",
+            code="./sdk/ml/azure-ai-ml/tests/test_configs/spark_job/basic_spark_job/src",
             entry={"file": "./main.py"},
             driver_cores=1,
             driver_memory="2g",
@@ -203,7 +204,7 @@ class SparkConfigurationOptions(object):
             executor_instances=2,
             resources={
                 "instance_type": "Standard_E8S_V3",
-                "runtime_version": "3.2.0",
+                "runtime_version": "3.3.0",
             },
             identity={"type": "managed"},
         )
@@ -229,7 +230,7 @@ class SparkConfigurationOptions(object):
                 file_input=Input(path="/dataset/iris.csv", type=AssetTypes.URI_FILE, mode=InputOutputModes.DIRECT)
             ),
             args="--file_input ${{inputs.file_input}}",
-            resources={"instance_type": "standard_e4s_v3", "runtime_version": "3.2.0"},
+            resources={"instance_type": "standard_e4s_v3", "runtime_version": "3.3.0"},
         )
 
         second_step = spark(
@@ -247,7 +248,7 @@ class SparkConfigurationOptions(object):
             ),
             outputs=dict(output=Output(type="uri_folder", mode=InputOutputModes.DIRECT)),
             args="--file_input ${{inputs.file_input}} --output ${{outputs.output}}",
-            resources={"instance_type": "standard_e4s_v3", "runtime_version": "3.2.0"},
+            resources={"instance_type": "standard_e4s_v3", "runtime_version": "3.3.0"},
         )
 
         # Define pipeline
@@ -264,7 +265,8 @@ class SparkConfigurationOptions(object):
 
         # [START spark_resource_configuration]
         from azure.ai.ml import Input, Output
-        from azure.ai.ml.entities import AmlTokenConfiguration, SparkJob, SparkResourceConfiguration
+        from azure.ai.ml.entities import SparkJob, SparkResourceConfiguration
+        from azure.ai.ml.entities._credentials import AmlTokenConfiguration
 
         spark_job = SparkJob(
             code="./tests/test_configs/spark_job/basic_spark_job/src",
@@ -294,7 +296,7 @@ class SparkConfigurationOptions(object):
                     mode="direct",
                 )
             },
-            resources=SparkResourceConfiguration(instance_type="Standard_E8S_V3", runtime_version="3.2.0"),
+            resources=SparkResourceConfiguration(instance_type="Standard_E8S_V3", runtime_version="3.3.0"),
         )
         # [END spark_resource_configuration]
 

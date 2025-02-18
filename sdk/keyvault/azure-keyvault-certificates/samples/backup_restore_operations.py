@@ -4,12 +4,13 @@
 # ------------------------------------
 import os
 import time
+
 from azure.keyvault.certificates import CertificateClient, CertificatePolicy
 from azure.identity import DefaultAzureCredential
 
 # ----------------------------------------------------------------------------------------------------------
 # Prerequisites:
-# 1. An Azure Key Vault (https://docs.microsoft.com/azure/key-vault/quick-create-cli)
+# 1. An Azure Key Vault (https://learn.microsoft.com/azure/key-vault/quick-create-cli)
 #
 # 2. azure-keyvault-certificates and azure-identity packages (pip install these)
 #
@@ -61,6 +62,7 @@ print(f"Backup created for certificate with name '{cert_name}'.")
 print("\n.. Delete the certificate")
 delete_operation = client.begin_delete_certificate(cert_name)
 deleted_certificate = delete_operation.result()
+assert deleted_certificate.name
 print(f"Deleted certificate with name '{deleted_certificate.name}'")
 
 # Wait for the deletion to complete before purging the certificate.

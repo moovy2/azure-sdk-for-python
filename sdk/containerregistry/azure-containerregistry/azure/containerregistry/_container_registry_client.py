@@ -8,7 +8,7 @@ import functools
 import hashlib
 import json
 from io import BytesIO
-from typing import Any, Dict, IO, Optional, overload, Union, cast, Tuple, MutableMapping
+from typing import Any, Dict, IO, Optional, overload, Union, cast, Tuple, MutableMapping, TYPE_CHECKING
 
 from azure.core.credentials import TokenCredential
 from azure.core.exceptions import (
@@ -47,6 +47,8 @@ from ._models import (
     DigestValidationError,
 )
 
+if TYPE_CHECKING:
+    from ._generated.models import ArtifactManifestOrder, ArtifactTagOrder
 JSON = MutableMapping[str, Any]
 
 
@@ -70,7 +72,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         *,
         api_version: Optional[str] = None,
         audience: str = DEFAULT_AUDIENCE,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Create a ContainerRegistryClient from an ACR endpoint and a credential.
 
@@ -115,14 +117,14 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         return tag_props.digest
 
     @distributed_trace
-    def delete_repository(self, repository: str, **kwargs) -> None:
+    def delete_repository(self, repository: str, **kwargs: Any) -> None:
         """Delete a repository. If the repository cannot be found or a response status code of
         404 is returned an error will not be raised.
 
         :param str repository: The repository to delete
         :returns: None
         :rtype: None
-        :raises: ~azure.core.exceptions.HttpResponseError
+        :raises ~azure.core.exceptions.HttpResponseError:
 
         .. admonition:: Example:
 
@@ -136,14 +138,14 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         self._client.container_registry.delete_repository(repository, **kwargs)
 
     @distributed_trace
-    def list_repository_names(self, **kwargs) -> ItemPaged[str]:
+    def list_repository_names(self, *, results_per_page: Optional[int] = None, **kwargs: Any) -> ItemPaged[str]:
         """List all repositories
 
         :keyword results_per_page: Number of repositories to return per page
         :paramtype results_per_page: int
         :returns: An iterable of strings
         :rtype: ~azure.core.paging.ItemPaged[str]
-        :raises: ~azure.core.exceptions.HttpResponseError
+        :raises ~azure.core.exceptions.HttpResponseError:
 
         .. admonition:: Example:
 
@@ -154,7 +156,6 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
                 :dedent: 8
                 :caption: List repositories in a container registry account
         """
-        n = kwargs.pop("results_per_page", None)
         last = kwargs.pop("last", None)
         cls = kwargs.pop("cls", None)
         error_map = {401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError}
@@ -163,7 +164,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
 
         def prepare_request(next_link=None):
             # Construct headers
-            header_parameters = {}  # type: Dict[str, Any]
+            header_parameters: Dict[str, Any] = {}
             header_parameters["Accept"] = self._client._serialize.header(  # pylint: disable=protected-access
                 "accept", accept, "str"
             )
@@ -181,14 +182,14 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
                 }
                 url = self._client._client.format_url(url, **path_format_arguments)  # pylint: disable=protected-access
                 # Construct parameters
-                query_parameters = {}  # type: Dict[str, Any]
+                query_parameters: Dict[str, Any] = {}
                 if last is not None:
                     query_parameters["last"] = self._client._serialize.query(  # pylint: disable=protected-access
                         "last", last, "str"
                     )
-                if n is not None:
+                if results_per_page is not None:
                     query_parameters["n"] = self._client._serialize.query(  # pylint: disable=protected-access
-                        "n", n, "int"
+                        "n", results_per_page, "int"
                     )
 
                 request = self._client._client.get(  # pylint: disable=protected-access
@@ -196,7 +197,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
                 )
             else:
                 url = next_link
-                query_parameters = {}  # type: Dict[str, Any]
+                query_parameters: Dict[str, Any] = {}
                 path_format_arguments = {
                     "url": self._client._serialize.url(  # pylint: disable=protected-access
                         "self._config.url",
@@ -243,20 +244,27 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         return ItemPaged(get_next, extract_data)
 
     @distributed_trace
-    def get_repository_properties(self, repository: str, **kwargs) -> RepositoryProperties:
+    def get_repository_properties(self, repository: str, **kwargs: Any) -> RepositoryProperties:
         """Get the properties of a repository
 
         :param str repository: Name of the repository
         :rtype: ~azure.containerregistry.RepositoryProperties
         :return: The properties of a repository
-        :raises: ~azure.core.exceptions.ResourceNotFoundError
+        :raises ~azure.core.exceptions.ResourceNotFoundError:
         """
         return RepositoryProperties._from_generated(  # pylint: disable=protected-access
             self._client.container_registry.get_properties(repository, **kwargs)
         )
 
     @distributed_trace
-    def list_manifest_properties(self, repository: str, **kwargs) -> ItemPaged[ArtifactManifestProperties]:
+    def list_manifest_properties(
+        self,
+        repository: str,
+        *,
+        order_by: Optional[Union["ArtifactManifestOrder", str]] = None,
+        results_per_page: Optional[int] = None,
+        **kwargs: Any,
+    ) -> ItemPaged[ArtifactManifestProperties]:
         """List the artifacts for a repository
 
         :param str repository: Name of the repository
@@ -266,12 +274,10 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         :paramtype results_per_page: int
         :returns: An iterable of :class:`~azure.containerregistry.ArtifactManifestProperties`
         :rtype: ~azure.core.paging.ItemPaged[~azure.containerregistry.ArtifactManifestProperties]
-        :raises: ~azure.core.exceptions.ResourceNotFoundError
+        :raises ~azure.core.exceptions.ResourceNotFoundError:
         """
         name = repository
         last = kwargs.pop("last", None)
-        n = kwargs.pop("results_per_page", None)
-        orderby = kwargs.pop("order_by", None)
         cls = kwargs.pop(
             "cls",
             lambda objs: [
@@ -288,7 +294,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
 
         def prepare_request(next_link=None):
             # Construct headers
-            header_parameters = {}  # type: Dict[str, Any]
+            header_parameters: Dict[str, Any] = {}
             header_parameters["Accept"] = self._client._serialize.header(  # pylint: disable=protected-access
                 "accept", accept, "str"
             )
@@ -307,18 +313,18 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
                 }
                 url = self._client._client.format_url(url, **path_format_arguments)  # pylint: disable=protected-access
                 # Construct parameters
-                query_parameters = {}  # type: Dict[str, Any]
+                query_parameters: Dict[str, Any] = {}
                 if last is not None:
                     query_parameters["last"] = self._client._serialize.query(  # pylint: disable=protected-access
                         "last", last, "str"
                     )
-                if n is not None:
+                if results_per_page is not None:
                     query_parameters["n"] = self._client._serialize.query(  # pylint: disable=protected-access
-                        "n", n, "int"
+                        "n", results_per_page, "int"
                     )
-                if orderby is not None:
+                if order_by is not None:
                     query_parameters["orderby"] = self._client._serialize.query(  # pylint: disable=protected-access
-                        "orderby", orderby, "str"
+                        "orderby", order_by, "str"
                     )
 
                 request = self._client._client.get(  # pylint: disable=protected-access
@@ -326,7 +332,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
                 )
             else:
                 url = next_link
-                query_parameters = {}  # type: Dict[str, Any]
+                query_parameters: Dict[str, Any] = {}
                 path_format_arguments = {
                     "url": self._client._serialize.url(  # pylint: disable=protected-access
                         "self._client._config.url",
@@ -374,7 +380,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         return ItemPaged(get_next, extract_data)
 
     @distributed_trace
-    def delete_tag(self, repository: str, tag: str, **kwargs) -> None:
+    def delete_tag(self, repository: str, tag: str, **kwargs: Any) -> None:
         """Delete a tag from a repository. If the tag cannot be found or a response status code of
         404 is returned an error will not be raised.
 
@@ -382,7 +388,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         :param str tag: The tag to be deleted
         :returns: None
         :rtype: None
-        :raises: ~azure.core.exceptions.HttpResponseError
+        :raises ~azure.core.exceptions.HttpResponseError:
 
         Example
 
@@ -398,14 +404,14 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         self._client.container_registry.delete_tag(repository, tag, **kwargs)
 
     @distributed_trace
-    def get_manifest_properties(self, repository: str, tag_or_digest: str, **kwargs) -> ArtifactManifestProperties:
+    def get_manifest_properties(self, repository: str, tag_or_digest: str, **kwargs: Any) -> ArtifactManifestProperties:
         """Get the properties of a registry artifact
 
         :param str repository: Name of the repository
         :param str tag_or_digest: Tag or digest of the manifest
         :return: The properties of a registry artifact
         :rtype: ~azure.containerregistry.ArtifactManifestProperties
-        :raises: ~azure.core.exceptions.ResourceNotFoundError
+        :raises ~azure.core.exceptions.ResourceNotFoundError:
 
         Example
 
@@ -425,20 +431,20 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
             repository, tag_or_digest, **kwargs
         )
         return ArtifactManifestProperties._from_generated(  # pylint: disable=protected-access
-            manifest_properties.manifest,  # type: ignore
+            manifest_properties.manifest,  # type: ignore[arg-type] # The property "manifest" is required in response
             repository_name=repository,
             registry=self._endpoint,
         )
 
     @distributed_trace
-    def get_tag_properties(self, repository: str, tag: str, **kwargs) -> ArtifactTagProperties:
+    def get_tag_properties(self, repository: str, tag: str, **kwargs: Any) -> ArtifactTagProperties:
         """Get the properties for a tag
 
         :param str repository: Name of the repository
         :param str tag: The tag to get tag properties for
         :return: The properties for a tag
         :rtype: ~azure.containerregistry.ArtifactTagProperties
-        :raises: ~azure.core.exceptions.ResourceNotFoundError
+        :raises ~azure.core.exceptions.ResourceNotFoundError:
 
         Example
 
@@ -453,12 +459,19 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         """
         tag_properties = self._client.container_registry.get_tag_properties(repository, tag, **kwargs)
         return ArtifactTagProperties._from_generated(  # pylint: disable=protected-access
-            tag_properties.tag,  # type: ignore
-            repository=repository,
+            tag_properties.tag,  # type: ignore[arg-type] # The property "tag" is required in response
+            repository_name=repository,
         )
 
     @distributed_trace
-    def list_tag_properties(self, repository: str, **kwargs) -> ItemPaged[ArtifactTagProperties]:
+    def list_tag_properties(
+        self,
+        repository: str,
+        *,
+        order_by: Optional[Union["ArtifactTagOrder", str]] = None,
+        results_per_page: Optional[int] = None,
+        **kwargs: Any,
+    ) -> ItemPaged[ArtifactTagProperties]:
         """List the tags for a repository
 
         :param str repository: Name of the repository
@@ -468,7 +481,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         :paramtype results_per_page: int
         :returns: An iterable of :class:`~azure.containerregistry.ArtifactTagProperties`
         :rtype: ~azure.core.paging.ItemPaged[~azure.containerregistry.ArtifactTagProperties]
-        :raises: ~azure.core.exceptions.ResourceNotFoundError
+        :raises ~azure.core.exceptions.ResourceNotFoundError:
 
         Example
 
@@ -483,13 +496,11 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         """
         name = repository
         last = kwargs.pop("last", None)
-        n = kwargs.pop("results_per_page", None)
-        orderby = kwargs.pop("order_by", None)
         digest = kwargs.pop("digest", None)
         cls = kwargs.pop(
             "cls",
             lambda objs: [
-                ArtifactTagProperties._from_generated(o, repository=repository)  # pylint: disable=protected-access
+                ArtifactTagProperties._from_generated(o, repository_name=repository)  # pylint: disable=protected-access
                 for o in objs
             ],
         )
@@ -500,7 +511,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
 
         def prepare_request(next_link=None):
             # Construct headers
-            header_parameters = {}  # type: Dict[str, Any]
+            header_parameters: Dict[str, Any] = {}
             header_parameters["Accept"] = self._client._serialize.header(  # pylint: disable=protected-access
                 "accept", accept, "str"
             )
@@ -519,18 +530,18 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
                 }
                 url = self._client._client.format_url(url, **path_format_arguments)  # pylint: disable=protected-access
                 # Construct parameters
-                query_parameters = {}  # type: Dict[str, Any]
+                query_parameters: Dict[str, Any] = {}
                 if last is not None:
                     query_parameters["last"] = self._client._serialize.query(  # pylint: disable=protected-access
                         "last", last, "str"
                     )
-                if n is not None:
+                if results_per_page is not None:
                     query_parameters["n"] = self._client._serialize.query(  # pylint: disable=protected-access
-                        "n", n, "int"
+                        "n", results_per_page, "int"
                     )
-                if orderby is not None:
+                if order_by is not None:
                     query_parameters["orderby"] = self._client._serialize.query(  # pylint: disable=protected-access
-                        "orderby", orderby, "str"
+                        "orderby", order_by, "str"
                     )
                 if digest is not None:
                     query_parameters["digest"] = self._client._serialize.query(  # pylint: disable=protected-access
@@ -542,7 +553,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
                 )
             else:
                 url = next_link
-                query_parameters = {}  # type: Dict[str, Any]
+                query_parameters: Dict[str, Any] = {}
                 path_format_arguments = {
                     "url": self._client._serialize.url(  # pylint: disable=protected-access
                         "self._client._config.url",
@@ -589,7 +600,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
 
     @overload
     def update_manifest_properties(
-        self, repository: str, tag_or_digest: str, properties: ArtifactManifestProperties, **kwargs
+        self, repository: str, tag_or_digest: str, properties: ArtifactManifestProperties, **kwargs: Any
     ) -> ArtifactManifestProperties:
         """Set the permission properties for a manifest.
 
@@ -601,7 +612,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
             parameter. Please provide either this or individual keyword parameters.
         :type properties: ~azure.containerregistry.ArtifactManifestProperties
         :rtype: ~azure.containerregistry.ArtifactManifestProperties
-        :raises: ~azure.core.exceptions.ResourceNotFoundError
+        :raises ~azure.core.exceptions.ResourceNotFoundError:
 
         Example
 
@@ -632,7 +643,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         can_list: Optional[bool] = None,
         can_read: Optional[bool] = None,
         can_write: Optional[bool] = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> ArtifactManifestProperties:
         """Set the permission properties for a manifest.
 
@@ -645,7 +656,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         :keyword bool can_read: Read permissions for a manifest.
         :keyword bool can_write: Write permissions for a manifest.
         :rtype: ~azure.containerregistry.ArtifactManifestProperties
-        :raises: ~azure.core.exceptions.ResourceNotFoundError
+        :raises ~azure.core.exceptions.ResourceNotFoundError:
 
         Example
 
@@ -668,7 +679,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
 
     @distributed_trace
     def update_manifest_properties(
-        self, *args: Union[str, ArtifactManifestProperties], **kwargs
+        self, *args: Union[str, ArtifactManifestProperties], **kwargs: Any
     ) -> ArtifactManifestProperties:
         repository = str(args[0])
         tag_or_digest = str(args[1])
@@ -690,12 +701,14 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
             repository, tag_or_digest, value=properties._to_generated(), **kwargs  # pylint: disable=protected-access
         )
         return ArtifactManifestProperties._from_generated(  # pylint: disable=protected-access
-            manifest_properties.manifest, repository_name=repository, registry=self._endpoint  # type: ignore
+            manifest_properties.manifest,  # type: ignore[arg-type] # The property "manifest" is required in response
+            repository_name=repository,
+            registry=self._endpoint,
         )
 
     @overload
     def update_tag_properties(
-        self, repository: str, tag: str, properties: ArtifactTagProperties, **kwargs
+        self, repository: str, tag: str, properties: ArtifactTagProperties, **kwargs: Any
     ) -> ArtifactTagProperties:
         """Set the permission properties for a tag.
 
@@ -707,7 +720,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
             parameter. Please provide either this or individual keyword parameters.
         :type properties: ~azure.containerregistry.ArtifactTagProperties
         :rtype: ~azure.containerregistry.ArtifactTagProperties
-        :raises: ~azure.core.exceptions.ResourceNotFoundError
+        :raises ~azure.core.exceptions.ResourceNotFoundError:
 
         Example
 
@@ -735,7 +748,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         can_list: Optional[bool] = None,
         can_read: Optional[bool] = None,
         can_write: Optional[bool] = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> ArtifactTagProperties:
         """Set the permission properties for a tag.
 
@@ -748,7 +761,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         :keyword bool can_read: Read permissions for a tag.
         :keyword bool can_write: Write permissions for a tag.
         :rtype: ~azure.containerregistry.ArtifactTagProperties
-        :raises: ~azure.core.exceptions.ResourceNotFoundError
+        :raises ~azure.core.exceptions.ResourceNotFoundError:
 
         Example
 
@@ -769,7 +782,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         """
 
     @distributed_trace
-    def update_tag_properties(self, *args: Union[str, ArtifactTagProperties], **kwargs) -> ArtifactTagProperties:
+    def update_tag_properties(self, *args: Union[str, ArtifactTagProperties], **kwargs: Any) -> ArtifactTagProperties:
         repository = str(args[0])
         tag = str(args[1])
         properties = None
@@ -787,12 +800,13 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
             repository, tag, value=properties._to_generated(), **kwargs  # pylint: disable=protected-access
         )
         return ArtifactTagProperties._from_generated(  # pylint: disable=protected-access
-            tag_attributes.tag, repository=repository  # type: ignore
+            tag_attributes.tag,  # type: ignore[arg-type] # The property "tag" is required in response
+            repository_name=repository,
         )
 
     @overload
     def update_repository_properties(
-        self, repository: str, properties: RepositoryProperties, **kwargs
+        self, repository: str, properties: RepositoryProperties, **kwargs: Any
     ) -> RepositoryProperties:
         """Set the permission properties of a repository.
 
@@ -803,7 +817,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
             parameter. Please provide either this or individual keyword parameters.
         :type properties: ~azure.containerregistry.RepositoryProperties
         :rtype: ~azure.containerregistry.RepositoryProperties
-        :raises: ~azure.core.exceptions.ResourceNotFoundError
+        :raises ~azure.core.exceptions.ResourceNotFoundError:
         """
 
     @overload
@@ -815,7 +829,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         can_list: Optional[bool] = None,
         can_read: Optional[bool] = None,
         can_write: Optional[bool] = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> RepositoryProperties:
         """Set the permission properties of a repository.
 
@@ -827,11 +841,13 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         :keyword bool can_read: Read permissions for a repository.
         :keyword bool can_write: Write permissions for a repository.
         :rtype: ~azure.containerregistry.RepositoryProperties
-        :raises: ~azure.core.exceptions.ResourceNotFoundError
+        :raises ~azure.core.exceptions.ResourceNotFoundError:
         """
 
     @distributed_trace
-    def update_repository_properties(self, *args: Union[str, RepositoryProperties], **kwargs) -> RepositoryProperties:
+    def update_repository_properties(
+        self, *args: Union[str, RepositoryProperties], **kwargs: Any
+    ) -> RepositoryProperties:
         repository = str(args[0])
         properties = None
         if len(args) == 2:
@@ -858,7 +874,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         *,
         tag: Optional[str] = None,
         media_type: str = OCI_IMAGE_MANIFEST,
-        **kwargs,
+        **kwargs: Any,
     ) -> str:
         """Set a manifest for an artifact.
 
@@ -905,7 +921,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         return digest
 
     @distributed_trace
-    def get_manifest(self, repository: str, tag_or_digest: str, **kwargs) -> GetManifestResult:
+    def get_manifest(self, repository: str, tag_or_digest: str, **kwargs: Any) -> GetManifestResult:
         """Get the manifest for an artifact.
 
         :param str repository: Name of the repository.
@@ -951,7 +967,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         return GetManifestResult(digest=digest, manifest=manifest_json, media_type=media_type)
 
     @distributed_trace
-    def upload_blob(self, repository: str, data: IO[bytes], **kwargs) -> Tuple[str, int]:
+    def upload_blob(self, repository: str, data: IO[bytes], **kwargs: Any) -> Tuple[str, int]:
         """Upload an artifact blob.
 
         :param str repository: Name of the repository.
@@ -1003,7 +1019,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         return f"sha256:{hasher.hexdigest()}", location, blob_size
 
     @distributed_trace
-    def download_blob(self, repository: str, digest: str, **kwargs) -> DownloadBlobStream:
+    def download_blob(self, repository: str, digest: str, **kwargs: Any) -> DownloadBlobStream:
         """Download a blob that is part of an artifact to a stream.
 
         :param str repository: Name of the repository.
@@ -1038,14 +1054,14 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         )
 
     @distributed_trace
-    def delete_manifest(self, repository: str, tag_or_digest: str, **kwargs) -> None:
+    def delete_manifest(self, repository: str, tag_or_digest: str, **kwargs: Any) -> None:
         """Delete a manifest. If the manifest cannot be found or a response status code of
         404 is returned an error will not be raised.
 
         :param str repository: Name of the repository the manifest belongs to
         :param str tag_or_digest: Tag or digest of the manifest to be deleted
         :returns: None
-        :raises: ~azure.core.exceptions.HttpResponseError
+        :raises ~azure.core.exceptions.HttpResponseError:
 
         Example
 
@@ -1063,7 +1079,7 @@ class ContainerRegistryClient(ContainerRegistryBaseClient):
         self._client.container_registry.delete_manifest(repository, tag_or_digest, **kwargs)
 
     @distributed_trace
-    def delete_blob(self, repository: str, digest: str, **kwargs) -> None:
+    def delete_blob(self, repository: str, digest: str, **kwargs: Any) -> None:
         """Delete a blob. If the blob cannot be found or a response status code of
         404 is returned an error will not be raised.
 

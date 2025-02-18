@@ -8,7 +8,7 @@ a configuration setting via the App Configuration sdk. The telemetry
 will be collected automatically and sent to Application Insights
 via the AzureMonitorTraceExporter
 """
-
+# mypy: disable-error-code="attr-defined"
 import os
 
 # Declare OpenTelemetry as enabled tracing plugin for Azure SDKs
@@ -28,10 +28,9 @@ tracer = trace.get_tracer(__name__)
 
 # azure monitor trace exporter to send telemetry to appinsights
 from azure.monitor.opentelemetry.exporter import AzureMonitorTraceExporter
+
 span_processor = BatchSpanProcessor(
-    AzureMonitorTraceExporter.from_connection_string(
-        os.environ["APPLICATIONINSIGHTS_CONNECTION_STRING"]
-    )
+    AzureMonitorTraceExporter.from_connection_string(os.environ["APPLICATIONINSIGHTS_CONNECTION_STRING"])
 )
 trace.get_tracer_provider().add_span_processor(span_processor)
 
@@ -43,10 +42,6 @@ client = AzureAppConfigurationClient.from_connection_string(connection_str)
 
 with tracer.start_as_current_span(name="AppConfig"):
     config_setting = ConfigurationSetting(
-        key="MyKey",
-        label="MyLabel",
-        value="my value",
-        content_type="my content type",
-        tags={"my tag": "my tag value"}
+        key="MyKey", label="MyLabel", value="my value", content_type="my content type", tags={"my tag": "my tag value"}
     )
     added_config_setting = client.add_configuration_setting(config_setting)

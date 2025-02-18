@@ -26,6 +26,7 @@ from azure.storage.queue import (
 )
 from azure.storage.queue.aio import QueueClient, QueueServiceClient
 
+from devtools_testutils.fake_credentials_async import AsyncFakeCredential
 from devtools_testutils.aio import recorded_by_proxy_async
 from devtools_testutils.storage.aio import AsyncStorageRecordedTestCase
 from settings.testcase import QueuePreparer
@@ -895,7 +896,7 @@ class TestAsyncStorageQueue(AsyncStorageRecordedTestCase):
         storage_account_key = kwargs.pop("storage_account_key")
 
         qsc = QueueServiceClient(self.account_url(storage_account_name, "queue"), storage_account_key)
-        token_credential = self.generate_oauth_token()
+        token_credential = self.get_credential(QueueServiceClient, is_async=True)
 
         # Action 1: make sure token works
         service = QueueServiceClient(
@@ -905,7 +906,7 @@ class TestAsyncStorageQueue(AsyncStorageRecordedTestCase):
         assert queues is not None
 
         # Action 2: change token value to make request fail
-        fake_credential = self.generate_fake_token()
+        fake_credential = AsyncFakeCredential()
         service = QueueServiceClient(
             self.account_url(storage_account_name, "queue"),
             credential=fake_credential)
@@ -1267,7 +1268,7 @@ class TestAsyncStorageQueue(AsyncStorageRecordedTestCase):
         queue_client = await self._create_queue(qsc)
 
         # Act
-        identifiers = dict()
+        identifiers = {}
         for i in range(0, 16):
             identifiers[f'id{i}'] = AccessPolicy()
 
@@ -1378,6 +1379,90 @@ class TestAsyncStorageQueue(AsyncStorageRecordedTestCase):
                 assert transport.session is not None
             await qsc.get_service_properties()
             assert transport.session is not None
+
+    @QueuePreparer()
+    @recorded_by_proxy_async
+    async def test_storage_account_audience_queue_service_client(self, **kwargs):
+        storage_account_name = kwargs.pop("storage_account_name")
+        storage_account_key = kwargs.pop("storage_account_key")
+
+        # Arrange
+        qsc = QueueServiceClient(self.account_url(storage_account_name, "queue"), storage_account_key)
+        await qsc.get_service_properties()
+
+        # Act
+        token_credential = self.get_credential(QueueServiceClient, is_async=True)
+        qsc = QueueServiceClient(
+            self.account_url(storage_account_name, "queue"), credential=token_credential,
+            audience=f'https://{storage_account_name}.queue.core.windows.net'
+        )
+
+        # Assert
+        response = await qsc.get_service_properties()
+        assert response is not None
+
+    @QueuePreparer()
+    @recorded_by_proxy_async
+    async def test_bad_audience_queue_service_client(self, **kwargs):
+        storage_account_name = kwargs.pop("storage_account_name")
+        storage_account_key = kwargs.pop("storage_account_key")
+
+        # Arrange
+        qsc = QueueServiceClient(self.account_url(storage_account_name, "queue"), storage_account_key)
+        await qsc.get_service_properties()
+
+        # Act
+        token_credential = self.get_credential(QueueServiceClient, is_async=True)
+        qsc = QueueServiceClient(
+            self.account_url(storage_account_name, "queue"), credential=token_credential,
+            audience=f'https://badaudience.queue.core.windows.net'
+        )
+
+        # Will not raise ClientAuthenticationError despite bad audience due to Bearer Challenge
+        await qsc.get_service_properties()
+
+    @QueuePreparer()
+    @recorded_by_proxy_async
+    async def test_storage_account_audience_queue_client(self, **kwargs):
+        storage_account_name = kwargs.pop("storage_account_name")
+        storage_account_key = kwargs.pop("storage_account_key")
+
+        # Arrange
+        queue_name = self.get_resource_name(TEST_QUEUE_PREFIX)
+        queue = QueueClient(self.account_url(storage_account_name, "queue"), queue_name, storage_account_key)
+        await queue.create_queue()
+
+        # Act
+        token_credential = self.get_credential(QueueServiceClient, is_async=True)
+        queue = QueueClient(
+            self.account_url(storage_account_name, "queue"), queue_name, credential=token_credential,
+            audience=f'https://{storage_account_name}.queue.core.windows.net'
+        )
+
+        # Assert
+        response = await queue.get_queue_properties()
+        assert response is not None
+
+    @QueuePreparer()
+    @recorded_by_proxy_async
+    async def test_bad_audience_queue_client(self, **kwargs):
+        storage_account_name = kwargs.pop("storage_account_name")
+        storage_account_key = kwargs.pop("storage_account_key")
+
+        # Arrange
+        queue_name = self.get_resource_name(TEST_QUEUE_PREFIX)
+        queue = QueueClient(self.account_url(storage_account_name, "queue"), queue_name, storage_account_key)
+        await queue.create_queue()
+
+        # Act
+        token_credential = self.get_credential(QueueServiceClient, is_async=True)
+        queue = QueueClient(
+            self.account_url(storage_account_name, "queue"), queue_name, credential=token_credential,
+            audience=f'https://badaudience.queue.core.windows.net'
+        )
+
+        # Will not raise ClientAuthenticationError despite bad audience due to Bearer Challenge
+        await queue.get_queue_properties()
 
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':

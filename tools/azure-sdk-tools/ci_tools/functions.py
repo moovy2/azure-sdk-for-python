@@ -1,17 +1,20 @@
 import fnmatch
 import subprocess
 import shutil
+import zipfile
+import tarfile
+import stat
 from ast import Not
 from packaging.specifiers import SpecifierSet
 from packaging.version import Version, parse, InvalidVersion
 from pkg_resources import Requirement
 
-from ci_tools.variables import discover_repo_root, DEV_BUILD_IDENTIFIER
-from ci_tools.parsing import ParsedSetup, get_build_config
+from ci_tools.variables import discover_repo_root, DEV_BUILD_IDENTIFIER, str_to_bool
+from ci_tools.parsing import ParsedSetup, get_config_setting, get_pyproject
 from pypi_tools.pypi import PyPIClient
 
 import os, sys, platform, glob, re, logging
-from typing import List, Any
+from typing import List, Any, Optional
 
 INACTIVE_CLASSIFIER = "Development Status :: 7 - Inactive"
 
@@ -25,6 +28,9 @@ MANAGEMENT_PACKAGE_IDENTIFIERS = [
     "azure-ai-anomalydetector",
 ]
 
+NO_TESTS_ALLOWED = []
+
+
 META_PACKAGES = ["azure", "azure-mgmt", "azure-keyvault"]
 
 REGRESSION_EXCLUDED_PACKAGES = [
@@ -35,7 +41,19 @@ MANAGEMENT_PACKAGES_FILTER_EXCLUSIONS = [
     "azure-mgmt-core",
 ]
 
-TEST_COMPATIBILITY_MAP = {}
+TEST_COMPATIBILITY_MAP = {
+    "azure-ai-ml": ">=3.7",
+    "azure-ai-evaluation": ">=3.9, !=3.13.*"
+}
+TEST_PYTHON_DISTRO_INCOMPATIBILITY_MAP = {
+    "azure-storage-blob": "pypy",
+    "azure-storage-queue": "pypy",
+    "azure-storage-file-datalake": "pypy",
+    "azure-storage-file-share": "pypy",
+    "azure-eventhub": "pypy",
+    "azure-servicebus": "pypy",
+    "azure-ai-projects": "pypy",
+}
 
 omit_regression = (
     lambda x: "nspkg" not in x
@@ -58,6 +76,19 @@ omit_function_dict = {
     "Regression": omit_regression,
     "Omit_management": omit_mgmt,
 }
+
+
+def unzip_file_to_directory(path_to_zip_file: str, extract_location: str) -> str:
+    if path_to_zip_file.endswith(".zip"):
+        with zipfile.ZipFile(path_to_zip_file, "r") as zip_ref:
+            zip_ref.extractall(extract_location)
+            extracted_dir = os.path.basename(os.path.splitext(path_to_zip_file)[0])
+            return os.path.join(extract_location, extracted_dir)
+    else:
+        with tarfile.open(path_to_zip_file) as tar_ref:
+            tar_ref.extractall(extract_location)
+            extracted_dir = os.path.basename(path_to_zip_file).replace(".tar.gz", "")
+            return os.path.join(extract_location, extracted_dir)
 
 
 def apply_compatibility_filter(package_set: List[str]) -> List[str]:
@@ -85,7 +116,12 @@ def apply_compatibility_filter(package_set: List[str]) -> List[str]:
         if pkg_specs_override:
             spec_set = SpecifierSet(pkg_specs_override)
 
-        if running_major_version in spec_set:
+        distro_compat = True
+        distro_incompat = TEST_PYTHON_DISTRO_INCOMPATIBILITY_MAP.get(os.path.basename(pkg), None)
+        if distro_incompat and distro_incompat in platform.python_implementation().lower():
+            distro_compat = False
+
+        if running_major_version in spec_set and distro_compat:
             collected_packages.append(pkg)
 
     logging.debug("Target packages after applying compatibility filter: {}".format(collected_packages))
@@ -107,26 +143,12 @@ def compare_python_version(version_spec: str) -> bool:
     # we want to be loud if we can't parse out a major version from the version string, not silently
     # fail and skip running samples on a platform we really should be
     if parsed_version is None:
-        raise InvalidVersion(f"Unable to parse the platform version. Unparsed value was \"{platform_version}\".")
+        raise InvalidVersion(f'Unable to parse the platform version. Unparsed value was "{platform_version}".')
     else:
         current_sys_version = parse(parsed_version[0])
         spec_set = SpecifierSet(version_spec)
 
     return current_sys_version in spec_set
-
-
-def str_to_bool(input_string: str) -> bool:
-    """
-    Takes a boolean string representation and returns a bool type value.
-    """
-    if isinstance(input_string, bool):
-        return input_string
-    elif input_string.lower() in ("true", "t", "1"):
-        return True
-    elif input_string.lower() in ("false", "f", "0"):
-        return False
-    else:
-        return False
 
 
 def generate_difference(original_packages: List[str], filtered_packages: List[str]):
@@ -135,7 +157,7 @@ def generate_difference(original_packages: List[str], filtered_packages: List[st
 
 def glob_packages(glob_string: str, target_root_dir: str) -> List[str]:
     if glob_string:
-        individual_globs = glob_string.split(",")
+        individual_globs = [glob_string.strip() for glob_string in glob_string.split(",")]
     else:
         individual_globs = "azure-*"
     collected_top_level_directories = []
@@ -145,6 +167,15 @@ def glob_packages(glob_string: str, target_root_dir: str) -> List[str]:
             os.path.join(target_root_dir, "sdk/*/", glob_string, "setup.py")
         )
         collected_top_level_directories.extend([os.path.dirname(p) for p in globbed])
+
+    # handle pyproject.toml separately, as we need to filter them by the presence of a `[project]` section
+    for glob_string in individual_globs:
+        globbed = glob.glob(os.path.join(target_root_dir, glob_string, "pyproject.toml")) + glob.glob(
+            os.path.join(target_root_dir, "sdk/*/", glob_string, "pyproject.toml")
+        )
+        for p in globbed:
+            if get_pyproject(os.path.dirname(p)):
+                collected_top_level_directories.append(os.path.dirname(p))
 
     # deduplicate, in case we have double coverage from the glob strings. Example: "azure-mgmt-keyvault,azure-mgmt-*"
     return list(set(collected_top_level_directories))
@@ -175,52 +206,44 @@ def discover_targeted_packages(
 
     :param str glob_string: The basic glob used to query packages within the repo. Defaults to "azure-*"
     :param str target_root_dir: The root directory in which globbing will begin.
-    :param str additional_contains_filter: Additional filter option. Used when needing to provide one-off filtration that doesn't merit an additional filter_type. Defaults to empty string.
-    :param str filter_type: One a string representing a filter function as a set of options. Options [ "Build", "Docs", "Regression", "Omit_management" ] Defaults to "Build".
-    :param bool compatibility_filter: Enables or disables compatibility filtering of found packages. If the invoking python executable does not match a found package's specifiers, the package will be omitted. Defaults to True.
+    :param str additional_contains_filter: Additional filter option.
+        Used when needing to provide one-off filtration that doesn't merit an additional filter_type. Defaults to empty string.
+    :param str filter_type: One a string representing a filter function as a set of options.
+        Options [ "Build", "Docs", "Regression", "Omit_management" ] Defaults to "Build".
+    :param bool compatibility_filter: Enables or disables compatibility filtering of found packages.
+        If the invoking python executable does not match a found package's specifiers, the package will be omitted.
+        Defaults to True.
     """
 
     # glob the starting package set
     collected_packages = glob_packages(glob_string, target_root_dir)
+    logging.info(
+        f'Results for glob_string "{glob_string}" and root directory "{target_root_dir}" are: {collected_packages}'
+    )
 
     # apply the additional contains filter
     collected_packages = [pkg for pkg in collected_packages if additional_contains_filter in pkg]
+    logging.info(f'Results after additional contains filter: "{additional_contains_filter}" {collected_packages}')
 
     # filter for compatibility, this means excluding a package that doesn't support py36 when we are running a py36 executable
     if compatibility_filter:
         collected_packages = apply_compatibility_filter(collected_packages)
+        logging.info(f"Results after compatibility filter: {collected_packages}")
 
-    # apply package-specific exclusions only if we have gotten more than one
-    if len(collected_packages) > 1:
-        if not include_inactive:
-            collected_packages = apply_inactive_filter(collected_packages)
+    if not include_inactive:
+        collected_packages = apply_inactive_filter(collected_packages)
 
     # Apply filter based on filter type. for e.g. Docs, Regression, Management
     collected_packages = apply_business_filter(collected_packages, filter_type)
+    logging.info(f"Results after business filter: {collected_packages}")
 
     return sorted(collected_packages)
-
-
-def get_config_setting(package_path: str, setting: str, default: Any = True) -> Any:
-    # we should always take the override if one is present
-    override_value = os.getenv(f"{os.path.basename(package_path).upper()}_{setting.upper()}", None)
-    if override_value:
-        return override_value
-
-    # if no override, check for the config setting in the pyproject.toml
-    config = get_build_config(package_path)
-
-    if config:
-        if setting.lower() in config:
-            return config[setting.lower()]
-
-    return default
 
 
 def is_package_active(package_path: str):
     disabled = INACTIVE_CLASSIFIER in ParsedSetup.from_path(package_path).classifiers
 
-    override_value = os.getenv(f"ENABLE_{os.path.basename(package_path).upper()}", None)
+    override_value = os.getenv(f"ENABLE_{os.path.basename(package_path).upper().replace('-', '_')}", None)
 
     if override_value:
         return str_to_bool(override_value)
@@ -237,10 +260,10 @@ def apply_inactive_filter(collected_packages: List[str]) -> List[str]:
     return packages
 
 
-def update_requires(setup_py_path, requires_dict):
+def update_requires(setup_path, requires_dict):
     # This method changes package requirement by overriding the specifier
     contents = []
-    with open(setup_py_path, "r") as setup_file:
+    with open(setup_path, "r") as setup_file:
         contents = setup_file.readlines()
 
     # find and replace all existing package requirement with new requirement
@@ -249,7 +272,7 @@ def update_requires(setup_py_path, requires_dict):
         for key in keys:
             contents[i] = contents[i].replace(key, requires_dict[key])
 
-    with open(setup_py_path, "w") as setup_file:
+    with open(setup_path, "w") as setup_file:
         setup_file.writelines(contents)
 
 
@@ -264,7 +287,7 @@ def is_required_version_on_pypi(package_name, spec):
     return versions
 
 
-def get_package_from_repo(pkg_name: str, repo_root: str = None) -> ParsedSetup:
+def get_package_from_repo(pkg_name: str, repo_root: Optional[str] = None) -> Optional[ParsedSetup]:
     root_dir = discover_repo_root(repo_root)
 
     glob_path = os.path.join(root_dir, "sdk", "*", pkg_name, "setup.py")
@@ -278,7 +301,31 @@ def get_package_from_repo(pkg_name: str, repo_root: str = None) -> ParsedSetup:
     return None
 
 
-def get_version_from_repo(pkg_name: str, repo_root: str = None) -> str:
+def get_package_from_repo_or_folder(req: str, prebuilt_wheel_dir: Optional[str] = None) -> Optional[str]:
+    """Takes a package name and a possible prebuilt wheel directory. Attempts to resolve a wheel that matches the package name, and if it can't,
+    attempts to find the package within the repo to install directly from path on disk.
+
+    During a CI build, it is preferred that the package is installed from a prebuilt wheel directory, as multiple CI environments attempting to install the relative
+    req can cause inconsistent installation issues during parallel tox environment execution.
+    """
+
+    local_package = get_package_from_repo(req)
+
+    if prebuilt_wheel_dir and os.path.exists(prebuilt_wheel_dir) and local_package:
+        prebuilt_package = discover_prebuilt_package(prebuilt_wheel_dir, local_package.setup_filename, "wheel")
+        if prebuilt_package:
+            # return the first package found, there should only be a single one matching given that our prebuilt wheel directory
+            # is populated by the replacement of dev_reqs.txt with the prebuilt wheels
+            # ref tox_harness replace_dev_reqs() calls
+            return os.path.join(prebuilt_wheel_dir, prebuilt_package[0])
+
+    if local_package:
+        return local_package.folder
+    else:
+        return None
+
+
+def get_version_from_repo(pkg_name: str, repo_root: Optional[str] = None) -> str:
     pkg_info = get_package_from_repo(pkg_name, repo_root)
     if pkg_info:
         # Remove dev build part if version for this package is already updated to dev build
@@ -311,7 +358,7 @@ def get_base_version(pkg_name: str) -> str:
         exit(1)
 
 
-def process_requires(setup_py_path: str):
+def process_requires(setup_py_path: str, is_dev_build: bool = False):
     """
     This method processes a setup.py's package requirements to verify if all required packages are available on PyPI.
     If any azure sdk package is not available on PyPI then requirement will be updated to refer to the sdk "dev_identifier".
@@ -331,7 +378,7 @@ def process_requires(setup_py_path: str):
         pkg_name = req.key
         spec = SpecifierSet(str(req).replace(pkg_name, ""))
 
-        if not is_required_version_on_pypi(pkg_name, spec):
+        if not is_required_version_on_pypi(pkg_name, spec) or is_dev_build:
             old_req = str(req)
             version = get_version_from_repo(pkg_name)
             base_version = get_base_version(pkg_name)
@@ -348,7 +395,8 @@ def process_requires(setup_py_path: str):
             #        )?
             #       )?
             rx = r"{}(((a|b|rc)\d+)?(\.post\d+)?)?".format(base_version)
-            new_req = re.sub(rx, "{}{}1".format(base_version, DEV_BUILD_IDENTIFIER), str(req), flags=re.IGNORECASE)
+            new_req_format = f"{base_version}{DEV_BUILD_IDENTIFIER}1,<{base_version}b0"
+            new_req = re.sub(rx, new_req_format, str(req), flags=re.IGNORECASE)
             logging.info("New requirement for package {0}: {1}".format(pkg_name, new_req))
             requirement_to_update[old_req] = new_req
 
@@ -360,70 +408,7 @@ def process_requires(setup_py_path: str):
         logging.info("Package requirement is updated in setup.py")
 
 
-def build_and_install_dev_reqs(file: str, pkg_root: str) -> None:
-    """This function builds whls for every requirement found in a package's
-    dev_requirements.txt and installs it.
-
-    :param str file: the absolute path to the dev_requirements.txt file
-    :param str pkg_root: the absolute path to the package's root
-    :return: None
-    """
-    adjusted_req_lines = []
-
-    with open(file, "r") as f:
-        for line in f:
-            args = [part.strip() for part in line.split() if part and not part.strip() == "-e"]
-            amended_line = " ".join(args)
-
-            if amended_line.endswith("]"):
-                trim_amount = amended_line[::-1].index("[") + 1
-                amended_line = amended_line[0 : (len(amended_line) - trim_amount)]
-
-            adjusted_req_lines.append(amended_line)
-
-    adjusted_req_lines = list(map(lambda x: build_whl_for_req(x, pkg_root), adjusted_req_lines))
-    install_deps_commands = [
-        sys.executable,
-        "-m",
-        "pip",
-        "install",
-    ]
-    logging.info(f"Installing dev requirements from freshly built packages: {adjusted_req_lines}")
-    install_deps_commands.extend(adjusted_req_lines)
-    subprocess.check_call(install_deps_commands)
-    shutil.rmtree(os.path.join(pkg_root, ".tmp_whl_dir"))
-
-
-def build_whl_for_req(req: str, package_path: str) -> str:
-    """Builds a whl from the dev_requirements file.
-
-    :param str req: a requirement from the dev_requirements.txt
-    :param str package_path: the absolute path to the package's root
-    :return: The absolute path to the whl built or the requirement if a third-party package
-    """
-    from ci_tools.build import create_package
-
-    if ".." in req:
-        # Create temp path if it doesn't exist
-        temp_dir = os.path.join(package_path, ".tmp_whl_dir")
-        if not os.path.exists(temp_dir):
-            os.mkdir(temp_dir)
-
-        req_pkg_path = os.path.abspath(os.path.join(package_path, req.replace("\n", "")))
-        parsed = ParsedSetup.from_path(req_pkg_path)
-
-        logging.info("Building wheel for package {}".format(parsed.name))
-        create_package(req_pkg_path, temp_dir, enable_sdist=False)
-
-        whl_path = os.path.join(temp_dir, find_whl(temp_dir, parsed.name, parsed.version))
-        logging.info("Wheel for package {0} is {1}".format(parsed.name, whl_path))
-        logging.info("Replacing dev requirement. Old requirement:{0}, New requirement:{1}".format(req, whl_path))
-        return whl_path
-    else:
-        return req
-
-
-def find_sdist(dist_dir: str, pkg_name: str, pkg_version: str) -> str:
+def find_sdist(dist_dir: str, pkg_name: str, pkg_version: str) -> Optional[str]:
     """This function attempts to look within a directory (and all subdirs therein) and find a source distribution for the targeted package and version."""
     # This function will find a sdist for given package name
     if not os.path.exists(dist_dir):
@@ -433,20 +418,120 @@ def find_sdist(dist_dir: str, pkg_name: str, pkg_version: str) -> str:
     if pkg_name is None:
         logging.error("Package name cannot be empty to find sdist")
         return
+    else:
+        # ensure package name matches cananonicalized package name
+        pkg_name = pkg_name.replace("-", "[-_]")
 
-    pkg_name_format = f"{pkg_name}-{pkg_version}.tar.gz"
+    pkg_format = f"{pkg_name}-{pkg_version}.tar.gz"
 
     packages = []
     for root, dirnames, filenames in os.walk(dist_dir):
-        for filename in fnmatch.filter(filenames, pkg_name_format):
+        for filename in fnmatch.filter(filenames, pkg_format):
             packages.append(os.path.join(root, filename))
 
     packages = [os.path.relpath(w, dist_dir) for w in packages]
 
     if not packages:
-        logging.error("No sdist is found in directory %s with package name format %s", dist_dir, pkg_name_format)
+        logging.error(f"No sdist is found in directory {dist_dir} with package name format {pkg_format}.")
         return
     return packages[0]
+
+
+def pip_install(
+    requirements: List[str], include_dependencies: bool = True, python_executable: Optional[str] = None
+) -> bool:
+    """
+    Attempts to invoke an install operation using the invoking python's pip. Empty requirements are auto-success.
+    """
+
+    exe = python_executable or sys.executable
+
+    command = [exe, "-m", "pip", "install"]
+
+    if requirements:
+        command.extend([req.strip() for req in requirements])
+    else:
+        return True
+
+    try:
+        subprocess.check_call(command)
+    except subprocess.CalledProcessError as f:
+        return False
+
+    return True
+
+
+def pip_uninstall(requirements: List[str], python_executable: str) -> bool:
+    """
+    Attempts to invoke an install operation using the invoking python's pip. Empty requirements are auto-success.
+    """
+    exe = python_executable or sys.executable
+    command = [exe, "-m", "pip", "uninstall", "-y"]
+
+    if requirements:
+        command.extend([req.strip() for req in requirements])
+    else:
+        return True
+
+    try:
+        result = subprocess.check_call(command)
+        return True
+    except subprocess.CalledProcessError as f:
+        return False
+
+
+def pip_install_requirements_file(requirements_file: str, python_executable: Optional[str] = None) -> bool:
+    return pip_install(["-r", requirements_file], True, python_executable)
+
+
+def get_pip_list_output(python_executable: Optional[str] = None):
+    """Uses the invoking python executable to get the output from pip list."""
+    exe = python_executable or sys.executable
+
+    out = subprocess.Popen(
+        [exe, "-m", "pip", "list", "--disable-pip-version-check", "--format", "freeze"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+
+    stdout, stderr = out.communicate()
+
+    collected_output = {}
+
+    if stdout and (stderr is None):
+        # this should be compatible with py27 https://docs.python.org/2.7/library/stdtypes.html#str.decode
+        for line in stdout.decode("utf-8").split(os.linesep)[2:]:
+            if line:
+                package, version = re.split("==", line)
+                collected_output[package] = version
+    else:
+        raise Exception(stderr)
+
+    return collected_output
+
+
+def pytest(args: list, cwd: Optional[str] = None, python_executable: Optional[str] = None) -> bool:
+    """
+    Invokes a set of tests, returns true if successful, false otherwise.
+    """
+
+    exe = python_executable or sys.executable
+
+    commands = [
+        exe,
+        "-m",
+        "pytest",
+    ]
+
+    commands.extend(args)
+
+    logging.info(commands)
+    if cwd:
+        result = subprocess.run(commands, cwd=cwd)
+    else:
+        result = subprocess.run(commands)
+
+    return result.returncode == 0
 
 
 def get_interpreter_compatible_tags() -> List[str]:
@@ -464,6 +549,7 @@ def get_interpreter_compatible_tags() -> List[str]:
 
     tag_strings = output.split(os.linesep)
 
+    index = 0
     for index, value in enumerate(tag_strings):
         if "Compatible tags" in value:
             break
@@ -480,7 +566,7 @@ def check_whl_against_tags(whl_name: str, tags: List[str]) -> bool:
     return False
 
 
-def find_whl(whl_dir: str, pkg_name: str, pkg_version: str) -> str:
+def find_whl(whl_dir: str, pkg_name: str, pkg_version: str) -> Optional[str]:
     """This function attempts to look within a directory (and all subdirs therein) and find a wheel that matches our targeted name and version AND
     whose compilation is compatible with the invoking interpreter."""
     if not os.path.exists(whl_dir):
@@ -502,8 +588,8 @@ def find_whl(whl_dir: str, pkg_name: str, pkg_version: str) -> str:
     whls = [os.path.relpath(w, whl_dir) for w in whls]
 
     if not whls:
-        logging.error("No whl is found in directory %s with package name format %s", whl_dir, pkg_name_format)
-        logging.info("List of whls in directory: %s", glob.glob(os.path.join(whl_dir, "*.whl")))
+        logging.info(f"No whl is found in directory {whl_dir} with package name format {pkg_name_format}")
+        logging.info(f"List of whls in directory: {glob.glob(os.path.join(whl_dir, '*.whl'))}")
         return
 
     compatible_tags = get_interpreter_compatible_tags()
@@ -529,6 +615,28 @@ def find_whl(whl_dir: str, pkg_name: str, pkg_version: str) -> str:
     return None
 
 
+def error_handler_git_access(func, path, exc):
+    """
+    This function exists because the git idx file is written with strange permissions that prevent it from being
+    deleted. Due to this, we need to register an error handler that attempts to fix the file permissions before
+    re-attempting the delete operations.
+    """
+
+    if not os.access(path, os.W_OK):
+        os.chmod(path, stat.S_IWUSR)
+        func(path)
+    else:
+        raise
+
+
+def cleanup_directory(target_directory: str) -> None:
+    """Invokes a directory delete. Specifically handles the case where bad permissions on a git .idx file
+    prevent cleanup of the directory with a generic error.
+    """
+    if os.path.exists(target_directory):
+        shutil.rmtree(target_directory, ignore_errors=False, onerror=error_handler_git_access)
+
+
 def discover_prebuilt_package(dist_directory: str, setup_path: str, package_type: str) -> List[str]:
     """Discovers a prebuild wheel or sdist for a given setup path."""
     packages = []
@@ -541,3 +649,209 @@ def discover_prebuilt_package(dist_directory: str, setup_path: str, package_type
     if prebuilt_package is not None:
         packages.append(prebuilt_package)
     return packages
+
+
+def is_package_compatible(
+    package_name: str,
+    package_requirements: List[Requirement],
+    immutable_requirements: List[Requirement],
+    should_log: bool = True,
+) -> bool:
+    """
+    This function accepts a set of requirements for a package, and ensures that the package is compatible with the
+    immutable_requirements.
+
+    It is factored this way because we retrieve requirements differently according to the source of the package.
+        If published, we can get requires() from PyPI
+        If locally built wheel, we can get requires() from the metadata of the package
+        If local relative requirement, we can get requires() from a ParsedSetup of the setup.py for the package
+
+    :param List[Requirement] package_requirements: The dependencies of a dev_requirement file. This is the set of
+        requirements that we are checking compatibility for.
+    :param List[Requirement] immutable_requirements: A list of requirements that the other packages must be compatible
+        with.
+    """
+
+    for immutable_requirement in immutable_requirements:
+        for package_requirement in package_requirements:
+            if package_requirement.key == immutable_requirement.key:
+                # if the dev_req line has a requirement that conflicts with the immutable requirement,
+                # we need to resolve it. We KNOW that the immutable requirement will be of form package==version,
+                # so we can reliably pull out the version and check it against the specifier of the dev_req line.
+                try:
+                    immutable_version = next(iter(immutable_requirement.specifier)).version
+                # we have no specifier set, so we don't even need to check this
+                except StopIteration:
+                    continue
+
+                if not package_requirement.specifier.contains(immutable_version):
+                    if should_log:
+                        logging.info(
+                            f"Dev req dependency {package_name}'s requirement specifier of {package_requirement}"
+                            f"is not compatible with immutable requirement {immutable_requirement}."
+                        )
+                    return False
+
+    return True
+
+
+def resolve_compatible_package(package_name: str, immutable_requirements: List[Requirement]) -> Optional[str]:
+    """
+    This function attempts to resolve a compatible package version for whatever set of immutable_requirements that
+    the package must be compatible with.
+
+    It should only be utilized when a package is found to be incompatible with the immutable_requirements.
+    It will attempt to resolve the incompatibility by walking backwards through different versions of <package_name>
+    until a compatible version is found that works with the immutable_requirements.
+    """
+
+    pypi = PyPIClient()
+    immovable_pkgs = {req.key: req for req in immutable_requirements}
+
+    # Let's use a real use-case to walk through this function. We're going to use the azure-ai-language-conversations
+    # package as an example.
+
+    # immovable_pkgs = the selected mindependency for azure-ai-language-conversations
+    #   -> "azure-core==1.28.0",
+    #   -> "isodate==0.6.1",
+    #   -> "typing-extensions==4.0.1",
+    # we have the following dev_reqs for azure-ai-language-conversations
+    #   -> ../azure-sdk-tools
+    #   ->  ../azure-identity
+    #   -> ../azure-core
+
+    # as we walk each of the dev reqs, we check for compatibility with the immovable_packages.
+    # (this happens in is_package_compatible) if the dev req is incompatible, we need to resolve it.
+    # THIS function is what resolves it!
+
+    # since we already know that package_name is incompatible with the immovable_pkgs, we need to walk backwards
+    # through the versions of package_name checking to ensure that each version is compatible with the immovable_pkgs.
+    # if we find one that is, we will return a new requirement string for that package which will replace this dev_req line.
+    for pkg in immovable_pkgs:
+        required_package = immovable_pkgs[pkg].name
+        try:
+            required_pkg_version = next(iter(immovable_pkgs[pkg].specifier)).version
+        except StopIteration:
+            required_pkg_version = None
+
+        versions = pypi.get_ordered_versions(package_name, True)
+        versions.reverse()
+
+        # only allow prerelease versions if the dev_req we're targeting is also prerelease
+        if required_pkg_version:
+            if not Version(required_pkg_version).is_prerelease:
+                versions = [v for v in versions if not v.is_prerelease]
+
+        for version in versions:
+            version_release = pypi.project_release(package_name, version).get("info", {}).get("requires_dist", [])
+
+            if version_release:
+                requirements_for_dev_req = [Requirement(r) for r in version_release]
+
+                compatible = is_package_compatible(
+                    required_package, requirements_for_dev_req, immutable_requirements, should_log=False
+                )
+                if compatible:
+                    # we have found a compatible version. We can return this as the new requirement line for the dev_req file.
+                    return f"{package_name}=={version}"
+
+    # no changes necessary
+    return None
+
+
+def handle_incompatible_minimum_dev_reqs(
+    setup_path: str, filtered_requirement_list: List[str], packages_for_install: List[Requirement]
+) -> List[str]:
+    """
+    This function is used to handle the case where a dev requirement is incompatible with the current set of packages
+    being installed. This is used to update or remove dev_requirements that are incompatible with a targeted set of
+        packages.
+
+    :param str setup_path: The path to the setup.py file whose dev_requirements are being filtered.
+
+    :param List[str] filtered_requirement_list: A filtered copy of the dev_requirements.txt for the targeted package.
+        This list will be
+    modified in place to remove any requirements incompatible with the packages_for_install.
+
+    :param List[Requirement] packages_for_install: A list of packages that dev_requirements MUST be compatible with.
+    """
+
+    cleansed_reqs = []
+
+    for dev_requirement_line in filtered_requirement_list:
+        cleansed_dev_requirement_line = dev_requirement_line.strip().replace("-e ", "").split("#")[0].split(";")[0]
+
+        if cleansed_dev_requirement_line:
+            dev_req_package = None
+            dev_req_version = None
+            requirements_for_dev_req = []
+
+            # this is a locally built wheel file, ise pkginfo to get the metadata
+            if os.path.exists(cleansed_dev_requirement_line) and os.path.isfile(cleansed_dev_requirement_line):
+                logging.info(
+                    f"We are processing a replaced relative requirement built into a wheel: {cleansed_dev_requirement_line}"
+                )
+                import pkginfo
+
+                try:
+                    local_package_metadata = pkginfo.get_metadata(cleansed_dev_requirement_line)
+                    if local_package_metadata:
+                        dev_req_package = local_package_metadata.name
+                        dev_req_version = local_package_metadata.version
+                        requirements_for_dev_req = [Requirement(r) for r in local_package_metadata.requires_dist]
+                    else:
+                        logging.error(
+                            f"Error while processing locally built requirement {cleansed_dev_requirement_line}. Unable to resolve metadata."
+                        )
+                        cleansed_reqs.append(cleansed_dev_requirement_line)
+                except Exception as e:
+                    logging.error(
+                        f"Unable to determine metadata for locally built requirement {cleansed_dev_requirement_line}: {e}"
+                    )
+                    cleansed_reqs.append(cleansed_dev_requirement_line)
+                    continue
+
+            # this is a relative requirement to a package path in the repo, use our ParsedSetup class to get data from setup.py or pyproject.toml
+            elif cleansed_dev_requirement_line.startswith("."):
+                logging.info(f"We are processing a relative requirement: {cleansed_dev_requirement_line}")
+                try:
+                    local_package = ParsedSetup.from_path(os.path.join(setup_path, cleansed_dev_requirement_line))
+
+                    if local_package:
+                        dev_req_package = local_package.name
+                        dev_req_version = local_package.version
+                        requirements_for_dev_req = [Requirement(r) for r in local_package.requires]
+                    else:
+                        logging.error(
+                            f"Error while processing relative requirement {cleansed_dev_requirement_line}. Unable to resolve metadata."
+                        )
+                        cleansed_reqs.append(cleansed_dev_requirement_line)
+
+                except Exception as e:
+                    logging.error(
+                        f'Unable to determine metadata for relative requirement "{cleansed_dev_requirement_line}", not modifying: {e}'
+                    )
+                    cleansed_reqs.append(cleansed_dev_requirement_line)
+                    continue
+            # If we got here, this has to be a standard requirement, attempt to parse it as a specifier and if unable to do so,
+            # simply add it to the list as a last fallback. we will log so that we can implement a fix for the edge case later.
+            else:
+                logging.info(f"We are processing a standard requirement: {cleansed_dev_requirement_line}")
+                cleansed_reqs.append(dev_requirement_line)
+
+            # we understand how to parse it, so we should handle it
+            if dev_req_package:
+                if not is_package_compatible(dev_req_package, requirements_for_dev_req, packages_for_install):
+                    new_req = resolve_compatible_package(dev_req_package, packages_for_install)
+
+                    if new_req:
+                        cleansed_reqs.append(new_req)
+                    else:
+                        logging.error(
+                            f'Found incompatible dev requirement {dev_req_package}, but unable to locate a compatible version. Not modifying the line: "{dev_requirement_line}".'
+                        )
+                        cleansed_reqs.append(cleansed_dev_requirement_line)
+                else:
+                    cleansed_reqs.append(cleansed_dev_requirement_line)
+
+    return cleansed_reqs

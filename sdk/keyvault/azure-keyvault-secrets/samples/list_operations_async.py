@@ -4,12 +4,13 @@
 # ------------------------------------
 import asyncio
 import os
+
 from azure.keyvault.secrets.aio import SecretClient
 from azure.identity.aio import DefaultAzureCredential
 
 # ----------------------------------------------------------------------------------------------------------
 # Prerequisites:
-# 1. An Azure Key Vault (https://docs.microsoft.com/azure/key-vault/quick-create-cli)
+# 1. An Azure Key Vault (https://learn.microsoft.com/azure/key-vault/quick-create-cli)
 #
 # 2. azure-keyvault-secrets and azure-identity libraries (pip install these)
 #
@@ -19,7 +20,7 @@ from azure.identity.aio import DefaultAzureCredential
 # ----------------------------------------------------------------------------------------------------------
 # Sample - demonstrates the basic list operations on a vault(secret) resource for Azure Key Vault.
 # The vault has to be soft-delete enabled to perform one of the following operations. See
-# https://docs.microsoft.com/azure/key-vault/key-vault-ovw-soft-delete for more information about soft-delete.
+# https://learn.microsoft.com/azure/key-vault/key-vault-ovw-soft-delete for more information about soft-delete.
 #
 # 1. Create secret (set_secret)
 #
@@ -43,6 +44,8 @@ async def run_sample():
     print("\n.. Create Secret")
     bank_secret = await client.set_secret("listOpsBankSecretNameAsync", "listOpsSecretValue1")
     storage_secret = await client.set_secret("listOpsStorageSecretNameAsync", "listOpsSecretValue2")
+    assert bank_secret.name
+    assert storage_secret.name
     print(f"Secret with name '{bank_secret.name}' was created.")
     print(f"Secret with name '{storage_secret.name}' was created.")
 
@@ -53,6 +56,7 @@ async def run_sample():
     print("\n.. List secrets from the Key Vault")
     secrets = client.list_properties_of_secrets()
     async for secret in secrets:
+        assert secret.name
         retrieved_secret = await client.get_secret(secret.name)
         print(f"Secret with name '{retrieved_secret.name}' with value '{retrieved_secret.value}' was found.")
 

@@ -1,5 +1,188 @@
 # Release History
 
+## 34.0.0 (2025-01-20)
+
+### Features Added
+
+  - Model CloudServiceVaultCertificate has a new parameter is_bootstrap_certificate
+
+### Breaking Changes
+
+  - Removed subfolders of some unused Api-Versions for smaller package size. If your application requires a specific and non-latest Api-Version, it's recommended to pin this package to the previous released version; If your application always only use latest Api-Version, please ignore this change.
+  - Model Gallery no longer has parameter identity
+  - Model GalleryImage no longer has parameter allow_update_image
+  - Model GalleryImageFeature no longer has parameter starts_at_version
+  - Model GalleryImageUpdate no longer has parameter allow_update_image
+  - Model GalleryImageVersion no longer has parameter restore
+  - Model GalleryImageVersion no longer has parameter validations_profile
+  - Model GalleryImageVersionSafetyProfile no longer has parameter block_deletion_before_end_of_life
+  - Model GalleryImageVersionUpdate no longer has parameter restore
+  - Model GalleryImageVersionUpdate no longer has parameter validations_profile
+  - Model GalleryList no longer has parameter security_profile
+  - Model GalleryUpdate no longer has parameter identity
+  - Model TargetRegion no longer has parameter additional_replica_sets
+  - Model UserArtifactSettings no longer has parameter script_behavior_after_reboot
+  - Removed operation group GalleryInVMAccessControlProfileVersionsOperations
+  - Removed operation group GalleryInVMAccessControlProfilesOperations
+  - Removed operation group SoftDeletedResourceOperation
+
+## 33.1.0 (2024-12-16)
+
+### Features Added
+
+  - Added operation group GalleryInVMAccessControlProfileVersionsOperations
+  - Added operation group GalleryInVMAccessControlProfilesOperations
+  - Added operation group SoftDeletedResourceOperations
+  - Model Gallery has a new parameter identity
+  - Model GalleryImage has a new parameter allow_update_image
+  - Model GalleryImageFeature has a new parameter starts_at_version
+  - Model GalleryImageUpdate has a new parameter allow_update_image
+  - Model GalleryImageVersion has a new parameter restore
+  - Model GalleryImageVersion has a new parameter validations_profile
+  - Model GalleryImageVersionSafetyProfile has a new parameter block_deletion_before_end_of_life
+  - Model GalleryImageVersionUpdate has a new parameter restore
+  - Model GalleryImageVersionUpdate has a new parameter validations_profile
+  - Model GalleryList has a new parameter security_profile
+  - Model GalleryUpdate has a new parameter identity
+  - Model TargetRegion has a new parameter additional_replica_sets
+  - Model UserArtifactSettings has a new parameter script_behavior_after_reboot
+
+## 33.0.0 (2024-08-20)
+
+### Features Added
+
+  - Model AvailabilitySet has a new parameter scheduled_events_policy
+  - Model AvailabilitySetUpdate has a new parameter scheduled_events_policy
+  - Model VirtualMachineScaleSet has a new parameter sku_profile
+  - Model VirtualMachineScaleSet has a new parameter zonal_platform_fault_domain_align_mode
+  - Model VirtualMachineScaleSetUpdate has a new parameter sku_profile
+  - Model VirtualMachineScaleSetUpdate has a new parameter zonal_platform_fault_domain_align_mode
+  - Model VirtualMachineScaleSetUpdate has a new parameter zones
+
+### Breaking Changes
+
+  - Model PurchasePlan no longer has parameter promotion_code
+
+## 32.0.0 (2024-07-22)
+
+### Features Added
+
+  - Model DiskRestorePoint has a new parameter logical_sector_size
+  - Model PurchasePlan has a new parameter promotion_code
+  - Model SecurityPostureReference has a new parameter is_overridable
+  - Model VirtualMachineScaleSetUpdateVMProfile has a new parameter security_posture_reference
+
+### Breaking Changes
+
+  - Parameter id of model SecurityPostureReference is now required
+
+## 31.0.0 (2024-04-22)
+
+### Features Added
+
+  - Model DataDisk has a new parameter source_resource
+  - Model DataDisksToAttach has a new parameter caching
+  - Model DataDisksToAttach has a new parameter delete_option
+  - Model DataDisksToAttach has a new parameter disk_encryption_set
+  - Model DataDisksToAttach has a new parameter write_accelerator_enabled
+  - Model VirtualMachine has a new parameter scheduled_events_policy
+  - Model VirtualMachineScaleSet has a new parameter scheduled_events_policy
+  - Model VirtualMachineScaleSetReimageParameters has a new parameter force_update_os_disk_for_ephemeral
+  - Model VirtualMachineScaleSetUpdateOSDisk has a new parameter diff_disk_settings
+  - Model VirtualMachineScaleSetVMReimageParameters has a new parameter force_update_os_disk_for_ephemeral
+  - Model VirtualMachineUpdate has a new parameter scheduled_events_policy
+  - Operation CapacityReservationGroupsOperations.list_by_subscription has a new optional parameter resource_ids_only
+
+### Breaking Changes
+
+  - Model PurchasePlan no longer has parameter promotion_code
+
+## 30.6.0 (2024-03-15)
+
+### Features Added
+
+  - Model GalleryArtifactVersionFullSource has a new parameter virtual_machine_id
+
+### Bugs Fixed
+
+  - Fix api_version in next_link for paging operation
+
+## 30.5.0 (2024-01-22)
+
+### Features Added
+
+  - Model CreationData has a new parameter provisioned_bandwidth_copy_speed
+  - Model PurchasePlan has a new parameter promotion_code
+
+## 30.4.0 (2023-12-18)
+
+### Features Added
+
+  - Added operation DedicatedHostsOperations.begin_redeploy
+  - Added operation VirtualMachineScaleSetVMsOperations.begin_approve_rolling_upgrade
+  - Added operation VirtualMachineScaleSetVMsOperations.begin_attach_detach_data_disks
+  - Added operation VirtualMachineScaleSetsOperations.begin_approve_rolling_upgrade
+  - Added operation VirtualMachinesOperations.begin_attach_detach_data_disks
+  - Model AutomaticOSUpgradePolicy has a new parameter os_rolling_upgrade_deferral
+  - Model CapacityReservationGroup has a new parameter sharing_profile
+  - Model CapacityReservationGroupInstanceView has a new parameter shared_subscription_ids
+  - Model CapacityReservationGroupUpdate has a new parameter sharing_profile
+  - Model CommunityGallery has a new parameter artifact_tags
+  - Model CommunityGallery has a new parameter community_metadata
+  - Model CommunityGallery has a new parameter disclaimer
+  - Model CommunityGalleryImage has a new parameter artifact_tags
+  - Model CommunityGalleryImage has a new parameter disclaimer
+  - Model CommunityGalleryImageVersion has a new parameter artifact_tags
+  - Model CommunityGalleryImageVersion has a new parameter disclaimer
+  - Model GalleryImageVersion has a new parameter security_profile
+  - Model GalleryImageVersionUpdate has a new parameter security_profile
+  - Model RestorePointSourceVMStorageProfile has a new parameter disk_controller_type
+  - Model SecurityProfile has a new parameter encryption_identity
+  - Model SecurityProfile has a new parameter proxy_agent_settings
+  - Model SharedGallery has a new parameter artifact_tags
+  - Model SharedGalleryImage has a new parameter artifact_tags
+  - Model SharedGalleryImageVersion has a new parameter artifact_tags
+  - Model VirtualMachine has a new parameter etag
+  - Model VirtualMachine has a new parameter managed_by
+  - Model VirtualMachineInstanceView has a new parameter is_vm_in_standby_pool
+  - Model VirtualMachineScaleSet has a new parameter etag
+  - Model VirtualMachineScaleSet has a new parameter resiliency_policy
+  - Model VirtualMachineScaleSetUpdate has a new parameter resiliency_policy
+  - Model VirtualMachineScaleSetVM has a new parameter etag
+  - Model VirtualMachineScaleSetVMProfile has a new parameter time_created
+  - Operation SshPublicKeysOperations.generate_key_pair has a new optional parameter parameters
+  - Operation VirtualMachineScaleSetVMsOperations.begin_update has a new optional parameter if_match
+  - Operation VirtualMachineScaleSetVMsOperations.begin_update has a new optional parameter if_none_match
+  - Operation VirtualMachineScaleSetsOperations.begin_create_or_update has a new optional parameter if_match
+  - Operation VirtualMachineScaleSetsOperations.begin_create_or_update has a new optional parameter if_none_match
+  - Operation VirtualMachineScaleSetsOperations.begin_update has a new optional parameter if_match
+  - Operation VirtualMachineScaleSetsOperations.begin_update has a new optional parameter if_none_match
+  - Operation VirtualMachinesOperations.begin_create_or_update has a new optional parameter if_match
+  - Operation VirtualMachinesOperations.begin_create_or_update has a new optional parameter if_none_match
+  - Operation VirtualMachinesOperations.begin_update has a new optional parameter if_match
+  - Operation VirtualMachinesOperations.begin_update has a new optional parameter if_none_match
+
+## 30.3.0 (2023-10-23)
+
+### Features Added
+
+  - Model CreationData has a new parameter elastic_san_resource_id
+  - Model Disk has a new parameter last_ownership_update_time
+
+## 30.2.0 (2023-09-15)
+
+### Features Added
+
+  - Model VirtualMachineNetworkInterfaceConfiguration has a new parameter auxiliary_mode
+  - Model VirtualMachineNetworkInterfaceConfiguration has a new parameter auxiliary_sku
+  - Model VirtualMachinePublicIPAddressDnsSettingsConfiguration has a new parameter domain_name_label_scope
+  - Model VirtualMachineScaleSetNetworkConfiguration has a new parameter auxiliary_mode
+  - Model VirtualMachineScaleSetNetworkConfiguration has a new parameter auxiliary_sku
+  - Model VirtualMachineScaleSetPublicIPAddressConfigurationDnsSettings has a new parameter domain_name_label_scope
+  - Model VirtualMachineScaleSetUpdateNetworkConfiguration has a new parameter auxiliary_mode
+  - Model VirtualMachineScaleSetUpdateNetworkConfiguration has a new parameter auxiliary_sku
+  - Model VirtualMachineScaleSetVM has a new parameter time_created
+
 ## 30.1.0 (2023-07-21)
 
 ### Features Added

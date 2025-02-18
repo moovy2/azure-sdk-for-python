@@ -2,20 +2,17 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 # ------------------------------------
+from datetime import datetime
 from functools import partial
-from typing import TYPE_CHECKING
+from typing import Any, cast, Dict, Optional
 
+from azure.core.paging import ItemPaged
+from azure.core.polling import LROPoller
 from azure.core.tracing.decorator import distributed_trace
 
 from ._models import KeyVaultSecret, DeletedSecret, SecretProperties
 from ._shared import KeyVaultClientBase
 from ._shared._polling import DeleteRecoverPollingMethod, KeyVaultOperationPoller
-
-if TYPE_CHECKING:
-    # pylint:disable=unused-import
-    from typing import Optional
-    from azure.core.paging import ItemPaged
-    from azure.core.polling import LROPoller
 
 
 class SecretClient(KeyVaultClientBase):
@@ -26,10 +23,10 @@ class SecretClient(KeyVaultClientBase):
         for details.
     :param credential: An object which can provide an access token for the vault, such as a credential from
         :mod:`azure.identity`
-    :type credential: :class:`~azure.core.credentials.TokenCredential`
+    :type credential: ~azure.core.credentials.TokenCredential
 
     :keyword api_version: Version of the service API to use. Defaults to the most recent.
-    :paramtype api_version: ~azure.keyvault.secrets.ApiVersion
+    :paramtype api_version: ~azure.keyvault.secrets.ApiVersion or str
     :keyword bool verify_challenge_resource: Whether to verify the authentication challenge resource matches the Key
         Vault domain. Defaults to True.
 
@@ -45,7 +42,7 @@ class SecretClient(KeyVaultClientBase):
     # pylint:disable=protected-access
 
     @distributed_trace
-    def get_secret(self, name: str, version: "Optional[str]" = None, **kwargs) -> KeyVaultSecret:
+    def get_secret(self, name: str, version: Optional[str] = None, **kwargs: Any) -> KeyVaultSecret:
         """Get a secret. Requires the secrets/get permission.
 
         :param str name: The name of the secret
@@ -54,9 +51,8 @@ class SecretClient(KeyVaultClientBase):
         :returns: The fetched secret.
         :rtype: ~azure.keyvault.secrets.KeyVaultSecret
 
-        :raises:
-            :class:`~azure.core.exceptions.ResourceNotFoundError` if the secret doesn't exist,
-            :class:`~azure.core.exceptions.HttpResponseError` for other errors
+        :raises ~azure.core.exceptions.ResourceNotFoundError or ~azure.core.exceptions.HttpResponseError:
+            the former if the secret doesn't exist; the latter for other errors
 
         Example:
             .. literalinclude:: ../tests/test_samples_secrets.py
@@ -75,7 +71,18 @@ class SecretClient(KeyVaultClientBase):
         return KeyVaultSecret._from_secret_bundle(bundle)
 
     @distributed_trace
-    def set_secret(self, name: str, value: str, **kwargs) -> KeyVaultSecret:
+    def set_secret(
+        self,
+        name: str,
+        value: str,
+        *,
+        enabled: Optional[bool] = None,
+        tags: Optional[Dict[str, str]] = None,
+        content_type: Optional[str] = None,
+        not_before: Optional[datetime] = None,
+        expires_on: Optional[datetime] = None,
+        **kwargs: Any,
+    ) -> KeyVaultSecret:
         """Set a secret value. If `name` is in use, create a new version of the secret. If not, create a new secret.
 
         Requires secrets/set permission.
@@ -93,7 +100,7 @@ class SecretClient(KeyVaultClientBase):
         :returns: The created or updated secret.
         :rtype: ~azure.keyvault.secrets.KeyVaultSecret
 
-        :raises: :class:`~azure.core.exceptions.HttpResponseError`
+        :raises ~azure.core.exceptions.HttpResponseError:
 
         Example:
             .. literalinclude:: ../tests/test_samples_secrets.py
@@ -104,10 +111,6 @@ class SecretClient(KeyVaultClientBase):
                 :dedent: 8
 
         """
-        enabled = kwargs.pop("enabled", None)
-        not_before = kwargs.pop("not_before", None)
-        expires_on = kwargs.pop("expires_on", None)
-        content_type = kwargs.pop("content_type", None)
         if enabled is not None or not_before is not None or expires_on is not None:
             attributes = self._models.SecretAttributes(
                 enabled=enabled, not_before=not_before, expires=expires_on
@@ -117,7 +120,7 @@ class SecretClient(KeyVaultClientBase):
 
         parameters = self._models.SecretSetParameters(
             value=value,
-            tags=kwargs.pop("tags", None),
+            tags=tags,
             content_type=content_type,
             secret_attributes=attributes
         )
@@ -131,7 +134,18 @@ class SecretClient(KeyVaultClientBase):
         return KeyVaultSecret._from_secret_bundle(bundle)
 
     @distributed_trace
-    def update_secret_properties(self, name: str, version: "Optional[str]" = None, **kwargs) -> SecretProperties:
+    def update_secret_properties(
+        self,
+        name: str,
+        version: Optional[str] = None,
+        *,
+        enabled: Optional[bool] = None,
+        tags: Optional[Dict[str, str]] = None,
+        content_type: Optional[str] = None,
+        not_before: Optional[datetime] = None,
+        expires_on: Optional[datetime] = None,
+        **kwargs: Any,
+    ) -> SecretProperties:
         """Update properties of a secret other than its value. Requires secrets/set permission.
 
         This method updates properties of the secret, such as whether it's enabled, but can't change the secret's
@@ -150,9 +164,8 @@ class SecretClient(KeyVaultClientBase):
         :returns: The updated secret properties.
         :rtype: ~azure.keyvault.secrets.SecretProperties
 
-        :raises:
-            :class:`~azure.core.exceptions.ResourceNotFoundError` if the secret doesn't exist,
-            :class:`~azure.core.exceptions.HttpResponseError` for other errors
+        :raises ~azure.core.exceptions.ResourceNotFoundError or ~azure.core.exceptions.HttpResponseError:
+            the former if the secret doesn't exist; the latter for other errors
 
         Example:
             .. literalinclude:: ../tests/test_samples_secrets.py
@@ -163,10 +176,6 @@ class SecretClient(KeyVaultClientBase):
                 :dedent: 8
 
         """
-        enabled = kwargs.pop("enabled", None)
-        not_before = kwargs.pop("not_before", None)
-        expires_on = kwargs.pop("expires_on", None)
-        content_type = kwargs.pop("content_type", None)
         if enabled is not None or not_before is not None or expires_on is not None:
             attributes = self._models.SecretAttributes(
                 enabled=enabled, not_before=not_before, expires=expires_on
@@ -177,7 +186,7 @@ class SecretClient(KeyVaultClientBase):
         parameters = self._models.SecretUpdateParameters(
             content_type=content_type,
             secret_attributes=attributes,
-            tags=kwargs.pop("tags", None)
+            tags=tags,
         )
 
         bundle = self._client.update_secret(
@@ -190,7 +199,7 @@ class SecretClient(KeyVaultClientBase):
         return SecretProperties._from_secret_bundle(bundle)  # pylint: disable=protected-access
 
     @distributed_trace
-    def list_properties_of_secrets(self, **kwargs) -> "ItemPaged[SecretProperties]":
+    def list_properties_of_secrets(self, **kwargs: Any) -> ItemPaged[SecretProperties]:
         """List identifiers and attributes of all secrets in the vault. Requires secrets/list permission.
 
         List items don't include secret values. Use :func:`get_secret` to get a secret's value.
@@ -215,7 +224,7 @@ class SecretClient(KeyVaultClientBase):
         )
 
     @distributed_trace
-    def list_properties_of_secret_versions(self, name: str, **kwargs) -> "ItemPaged[SecretProperties]":
+    def list_properties_of_secret_versions(self, name: str, **kwargs: Any) -> ItemPaged[SecretProperties]:
         """List properties of all versions of a secret, excluding their values. Requires secrets/list permission.
 
         List items don't include secret values. Use :func:`get_secret` to get a secret's value.
@@ -243,7 +252,7 @@ class SecretClient(KeyVaultClientBase):
         )
 
     @distributed_trace
-    def backup_secret(self, name: str, **kwargs) -> bytes:
+    def backup_secret(self, name: str, **kwargs: Any) -> bytes:
         """Back up a secret in a protected form useable only by Azure Key Vault. Requires secrets/backup permission.
 
         :param str name: Name of the secret to back up
@@ -251,9 +260,8 @@ class SecretClient(KeyVaultClientBase):
         :returns: The backup result, in a protected bytes format that can only be used by Azure Key Vault.
         :rtype: bytes
 
-        :raises:
-            :class:`~azure.core.exceptions.ResourceNotFoundError` if the secret doesn't exist,
-            :class:`~azure.core.exceptions.HttpResponseError` for other errors
+        :raises ~azure.core.exceptions.ResourceNotFoundError or ~azure.core.exceptions.HttpResponseError:
+            the former if the secret doesn't exist; the latter for other errors
 
         Example:
             .. literalinclude:: ../tests/test_samples_secrets.py
@@ -265,10 +273,10 @@ class SecretClient(KeyVaultClientBase):
 
         """
         backup_result = self._client.backup_secret(self.vault_url, name, **kwargs)
-        return backup_result.value
+        return cast(bytes, backup_result.value)
 
     @distributed_trace
-    def restore_secret_backup(self, backup: bytes, **kwargs) -> SecretProperties:
+    def restore_secret_backup(self, backup: bytes, **kwargs: Any) -> SecretProperties:
         """Restore a backed up secret. Requires the secrets/restore permission.
 
         :param bytes backup: A secret backup as returned by :func:`backup_secret`
@@ -276,9 +284,8 @@ class SecretClient(KeyVaultClientBase):
         :returns: The restored secret
         :rtype: ~azure.keyvault.secrets.SecretProperties
 
-        :raises:
-            :class:`~azure.core.exceptions.ResourceExistsError` if the secret's name is already in use,
-            :class:`~azure.core.exceptions.HttpResponseError` for other errors
+        :raises ~azure.core.exceptions.ResourceExistsError or ~azure.core.exceptions.HttpResponseError:
+            the former if the secret's name is already in use; the latter for other errors
 
         Example:
             .. literalinclude:: ../tests/test_samples_secrets.py
@@ -297,7 +304,7 @@ class SecretClient(KeyVaultClientBase):
         return SecretProperties._from_secret_bundle(bundle)
 
     @distributed_trace
-    def begin_delete_secret(self, name: str, **kwargs) -> "LROPoller[DeletedSecret]":  # pylint:disable=bad-option-value,delete-operation-wrong-return-type
+    def begin_delete_secret(self, name: str, **kwargs: Any) -> LROPoller[DeletedSecret]:  # pylint:disable=bad-option-value,delete-operation-wrong-return-type
         """Delete all versions of a secret. Requires secrets/delete permission.
 
         When this method returns Key Vault has begun deleting the secret. Deletion may take several seconds in a vault
@@ -312,9 +319,8 @@ class SecretClient(KeyVaultClientBase):
             secrets/get permission.
         :rtype: ~azure.core.polling.LROPoller[~azure.keyvault.secrets.DeletedSecret]
 
-        :raises:
-            :class:`~azure.core.exceptions.ResourceNotFoundError` if the secret doesn't exist,
-            :class:`~azure.core.exceptions.HttpResponseError` for other errors
+        :raises ~azure.core.exceptions.ResourceNotFoundError or ~azure.core.exceptions.HttpResponseError:
+            the former if the secret doesn't exist; the latter for other errors
 
         Example:
             .. literalinclude:: ../tests/test_samples_secrets.py
@@ -328,14 +334,20 @@ class SecretClient(KeyVaultClientBase):
         polling_interval = kwargs.pop("_polling_interval", None)
         if polling_interval is None:
             polling_interval = 2
-        deleted_secret = DeletedSecret._from_deleted_secret_bundle(
-            self._client.delete_secret(self.vault_url, name, **kwargs)
-        )
+        # Ignore pyright warning about return type not being iterable because we use `cls` to return a tuple
+        pipeline_response, deleted_secret_bundle = self._client.delete_secret(
+            vault_base_url=self.vault_url,
+            secret_name=name,
+            cls=lambda pipeline_response, deserialized, _: (pipeline_response, deserialized),
+            **kwargs,
+        )  # pyright: ignore[reportGeneralTypeIssues]
+        deleted_secret = DeletedSecret._from_deleted_secret_bundle(deleted_secret_bundle)
 
         command = partial(self.get_deleted_secret, name=name, **kwargs)
         polling_method = DeleteRecoverPollingMethod(
             # no recovery ID means soft-delete is disabled, in which case we initialize the poller as finished
             finished=deleted_secret.recovery_id is None,
+            pipeline_response=pipeline_response,
             command=command,
             final_resource=deleted_secret,
             interval=polling_interval,
@@ -343,7 +355,7 @@ class SecretClient(KeyVaultClientBase):
         return KeyVaultOperationPoller(polling_method)
 
     @distributed_trace
-    def get_deleted_secret(self, name: str, **kwargs) -> DeletedSecret:
+    def get_deleted_secret(self, name: str, **kwargs: Any) -> DeletedSecret:
         """Get a deleted secret. Possible only in vaults with soft-delete enabled. Requires secrets/get permission.
 
         :param str name: Name of the deleted secret
@@ -351,9 +363,8 @@ class SecretClient(KeyVaultClientBase):
         :returns: The deleted secret.
         :rtype: ~azure.keyvault.secrets.DeletedSecret
 
-        :raises:
-            :class:`~azure.core.exceptions.ResourceNotFoundError` if the deleted secret doesn't exist,
-            :class:`~azure.core.exceptions.HttpResponseError` for other errors
+        :raises ~azure.core.exceptions.ResourceNotFoundError or ~azure.core.exceptions.HttpResponseError:
+            the former if the deleted secret doesn't exist; the latter for other errors
 
         Example:
             .. literalinclude:: ../tests/test_samples_secrets.py
@@ -368,7 +379,7 @@ class SecretClient(KeyVaultClientBase):
         return DeletedSecret._from_deleted_secret_bundle(bundle)
 
     @distributed_trace
-    def list_deleted_secrets(self, **kwargs) -> "ItemPaged[DeletedSecret]":
+    def list_deleted_secrets(self, **kwargs: Any) -> ItemPaged[DeletedSecret]:
         """Lists all deleted secrets. Possible only in vaults with soft-delete enabled.
 
         Requires secrets/list permission.
@@ -393,7 +404,7 @@ class SecretClient(KeyVaultClientBase):
         )
 
     @distributed_trace
-    def purge_deleted_secret(self, name: str, **kwargs) -> None:
+    def purge_deleted_secret(self, name: str, **kwargs: Any) -> None:
         """Permanently deletes a deleted secret. Possible only in vaults with soft-delete enabled.
 
         Performs an irreversible deletion of the specified secret, without possibility for recovery. The operation is
@@ -407,7 +418,7 @@ class SecretClient(KeyVaultClientBase):
 
         :returns: None
 
-        :raises: :class:`~azure.core.exceptions.HttpResponseError`
+        :raises ~azure.core.exceptions.HttpResponseError:
 
         Example:
             .. code-block:: python
@@ -420,7 +431,7 @@ class SecretClient(KeyVaultClientBase):
         self._client.purge_deleted_secret(self.vault_url, name, **kwargs)
 
     @distributed_trace
-    def begin_recover_deleted_secret(self, name: str, **kwargs) -> "LROPoller[SecretProperties]":
+    def begin_recover_deleted_secret(self, name: str, **kwargs: Any) -> LROPoller[SecretProperties]:
         """Recover a deleted secret to its latest version. Possible only in a vault with soft-delete enabled.
 
         Requires the secrets/recover permission. If the vault does not have soft-delete enabled,
@@ -438,7 +449,7 @@ class SecretClient(KeyVaultClientBase):
             ready to use. The `wait` method requires secrets/get permission.
         :rtype: ~azure.core.polling.LROPoller[~azure.keyvault.secrets.SecretProperties]
 
-        :raises: :class:`~azure.core.exceptions.HttpResponseError`
+        :raises ~azure.core.exceptions.HttpResponseError:
 
         Example:
             .. literalinclude:: ../tests/test_samples_secrets.py
@@ -452,12 +463,25 @@ class SecretClient(KeyVaultClientBase):
         polling_interval = kwargs.pop("_polling_interval", None)
         if polling_interval is None:
             polling_interval = 2
-        recovered_secret = SecretProperties._from_secret_bundle(
-            self._client.recover_deleted_secret(self.vault_url, name, **kwargs)
-        )
+        # Ignore pyright warning about return type not being iterable because we use `cls` to return a tuple
+        pipeline_response, recovered_secret_bundle = self._client.recover_deleted_secret(
+            vault_base_url=self.vault_url,
+            secret_name=name,
+            cls=lambda pipeline_response, deserialized, _: (pipeline_response, deserialized),
+            **kwargs,
+        )  # pyright: ignore[reportGeneralTypeIssues]
+        recovered_secret = SecretProperties._from_secret_bundle(recovered_secret_bundle)
 
         command = partial(self.get_secret, name=name, **kwargs)
         polling_method = DeleteRecoverPollingMethod(
-            finished=False, command=command, final_resource=recovered_secret, interval=polling_interval,
+            finished=False,
+            pipeline_response=pipeline_response,
+            command=command,
+            final_resource=recovered_secret,
+            interval=polling_interval,
         )
         return KeyVaultOperationPoller(polling_method)
+
+    def __enter__(self) -> "SecretClient":
+        self._client.__enter__()
+        return self

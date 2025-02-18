@@ -1,14 +1,29 @@
 # Release History
 
-## 1.0.0b11 (Unreleased)
+## 1.0.0b12 (Unreleased)
 
 ### Features Added
 
+- If a span exits with an exception, the exception name is now recorded in the `error.type` attribute. ([#34619](https://github.com/Azure/azure-sdk-for-python/pull/34619))
+
 ### Breaking Changes
+
+- Remapped certain attributes to converge with OpenTelemetry semantic conventions version `1.23.1` ([#34089](https://github.com/Azure/azure-sdk-for-python/pull/34089)):
+    - `http.method` -> `http.request.method`
+    - `http.status_code` -> `http.response.status_code`
+    - `net.peer.name` -> `server.address`
+    - `net.peer.port` -> `server.port`
+    - `http.url` -> `url.full`
 
 ### Bugs Fixed
 
 ### Other Changes
+
+## 1.0.0b11 (2023-09-07)
+
+### Bugs Fixed
+
+- Fixed `OpenTelemetrySpan` typing to correctly implement the `AbstractSpan` protocol. ([#31943](https://github.com/Azure/azure-sdk-for-python/pull/31943))
 
 ## 1.0.0b10 (2023-07-11)
 

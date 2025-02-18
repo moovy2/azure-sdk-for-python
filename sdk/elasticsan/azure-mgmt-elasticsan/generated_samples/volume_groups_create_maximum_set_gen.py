@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.elasticsan import ElasticSanMgmtClient
 
 """
@@ -34,23 +35,26 @@ def main():
         elastic_san_name="elasticsanname",
         volume_group_name="volumegroupname",
         parameters={
+            "identity": {"type": "None", "userAssignedIdentities": {"key1006": {}}},
             "properties": {
                 "encryption": "EncryptionAtRestWithPlatformKey",
-                "networkAcls": {
-                    "virtualNetworkRules": [
-                        {
-                            "action": "Allow",
-                            "id": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}/subnets/{subnetName}",
-                        }
-                    ]
+                "encryptionProperties": {
+                    "identity": {"userAssignedIdentity": "gfhkfbozahmmwluqndfgxunssafa"},
+                    "keyVaultProperties": {
+                        "keyName": "lunpapamzeimppgobraxjt",
+                        "keyVaultUri": "https://microsoft.com/a",
+                        "keyVersion": "oemygbnfmqhijmonkqfqmy",
+                    },
                 },
+                "enforceDataIntegrityCheckForIscsi": True,
+                "networkAcls": {"virtualNetworkRules": [{"action": "Allow", "id": "bkhwaiqvvaguymsmnzzbzz"}]},
                 "protocolType": "Iscsi",
-            }
+            },
         },
     ).result()
     print(response)
 
 
-# x-ms-original-file: specification/elasticsan/resource-manager/Microsoft.ElasticSan/preview/2022-12-01-preview/examples/VolumeGroups_Create_MaximumSet_Gen.json
+# x-ms-original-file: specification/elasticsan/resource-manager/Microsoft.ElasticSan/preview/2024-06-01-preview/examples/VolumeGroups_Create_MaximumSet_Gen.json
 if __name__ == "__main__":
     main()

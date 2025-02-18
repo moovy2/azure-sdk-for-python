@@ -1,4 +1,4 @@
-# pylint: disable=too-many-lines
+# pylint: disable=too-many-lines,too-many-statements
 # coding=utf-8
 # --------------------------------------------------------------------------
 # Copyright (c) Microsoft Corporation. All rights reserved.
@@ -7,7 +7,7 @@
 # Changes may cause incorrect behavior and will be lost if the code is regenerated.
 # --------------------------------------------------------------------------
 import sys
-from typing import Any, AsyncIterable, Callable, Dict, Optional, TypeVar
+from typing import Any, AsyncIterable, Callable, Dict, Optional, Type, TypeVar
 import urllib.parse
 
 from azure.core.async_paging import AsyncItemPaged, AsyncList
@@ -34,11 +34,12 @@ from ...operations._query_keys_operations import (
     build_delete_request,
     build_list_by_search_service_request,
 )
+from .._vendor import SearchManagementClientMixinABC
 
-if sys.version_info >= (3, 8):
-    from typing import Literal  # pylint: disable=no-name-in-module, ungrouped-imports
+if sys.version_info >= (3, 9):
+    from collections.abc import MutableMapping
 else:
-    from typing_extensions import Literal  # type: ignore  # pylint: disable=ungrouped-imports
+    from typing import MutableMapping  # type: ignore  # pylint: disable=ungrouped-imports
 T = TypeVar("T")
 ClsType = Optional[Callable[[PipelineResponse[HttpRequest, AsyncHttpResponse], T, Dict[str, Any]], Any]]
 
@@ -74,10 +75,13 @@ class QueryKeysOperations:
         """Generates a new query key for the specified search service. You can create up to 50 query keys
         per service.
 
+        .. seealso::
+           - https://aka.ms/search-manage
+
         :param resource_group_name: The name of the resource group within the current subscription. You
          can obtain this value from the Azure Resource Manager API or the portal. Required.
         :type resource_group_name: str
-        :param search_service_name: The name of the Azure Cognitive Search service associated with the
+        :param search_service_name: The name of the Azure AI Search service associated with the
          specified resource group. Required.
         :type search_service_name: str
         :param name: The name of the new query API key. Required.
@@ -85,12 +89,11 @@ class QueryKeysOperations:
         :param search_management_request_options: Parameter group. Default value is None.
         :type search_management_request_options:
          ~azure.mgmt.search.models.SearchManagementRequestOptions
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: QueryKey or the result of cls(response)
         :rtype: ~azure.mgmt.search.models.QueryKey
         :raises ~azure.core.exceptions.HttpResponseError:
         """
-        error_map = {
+        error_map: MutableMapping[int, Type[HttpResponseError]] = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -101,31 +104,29 @@ class QueryKeysOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop(
-            "api_version", _params.pop("api-version", self._config.api_version)
-        )
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._config.api_version))
         cls: ClsType[_models.QueryKey] = kwargs.pop("cls", None)
 
         _client_request_id = None
         if search_management_request_options is not None:
             _client_request_id = search_management_request_options.client_request_id
 
-        request = build_create_request(
+        _request = build_create_request(
             resource_group_name=resource_group_name,
             search_service_name=search_service_name,
             name=name,
             subscription_id=self._config.subscription_id,
             client_request_id=_client_request_id,
             api_version=api_version,
-            template_url=self.create.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
-        request.url = self._client.format_url(request.url)
+        _request = _convert_request(_request)
+        _request.url = self._client.format_url(_request.url)
 
+        _stream = False
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=False, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -137,13 +138,9 @@ class QueryKeysOperations:
         deserialized = self._deserialize("QueryKey", pipeline_response)
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {})  # type: ignore
 
-        return deserialized
-
-    create.metadata = {
-        "url": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Search/searchServices/{searchServiceName}/createQueryKey/{name}"
-    }
+        return deserialized  # type: ignore
 
     @distributed_trace
     def list_by_search_service(
@@ -153,18 +150,20 @@ class QueryKeysOperations:
         search_management_request_options: Optional[_models.SearchManagementRequestOptions] = None,
         **kwargs: Any
     ) -> AsyncIterable["_models.QueryKey"]:
-        """Returns the list of query API keys for the given Azure Cognitive Search service.
+        """Returns the list of query API keys for the given Azure AI Search service.
+
+        .. seealso::
+           - https://aka.ms/search-manage
 
         :param resource_group_name: The name of the resource group within the current subscription. You
          can obtain this value from the Azure Resource Manager API or the portal. Required.
         :type resource_group_name: str
-        :param search_service_name: The name of the Azure Cognitive Search service associated with the
+        :param search_service_name: The name of the Azure AI Search service associated with the
          specified resource group. Required.
         :type search_service_name: str
         :param search_management_request_options: Parameter group. Default value is None.
         :type search_management_request_options:
          ~azure.mgmt.search.models.SearchManagementRequestOptions
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: An iterator like instance of either QueryKey or the result of cls(response)
         :rtype: ~azure.core.async_paging.AsyncItemPaged[~azure.mgmt.search.models.QueryKey]
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -172,12 +171,10 @@ class QueryKeysOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop(
-            "api_version", _params.pop("api-version", self._config.api_version)
-        )
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._config.api_version))
         cls: ClsType[_models.ListQueryKeysResult] = kwargs.pop("cls", None)
 
-        error_map = {
+        error_map: MutableMapping[int, Type[HttpResponseError]] = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -191,18 +188,17 @@ class QueryKeysOperations:
                 if search_management_request_options is not None:
                     _client_request_id = search_management_request_options.client_request_id
 
-                request = build_list_by_search_service_request(
+                _request = build_list_by_search_service_request(
                     resource_group_name=resource_group_name,
                     search_service_name=search_service_name,
                     subscription_id=self._config.subscription_id,
                     client_request_id=_client_request_id,
                     api_version=api_version,
-                    template_url=self.list_by_search_service.metadata["url"],
                     headers=_headers,
                     params=_params,
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
+                _request = _convert_request(_request)
+                _request.url = self._client.format_url(_request.url)
 
             else:
                 # make call to next link with the client's api-version
@@ -214,13 +210,13 @@ class QueryKeysOperations:
                     }
                 )
                 _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
-                request.method = "GET"
-            return request
+                _request = _convert_request(_request)
+                _request.url = self._client.format_url(_request.url)
+                _request.method = "GET"
+            return _request
 
         async def extract_data(pipeline_response):
             deserialized = self._deserialize("ListQueryKeysResult", pipeline_response)
@@ -230,10 +226,11 @@ class QueryKeysOperations:
             return deserialized.next_link or None, AsyncList(list_of_elem)
 
         async def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
+            _stream = False
             pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=False, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -244,10 +241,6 @@ class QueryKeysOperations:
             return pipeline_response
 
         return AsyncItemPaged(get_next, extract_data)
-
-    list_by_search_service.metadata = {
-        "url": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Search/searchServices/{searchServiceName}/listQueryKeys"
-    }
 
     @distributed_trace_async
     async def delete(  # pylint: disable=inconsistent-return-statements
@@ -261,10 +254,13 @@ class QueryKeysOperations:
         """Deletes the specified query key. Unlike admin keys, query keys are not regenerated. The process
         for regenerating a query key is to delete and then recreate it.
 
+        .. seealso::
+           - https://aka.ms/search-manage
+
         :param resource_group_name: The name of the resource group within the current subscription. You
          can obtain this value from the Azure Resource Manager API or the portal. Required.
         :type resource_group_name: str
-        :param search_service_name: The name of the Azure Cognitive Search service associated with the
+        :param search_service_name: The name of the Azure AI Search service associated with the
          specified resource group. Required.
         :type search_service_name: str
         :param key: The query key to be deleted. Query keys are identified by value, not by name.
@@ -273,12 +269,11 @@ class QueryKeysOperations:
         :param search_management_request_options: Parameter group. Default value is None.
         :type search_management_request_options:
          ~azure.mgmt.search.models.SearchManagementRequestOptions
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: None or the result of cls(response)
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
         """
-        error_map = {
+        error_map: MutableMapping[int, Type[HttpResponseError]] = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -289,31 +284,29 @@ class QueryKeysOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop(
-            "api_version", _params.pop("api-version", self._config.api_version)
-        )
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._config.api_version))
         cls: ClsType[None] = kwargs.pop("cls", None)
 
         _client_request_id = None
         if search_management_request_options is not None:
             _client_request_id = search_management_request_options.client_request_id
 
-        request = build_delete_request(
+        _request = build_delete_request(
             resource_group_name=resource_group_name,
             search_service_name=search_service_name,
             key=key,
             subscription_id=self._config.subscription_id,
             client_request_id=_client_request_id,
             api_version=api_version,
-            template_url=self.delete.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
-        request.url = self._client.format_url(request.url)
+        _request = _convert_request(_request)
+        _request.url = self._client.format_url(_request.url)
 
+        _stream = False
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=False, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -323,8 +316,4 @@ class QueryKeysOperations:
             raise HttpResponseError(response=response, error_format=ARMErrorFormat)
 
         if cls:
-            return cls(pipeline_response, None, {})
-
-    delete.metadata = {
-        "url": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Search/searchServices/{searchServiceName}/deleteQueryKey/{key}"
-    }
+            return cls(pipeline_response, None, {})  # type: ignore

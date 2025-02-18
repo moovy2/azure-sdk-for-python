@@ -1,5 +1,17 @@
 # Release History
 
+## 2.2.0b2 (2024-05-20)
+
+### Features Added
+
+  - Added operation group ScheduledEventOperations
+
+## 2.2.0b1 (2023-10-22)
+
+### Features Added
+
+  - Added operation ApplyUpdatesOperations.create_or_update_or_cancel
+
 ## 2.1.0 (2023-08-18)
 
 ### Features Added

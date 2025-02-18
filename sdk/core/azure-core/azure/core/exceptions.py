@@ -40,6 +40,7 @@ from typing import (
     TypeVar,
     Generic,
     Dict,
+    NoReturn,
     TYPE_CHECKING,
 )
 from typing_extensions import Protocol, runtime_checkable
@@ -79,7 +80,7 @@ __all__ = [
 ]
 
 
-def raise_with_traceback(exception: Callable, *args: Any, **kwargs: Any) -> None:
+def raise_with_traceback(exception: Callable, *args: Any, message: str = "", **kwargs: Any) -> NoReturn:
     """Raise exception with a specified traceback.
     This MUST be called inside a "except" clause.
 
@@ -89,7 +90,6 @@ def raise_with_traceback(exception: Callable, *args: Any, **kwargs: Any) -> None
     :param any args: Any additional args to be included with exception.
     :keyword str message: Message to be associated with the exception. If omitted, defaults to an empty string.
     """
-    message = kwargs.pop("message", "")
     exc_type, exc_value, exc_traceback = sys.exc_info()
     # If not called inside an "except", exc_type will be None. Assume it will not happen
     if exc_type is None:
@@ -97,7 +97,7 @@ def raise_with_traceback(exception: Callable, *args: Any, **kwargs: Any) -> None
     exc_msg = "{}, {}: {}".format(message, exc_type.__name__, exc_value)
     error = exception(exc_msg, *args, **kwargs)
     try:
-        raise error.with_traceback(exc_traceback)  # pylint: disable=raise-missing-from
+        raise error.with_traceback(exc_traceback)
     except AttributeError:  # Python 2
         error.__traceback__ = exc_traceback
         raise error  # pylint: disable=raise-missing-from
@@ -112,19 +112,16 @@ class _HttpResponseCommonAPI(Protocol):
     """
 
     @property
-    def reason(self) -> Optional[str]:
-        pass
+    def reason(self) -> Optional[str]: ...
 
     @property
-    def status_code(self) -> Optional[int]:
-        pass
+    def status_code(self) -> Optional[int]: ...
 
-    def text(self) -> str:
-        pass
+    def text(self) -> str: ...
 
     @property
     def request(self) -> object:  # object as type, since all we need is str() on it
-        pass
+        ...
 
 
 class ErrorMap(Generic[KeyType, ValueType]):
@@ -153,7 +150,9 @@ class ErrorMap(Generic[KeyType, ValueType]):
 
 
 def map_error(
-    status_code: int, response: _HttpResponseCommonAPI, error_map: Mapping[int, Type[HttpResponseError]]
+    status_code: int,
+    response: _HttpResponseCommonAPI,
+    error_map: Mapping[int, Type[HttpResponseError]],
 ) -> None:
     if not error_map:
         return
@@ -171,25 +170,29 @@ class ODataV4Format:
 
     Example of JSON:
 
-    error: {
-        "code": "ValidationError",
-        "message": "One or more fields contain incorrect values: ",
-        "details": [
-            {
+    .. code-block:: json
+
+        {
+            "error": {
                 "code": "ValidationError",
-                "target": "representation",
-                "message": "Parsing error(s): String '' does not match regex pattern '^[^{}/ :]+(?: :\\\\d+)?$'.
-                Path 'host', line 1, position 297."
-            },
-            {
-                "code": "ValidationError",
-                "target": "representation",
-                "message": "Parsing error(s): The input OpenAPI file is not valid for the OpenAPI specificate
-                https: //github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md
-                (schema https://github.com/OAI/OpenAPI-Specification/blob/master/schemas/v2.0/schema.json)."
+                "message": "One or more fields contain incorrect values: ",
+                "details": [
+                    {
+                        "code": "ValidationError",
+                        "target": "representation",
+                        "message": "Parsing error(s): String '' does not match regex pattern '^[^{}/ :]+(?: :\\\\d+)?$'.
+                        Path 'host', line 1, position 297."
+                    },
+                    {
+                        "code": "ValidationError",
+                        "target": "representation",
+                        "message": "Parsing error(s): The input OpenAPI file is not valid for the OpenAPI specificate
+                        https: //github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md
+                        (schema https://github.com/OAI/OpenAPI-Specification/blob/master/schemas/v2.0/schema.json)."
+                    }
+                ]
             }
-        ]
-    }
+        }
 
     :param dict json_object: A Python dict representing a ODataV4 JSON
     :ivar str ~.code: Its value is a service-defined error code.
@@ -308,7 +311,7 @@ class AzureError(Exception):
            This method is deprecated as we don't support Python 2 anymore. Use raise/from instead.
         """
         try:
-            raise super(AzureError, self).with_traceback(self.exc_traceback)  # pylint: disable=raise-missing-from
+            raise super(AzureError, self).with_traceback(self.exc_traceback)
         except AttributeError:
             self.__traceback__: Optional[TracebackType] = self.exc_traceback
             raise self  # pylint: disable=raise-missing-from
@@ -354,7 +357,10 @@ class HttpResponseError(AzureError):
     """
 
     def __init__(
-        self, message: Optional[object] = None, response: Optional[_HttpResponseCommonAPI] = None, **kwargs: Any
+        self,
+        message: Optional[object] = None,
+        response: Optional[_HttpResponseCommonAPI] = None,
+        **kwargs: Any,
     ) -> None:
         # Don't want to document this one yet.
         error_format = kwargs.get("error_format", ODataV4Format)
@@ -452,7 +458,10 @@ class TooManyRedirectsError(HttpResponseError, Generic[HTTPRequestType, HTTPResp
     """
 
     def __init__(
-        self, history: "List[RequestHistory[HTTPRequestType, HTTPResponseType]]", *args: Any, **kwargs: Any
+        self,
+        history: "List[RequestHistory[HTTPRequestType, HTTPResponseType]]",
+        *args: Any,
+        **kwargs: Any,
     ) -> None:
         self.history = history
         message = "Reached maximum redirect attempts."

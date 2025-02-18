@@ -5,6 +5,7 @@
 # --------------------------------------------------------------------------
 import re
 from enum import Enum
+from typing import Any
 
 from azure.core import CaseInsensitiveEnumMeta
 from azure.core.exceptions import (
@@ -18,8 +19,6 @@ from azure.core.exceptions import (
 from azure.core.pipeline.policies import ContentDecodePolicy
 
 
-_ERROR_TYPE_NOT_SUPPORTED = "Type not supported when sending data to the service: {0}."
-_ERROR_VALUE_TOO_LARGE = "{0} is too large to be cast to type {1}."
 _ERROR_UNKNOWN = "Unknown error ({0})"
 _ERROR_VALUE_NONE = "{0} should not be None."
 
@@ -54,14 +53,16 @@ def _wrap_exception(ex, desired_type):
 def _validate_storage_tablename(table_name):
     if _STORAGE_VALID_TABLE.match(table_name) is None:
         raise ValueError(
-            "Storage table names must be alphanumeric, cannot begin with a number, and must be between 3-63 characters long."  # pylint: disable=line-too-long
+            "Storage table names must be alphanumeric, cannot begin with a number, \
+                and must be between 3-63 characters long."
         )
 
 
 def _validate_cosmos_tablename(table_name):
     if _COSMOS_VALID_TABLE.match(table_name) is None:
         raise ValueError(
-            "Cosmos table names must contain from 1-255 characters, and they cannot contain /, \\, #, ?, or a trailing space."  # pylint: disable=line-too-long
+            "Cosmos table names must contain from 1-255 characters, \
+                and they cannot contain /, \\, #, ?, or a trailing space."
         )
 
 
@@ -139,6 +140,7 @@ def _decode_error(response, error_message=None, error_type=None, **kwargs):  # p
                     additional_data[info.tag] = info.text
         else:
             if error_body:
+                # Attempt to parse from XML element
                 for info in error_body.iter():
                     if info.tag.lower().find("code") != -1:
                         error_code = info.text
@@ -146,6 +148,9 @@ def _decode_error(response, error_message=None, error_type=None, **kwargs):  # p
                         error_message = info.text
                     else:
                         additional_data[info.tag] = info.text
+    except AttributeError:
+        # Response body wasn't XML, give up trying to parse
+        error_message = str(error_body)
     except DecodeError:
         pass
 
@@ -181,9 +186,9 @@ def _decode_error(response, error_message=None, error_type=None, **kwargs):  # p
         error_type = HttpResponseError
 
     try:
-        error_message += f"\nErrorCode:{error_code.value}"
+        error_message = f"{error_message}\nErrorCode:{error_code.value}"
     except AttributeError:
-        error_message += f"\nErrorCode:{error_code}"
+        error_message = f"{error_message}\nErrorCode:{error_code}"
     for name, info in additional_data.items():
         error_message += f"\n{name}:{info}"
 
@@ -225,7 +230,7 @@ def _reprocess_error(decoded_error, identifiers=None):
         ):
             args_list = list(decoded_error.args)
             args_list[0] += (
-                "\nA possible cause of this error could be that the account URL used to"
+                "\nA possible cause of this error could be that the account URL used to "
                 "create the Client includes an invalid path, for example the table name. Please check your account URL."
             )
             decoded_error.args = tuple(args_list)
@@ -250,15 +255,15 @@ class TableTransactionError(HttpResponseError):
     :vartype additional_info: Mapping[str, Any]
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: Any) -> None:
         super(TableTransactionError, self).__init__(**kwargs)
         self.index = kwargs.get("index", self._extract_index())
 
-    def _extract_index(self):
+    def _extract_index(self) -> int:
         try:
             message_sections = self.message.split(":", 1)
             return int(message_sections[0])
-        except:  # pylint: disable=bare-except
+        except Exception:  # pylint:disable=broad-except
             return 0
 
 

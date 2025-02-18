@@ -32,22 +32,24 @@ from typing import (
     TypeVar,
     Generic,
     Any,
-    TYPE_CHECKING,
     AsyncContextManager,
     Optional,
     Type,
+    TYPE_CHECKING,
 )
 from types import TracebackType
 
 from ._base import _HttpResponseBase, _HttpClientTransportResponse, HttpRequest
 from ...utils._pipeline_transport_rest_shared_async import _PartGenerator
 
-if TYPE_CHECKING:
-    from ..._pipeline_client_async import AsyncPipelineClient
 
 AsyncHTTPResponseType = TypeVar("AsyncHTTPResponseType")
 HTTPResponseType = TypeVar("HTTPResponseType")
 HTTPRequestType = TypeVar("HTTPRequestType")
+
+if TYPE_CHECKING:
+    # We need a transport to define a pipeline, this "if" avoid a circular import
+    from .._base_async import AsyncPipeline
 
 
 class _ResponseStopIteration(Exception):
@@ -69,14 +71,18 @@ def _iterate_response_content(iterator):
         raise _ResponseStopIteration()  # pylint: disable=raise-missing-from
 
 
-class AsyncHttpResponse(_HttpResponseBase, AsyncContextManager["AsyncHttpResponse"]):  # pylint: disable=abstract-method
+class AsyncHttpResponse(_HttpResponseBase, AsyncContextManager["AsyncHttpResponse"]):
     """An AsyncHttpResponse ABC.
 
     Allows for the asynchronous streaming of data from the response.
     """
 
     def stream_download(
-        self, pipeline: AsyncPipelineClient[HttpRequest, "AsyncHttpResponse"], **kwargs: Any
+        self,
+        pipeline: AsyncPipeline[HttpRequest, "AsyncHttpResponse"],
+        *,
+        decompress: bool = True,
+        **kwargs: Any,
     ) -> AsyncIteratorType[bytes]:
         """Generator for streaming response body data.
 
@@ -113,9 +119,7 @@ class AsyncHttpResponse(_HttpResponseBase, AsyncContextManager["AsyncHttpRespons
         return None
 
 
-class AsyncHttpClientTransportResponse(  # pylint: disable=abstract-method
-    _HttpClientTransportResponse, AsyncHttpResponse
-):
+class AsyncHttpClientTransportResponse(_HttpClientTransportResponse, AsyncHttpResponse):
     """Create a HTTPResponse from an http.client response.
 
     Body will NOT be read by the constructor. Call "body()" to load the body in memory if necessary.

@@ -10,18 +10,18 @@ from datetime import datetime, timedelta
 from math import ceil
 from time import sleep
 
-from devtools_testutils import recorded_by_proxy, set_custom_default_matcher
-
-try:
-    # Hack to run ChangeFeed tests locally due to conflicting namespace and dependency with blob.
-    # To run locally, set each library folder in ChangeFeed package as "Sources Root" in PyCharm
-    # (i.e. azure, storage, blob, changefeed).
-    from changefeed import ChangeFeedClient
-except ImportError:
-    from azure.storage.blob.changefeed import ChangeFeedClient
-
+from devtools_testutils import recorded_by_proxy
 from devtools_testutils.storage import StorageRecordedTestCase
 from settings.testcase import ChangeFeedPreparer
+
+# To run these tests locally in PyCharm, ensure the following directories are set a "Sources Root":
+#    azure-storage-blob
+#    azure-storage-blob-changefeed
+#    azure-storage-blob-changefeed/azure/storage/blob
+#    azure-storage-blob-changefeed/azure/storage/blob/changefeed
+# Then uncomment this import and comment out the other.
+# from changefeed import ChangeFeedClient
+from azure.storage.blob.changefeed import ChangeFeedClient
 
 @pytest.mark.playback_test_only
 class TestStorageChangeFeed(StorageRecordedTestCase):
@@ -108,7 +108,7 @@ class TestStorageChangeFeed(StorageRecordedTestCase):
         token = change_feed.continuation_token
 
         # restart to read using the continuation token
-        rest_events = list()
+        rest_events = []
         change_feed2 = cf_client.list_changes().by_page(continuation_token=token)
         for page in change_feed2:
             rest_events.extend(list(page))
@@ -158,7 +158,7 @@ class TestStorageChangeFeed(StorageRecordedTestCase):
 
         change_feed = cf_client.list_changes(start_time=start_time, end_time=end_time).by_page()
 
-        events = list()
+        events = []
         for page in change_feed:
             for event in page:
                 events.append(event)
@@ -179,7 +179,7 @@ class TestStorageChangeFeed(StorageRecordedTestCase):
         # restart using the continuation token after waiting for 2 minutes
         change_feed2 = cf_client.list_changes(results_per_page=6).by_page(continuation_token=token)
         change_feed_page2 = next(change_feed2)
-        events2 = list()
+        events2 = []
         for event in change_feed_page2:
             events2.append(event)
 
@@ -199,7 +199,7 @@ class TestStorageChangeFeed(StorageRecordedTestCase):
 
         change_feed3 = cf_client.list_changes(results_per_page=57).by_page(continuation_token=token2)
         change_feed_page3 = next(change_feed3)
-        events3 = list()
+        events3 = []
         for event in change_feed_page3:
             events3.append(event)
         assert events2 != 0
@@ -218,7 +218,7 @@ class TestStorageChangeFeed(StorageRecordedTestCase):
         change_feed = cf_client.list_changes(start_time=start_time, end_time=end_time, results_per_page=3).by_page()
 
         page = next(change_feed)
-        events_on_first_page = list()
+        events_on_first_page = []
         for event in page:
             events_on_first_page.append(event)
 
@@ -289,7 +289,7 @@ class TestStorageChangeFeed(StorageRecordedTestCase):
         all_events = list(cf_client.list_changes(start_time=start_time, end_time=end_time))
         change_feed = cf_client.list_changes(start_time=start_time, end_time=end_time, results_per_page=50).by_page()
 
-        events = list()
+        events = []
         for _ in (0, 2):
             page = next(change_feed)
             for event in page:
@@ -312,7 +312,7 @@ class TestStorageChangeFeed(StorageRecordedTestCase):
             cf_client.list_changes(results_per_page=50, start_time=datetime.now()).by_page(continuation_token=token)
 
         change_feed2 = cf_client.list_changes(results_per_page=50).by_page(continuation_token=token)
-        events2 = list()
+        events2 = []
         for _ in (0, 2):
             page = next(change_feed2)
             for event in page:
@@ -326,7 +326,7 @@ class TestStorageChangeFeed(StorageRecordedTestCase):
         assert len(dict_token2['CurrentSegmentCursor']['ShardCursors']) == 3
 
         change_feed3 = cf_client.list_changes(results_per_page=50).by_page(continuation_token=token2)
-        events3 = list()
+        events3 = []
         for page in change_feed3:
             for event in page:
                 events3.append(event)
@@ -352,7 +352,7 @@ class TestStorageChangeFeed(StorageRecordedTestCase):
         token_with_1_shard = change_feed.continuation_token
 
         change_feed = cf_client.list_changes(results_per_page=50).by_page(continuation_token=token_with_1_shard)
-        events = list()
+        events = []
         for _ in range(0, 2):
             page = next(change_feed)
             for event in page:

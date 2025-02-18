@@ -15,8 +15,16 @@ from ._models import (
     ConfigurationSetting,
     FeatureFlagConfigurationSetting,
     SecretReferenceConfigurationSetting,
-    Snapshot,
-    ConfigurationSettingFilter,
+    ConfigurationSettingsFilter,
+    ConfigurationSnapshot,
+    ConfigurationSettingLabel,
+)
+from ._generated.models import (
+    SnapshotStatus,
+    LabelFields,
+    SnapshotFields,
+    ConfigurationSettingFields,
+    SnapshotComposition,
 )
 from ._version import VERSION
 from ._azure_appconfiguration_error import ResourceReadOnlyError
@@ -28,8 +36,14 @@ __all__ = [
     "ResourceReadOnlyError",
     "FeatureFlagConfigurationSetting",
     "SecretReferenceConfigurationSetting",
-    "Snapshot",
-    "ConfigurationSettingFilter",
+    "ConfigurationSnapshot",
+    "SnapshotStatus",
+    "SnapshotFields",
+    "SnapshotComposition",
+    "LabelFields",
+    "ConfigurationSettingFields",
+    "ConfigurationSettingsFilter",
+    "ConfigurationSettingLabel",
     "FILTER_PERCENTAGE",
     "FILTER_TARGETING",
     "FILTER_TIME_WINDOW",

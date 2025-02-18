@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.network import NetworkManagementClient
 
 """
@@ -82,6 +83,7 @@ def main():
                         "signatureOverrides": [{"id": "2525004", "mode": "Deny"}],
                     },
                     "mode": "Alert",
+                    "profile": "Balanced",
                 },
                 "sku": {"tier": "Premium"},
                 "snat": {"privateRanges": ["IANAPrivateRanges"]},
@@ -98,6 +100,6 @@ def main():
     print(response)
 
 
-# x-ms-original-file: specification/network/resource-manager/Microsoft.Network/stable/2023-04-01/examples/FirewallPolicyPut.json
+# x-ms-original-file: specification/network/resource-manager/Microsoft.Network/stable/2024-05-01/examples/FirewallPolicyPut.json
 if __name__ == "__main__":
     main()

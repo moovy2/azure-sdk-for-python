@@ -30,7 +30,7 @@ class Activity(_serialization.Model):
     You probably want to use the sub-classes and not this class directly. Known sub-classes are:
     ControlActivity, ExecutionActivity, SqlPoolStoredProcedureActivity
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -124,7 +124,7 @@ class Activity(_serialization.Model):
 class ActivityDependency(_serialization.Model):
     """Activity dependency information.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -344,7 +344,7 @@ class ActivityRun(_serialization.Model):  # pylint: disable=too-many-instance-at
 class ActivityRunsQueryResponse(_serialization.Model):
     """A list activity runs.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: List of activity runs. Required.
     :vartype value: list[~azure.synapse.artifacts.models.ActivityRun]
@@ -444,27 +444,29 @@ class LinkedService(_serialization.Model):
     CustomDataSourceLinkedService, DataworldLinkedService, Db2LinkedService, DrillLinkedService,
     DynamicsLinkedService, DynamicsAXLinkedService, DynamicsCrmLinkedService, EloquaLinkedService,
     FileServerLinkedService, FtpServerLinkedService, GoogleAdWordsLinkedService,
-    GoogleBigQueryLinkedService, GoogleCloudStorageLinkedService, GoogleSheetsLinkedService,
-    GreenplumLinkedService, HBaseLinkedService, HDInsightLinkedService,
+    GoogleBigQueryLinkedService, GoogleBigQueryV2LinkedService, GoogleCloudStorageLinkedService,
+    GoogleSheetsLinkedService, GreenplumLinkedService, HBaseLinkedService, HDInsightLinkedService,
     HDInsightOnDemandLinkedService, HdfsLinkedService, HiveLinkedService, HttpLinkedService,
     HubspotLinkedService, ImpalaLinkedService, InformixLinkedService, JiraLinkedService,
-    MagentoLinkedService, MariaDBLinkedService, MarketoLinkedService, MicrosoftAccessLinkedService,
-    MongoDbLinkedService, MongoDbAtlasLinkedService, MongoDbV2LinkedService, MySqlLinkedService,
-    NetezzaLinkedService, ODataLinkedService, OdbcLinkedService, Office365LinkedService,
-    OracleLinkedService, OracleServiceCloudLinkedService, PaypalLinkedService,
-    PhoenixLinkedService, PostgreSqlLinkedService, PowerBIWorkspaceLinkedService,
+    LakeHouseLinkedService, MagentoLinkedService, MariaDBLinkedService, MarketoLinkedService,
+    MicrosoftAccessLinkedService, MongoDbLinkedService, MongoDbAtlasLinkedService,
+    MongoDbV2LinkedService, MySqlLinkedService, NetezzaLinkedService, ODataLinkedService,
+    OdbcLinkedService, Office365LinkedService, OracleLinkedService,
+    OracleServiceCloudLinkedService, PaypalLinkedService, PhoenixLinkedService,
+    PostgreSqlLinkedService, PostgreSqlV2LinkedService, PowerBIWorkspaceLinkedService,
     PrestoLinkedService, QuickBooksLinkedService, QuickbaseLinkedService, ResponsysLinkedService,
     RestServiceLinkedService, SalesforceLinkedService, SalesforceMarketingCloudLinkedService,
-    SalesforceServiceCloudLinkedService, SapBWLinkedService, SapCloudForCustomerLinkedService,
+    SalesforceServiceCloudLinkedService, SalesforceServiceCloudV2LinkedService,
+    SalesforceV2LinkedService, SapBWLinkedService, SapCloudForCustomerLinkedService,
     SapEccLinkedService, SapHanaLinkedService, SapOdpLinkedService, SapOpenHubLinkedService,
     SapTableLinkedService, ServiceNowLinkedService, SftpServerLinkedService,
     SharePointOnlineListLinkedService, ShopifyLinkedService, SmartsheetLinkedService,
-    SnowflakeLinkedService, SparkLinkedService, SqlServerLinkedService, SquareLinkedService,
-    SybaseLinkedService, TeamDeskLinkedService, TeradataLinkedService, TwilioLinkedService,
-    VerticaLinkedService, WebLinkedService, XeroLinkedService, ZendeskLinkedService,
-    ZohoLinkedService
+    SnowflakeLinkedService, SnowflakeV2LinkedService, SparkLinkedService, SqlServerLinkedService,
+    SquareLinkedService, SybaseLinkedService, TeamDeskLinkedService, TeradataLinkedService,
+    TwilioLinkedService, VerticaLinkedService, WarehouseLinkedService, WebLinkedService,
+    XeroLinkedService, ZendeskLinkedService, ZohoLinkedService
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -544,6 +546,7 @@ class LinkedService(_serialization.Model):
             "FtpServer": "FtpServerLinkedService",
             "GoogleAdWords": "GoogleAdWordsLinkedService",
             "GoogleBigQuery": "GoogleBigQueryLinkedService",
+            "GoogleBigQueryV2": "GoogleBigQueryV2LinkedService",
             "GoogleCloudStorage": "GoogleCloudStorageLinkedService",
             "GoogleSheets": "GoogleSheetsLinkedService",
             "Greenplum": "GreenplumLinkedService",
@@ -557,6 +560,7 @@ class LinkedService(_serialization.Model):
             "Impala": "ImpalaLinkedService",
             "Informix": "InformixLinkedService",
             "Jira": "JiraLinkedService",
+            "LakeHouse": "LakeHouseLinkedService",
             "Magento": "MagentoLinkedService",
             "MariaDB": "MariaDBLinkedService",
             "Marketo": "MarketoLinkedService",
@@ -574,6 +578,7 @@ class LinkedService(_serialization.Model):
             "Paypal": "PaypalLinkedService",
             "Phoenix": "PhoenixLinkedService",
             "PostgreSql": "PostgreSqlLinkedService",
+            "PostgreSqlV2": "PostgreSqlV2LinkedService",
             "PowerBIWorkspace": "PowerBIWorkspaceLinkedService",
             "Presto": "PrestoLinkedService",
             "QuickBooks": "QuickBooksLinkedService",
@@ -583,6 +588,8 @@ class LinkedService(_serialization.Model):
             "Salesforce": "SalesforceLinkedService",
             "SalesforceMarketingCloud": "SalesforceMarketingCloudLinkedService",
             "SalesforceServiceCloud": "SalesforceServiceCloudLinkedService",
+            "SalesforceServiceCloudV2": "SalesforceServiceCloudV2LinkedService",
+            "SalesforceV2": "SalesforceV2LinkedService",
             "SapBW": "SapBWLinkedService",
             "SapCloudForCustomer": "SapCloudForCustomerLinkedService",
             "SapEcc": "SapEccLinkedService",
@@ -596,6 +603,7 @@ class LinkedService(_serialization.Model):
             "Shopify": "ShopifyLinkedService",
             "Smartsheet": "SmartsheetLinkedService",
             "Snowflake": "SnowflakeLinkedService",
+            "SnowflakeV2": "SnowflakeV2LinkedService",
             "Spark": "SparkLinkedService",
             "SqlServer": "SqlServerLinkedService",
             "Square": "SquareLinkedService",
@@ -604,6 +612,7 @@ class LinkedService(_serialization.Model):
             "Teradata": "TeradataLinkedService",
             "Twilio": "TwilioLinkedService",
             "Vertica": "VerticaLinkedService",
+            "Warehouse": "WarehouseLinkedService",
             "Web": "WebLinkedService",
             "Xero": "XeroLinkedService",
             "Zendesk": "ZendeskLinkedService",
@@ -646,7 +655,7 @@ class LinkedService(_serialization.Model):
 class AmazonMWSLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Amazon Marketplace Web Service linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -817,23 +826,27 @@ class Dataset(_serialization.Model):
     DocumentDbCollectionDataset, DrillTableDataset, DynamicsAXResourceDataset,
     DynamicsCrmEntityDataset, DynamicsEntityDataset, EloquaObjectDataset, ExcelDataset,
     FileShareDataset, GoogleAdWordsObjectDataset, GoogleBigQueryObjectDataset,
-    GreenplumTableDataset, HBaseObjectDataset, HiveObjectDataset, HttpDataset,
-    HubspotObjectDataset, ImpalaObjectDataset, InformixTableDataset, JiraObjectDataset,
-    JsonDataset, MagentoObjectDataset, MariaDBTableDataset, MarketoObjectDataset,
-    MicrosoftAccessTableDataset, MongoDbAtlasCollectionDataset, MongoDbCollectionDataset,
-    MongoDbV2CollectionDataset, MySqlTableDataset, NetezzaTableDataset, ODataResourceDataset,
-    OdbcTableDataset, Office365Dataset, OracleServiceCloudObjectDataset, OracleTableDataset,
-    OrcDataset, ParquetDataset, PaypalObjectDataset, PhoenixObjectDataset, PostgreSqlTableDataset,
-    PrestoObjectDataset, QuickBooksObjectDataset, RelationalTableDataset, ResponsysObjectDataset,
-    RestResourceDataset, SalesforceMarketingCloudObjectDataset, SalesforceObjectDataset,
-    SalesforceServiceCloudObjectDataset, SapBwCubeDataset, SapCloudForCustomerResourceDataset,
-    SapEccResourceDataset, SapHanaTableDataset, SapOdpResourceDataset, SapOpenHubTableDataset,
-    SapTableResourceDataset, ServiceNowObjectDataset, SharePointOnlineListResourceDataset,
-    ShopifyObjectDataset, SnowflakeDataset, SparkObjectDataset, SqlServerTableDataset,
-    SquareObjectDataset, SybaseTableDataset, TeradataTableDataset, VerticaTableDataset,
-    WebTableDataset, XeroObjectDataset, XmlDataset, ZohoObjectDataset
+    GoogleBigQueryV2ObjectDataset, GreenplumTableDataset, HBaseObjectDataset, HiveObjectDataset,
+    HttpDataset, HubspotObjectDataset, ImpalaObjectDataset, InformixTableDataset,
+    JiraObjectDataset, JsonDataset, LakeHouseTableDataset, MagentoObjectDataset,
+    MariaDBTableDataset, MarketoObjectDataset, MicrosoftAccessTableDataset,
+    MongoDbAtlasCollectionDataset, MongoDbCollectionDataset, MongoDbV2CollectionDataset,
+    MySqlTableDataset, NetezzaTableDataset, ODataResourceDataset, OdbcTableDataset,
+    Office365Dataset, OracleServiceCloudObjectDataset, OracleTableDataset, OrcDataset,
+    ParquetDataset, PaypalObjectDataset, PhoenixObjectDataset, PostgreSqlTableDataset,
+    PostgreSqlV2TableDataset, PrestoObjectDataset, QuickBooksObjectDataset, RelationalTableDataset,
+    ResponsysObjectDataset, RestResourceDataset, SalesforceMarketingCloudObjectDataset,
+    SalesforceObjectDataset, SalesforceServiceCloudObjectDataset,
+    SalesforceServiceCloudV2ObjectDataset, SalesforceV2ObjectDataset, SapBwCubeDataset,
+    SapCloudForCustomerResourceDataset, SapEccResourceDataset, SapHanaTableDataset,
+    SapOdpResourceDataset, SapOpenHubTableDataset, SapTableResourceDataset,
+    ServiceNowObjectDataset, ServiceNowV2ObjectDataset, SharePointOnlineListResourceDataset,
+    ShopifyObjectDataset, SnowflakeDataset, SnowflakeV2Dataset, SparkObjectDataset,
+    SqlServerTableDataset, SquareObjectDataset, SybaseTableDataset, TeradataTableDataset,
+    VerticaTableDataset, WarehouseTableDataset, WebTableDataset, XeroObjectDataset, XmlDataset,
+    ZohoObjectDataset
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -917,6 +930,7 @@ class Dataset(_serialization.Model):
             "FileShare": "FileShareDataset",
             "GoogleAdWordsObject": "GoogleAdWordsObjectDataset",
             "GoogleBigQueryObject": "GoogleBigQueryObjectDataset",
+            "GoogleBigQueryV2Object": "GoogleBigQueryV2ObjectDataset",
             "GreenplumTable": "GreenplumTableDataset",
             "HBaseObject": "HBaseObjectDataset",
             "HiveObject": "HiveObjectDataset",
@@ -926,6 +940,7 @@ class Dataset(_serialization.Model):
             "InformixTable": "InformixTableDataset",
             "JiraObject": "JiraObjectDataset",
             "Json": "JsonDataset",
+            "LakeHouseTable": "LakeHouseTableDataset",
             "MagentoObject": "MagentoObjectDataset",
             "MariaDBTable": "MariaDBTableDataset",
             "MarketoObject": "MarketoObjectDataset",
@@ -945,6 +960,7 @@ class Dataset(_serialization.Model):
             "PaypalObject": "PaypalObjectDataset",
             "PhoenixObject": "PhoenixObjectDataset",
             "PostgreSqlTable": "PostgreSqlTableDataset",
+            "PostgreSqlV2Table": "PostgreSqlV2TableDataset",
             "PrestoObject": "PrestoObjectDataset",
             "QuickBooksObject": "QuickBooksObjectDataset",
             "RelationalTable": "RelationalTableDataset",
@@ -953,6 +969,8 @@ class Dataset(_serialization.Model):
             "SalesforceMarketingCloudObject": "SalesforceMarketingCloudObjectDataset",
             "SalesforceObject": "SalesforceObjectDataset",
             "SalesforceServiceCloudObject": "SalesforceServiceCloudObjectDataset",
+            "SalesforceServiceCloudV2Object": "SalesforceServiceCloudV2ObjectDataset",
+            "SalesforceV2Object": "SalesforceV2ObjectDataset",
             "SapBwCube": "SapBwCubeDataset",
             "SapCloudForCustomerResource": "SapCloudForCustomerResourceDataset",
             "SapEccResource": "SapEccResourceDataset",
@@ -961,15 +979,18 @@ class Dataset(_serialization.Model):
             "SapOpenHubTable": "SapOpenHubTableDataset",
             "SapTableResource": "SapTableResourceDataset",
             "ServiceNowObject": "ServiceNowObjectDataset",
+            "ServiceNowV2Object": "ServiceNowV2ObjectDataset",
             "SharePointOnlineListResource": "SharePointOnlineListResourceDataset",
             "ShopifyObject": "ShopifyObjectDataset",
             "SnowflakeTable": "SnowflakeDataset",
+            "SnowflakeV2Table": "SnowflakeV2Dataset",
             "SparkObject": "SparkObjectDataset",
             "SqlServerTable": "SqlServerTableDataset",
             "SquareObject": "SquareObjectDataset",
             "SybaseTable": "SybaseTableDataset",
             "TeradataTable": "TeradataTableDataset",
             "VerticaTable": "VerticaTableDataset",
+            "WarehouseTable": "WarehouseTableDataset",
             "WebTable": "WebTableDataset",
             "XeroObject": "XeroObjectDataset",
             "Xml": "XmlDataset",
@@ -1027,7 +1048,7 @@ class Dataset(_serialization.Model):
 class AmazonMWSObjectDataset(Dataset):
     """Amazon Marketplace Web Service dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -1134,12 +1155,13 @@ class CopySource(_serialization.Model):
     AzureDataLakeStoreSource, AzureDatabricksDeltaLakeSource, BinarySource, BlobSource,
     CommonDataServiceForAppsSource, CosmosDbMongoDbApiSource, CosmosDbSqlApiSource,
     DelimitedTextSource, DocumentDbCollectionSource, DynamicsCrmSource, DynamicsSource,
-    ExcelSource, FileSystemSource, HdfsSource, HttpSource, JsonSource, MicrosoftAccessSource,
-    MongoDbAtlasSource, MongoDbSource, MongoDbV2Source, ODataSource, Office365Source, OracleSource,
-    OrcSource, ParquetSource, RelationalSource, RestSource, SalesforceServiceCloudSource,
-    SharePointOnlineListSource, SnowflakeSource, TabularSource, WebSource, XmlSource
+    ExcelSource, FileSystemSource, HdfsSource, HttpSource, JsonSource, LakeHouseTableSource,
+    MicrosoftAccessSource, MongoDbAtlasSource, MongoDbSource, MongoDbV2Source, ODataSource,
+    Office365Source, OracleSource, OrcSource, ParquetSource, RelationalSource, RestSource,
+    SalesforceServiceCloudSource, SalesforceServiceCloudV2Source, SharePointOnlineListSource,
+    SnowflakeSource, SnowflakeV2Source, TabularSource, WebSource, XmlSource
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -1191,6 +1213,7 @@ class CopySource(_serialization.Model):
             "HdfsSource": "HdfsSource",
             "HttpSource": "HttpSource",
             "JsonSource": "JsonSource",
+            "LakeHouseTableSource": "LakeHouseTableSource",
             "MicrosoftAccessSource": "MicrosoftAccessSource",
             "MongoDbAtlasSource": "MongoDbAtlasSource",
             "MongoDbSource": "MongoDbSource",
@@ -1203,8 +1226,10 @@ class CopySource(_serialization.Model):
             "RelationalSource": "RelationalSource",
             "RestSource": "RestSource",
             "SalesforceServiceCloudSource": "SalesforceServiceCloudSource",
+            "SalesforceServiceCloudV2Source": "SalesforceServiceCloudV2Source",
             "SharePointOnlineListSource": "SharePointOnlineListSource",
             "SnowflakeSource": "SnowflakeSource",
+            "SnowflakeV2Source": "SnowflakeV2Source",
             "TabularSource": "TabularSource",
             "WebSource": "WebSource",
             "XmlSource": "XmlSource",
@@ -1249,16 +1274,18 @@ class TabularSource(CopySource):
     AmazonMWSSource, AmazonRdsForSqlServerSource, AmazonRedshiftSource, AzureMariaDBSource,
     AzureMySqlSource, AzurePostgreSqlSource, AzureSqlSource, AzureTableSource, CassandraSource,
     ConcurSource, CouchbaseSource, Db2Source, DrillSource, DynamicsAXSource, EloquaSource,
-    GoogleAdWordsSource, GoogleBigQuerySource, GreenplumSource, HBaseSource, HiveSource,
-    HubspotSource, ImpalaSource, InformixSource, JiraSource, MagentoSource, MariaDBSource,
-    MarketoSource, MySqlSource, NetezzaSource, OdbcSource, OracleServiceCloudSource, PaypalSource,
-    PhoenixSource, PostgreSqlSource, PrestoSource, QuickBooksSource, ResponsysSource,
-    SalesforceMarketingCloudSource, SalesforceSource, SapBwSource, SapCloudForCustomerSource,
-    SapEccSource, SapHanaSource, SapOdpSource, SapOpenHubSource, SapTableSource, ServiceNowSource,
-    ShopifySource, SparkSource, SqlDWSource, SqlMISource, SqlServerSource, SqlSource, SquareSource,
-    SybaseSource, TeradataSource, VerticaSource, XeroSource, ZohoSource
+    GoogleAdWordsSource, GoogleBigQuerySource, GoogleBigQueryV2Source, GreenplumSource,
+    HBaseSource, HiveSource, HubspotSource, ImpalaSource, InformixSource, JiraSource,
+    MagentoSource, MariaDBSource, MarketoSource, MySqlSource, NetezzaSource, OdbcSource,
+    OracleServiceCloudSource, PaypalSource, PhoenixSource, PostgreSqlSource, PostgreSqlV2Source,
+    PrestoSource, QuickBooksSource, ResponsysSource, SalesforceMarketingCloudSource,
+    SalesforceSource, SalesforceV2Source, SapBwSource, SapCloudForCustomerSource, SapEccSource,
+    SapHanaSource, SapOdpSource, SapOpenHubSource, SapTableSource, ServiceNowSource,
+    ServiceNowV2Source, ShopifySource, SparkSource, SqlDWSource, SqlMISource, SqlServerSource,
+    SqlSource, SquareSource, SybaseSource, TeradataSource, VerticaSource, WarehouseSource,
+    XeroSource, ZohoSource
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -1315,6 +1342,7 @@ class TabularSource(CopySource):
             "EloquaSource": "EloquaSource",
             "GoogleAdWordsSource": "GoogleAdWordsSource",
             "GoogleBigQuerySource": "GoogleBigQuerySource",
+            "GoogleBigQueryV2Source": "GoogleBigQueryV2Source",
             "GreenplumSource": "GreenplumSource",
             "HBaseSource": "HBaseSource",
             "HiveSource": "HiveSource",
@@ -1332,11 +1360,13 @@ class TabularSource(CopySource):
             "PaypalSource": "PaypalSource",
             "PhoenixSource": "PhoenixSource",
             "PostgreSqlSource": "PostgreSqlSource",
+            "PostgreSqlV2Source": "PostgreSqlV2Source",
             "PrestoSource": "PrestoSource",
             "QuickBooksSource": "QuickBooksSource",
             "ResponsysSource": "ResponsysSource",
             "SalesforceMarketingCloudSource": "SalesforceMarketingCloudSource",
             "SalesforceSource": "SalesforceSource",
+            "SalesforceV2Source": "SalesforceV2Source",
             "SapBwSource": "SapBwSource",
             "SapCloudForCustomerSource": "SapCloudForCustomerSource",
             "SapEccSource": "SapEccSource",
@@ -1345,6 +1375,7 @@ class TabularSource(CopySource):
             "SapOpenHubSource": "SapOpenHubSource",
             "SapTableSource": "SapTableSource",
             "ServiceNowSource": "ServiceNowSource",
+            "ServiceNowV2Source": "ServiceNowV2Source",
             "ShopifySource": "ShopifySource",
             "SparkSource": "SparkSource",
             "SqlDWSource": "SqlDWSource",
@@ -1355,6 +1386,7 @@ class TabularSource(CopySource):
             "SybaseSource": "SybaseSource",
             "TeradataSource": "TeradataSource",
             "VerticaSource": "VerticaSource",
+            "WarehouseSource": "WarehouseSource",
             "XeroSource": "XeroSource",
             "ZohoSource": "ZohoSource",
         }
@@ -1406,7 +1438,7 @@ class TabularSource(CopySource):
 class AmazonMWSSource(TabularSource):
     """A copy activity Amazon Marketplace Web Service source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -1499,7 +1531,7 @@ class AmazonMWSSource(TabularSource):
 class AmazonRdsForOracleLinkedService(LinkedService):
     """AmazonRdsForOracle database.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -1650,7 +1682,7 @@ class AmazonRdsForOraclePartitionSettings(_serialization.Model):
 class AmazonRdsForOracleSource(CopySource):
     """A copy activity AmazonRdsForOracle source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -1763,7 +1795,7 @@ class AmazonRdsForOracleSource(CopySource):
 class AmazonRdsForOracleTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The AmazonRdsForOracle database dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -1876,7 +1908,7 @@ class AmazonRdsForOracleTableDataset(Dataset):  # pylint: disable=too-many-insta
 class AmazonRdsForSqlServerLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Amazon RDS for SQL Server linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -1992,7 +2024,7 @@ class AmazonRdsForSqlServerLinkedService(LinkedService):  # pylint: disable=too-
 class AmazonRdsForSqlServerSource(TabularSource):  # pylint: disable=too-many-instance-attributes
     """A copy activity Amazon RDS for SQL Server source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -2022,8 +2054,7 @@ class AmazonRdsForSqlServerSource(TabularSource):  # pylint: disable=too-many-in
     :vartype sql_reader_stored_procedure_name: JSON
     :ivar stored_procedure_parameters: Value and type setting for stored procedure parameters.
      Example: "{Parameter1: {value: "1", type: "int"}}".
-    :vartype stored_procedure_parameters: dict[str,
-     ~azure.synapse.artifacts.models.StoredProcedureParameter]
+    :vartype stored_procedure_parameters: JSON
     :ivar isolation_level: Specifies the transaction locking behavior for the SQL source. Allowed
      values: ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default value
      is ReadCommitted. Type: string (or Expression with resultType string).
@@ -2051,7 +2082,7 @@ class AmazonRdsForSqlServerSource(TabularSource):  # pylint: disable=too-many-in
         "additional_columns": {"key": "additionalColumns", "type": "object"},
         "sql_reader_query": {"key": "sqlReaderQuery", "type": "object"},
         "sql_reader_stored_procedure_name": {"key": "sqlReaderStoredProcedureName", "type": "object"},
-        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "{StoredProcedureParameter}"},
+        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "object"},
         "isolation_level": {"key": "isolationLevel", "type": "object"},
         "produce_additional_types": {"key": "produceAdditionalTypes", "type": "object"},
         "partition_option": {"key": "partitionOption", "type": "object"},
@@ -2069,7 +2100,7 @@ class AmazonRdsForSqlServerSource(TabularSource):  # pylint: disable=too-many-in
         additional_columns: Optional[JSON] = None,
         sql_reader_query: Optional[JSON] = None,
         sql_reader_stored_procedure_name: Optional[JSON] = None,
-        stored_procedure_parameters: Optional[Dict[str, "_models.StoredProcedureParameter"]] = None,
+        stored_procedure_parameters: Optional[JSON] = None,
         isolation_level: Optional[JSON] = None,
         produce_additional_types: Optional[JSON] = None,
         partition_option: Optional[JSON] = None,
@@ -2104,8 +2135,7 @@ class AmazonRdsForSqlServerSource(TabularSource):  # pylint: disable=too-many-in
         :paramtype sql_reader_stored_procedure_name: JSON
         :keyword stored_procedure_parameters: Value and type setting for stored procedure parameters.
          Example: "{Parameter1: {value: "1", type: "int"}}".
-        :paramtype stored_procedure_parameters: dict[str,
-         ~azure.synapse.artifacts.models.StoredProcedureParameter]
+        :paramtype stored_procedure_parameters: JSON
         :keyword isolation_level: Specifies the transaction locking behavior for the SQL source.
          Allowed values: ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default
          value is ReadCommitted. Type: string (or Expression with resultType string).
@@ -2140,7 +2170,7 @@ class AmazonRdsForSqlServerSource(TabularSource):  # pylint: disable=too-many-in
 class AmazonRdsForSqlServerTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The Amazon RDS for SQL Server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -2253,7 +2283,7 @@ class AmazonRdsForSqlServerTableDataset(Dataset):  # pylint: disable=too-many-in
 class AmazonRedshiftLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Linked service for Amazon Redshift.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -2376,7 +2406,7 @@ class AmazonRedshiftLinkedService(LinkedService):  # pylint: disable=too-many-in
 class AmazonRedshiftSource(TabularSource):
     """A copy activity source for Amazon Redshift Source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -2478,7 +2508,7 @@ class AmazonRedshiftSource(TabularSource):
 class AmazonRedshiftTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The Amazon Redshift table dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -2600,7 +2630,7 @@ class AmazonRedshiftTableDataset(Dataset):  # pylint: disable=too-many-instance-
 class AmazonS3Dataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """A single Amazon Simple Storage Service (S3) object or a set of S3 objects.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -2764,7 +2794,7 @@ class AmazonS3Dataset(Dataset):  # pylint: disable=too-many-instance-attributes
 class AmazonS3LinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Linked service for Amazon S3.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -2890,9 +2920,9 @@ class DatasetLocation(_serialization.Model):
     You probably want to use the sub-classes and not this class directly. Known sub-classes are:
     AmazonS3Location, AzureBlobFSLocation, AzureBlobStorageLocation, AzureDataLakeStoreLocation,
     AzureFileStorageLocation, FileServerLocation, FtpServerLocation, GoogleCloudStorageLocation,
-    HdfsLocation, HttpServerLocation, SftpLocation
+    HdfsLocation, HttpServerLocation, LakeHouseLocation, SftpLocation
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -2930,6 +2960,7 @@ class DatasetLocation(_serialization.Model):
             "GoogleCloudStorageLocation": "GoogleCloudStorageLocation",
             "HdfsLocation": "HdfsLocation",
             "HttpServerLocation": "HttpServerLocation",
+            "LakeHouseLocation": "LakeHouseLocation",
             "SftpLocation": "SftpLocation",
         }
     }
@@ -2963,7 +2994,7 @@ class DatasetLocation(_serialization.Model):
 class AmazonS3Location(DatasetLocation):
     """The location of amazon S3 dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -3039,9 +3070,9 @@ class StoreReadSettings(_serialization.Model):
     AmazonS3ReadSettings, AzureBlobFSReadSettings, AzureBlobStorageReadSettings,
     AzureDataLakeStoreReadSettings, AzureFileStorageReadSettings, FileServerReadSettings,
     FtpReadSettings, GoogleCloudStorageReadSettings, HdfsReadSettings, HttpReadSettings,
-    SftpReadSettings
+    LakeHouseReadSettings, SftpReadSettings
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -3075,6 +3106,7 @@ class StoreReadSettings(_serialization.Model):
             "GoogleCloudStorageReadSettings": "GoogleCloudStorageReadSettings",
             "HdfsReadSettings": "HdfsReadSettings",
             "HttpReadSettings": "HttpReadSettings",
+            "LakeHouseReadSettings": "LakeHouseReadSettings",
             "SftpReadSettings": "SftpReadSettings",
         }
     }
@@ -3103,7 +3135,7 @@ class StoreReadSettings(_serialization.Model):
 class AmazonS3ReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-attributes
     """Azure data lake store read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -3129,8 +3161,9 @@ class AmazonS3ReadSettings(StoreReadSettings):  # pylint: disable=too-many-insta
      configured in the dataset) that you want to copy. Type: string (or Expression with resultType
      string).
     :vartype file_list_path: JSON
-    :ivar enable_partition_discovery: Indicates whether to enable partition discovery.
-    :vartype enable_partition_discovery: bool
+    :ivar enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+     boolean (or Expression with resultType boolean).
+    :vartype enable_partition_discovery: JSON
     :ivar partition_root_path: Specify the root path where partition discovery starts from. Type:
      string (or Expression with resultType string).
     :vartype partition_root_path: JSON
@@ -3158,7 +3191,7 @@ class AmazonS3ReadSettings(StoreReadSettings):  # pylint: disable=too-many-insta
         "wildcard_file_name": {"key": "wildcardFileName", "type": "object"},
         "prefix": {"key": "prefix", "type": "object"},
         "file_list_path": {"key": "fileListPath", "type": "object"},
-        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "bool"},
+        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "object"},
         "partition_root_path": {"key": "partitionRootPath", "type": "object"},
         "delete_files_after_completion": {"key": "deleteFilesAfterCompletion", "type": "object"},
         "modified_datetime_start": {"key": "modifiedDatetimeStart", "type": "object"},
@@ -3175,7 +3208,7 @@ class AmazonS3ReadSettings(StoreReadSettings):  # pylint: disable=too-many-insta
         wildcard_file_name: Optional[JSON] = None,
         prefix: Optional[JSON] = None,
         file_list_path: Optional[JSON] = None,
-        enable_partition_discovery: Optional[bool] = None,
+        enable_partition_discovery: Optional[JSON] = None,
         partition_root_path: Optional[JSON] = None,
         delete_files_after_completion: Optional[JSON] = None,
         modified_datetime_start: Optional[JSON] = None,
@@ -3205,8 +3238,9 @@ class AmazonS3ReadSettings(StoreReadSettings):  # pylint: disable=too-many-insta
          configured in the dataset) that you want to copy. Type: string (or Expression with resultType
          string).
         :paramtype file_list_path: JSON
-        :keyword enable_partition_discovery: Indicates whether to enable partition discovery.
-        :paramtype enable_partition_discovery: bool
+        :keyword enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+         boolean (or Expression with resultType boolean).
+        :paramtype enable_partition_discovery: JSON
         :keyword partition_root_path: Specify the root path where partition discovery starts from.
          Type: string (or Expression with resultType string).
         :paramtype partition_root_path: JSON
@@ -3244,7 +3278,7 @@ class ControlActivity(Activity):
     IfConditionActivity, SetVariableActivity, SwitchActivity, UntilActivity, ValidationActivity,
     WaitActivity, WebHookActivity
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -3349,7 +3383,7 @@ class ControlActivity(Activity):
 class AppendVariableActivity(ControlActivity):
     """Append value for a Variable of type Array.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -3451,7 +3485,7 @@ class AppendVariableActivity(ControlActivity):
 class AppFiguresLinkedService(LinkedService):
     """Linked service for AppFigures.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -3566,7 +3600,7 @@ class ArtifactRenameRequest(_serialization.Model):
 class AsanaLinkedService(LinkedService):
     """Linked service for Asana.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -3721,7 +3755,7 @@ class AutoScaleProperties(_serialization.Model):
 class AvroDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Avro dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -3841,7 +3875,7 @@ class DatasetStorageFormat(_serialization.Model):
     You probably want to use the sub-classes and not this class directly. Known sub-classes are:
     AvroFormat, JsonFormat, OrcFormat, ParquetFormat, TextFormat
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -3902,7 +3936,7 @@ class DatasetStorageFormat(_serialization.Model):
 class AvroFormat(DatasetStorageFormat):
     """The data stored in Avro format.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -3958,11 +3992,12 @@ class CopySink(_serialization.Model):
     AzureSearchIndexSink, AzureSqlSink, AzureTableSink, BinarySink, BlobSink,
     CommonDataServiceForAppsSink, CosmosDbMongoDbApiSink, CosmosDbSqlApiSink, DelimitedTextSink,
     DocumentDbCollectionSink, DynamicsCrmSink, DynamicsSink, FileSystemSink, InformixSink,
-    JsonSink, MicrosoftAccessSink, OdbcSink, OracleSink, OrcSink, ParquetSink, RestSink,
-    SalesforceServiceCloudSink, SalesforceSink, SapCloudForCustomerSink, SnowflakeSink, SqlDWSink,
-    SqlMISink, SqlServerSink, SqlSink
+    JsonSink, LakeHouseTableSink, MicrosoftAccessSink, OdbcSink, OracleSink, OrcSink, ParquetSink,
+    RestSink, SalesforceServiceCloudSink, SalesforceServiceCloudV2Sink, SalesforceSink,
+    SalesforceV2Sink, SapCloudForCustomerSink, SnowflakeSink, SnowflakeV2Sink, SqlDWSink,
+    SqlMISink, SqlServerSink, SqlSink, WarehouseSink
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -4025,6 +4060,7 @@ class CopySink(_serialization.Model):
             "FileSystemSink": "FileSystemSink",
             "InformixSink": "InformixSink",
             "JsonSink": "JsonSink",
+            "LakeHouseTableSink": "LakeHouseTableSink",
             "MicrosoftAccessSink": "MicrosoftAccessSink",
             "OdbcSink": "OdbcSink",
             "OracleSink": "OracleSink",
@@ -4032,13 +4068,17 @@ class CopySink(_serialization.Model):
             "ParquetSink": "ParquetSink",
             "RestSink": "RestSink",
             "SalesforceServiceCloudSink": "SalesforceServiceCloudSink",
+            "SalesforceServiceCloudV2Sink": "SalesforceServiceCloudV2Sink",
             "SalesforceSink": "SalesforceSink",
+            "SalesforceV2Sink": "SalesforceV2Sink",
             "SapCloudForCustomerSink": "SapCloudForCustomerSink",
             "SnowflakeSink": "SnowflakeSink",
+            "SnowflakeV2Sink": "SnowflakeV2Sink",
             "SqlDWSink": "SqlDWSink",
             "SqlMISink": "SqlMISink",
             "SqlServerSink": "SqlServerSink",
             "SqlSink": "SqlSink",
+            "WarehouseSink": "WarehouseSink",
         }
     }
 
@@ -4086,7 +4126,7 @@ class CopySink(_serialization.Model):
 class AvroSink(CopySink):
     """A copy activity Avro sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -4184,7 +4224,7 @@ class AvroSink(CopySink):
 class AvroSource(CopySource):
     """A copy activity Avro source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -4270,7 +4310,7 @@ class FormatWriteSettings(_serialization.Model):
     AvroWriteSettings, DelimitedTextWriteSettings, JsonWriteSettings, OrcWriteSettings,
     ParquetWriteSettings
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -4312,7 +4352,7 @@ class FormatWriteSettings(_serialization.Model):
 class AvroWriteSettings(FormatWriteSettings):
     """Avro write settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -4382,7 +4422,7 @@ class AvroWriteSettings(FormatWriteSettings):
 class AzureBatchLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Azure Batch linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -4512,7 +4552,7 @@ class AzureBatchLinkedService(LinkedService):  # pylint: disable=too-many-instan
 class AzureBlobDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The Azure Blob storage.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -4666,7 +4706,7 @@ class AzureBlobDataset(Dataset):  # pylint: disable=too-many-instance-attributes
 class AzureBlobFSDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The Azure Data Lake Storage Gen2 storage.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -4793,7 +4833,7 @@ class AzureBlobFSDataset(Dataset):  # pylint: disable=too-many-instance-attribut
 class AzureBlobFSLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Azure Data Lake Storage Gen2 linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -4976,7 +5016,7 @@ class AzureBlobFSLinkedService(LinkedService):  # pylint: disable=too-many-insta
 class AzureBlobFSLocation(DatasetLocation):
     """The location of azure blobFS dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -5039,7 +5079,7 @@ class AzureBlobFSLocation(DatasetLocation):
 class AzureBlobFSReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-attributes
     """Azure blobFS read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -5168,7 +5208,7 @@ class AzureBlobFSReadSettings(StoreReadSettings):  # pylint: disable=too-many-in
 class AzureBlobFSSink(CopySink):
     """A copy activity Azure Data Lake Storage Gen2 sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -5261,7 +5301,7 @@ class AzureBlobFSSink(CopySink):
 class AzureBlobFSSource(CopySource):
     """A copy activity Azure BlobFS source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -5356,9 +5396,10 @@ class StoreWriteSettings(_serialization.Model):
 
     You probably want to use the sub-classes and not this class directly. Known sub-classes are:
     AzureBlobFSWriteSettings, AzureBlobStorageWriteSettings, AzureDataLakeStoreWriteSettings,
-    AzureFileStorageWriteSettings, FileServerWriteSettings, SftpWriteSettings
+    AzureFileStorageWriteSettings, FileServerWriteSettings, LakeHouseWriteSettings,
+    SftpWriteSettings
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -5370,6 +5411,9 @@ class StoreWriteSettings(_serialization.Model):
     :vartype max_concurrent_connections: JSON
     :ivar copy_behavior: The type of copy behavior for copy sink.
     :vartype copy_behavior: JSON
+    :ivar metadata: Specify the custom metadata to be added to sink data. Type: array of objects
+     (or Expression with resultType array of objects).
+    :vartype metadata: list[~azure.synapse.artifacts.models.MetadataItem]
     """
 
     _validation = {
@@ -5381,6 +5425,7 @@ class StoreWriteSettings(_serialization.Model):
         "type": {"key": "type", "type": "str"},
         "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
         "copy_behavior": {"key": "copyBehavior", "type": "object"},
+        "metadata": {"key": "metadata", "type": "[MetadataItem]"},
     }
 
     _subtype_map = {
@@ -5390,6 +5435,7 @@ class StoreWriteSettings(_serialization.Model):
             "AzureDataLakeStoreWriteSettings": "AzureDataLakeStoreWriteSettings",
             "AzureFileStorageWriteSettings": "AzureFileStorageWriteSettings",
             "FileServerWriteSettings": "FileServerWriteSettings",
+            "LakeHouseWriteSettings": "LakeHouseWriteSettings",
             "SftpWriteSettings": "SftpWriteSettings",
         }
     }
@@ -5400,6 +5446,7 @@ class StoreWriteSettings(_serialization.Model):
         additional_properties: Optional[Dict[str, JSON]] = None,
         max_concurrent_connections: Optional[JSON] = None,
         copy_behavior: Optional[JSON] = None,
+        metadata: Optional[List["_models.MetadataItem"]] = None,
         **kwargs: Any
     ) -> None:
         """
@@ -5411,18 +5458,22 @@ class StoreWriteSettings(_serialization.Model):
         :paramtype max_concurrent_connections: JSON
         :keyword copy_behavior: The type of copy behavior for copy sink.
         :paramtype copy_behavior: JSON
+        :keyword metadata: Specify the custom metadata to be added to sink data. Type: array of objects
+         (or Expression with resultType array of objects).
+        :paramtype metadata: list[~azure.synapse.artifacts.models.MetadataItem]
         """
         super().__init__(**kwargs)
         self.additional_properties = additional_properties
         self.type: Optional[str] = None
         self.max_concurrent_connections = max_concurrent_connections
         self.copy_behavior = copy_behavior
+        self.metadata = metadata
 
 
 class AzureBlobFSWriteSettings(StoreWriteSettings):
     """Azure blobFS write settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -5434,6 +5485,9 @@ class AzureBlobFSWriteSettings(StoreWriteSettings):
     :vartype max_concurrent_connections: JSON
     :ivar copy_behavior: The type of copy behavior for copy sink.
     :vartype copy_behavior: JSON
+    :ivar metadata: Specify the custom metadata to be added to sink data. Type: array of objects
+     (or Expression with resultType array of objects).
+    :vartype metadata: list[~azure.synapse.artifacts.models.MetadataItem]
     :ivar block_size_in_mb: Indicates the block size(MB) when writing data to blob. Type: integer
      (or Expression with resultType integer).
     :vartype block_size_in_mb: JSON
@@ -5448,6 +5502,7 @@ class AzureBlobFSWriteSettings(StoreWriteSettings):
         "type": {"key": "type", "type": "str"},
         "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
         "copy_behavior": {"key": "copyBehavior", "type": "object"},
+        "metadata": {"key": "metadata", "type": "[MetadataItem]"},
         "block_size_in_mb": {"key": "blockSizeInMB", "type": "object"},
     }
 
@@ -5457,6 +5512,7 @@ class AzureBlobFSWriteSettings(StoreWriteSettings):
         additional_properties: Optional[Dict[str, JSON]] = None,
         max_concurrent_connections: Optional[JSON] = None,
         copy_behavior: Optional[JSON] = None,
+        metadata: Optional[List["_models.MetadataItem"]] = None,
         block_size_in_mb: Optional[JSON] = None,
         **kwargs: Any
     ) -> None:
@@ -5469,6 +5525,9 @@ class AzureBlobFSWriteSettings(StoreWriteSettings):
         :paramtype max_concurrent_connections: JSON
         :keyword copy_behavior: The type of copy behavior for copy sink.
         :paramtype copy_behavior: JSON
+        :keyword metadata: Specify the custom metadata to be added to sink data. Type: array of objects
+         (or Expression with resultType array of objects).
+        :paramtype metadata: list[~azure.synapse.artifacts.models.MetadataItem]
         :keyword block_size_in_mb: Indicates the block size(MB) when writing data to blob. Type:
          integer (or Expression with resultType integer).
         :paramtype block_size_in_mb: JSON
@@ -5477,6 +5536,7 @@ class AzureBlobFSWriteSettings(StoreWriteSettings):
             additional_properties=additional_properties,
             max_concurrent_connections=max_concurrent_connections,
             copy_behavior=copy_behavior,
+            metadata=metadata,
             **kwargs
         )
         self.type: str = "AzureBlobFSWriteSettings"
@@ -5486,7 +5546,7 @@ class AzureBlobFSWriteSettings(StoreWriteSettings):
 class AzureBlobStorageLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """The azure blob storage linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -5683,7 +5743,7 @@ class AzureBlobStorageLinkedService(LinkedService):  # pylint: disable=too-many-
 class AzureBlobStorageLocation(DatasetLocation):
     """The location of azure blob dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -5746,7 +5806,7 @@ class AzureBlobStorageLocation(DatasetLocation):
 class AzureBlobStorageReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-attributes
     """Azure blob read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -5772,8 +5832,9 @@ class AzureBlobStorageReadSettings(StoreReadSettings):  # pylint: disable=too-ma
      configured in the dataset) that you want to copy. Type: string (or Expression with resultType
      string).
     :vartype file_list_path: JSON
-    :ivar enable_partition_discovery: Indicates whether to enable partition discovery.
-    :vartype enable_partition_discovery: bool
+    :ivar enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+     boolean (or Expression with resultType boolean).
+    :vartype enable_partition_discovery: JSON
     :ivar partition_root_path: Specify the root path where partition discovery starts from. Type:
      string (or Expression with resultType string).
     :vartype partition_root_path: JSON
@@ -5801,7 +5862,7 @@ class AzureBlobStorageReadSettings(StoreReadSettings):  # pylint: disable=too-ma
         "wildcard_file_name": {"key": "wildcardFileName", "type": "object"},
         "prefix": {"key": "prefix", "type": "object"},
         "file_list_path": {"key": "fileListPath", "type": "object"},
-        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "bool"},
+        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "object"},
         "partition_root_path": {"key": "partitionRootPath", "type": "object"},
         "delete_files_after_completion": {"key": "deleteFilesAfterCompletion", "type": "object"},
         "modified_datetime_start": {"key": "modifiedDatetimeStart", "type": "object"},
@@ -5818,7 +5879,7 @@ class AzureBlobStorageReadSettings(StoreReadSettings):  # pylint: disable=too-ma
         wildcard_file_name: Optional[JSON] = None,
         prefix: Optional[JSON] = None,
         file_list_path: Optional[JSON] = None,
-        enable_partition_discovery: Optional[bool] = None,
+        enable_partition_discovery: Optional[JSON] = None,
         partition_root_path: Optional[JSON] = None,
         delete_files_after_completion: Optional[JSON] = None,
         modified_datetime_start: Optional[JSON] = None,
@@ -5848,8 +5909,9 @@ class AzureBlobStorageReadSettings(StoreReadSettings):  # pylint: disable=too-ma
          configured in the dataset) that you want to copy. Type: string (or Expression with resultType
          string).
         :paramtype file_list_path: JSON
-        :keyword enable_partition_discovery: Indicates whether to enable partition discovery.
-        :paramtype enable_partition_discovery: bool
+        :keyword enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+         boolean (or Expression with resultType boolean).
+        :paramtype enable_partition_discovery: JSON
         :keyword partition_root_path: Specify the root path where partition discovery starts from.
          Type: string (or Expression with resultType string).
         :paramtype partition_root_path: JSON
@@ -5882,7 +5944,7 @@ class AzureBlobStorageReadSettings(StoreReadSettings):  # pylint: disable=too-ma
 class AzureBlobStorageWriteSettings(StoreWriteSettings):
     """Azure blob write settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -5894,6 +5956,9 @@ class AzureBlobStorageWriteSettings(StoreWriteSettings):
     :vartype max_concurrent_connections: JSON
     :ivar copy_behavior: The type of copy behavior for copy sink.
     :vartype copy_behavior: JSON
+    :ivar metadata: Specify the custom metadata to be added to sink data. Type: array of objects
+     (or Expression with resultType array of objects).
+    :vartype metadata: list[~azure.synapse.artifacts.models.MetadataItem]
     :ivar block_size_in_mb: Indicates the block size(MB) when writing data to blob. Type: integer
      (or Expression with resultType integer).
     :vartype block_size_in_mb: JSON
@@ -5908,6 +5973,7 @@ class AzureBlobStorageWriteSettings(StoreWriteSettings):
         "type": {"key": "type", "type": "str"},
         "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
         "copy_behavior": {"key": "copyBehavior", "type": "object"},
+        "metadata": {"key": "metadata", "type": "[MetadataItem]"},
         "block_size_in_mb": {"key": "blockSizeInMB", "type": "object"},
     }
 
@@ -5917,6 +5983,7 @@ class AzureBlobStorageWriteSettings(StoreWriteSettings):
         additional_properties: Optional[Dict[str, JSON]] = None,
         max_concurrent_connections: Optional[JSON] = None,
         copy_behavior: Optional[JSON] = None,
+        metadata: Optional[List["_models.MetadataItem"]] = None,
         block_size_in_mb: Optional[JSON] = None,
         **kwargs: Any
     ) -> None:
@@ -5929,6 +5996,9 @@ class AzureBlobStorageWriteSettings(StoreWriteSettings):
         :paramtype max_concurrent_connections: JSON
         :keyword copy_behavior: The type of copy behavior for copy sink.
         :paramtype copy_behavior: JSON
+        :keyword metadata: Specify the custom metadata to be added to sink data. Type: array of objects
+         (or Expression with resultType array of objects).
+        :paramtype metadata: list[~azure.synapse.artifacts.models.MetadataItem]
         :keyword block_size_in_mb: Indicates the block size(MB) when writing data to blob. Type:
          integer (or Expression with resultType integer).
         :paramtype block_size_in_mb: JSON
@@ -5937,6 +6007,7 @@ class AzureBlobStorageWriteSettings(StoreWriteSettings):
             additional_properties=additional_properties,
             max_concurrent_connections=max_concurrent_connections,
             copy_behavior=copy_behavior,
+            metadata=metadata,
             **kwargs
         )
         self.type: str = "AzureBlobStorageWriteSettings"
@@ -5946,7 +6017,7 @@ class AzureBlobStorageWriteSettings(StoreWriteSettings):
 class AzureDatabricksDeltaLakeDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Azure Databricks Delta Lake dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -6060,7 +6131,7 @@ class ExportSettings(_serialization.Model):
     You probably want to use the sub-classes and not this class directly. Known sub-classes are:
     AzureDatabricksDeltaLakeExportCommand, SnowflakeExportCopyCommand
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -6099,7 +6170,7 @@ class ExportSettings(_serialization.Model):
 class AzureDatabricksDeltaLakeExportCommand(ExportSettings):
     """Azure Databricks Delta Lake export command settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -6156,7 +6227,7 @@ class ImportSettings(_serialization.Model):
     You probably want to use the sub-classes and not this class directly. Known sub-classes are:
     AzureDatabricksDeltaLakeImportCommand, SnowflakeImportCopyCommand
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -6195,7 +6266,7 @@ class ImportSettings(_serialization.Model):
 class AzureDatabricksDeltaLakeImportCommand(ImportSettings):
     """Azure Databricks Delta Lake import command settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -6249,7 +6320,7 @@ class AzureDatabricksDeltaLakeImportCommand(ImportSettings):
 class AzureDatabricksDeltaLakeLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Azure Databricks Delta Lake linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -6365,7 +6436,7 @@ class AzureDatabricksDeltaLakeLinkedService(LinkedService):  # pylint: disable=t
 class AzureDatabricksDeltaLakeSink(CopySink):
     """A copy activity Azure Databricks Delta Lake sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -6466,7 +6537,7 @@ class AzureDatabricksDeltaLakeSink(CopySink):
 class AzureDatabricksDeltaLakeSource(CopySource):
     """A copy activity Azure Databricks Delta Lake source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -6549,7 +6620,7 @@ class AzureDatabricksDeltaLakeSource(CopySource):
 class AzureDatabricksLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Azure Databricks linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -6818,7 +6889,7 @@ class ExecutionActivity(Activity):
     HDInsightStreamingActivity, LookupActivity, ScriptActivity, SynapseSparkJobDefinitionActivity,
     SqlServerStoredProcedureActivity, SynapseNotebookActivity, WebActivity
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -6951,7 +7022,7 @@ class ExecutionActivity(Activity):
 class AzureDataExplorerCommandActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """Azure Data Explorer command activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -7072,7 +7143,7 @@ class AzureDataExplorerCommandActivity(ExecutionActivity):  # pylint: disable=to
 class AzureDataExplorerLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Azure Data Explorer (Kusto) linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -7195,7 +7266,7 @@ class AzureDataExplorerLinkedService(LinkedService):  # pylint: disable=too-many
 class AzureDataExplorerSink(CopySink):
     """A copy activity Azure Data Explorer sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -7306,7 +7377,7 @@ class AzureDataExplorerSink(CopySink):
 class AzureDataExplorerSource(CopySource):
     """A copy activity Azure Data Explorer (Kusto) source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -7409,7 +7480,7 @@ class AzureDataExplorerSource(CopySource):
 class AzureDataExplorerTableDataset(Dataset):
     """The Azure Data Explorer (Kusto) dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -7513,7 +7584,7 @@ class AzureDataExplorerTableDataset(Dataset):
 class AzureDataLakeAnalyticsLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Azure Data Lake Analytics linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -7656,7 +7727,7 @@ class AzureDataLakeAnalyticsLinkedService(LinkedService):  # pylint: disable=too
 class AzureDataLakeStoreDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Azure Data Lake Store dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -7785,7 +7856,7 @@ class AzureDataLakeStoreDataset(Dataset):  # pylint: disable=too-many-instance-a
 class AzureDataLakeStoreLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Azure Data Lake Store linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -7945,7 +8016,7 @@ class AzureDataLakeStoreLinkedService(LinkedService):  # pylint: disable=too-man
 class AzureDataLakeStoreLocation(DatasetLocation):
     """The location of azure data lake store dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -7999,7 +8070,7 @@ class AzureDataLakeStoreLocation(DatasetLocation):
 class AzureDataLakeStoreReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-attributes
     """Azure data lake store read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -8150,7 +8221,7 @@ class AzureDataLakeStoreReadSettings(StoreReadSettings):  # pylint: disable=too-
 class AzureDataLakeStoreSink(CopySink):
     """A copy activity Azure Data Lake Store sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -8250,7 +8321,7 @@ class AzureDataLakeStoreSink(CopySink):
 class AzureDataLakeStoreSource(CopySource):
     """A copy activity Azure Data Lake source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -8325,7 +8396,7 @@ class AzureDataLakeStoreSource(CopySource):
 class AzureDataLakeStoreWriteSettings(StoreWriteSettings):
     """Azure data lake store write settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -8337,6 +8408,9 @@ class AzureDataLakeStoreWriteSettings(StoreWriteSettings):
     :vartype max_concurrent_connections: JSON
     :ivar copy_behavior: The type of copy behavior for copy sink.
     :vartype copy_behavior: JSON
+    :ivar metadata: Specify the custom metadata to be added to sink data. Type: array of objects
+     (or Expression with resultType array of objects).
+    :vartype metadata: list[~azure.synapse.artifacts.models.MetadataItem]
     :ivar expiry_date_time: Specifies the expiry time of the written files. The time is applied to
      the UTC time zone in the format of "2018-12-01T05:00:00Z". Default value is NULL. Type: string
      (or Expression with resultType string).
@@ -8352,6 +8426,7 @@ class AzureDataLakeStoreWriteSettings(StoreWriteSettings):
         "type": {"key": "type", "type": "str"},
         "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
         "copy_behavior": {"key": "copyBehavior", "type": "object"},
+        "metadata": {"key": "metadata", "type": "[MetadataItem]"},
         "expiry_date_time": {"key": "expiryDateTime", "type": "object"},
     }
 
@@ -8361,6 +8436,7 @@ class AzureDataLakeStoreWriteSettings(StoreWriteSettings):
         additional_properties: Optional[Dict[str, JSON]] = None,
         max_concurrent_connections: Optional[JSON] = None,
         copy_behavior: Optional[JSON] = None,
+        metadata: Optional[List["_models.MetadataItem"]] = None,
         expiry_date_time: Optional[JSON] = None,
         **kwargs: Any
     ) -> None:
@@ -8373,6 +8449,9 @@ class AzureDataLakeStoreWriteSettings(StoreWriteSettings):
         :paramtype max_concurrent_connections: JSON
         :keyword copy_behavior: The type of copy behavior for copy sink.
         :paramtype copy_behavior: JSON
+        :keyword metadata: Specify the custom metadata to be added to sink data. Type: array of objects
+         (or Expression with resultType array of objects).
+        :paramtype metadata: list[~azure.synapse.artifacts.models.MetadataItem]
         :keyword expiry_date_time: Specifies the expiry time of the written files. The time is applied
          to the UTC time zone in the format of "2018-12-01T05:00:00Z". Default value is NULL. Type:
          string (or Expression with resultType string).
@@ -8382,6 +8461,7 @@ class AzureDataLakeStoreWriteSettings(StoreWriteSettings):
             additional_properties=additional_properties,
             max_concurrent_connections=max_concurrent_connections,
             copy_behavior=copy_behavior,
+            metadata=metadata,
             **kwargs
         )
         self.type: str = "AzureDataLakeStoreWriteSettings"
@@ -8394,7 +8474,7 @@ class Resource(_serialization.Model):
     Variables are only populated by the server, and will be ignored when sending a request.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -8429,7 +8509,7 @@ class AzureEntityResource(Resource):
     Variables are only populated by the server, and will be ignored when sending a request.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -8463,7 +8543,7 @@ class AzureEntityResource(Resource):
 class AzureFileStorageLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Azure File Storage linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -8617,7 +8697,7 @@ class AzureFileStorageLinkedService(LinkedService):  # pylint: disable=too-many-
 class AzureFileStorageLocation(DatasetLocation):
     """The location of file server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -8671,7 +8751,7 @@ class AzureFileStorageLocation(DatasetLocation):
 class AzureFileStorageReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-attributes
     """Azure File Storage read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -8697,8 +8777,9 @@ class AzureFileStorageReadSettings(StoreReadSettings):  # pylint: disable=too-ma
      configured in the dataset) that you want to copy. Type: string (or Expression with resultType
      string).
     :vartype file_list_path: JSON
-    :ivar enable_partition_discovery: Indicates whether to enable partition discovery.
-    :vartype enable_partition_discovery: bool
+    :ivar enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+     boolean (or Expression with resultType boolean).
+    :vartype enable_partition_discovery: JSON
     :ivar partition_root_path: Specify the root path where partition discovery starts from. Type:
      string (or Expression with resultType string).
     :vartype partition_root_path: JSON
@@ -8726,7 +8807,7 @@ class AzureFileStorageReadSettings(StoreReadSettings):  # pylint: disable=too-ma
         "wildcard_file_name": {"key": "wildcardFileName", "type": "object"},
         "prefix": {"key": "prefix", "type": "object"},
         "file_list_path": {"key": "fileListPath", "type": "object"},
-        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "bool"},
+        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "object"},
         "partition_root_path": {"key": "partitionRootPath", "type": "object"},
         "delete_files_after_completion": {"key": "deleteFilesAfterCompletion", "type": "object"},
         "modified_datetime_start": {"key": "modifiedDatetimeStart", "type": "object"},
@@ -8743,7 +8824,7 @@ class AzureFileStorageReadSettings(StoreReadSettings):  # pylint: disable=too-ma
         wildcard_file_name: Optional[JSON] = None,
         prefix: Optional[JSON] = None,
         file_list_path: Optional[JSON] = None,
-        enable_partition_discovery: Optional[bool] = None,
+        enable_partition_discovery: Optional[JSON] = None,
         partition_root_path: Optional[JSON] = None,
         delete_files_after_completion: Optional[JSON] = None,
         modified_datetime_start: Optional[JSON] = None,
@@ -8773,8 +8854,9 @@ class AzureFileStorageReadSettings(StoreReadSettings):  # pylint: disable=too-ma
          configured in the dataset) that you want to copy. Type: string (or Expression with resultType
          string).
         :paramtype file_list_path: JSON
-        :keyword enable_partition_discovery: Indicates whether to enable partition discovery.
-        :paramtype enable_partition_discovery: bool
+        :keyword enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+         boolean (or Expression with resultType boolean).
+        :paramtype enable_partition_discovery: JSON
         :keyword partition_root_path: Specify the root path where partition discovery starts from.
          Type: string (or Expression with resultType string).
         :paramtype partition_root_path: JSON
@@ -8807,7 +8889,7 @@ class AzureFileStorageReadSettings(StoreReadSettings):  # pylint: disable=too-ma
 class AzureFileStorageWriteSettings(StoreWriteSettings):
     """Azure File Storage write settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -8819,6 +8901,9 @@ class AzureFileStorageWriteSettings(StoreWriteSettings):
     :vartype max_concurrent_connections: JSON
     :ivar copy_behavior: The type of copy behavior for copy sink.
     :vartype copy_behavior: JSON
+    :ivar metadata: Specify the custom metadata to be added to sink data. Type: array of objects
+     (or Expression with resultType array of objects).
+    :vartype metadata: list[~azure.synapse.artifacts.models.MetadataItem]
     """
 
     _validation = {
@@ -8830,6 +8915,7 @@ class AzureFileStorageWriteSettings(StoreWriteSettings):
         "type": {"key": "type", "type": "str"},
         "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
         "copy_behavior": {"key": "copyBehavior", "type": "object"},
+        "metadata": {"key": "metadata", "type": "[MetadataItem]"},
     }
 
     def __init__(
@@ -8838,6 +8924,7 @@ class AzureFileStorageWriteSettings(StoreWriteSettings):
         additional_properties: Optional[Dict[str, JSON]] = None,
         max_concurrent_connections: Optional[JSON] = None,
         copy_behavior: Optional[JSON] = None,
+        metadata: Optional[List["_models.MetadataItem"]] = None,
         **kwargs: Any
     ) -> None:
         """
@@ -8849,11 +8936,15 @@ class AzureFileStorageWriteSettings(StoreWriteSettings):
         :paramtype max_concurrent_connections: JSON
         :keyword copy_behavior: The type of copy behavior for copy sink.
         :paramtype copy_behavior: JSON
+        :keyword metadata: Specify the custom metadata to be added to sink data. Type: array of objects
+         (or Expression with resultType array of objects).
+        :paramtype metadata: list[~azure.synapse.artifacts.models.MetadataItem]
         """
         super().__init__(
             additional_properties=additional_properties,
             max_concurrent_connections=max_concurrent_connections,
             copy_behavior=copy_behavior,
+            metadata=metadata,
             **kwargs
         )
         self.type: str = "AzureFileStorageWriteSettings"
@@ -8862,7 +8953,7 @@ class AzureFileStorageWriteSettings(StoreWriteSettings):
 class AzureFunctionActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """Azure Function activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -9004,7 +9095,7 @@ class AzureFunctionActivity(ExecutionActivity):  # pylint: disable=too-many-inst
 class AzureFunctionLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Azure Function linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -9122,7 +9213,7 @@ class AzureFunctionLinkedService(LinkedService):  # pylint: disable=too-many-ins
 class AzureKeyVaultLinkedService(LinkedService):
     """Azure Key Vault linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -9209,7 +9300,7 @@ class SecretBase(_serialization.Model):
     You probably want to use the sub-classes and not this class directly. Known sub-classes are:
     AzureKeyVaultSecretReference, SecureString
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Type of the secret. Required.
     :vartype type: str
@@ -9234,7 +9325,7 @@ class SecretBase(_serialization.Model):
 class AzureKeyVaultSecretReference(SecretBase):
     """Azure Key Vault secret reference.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Type of the secret. Required.
     :vartype type: str
@@ -9289,7 +9380,7 @@ class AzureKeyVaultSecretReference(SecretBase):
 class AzureMariaDBLinkedService(LinkedService):
     """Azure Database for MariaDB linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -9383,7 +9474,7 @@ class AzureMariaDBLinkedService(LinkedService):
 class AzureMariaDBSource(TabularSource):
     """A copy activity Azure MariaDB source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -9476,7 +9567,7 @@ class AzureMariaDBSource(TabularSource):
 class AzureMariaDBTableDataset(Dataset):
     """Azure Database for MariaDB dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -9578,7 +9669,7 @@ class AzureMariaDBTableDataset(Dataset):
 class AzureMLBatchExecutionActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """Azure ML Batch Execution activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -9719,7 +9810,7 @@ class AzureMLBatchExecutionActivity(ExecutionActivity):  # pylint: disable=too-m
 class AzureMLExecutePipelineActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """Azure ML Execute Pipeline activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -9878,7 +9969,7 @@ class AzureMLExecutePipelineActivity(ExecutionActivity):  # pylint: disable=too-
 class AzureMLLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Azure ML Studio Web Service linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -10021,7 +10112,7 @@ class AzureMLLinkedService(LinkedService):  # pylint: disable=too-many-instance-
 class AzureMLServiceLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Azure ML Service linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -10167,7 +10258,7 @@ class AzureMLServiceLinkedService(LinkedService):  # pylint: disable=too-many-in
 class AzureMLUpdateResourceActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """Azure ML Update Resource management activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -10306,7 +10397,7 @@ class AzureMLUpdateResourceActivity(ExecutionActivity):  # pylint: disable=too-m
 class AzureMLWebServiceFile(_serialization.Model):
     """Azure ML WebService Input/Output file.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar file_path: The relative file path, including container name, in the Azure Blob Storage
      specified by the LinkedService. Type: string (or Expression with resultType string). Required.
@@ -10345,7 +10436,7 @@ class AzureMLWebServiceFile(_serialization.Model):
 class AzureMySqlLinkedService(LinkedService):
     """Azure MySQL database linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -10440,7 +10531,7 @@ class AzureMySqlLinkedService(LinkedService):
 class AzureMySqlSink(CopySink):
     """A copy activity Azure MySql sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -10533,7 +10624,7 @@ class AzureMySqlSink(CopySink):
 class AzureMySqlSource(TabularSource):
     """A copy activity Azure MySQL source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -10624,7 +10715,7 @@ class AzureMySqlSource(TabularSource):
 class AzureMySqlTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The Azure MySQL database dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -10737,7 +10828,7 @@ class AzureMySqlTableDataset(Dataset):  # pylint: disable=too-many-instance-attr
 class AzurePostgreSqlLinkedService(LinkedService):
     """Azure PostgreSQL linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -10831,7 +10922,7 @@ class AzurePostgreSqlLinkedService(LinkedService):
 class AzurePostgreSqlSink(CopySink):
     """A copy activity Azure PostgreSQL sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -10924,7 +11015,7 @@ class AzurePostgreSqlSink(CopySink):
 class AzurePostgreSqlSource(TabularSource):
     """A copy activity Azure PostgreSQL source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -11017,7 +11108,7 @@ class AzurePostgreSqlSource(TabularSource):
 class AzurePostgreSqlTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Azure PostgreSQL dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -11139,7 +11230,7 @@ class AzurePostgreSqlTableDataset(Dataset):  # pylint: disable=too-many-instance
 class AzureQueueSink(CopySink):
     """A copy activity Azure Queue sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -11223,7 +11314,7 @@ class AzureQueueSink(CopySink):
 class AzureSearchIndexDataset(Dataset):
     """The Azure Search Index.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -11328,7 +11419,7 @@ class AzureSearchIndexDataset(Dataset):
 class AzureSearchIndexSink(CopySink):
     """A copy activity Azure Search Index sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -11423,7 +11514,7 @@ class AzureSearchIndexSink(CopySink):
 class AzureSearchLinkedService(LinkedService):
     """Linked service for Windows Azure Search Service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -11518,7 +11609,7 @@ class AzureSearchLinkedService(LinkedService):
 class AzureSqlDatabaseLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Microsoft Azure SQL Database linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -11670,7 +11761,7 @@ class AzureSqlDatabaseLinkedService(LinkedService):  # pylint: disable=too-many-
 class AzureSqlDWLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Azure SQL Data Warehouse linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -11812,7 +11903,7 @@ class AzureSqlDWLinkedService(LinkedService):  # pylint: disable=too-many-instan
 class AzureSqlDWTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The Azure SQL Data Warehouse dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -11934,7 +12025,7 @@ class AzureSqlDWTableDataset(Dataset):  # pylint: disable=too-many-instance-attr
 class AzureSqlMILinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Azure SQL Managed Instance linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -12086,7 +12177,7 @@ class AzureSqlMILinkedService(LinkedService):  # pylint: disable=too-many-instan
 class AzureSqlMITableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The Azure SQL Managed Instance dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -12208,7 +12299,7 @@ class AzureSqlMITableDataset(Dataset):  # pylint: disable=too-many-instance-attr
 class AzureSqlSink(CopySink):  # pylint: disable=too-many-instance-attributes
     """A copy activity Azure SQL sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -12240,8 +12331,7 @@ class AzureSqlSink(CopySink):  # pylint: disable=too-many-instance-attributes
      string).
     :vartype pre_copy_script: JSON
     :ivar stored_procedure_parameters: SQL stored procedure parameters.
-    :vartype stored_procedure_parameters: dict[str,
-     ~azure.synapse.artifacts.models.StoredProcedureParameter]
+    :vartype stored_procedure_parameters: JSON
     :ivar stored_procedure_table_type_parameter_name: The stored procedure parameter name of the
      table type. Type: string (or Expression with resultType string).
     :vartype stored_procedure_table_type_parameter_name: JSON
@@ -12265,7 +12355,7 @@ class AzureSqlSink(CopySink):  # pylint: disable=too-many-instance-attributes
         "sql_writer_stored_procedure_name": {"key": "sqlWriterStoredProcedureName", "type": "object"},
         "sql_writer_table_type": {"key": "sqlWriterTableType", "type": "object"},
         "pre_copy_script": {"key": "preCopyScript", "type": "object"},
-        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "{StoredProcedureParameter}"},
+        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "object"},
         "stored_procedure_table_type_parameter_name": {
             "key": "storedProcedureTableTypeParameterName",
             "type": "object",
@@ -12285,7 +12375,7 @@ class AzureSqlSink(CopySink):  # pylint: disable=too-many-instance-attributes
         sql_writer_stored_procedure_name: Optional[JSON] = None,
         sql_writer_table_type: Optional[JSON] = None,
         pre_copy_script: Optional[JSON] = None,
-        stored_procedure_parameters: Optional[Dict[str, "_models.StoredProcedureParameter"]] = None,
+        stored_procedure_parameters: Optional[JSON] = None,
         stored_procedure_table_type_parameter_name: Optional[JSON] = None,
         table_option: Optional[JSON] = None,
         **kwargs: Any
@@ -12319,8 +12409,7 @@ class AzureSqlSink(CopySink):  # pylint: disable=too-many-instance-attributes
          string).
         :paramtype pre_copy_script: JSON
         :keyword stored_procedure_parameters: SQL stored procedure parameters.
-        :paramtype stored_procedure_parameters: dict[str,
-         ~azure.synapse.artifacts.models.StoredProcedureParameter]
+        :paramtype stored_procedure_parameters: JSON
         :keyword stored_procedure_table_type_parameter_name: The stored procedure parameter name of the
          table type. Type: string (or Expression with resultType string).
         :paramtype stored_procedure_table_type_parameter_name: JSON
@@ -12349,7 +12438,7 @@ class AzureSqlSink(CopySink):  # pylint: disable=too-many-instance-attributes
 class AzureSqlSource(TabularSource):  # pylint: disable=too-many-instance-attributes
     """A copy activity Azure SQL source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -12379,8 +12468,7 @@ class AzureSqlSource(TabularSource):  # pylint: disable=too-many-instance-attrib
     :vartype sql_reader_stored_procedure_name: JSON
     :ivar stored_procedure_parameters: Value and type setting for stored procedure parameters.
      Example: "{Parameter1: {value: "1", type: "int"}}".
-    :vartype stored_procedure_parameters: dict[str,
-     ~azure.synapse.artifacts.models.StoredProcedureParameter]
+    :vartype stored_procedure_parameters: JSON
     :ivar isolation_level: Specifies the transaction locking behavior for the SQL source. Allowed
      values: ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default value
      is ReadCommitted. Type: string (or Expression with resultType string).
@@ -12408,7 +12496,7 @@ class AzureSqlSource(TabularSource):  # pylint: disable=too-many-instance-attrib
         "additional_columns": {"key": "additionalColumns", "type": "object"},
         "sql_reader_query": {"key": "sqlReaderQuery", "type": "object"},
         "sql_reader_stored_procedure_name": {"key": "sqlReaderStoredProcedureName", "type": "object"},
-        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "{StoredProcedureParameter}"},
+        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "object"},
         "isolation_level": {"key": "isolationLevel", "type": "object"},
         "produce_additional_types": {"key": "produceAdditionalTypes", "type": "object"},
         "partition_option": {"key": "partitionOption", "type": "object"},
@@ -12426,7 +12514,7 @@ class AzureSqlSource(TabularSource):  # pylint: disable=too-many-instance-attrib
         additional_columns: Optional[JSON] = None,
         sql_reader_query: Optional[JSON] = None,
         sql_reader_stored_procedure_name: Optional[JSON] = None,
-        stored_procedure_parameters: Optional[Dict[str, "_models.StoredProcedureParameter"]] = None,
+        stored_procedure_parameters: Optional[JSON] = None,
         isolation_level: Optional[JSON] = None,
         produce_additional_types: Optional[JSON] = None,
         partition_option: Optional[JSON] = None,
@@ -12461,8 +12549,7 @@ class AzureSqlSource(TabularSource):  # pylint: disable=too-many-instance-attrib
         :paramtype sql_reader_stored_procedure_name: JSON
         :keyword stored_procedure_parameters: Value and type setting for stored procedure parameters.
          Example: "{Parameter1: {value: "1", type: "int"}}".
-        :paramtype stored_procedure_parameters: dict[str,
-         ~azure.synapse.artifacts.models.StoredProcedureParameter]
+        :paramtype stored_procedure_parameters: JSON
         :keyword isolation_level: Specifies the transaction locking behavior for the SQL source.
          Allowed values: ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default
          value is ReadCommitted. Type: string (or Expression with resultType string).
@@ -12497,7 +12584,7 @@ class AzureSqlSource(TabularSource):  # pylint: disable=too-many-instance-attrib
 class AzureSqlTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The Azure SQL Server database dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -12619,7 +12706,7 @@ class AzureSqlTableDataset(Dataset):  # pylint: disable=too-many-instance-attrib
 class AzureStorageLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """The storage account linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -12729,7 +12816,7 @@ class AzureStorageLinkedService(LinkedService):  # pylint: disable=too-many-inst
 class AzureSynapseArtifactsLinkedService(LinkedService):
     """Azure Synapse Analytics (Artifacts) linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -12751,7 +12838,7 @@ class AzureSynapseArtifactsLinkedService(LinkedService):
      authentication method. Type: string (or Expression with resultType string).
     :vartype authentication: JSON
     :ivar workspace_resource_id: The resource ID of the Synapse workspace. The format should be:
-     /subscriptions/{subscriptionID}/resourceGroups/{resourceGroup}/providers/Microsoft.Synapse/workspaces/{workspaceName}.
+     /subscriptions/{subscriptionID}/resourceGroups/{resourceGroup}/providers/Microsoft.Synapse/workspaces/{workspaceName}.  # pylint: disable=line-too-long
      Type: string (or Expression with resultType string).
     :vartype workspace_resource_id: JSON
     """
@@ -12805,7 +12892,7 @@ class AzureSynapseArtifactsLinkedService(LinkedService):
          authentication method. Type: string (or Expression with resultType string).
         :paramtype authentication: JSON
         :keyword workspace_resource_id: The resource ID of the Synapse workspace. The format should be:
-         /subscriptions/{subscriptionID}/resourceGroups/{resourceGroup}/providers/Microsoft.Synapse/workspaces/{workspaceName}.
+         /subscriptions/{subscriptionID}/resourceGroups/{resourceGroup}/providers/Microsoft.Synapse/workspaces/{workspaceName}.  # pylint: disable=line-too-long
          Type: string (or Expression with resultType string).
         :paramtype workspace_resource_id: JSON
         """
@@ -12826,7 +12913,7 @@ class AzureSynapseArtifactsLinkedService(LinkedService):
 class AzureTableDataset(Dataset):
     """The Azure Table storage dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -12931,7 +13018,7 @@ class AzureTableDataset(Dataset):
 class AzureTableSink(CopySink):  # pylint: disable=too-many-instance-attributes
     """A copy activity Azure Table sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -13051,7 +13138,7 @@ class AzureTableSink(CopySink):  # pylint: disable=too-many-instance-attributes
 class AzureTableSource(TabularSource):
     """A copy activity Azure Table source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -13153,7 +13240,7 @@ class AzureTableSource(TabularSource):
 class AzureTableStorageLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """The azure table storage linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -13263,7 +13350,7 @@ class AzureTableStorageLinkedService(LinkedService):  # pylint: disable=too-many
 class BigDataPoolParametrizationReference(_serialization.Model):
     """Big data pool reference type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Big data pool reference type. Required. "BigDataPoolReference"
     :vartype type: str or ~azure.synapse.artifacts.models.BigDataPoolReferenceType
@@ -13300,7 +13387,7 @@ class BigDataPoolParametrizationReference(_serialization.Model):
 class BigDataPoolReference(_serialization.Model):
     """Big data pool reference.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Big data pool reference type. Required. "BigDataPoolReference"
     :vartype type: str or ~azure.synapse.artifacts.models.BigDataPoolReferenceType
@@ -13338,10 +13425,10 @@ class TrackedResource(Resource):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -13386,10 +13473,10 @@ class BigDataPoolResourceInfo(TrackedResource):  # pylint: disable=too-many-inst
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -13600,7 +13687,7 @@ class BigDataPoolResourceInfoListResult(_serialization.Model):
 class BinaryDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Binary dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -13710,9 +13797,10 @@ class FormatReadSettings(_serialization.Model):
     """Format read settings.
 
     You probably want to use the sub-classes and not this class directly. Known sub-classes are:
-    BinaryReadSettings, DelimitedTextReadSettings, JsonReadSettings, XmlReadSettings
+    BinaryReadSettings, DelimitedTextReadSettings, JsonReadSettings, ParquetReadSettings,
+    XmlReadSettings
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -13735,6 +13823,7 @@ class FormatReadSettings(_serialization.Model):
             "BinaryReadSettings": "BinaryReadSettings",
             "DelimitedTextReadSettings": "DelimitedTextReadSettings",
             "JsonReadSettings": "JsonReadSettings",
+            "ParquetReadSettings": "ParquetReadSettings",
             "XmlReadSettings": "XmlReadSettings",
         }
     }
@@ -13753,7 +13842,7 @@ class FormatReadSettings(_serialization.Model):
 class BinaryReadSettings(FormatReadSettings):
     """Binary read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -13796,7 +13885,7 @@ class BinaryReadSettings(FormatReadSettings):
 class BinarySink(CopySink):
     """A copy activity Binary sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -13887,7 +13976,7 @@ class BinarySink(CopySink):
 class BinarySource(CopySource):
     """A copy activity Binary source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -13972,7 +14061,7 @@ class Trigger(_serialization.Model):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -14043,7 +14132,7 @@ class MultiplePipelineTrigger(Trigger):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -14116,7 +14205,7 @@ class BlobEventsTrigger(MultiplePipelineTrigger):  # pylint: disable=too-many-in
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -14228,7 +14317,7 @@ class BlobEventsTrigger(MultiplePipelineTrigger):  # pylint: disable=too-many-in
 class BlobSink(CopySink):  # pylint: disable=too-many-instance-attributes
     """A copy activity Azure Blob sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -14346,7 +14435,7 @@ class BlobSink(CopySink):  # pylint: disable=too-many-instance-attributes
 class BlobSource(CopySource):
     """A copy activity Azure Blob source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -14441,7 +14530,7 @@ class BlobTrigger(MultiplePipelineTrigger):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -14533,7 +14622,7 @@ class BlobTrigger(MultiplePipelineTrigger):
 class CassandraLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Linked service for Cassandra data source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -14654,7 +14743,7 @@ class CassandraLinkedService(LinkedService):  # pylint: disable=too-many-instanc
 class CassandraSource(TabularSource):
     """A copy activity source for a Cassandra database.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -14766,7 +14855,7 @@ class CassandraSource(TabularSource):
 class CassandraTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The Cassandra database dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -14884,7 +14973,7 @@ class ChainingTrigger(Trigger):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -14967,7 +15056,7 @@ class ChainingTrigger(Trigger):
 class CloudError(_serialization.Model):
     """The object that defines the structure of an Azure Synapse error response.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar code: Error code. Required.
     :vartype code: str
@@ -15020,7 +15109,7 @@ class CloudError(_serialization.Model):
 class CommonDataServiceForAppsEntityDataset(Dataset):
     """The Common Data Service for Apps entity dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -15124,7 +15213,7 @@ class CommonDataServiceForAppsEntityDataset(Dataset):
 class CommonDataServiceForAppsLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Common Data Service for Apps linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -15325,7 +15414,7 @@ class CommonDataServiceForAppsLinkedService(LinkedService):  # pylint: disable=t
 class CommonDataServiceForAppsSink(CopySink):
     """A copy activity Common Data Service for Apps sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -15437,7 +15526,7 @@ class CommonDataServiceForAppsSink(CopySink):
 class CommonDataServiceForAppsSource(CopySource):
     """A copy activity Common Data Service for Apps source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -15524,7 +15613,7 @@ class CompressionReadSettings(_serialization.Model):
     You probably want to use the sub-classes and not this class directly. Known sub-classes are:
     TarGZipReadSettings, TarReadSettings, ZipDeflateReadSettings
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -15564,7 +15653,7 @@ class CompressionReadSettings(_serialization.Model):
 class ConcurLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Concur Service linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -15705,7 +15794,7 @@ class ConcurLinkedService(LinkedService):  # pylint: disable=too-many-instance-a
 class ConcurObjectDataset(Dataset):
     """Concur Service dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -15807,7 +15896,7 @@ class ConcurObjectDataset(Dataset):
 class ConcurSource(TabularSource):
     """A copy activity Concur Service source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -15900,7 +15989,7 @@ class ConcurSource(TabularSource):
 class CopyActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """Copy activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -16179,7 +16268,7 @@ class CopyTranslator(_serialization.Model):
     You probably want to use the sub-classes and not this class directly. Known sub-classes are:
     TabularTranslator
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -16213,7 +16302,7 @@ class CopyTranslator(_serialization.Model):
 class CosmosDbLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Microsoft Azure Cosmos Database (CosmosDB) linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -16333,7 +16422,7 @@ class CosmosDbLinkedService(LinkedService):  # pylint: disable=too-many-instance
 class CosmosDbMongoDbApiCollectionDataset(Dataset):
     """The CosmosDB (MongoDB API) database dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -16438,7 +16527,7 @@ class CosmosDbMongoDbApiCollectionDataset(Dataset):
 class CosmosDbMongoDbApiLinkedService(LinkedService):
     """Linked service for CosmosDB (MongoDB API) data source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -16527,7 +16616,7 @@ class CosmosDbMongoDbApiLinkedService(LinkedService):
 class CosmosDbMongoDbApiSink(CopySink):
     """A copy activity sink for a CosmosDB (MongoDB API) database.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -16622,7 +16711,7 @@ class CosmosDbMongoDbApiSink(CopySink):
 class CosmosDbMongoDbApiSource(CopySource):
     """A copy activity source for a CosmosDB (MongoDB API) database.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -16737,7 +16826,7 @@ class CosmosDbMongoDbApiSource(CopySource):
 class CosmosDbSqlApiCollectionDataset(Dataset):
     """Microsoft Azure CosmosDB (SQL API) Collection dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -16842,7 +16931,7 @@ class CosmosDbSqlApiCollectionDataset(Dataset):
 class CosmosDbSqlApiSink(CopySink):
     """A copy activity Azure CosmosDB (SQL API) Collection sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -16935,7 +17024,7 @@ class CosmosDbSqlApiSink(CopySink):
 class CosmosDbSqlApiSource(CopySource):
     """A copy activity Azure CosmosDB (SQL API) Collection source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -17044,7 +17133,7 @@ class CosmosDbSqlApiSource(CopySource):
 class CouchbaseLinkedService(LinkedService):
     """Couchbase server linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -17138,7 +17227,7 @@ class CouchbaseLinkedService(LinkedService):
 class CouchbaseSource(TabularSource):
     """A copy activity Couchbase server source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -17231,7 +17320,7 @@ class CouchbaseSource(TabularSource):
 class CouchbaseTableDataset(Dataset):
     """Couchbase server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -17404,7 +17493,7 @@ class CreateDataFlowDebugSessionResponse(_serialization.Model):
 class CreateRunResponse(_serialization.Model):
     """Response body with a run identifier.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar run_id: Identifier of a run. Required.
     :vartype run_id: str
@@ -17430,7 +17519,7 @@ class CreateRunResponse(_serialization.Model):
 class CredentialReference(_serialization.Model):
     """Credential reference type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -17478,7 +17567,7 @@ class CredentialReference(_serialization.Model):
 class CustomActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """Custom activity type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -17674,7 +17763,7 @@ class CustomActivityReferenceObject(_serialization.Model):
 class CustomDataset(Dataset):
     """The custom dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -17776,7 +17865,7 @@ class CustomDataset(Dataset):
 class CustomDataSourceLinkedService(LinkedService):
     """Custom linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -17883,7 +17972,7 @@ class CustomEventsTrigger(MultiplePipelineTrigger):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -17982,7 +18071,7 @@ class CustomEventsTrigger(MultiplePipelineTrigger):
 class CustomSetupBase(_serialization.Model):
     """The base definition of the custom setup.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: The type of custom setup. Required.
     :vartype type: str
@@ -18005,7 +18094,7 @@ class CustomSetupBase(_serialization.Model):
 class DatabricksNotebookActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """DatabricksNotebook activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -18136,7 +18225,7 @@ class DatabricksNotebookActivity(ExecutionActivity):  # pylint: disable=too-many
 class DatabricksSparkJarActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """DatabricksSparkJar activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -18265,7 +18354,7 @@ class DatabricksSparkJarActivity(ExecutionActivity):  # pylint: disable=too-many
 class DatabricksSparkPythonActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """DatabricksSparkPython activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -18395,7 +18484,7 @@ class DataFlow(_serialization.Model):
     You probably want to use the sub-classes and not this class directly. Known sub-classes are:
     Flowlet, MappingDataFlow
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Type of data flow. Required.
     :vartype type: str
@@ -18448,7 +18537,7 @@ class DataFlow(_serialization.Model):
 class DataFlowDebugCommandPayload(_serialization.Model):
     """Structure of command payload.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar stream_name: The stream name which is used for preview. Required.
     :vartype stream_name: str
@@ -18768,7 +18857,7 @@ class SubResourceDebugResource(_serialization.Model):
 class DataFlowDebugResource(SubResourceDebugResource):
     """Data flow debug resource.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: The resource name.
     :vartype name: str
@@ -18983,7 +19072,7 @@ class DataFlowFolder(_serialization.Model):
 class DataFlowListResponse(_serialization.Model):
     """A list of data flow resources.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: List of data flows. Required.
     :vartype value: list[~azure.synapse.artifacts.models.DataFlowResource]
@@ -19017,7 +19106,7 @@ class DataFlowListResponse(_serialization.Model):
 class DataFlowReference(_serialization.Model):
     """Data flow reference type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -19082,7 +19171,7 @@ class SubResource(AzureEntityResource):
     Variables are only populated by the server, and will be ignored when sending a request.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -19093,34 +19182,16 @@ class SubResource(AzureEntityResource):
     :vartype etag: str
     """
 
-    _validation = {
-        "id": {"readonly": True},
-        "name": {"readonly": True},
-        "type": {"readonly": True},
-        "etag": {"readonly": True},
-    }
-
-    _attribute_map = {
-        "id": {"key": "id", "type": "str"},
-        "name": {"key": "name", "type": "str"},
-        "type": {"key": "type", "type": "str"},
-        "etag": {"key": "etag", "type": "str"},
-    }
-
-    def __init__(self, **kwargs: Any) -> None:
-        """ """
-        super().__init__(**kwargs)
-
 
 class DataFlowResource(SubResource):
     """Data flow resource type.
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -19161,7 +19232,7 @@ class DataFlowResource(SubResource):
 class Transformation(_serialization.Model):
     """A data flow transformation.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: Transformation name. Required.
     :vartype name: str
@@ -19220,7 +19291,7 @@ class Transformation(_serialization.Model):
 class DataFlowSink(Transformation):
     """Transformation for data flow sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: Transformation name. Required.
     :vartype name: str
@@ -19295,7 +19366,7 @@ class DataFlowSink(Transformation):
 class DataFlowSource(Transformation):
     """Transformation for data flow source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: Transformation name. Required.
     :vartype name: str
@@ -19436,7 +19507,7 @@ class DataFlowStagingInfo(_serialization.Model):
 class DataLakeAnalyticsUSQLActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """Data Lake Analytics U-SQL activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -19627,7 +19698,7 @@ class DataLakeStorageAccountDetails(_serialization.Model):
 class DatasetCompression(_serialization.Model):
     """The compression method used on a dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -19704,7 +19775,7 @@ class DatasetDataElement(_serialization.Model):
 class DatasetDebugResource(SubResourceDebugResource):
     """Dataset debug resource.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: The resource name.
     :vartype name: str
@@ -19755,7 +19826,7 @@ class DatasetFolder(_serialization.Model):
 class DatasetListResponse(_serialization.Model):
     """A list of dataset resources.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: List of datasets. Required.
     :vartype value: list[~azure.synapse.artifacts.models.DatasetResource]
@@ -19789,7 +19860,7 @@ class DatasetListResponse(_serialization.Model):
 class DatasetReference(_serialization.Model):
     """Dataset reference type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Dataset reference type. Required. "DatasetReference"
     :vartype type: str or ~azure.synapse.artifacts.models.DatasetReferenceType
@@ -19837,10 +19908,10 @@ class DatasetResource(SubResource):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -19922,7 +19993,7 @@ class DatasetSchemaDataElement(_serialization.Model):
 class DataworldLinkedService(LinkedService):
     """Linked service for Dataworld.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -20008,7 +20079,7 @@ class DataworldLinkedService(LinkedService):
 class Db2LinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Linked service for DB2 data source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -20162,7 +20233,7 @@ class Db2LinkedService(LinkedService):  # pylint: disable=too-many-instance-attr
 class Db2Source(TabularSource):
     """A copy activity source for Db2 databases.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -20253,7 +20324,7 @@ class Db2Source(TabularSource):
 class Db2TableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The Db2 table dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -20373,7 +20444,7 @@ class Db2TableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
 class DeleteActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """Delete activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -20555,7 +20626,7 @@ class DeleteDataFlowDebugSessionRequest(_serialization.Model):
 class DelimitedTextDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Delimited text dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -20738,7 +20809,7 @@ class DelimitedTextDataset(Dataset):  # pylint: disable=too-many-instance-attrib
 class DelimitedTextReadSettings(FormatReadSettings):
     """Delimited text read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -20790,7 +20861,7 @@ class DelimitedTextReadSettings(FormatReadSettings):
 class DelimitedTextSink(CopySink):
     """A copy activity DelimitedText sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -20888,7 +20959,7 @@ class DelimitedTextSink(CopySink):
 class DelimitedTextSource(CopySource):
     """A copy activity DelimitedText source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -20977,7 +21048,7 @@ class DelimitedTextSource(CopySource):
 class DelimitedTextWriteSettings(FormatWriteSettings):
     """Delimited text write settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -21055,7 +21126,7 @@ class DependencyReference(_serialization.Model):
     You probably want to use the sub-classes and not this class directly. Known sub-classes are:
     SelfDependencyTumblingWindowTriggerReference, TriggerDependencyReference
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: The type of dependency reference. Required.
     :vartype type: str
@@ -21085,7 +21156,7 @@ class DependencyReference(_serialization.Model):
 class DistcpSettings(_serialization.Model):
     """Distcp settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar resource_manager_endpoint: Specifies the Yarn ResourceManager endpoint. Type: string (or
      Expression with resultType string). Required.
@@ -21139,7 +21210,7 @@ class DistcpSettings(_serialization.Model):
 class DocumentDbCollectionDataset(Dataset):
     """Microsoft Azure Document Database Collection dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -21244,7 +21315,7 @@ class DocumentDbCollectionDataset(Dataset):
 class DocumentDbCollectionSink(CopySink):
     """A copy activity Document Database Collection sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -21346,7 +21417,7 @@ class DocumentDbCollectionSink(CopySink):
 class DocumentDbCollectionSource(CopySource):
     """A copy activity Document Database Collection source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -21446,7 +21517,7 @@ class DocumentDbCollectionSource(CopySource):
 class DrillLinkedService(LinkedService):
     """Drill server linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -21540,7 +21611,7 @@ class DrillLinkedService(LinkedService):
 class DrillSource(TabularSource):
     """A copy activity Drill server source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -21633,7 +21704,7 @@ class DrillSource(TabularSource):
 class DrillTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Drill server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -21846,7 +21917,7 @@ class DynamicExecutorAllocation(_serialization.Model):
 class DynamicsAXLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Dynamics AX linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -21978,7 +22049,7 @@ class DynamicsAXLinkedService(LinkedService):  # pylint: disable=too-many-instan
 class DynamicsAXResourceDataset(Dataset):
     """The path of the Dynamics AX OData entity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -22083,7 +22154,7 @@ class DynamicsAXResourceDataset(Dataset):
 class DynamicsAXSource(TabularSource):
     """A copy activity Dynamics AX source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -22189,7 +22260,7 @@ class DynamicsAXSource(TabularSource):
 class DynamicsCrmEntityDataset(Dataset):
     """The Dynamics CRM entity dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -22293,7 +22364,7 @@ class DynamicsCrmEntityDataset(Dataset):
 class DynamicsCrmLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Dynamics CRM linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -22487,7 +22558,7 @@ class DynamicsCrmLinkedService(LinkedService):  # pylint: disable=too-many-insta
 class DynamicsCrmSink(CopySink):
     """A copy activity Dynamics CRM sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -22599,7 +22670,7 @@ class DynamicsCrmSink(CopySink):
 class DynamicsCrmSource(CopySource):
     """A copy activity Dynamics CRM source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -22683,7 +22754,7 @@ class DynamicsCrmSource(CopySource):
 class DynamicsEntityDataset(Dataset):
     """The Dynamics entity dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -22787,7 +22858,7 @@ class DynamicsEntityDataset(Dataset):
 class DynamicsLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Dynamics linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -22989,7 +23060,7 @@ class DynamicsLinkedService(LinkedService):  # pylint: disable=too-many-instance
 class DynamicsSink(CopySink):
     """A copy activity Dynamics sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -23101,7 +23172,7 @@ class DynamicsSink(CopySink):
 class DynamicsSource(CopySource):
     """A copy activity Dynamics source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -23205,7 +23276,7 @@ class EditTablesRequest(_serialization.Model):
 class EloquaLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Eloqua server linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -23337,7 +23408,7 @@ class EloquaLinkedService(LinkedService):  # pylint: disable=too-many-instance-a
 class EloquaObjectDataset(Dataset):
     """Eloqua server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -23439,7 +23510,7 @@ class EloquaObjectDataset(Dataset):
 class EloquaSource(TabularSource):
     """A copy activity Eloqua server source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -23741,7 +23812,7 @@ class EvaluateDataFlowExpressionRequest(_serialization.Model):
 class ExcelDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Excel dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -23896,7 +23967,7 @@ class ExcelDataset(Dataset):  # pylint: disable=too-many-instance-attributes
 class ExcelSource(CopySource):
     """A copy activity excel source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -23978,7 +24049,7 @@ class ExcelSource(CopySource):
 class ExecuteDataFlowActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """Execute data flow activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -24145,36 +24216,35 @@ class ExecuteDataFlowActivity(ExecutionActivity):  # pylint: disable=too-many-in
         self.source_staging_concurrency = source_staging_concurrency
 
 
-class ExecuteDataFlowActivityTypePropertiesCompute(_serialization.Model):
+class ExecuteDataFlowActivityTypePropertiesCompute(_serialization.Model):  # pylint: disable=name-too-long
     """Compute properties for data flow activity.
 
-    :ivar compute_type: Compute type of the cluster which will execute data flow job. Known values
-     are: "General", "MemoryOptimized", and "ComputeOptimized".
-    :vartype compute_type: str or ~azure.synapse.artifacts.models.DataFlowComputeType
+    :ivar compute_type: Compute type of the cluster which will execute data flow job. Possible
+     values include: 'General', 'MemoryOptimized', 'ComputeOptimized'. Type: string (or Expression
+     with resultType string).
+    :vartype compute_type: JSON
     :ivar core_count: Core count of the cluster which will execute data flow job. Supported values
-     are: 8, 16, 32, 48, 80, 144 and 272.
-    :vartype core_count: int
+     are: 8, 16, 32, 48, 80, 144 and 272. Type: integer (or Expression with resultType integer).
+    :vartype core_count: JSON
     """
 
     _attribute_map = {
-        "compute_type": {"key": "computeType", "type": "str"},
-        "core_count": {"key": "coreCount", "type": "int"},
+        "compute_type": {"key": "computeType", "type": "object"},
+        "core_count": {"key": "coreCount", "type": "object"},
     }
 
     def __init__(
-        self,
-        *,
-        compute_type: Optional[Union[str, "_models.DataFlowComputeType"]] = None,
-        core_count: Optional[int] = None,
-        **kwargs: Any
+        self, *, compute_type: Optional[JSON] = None, core_count: Optional[JSON] = None, **kwargs: Any
     ) -> None:
         """
-        :keyword compute_type: Compute type of the cluster which will execute data flow job. Known
-         values are: "General", "MemoryOptimized", and "ComputeOptimized".
-        :paramtype compute_type: str or ~azure.synapse.artifacts.models.DataFlowComputeType
+        :keyword compute_type: Compute type of the cluster which will execute data flow job. Possible
+         values include: 'General', 'MemoryOptimized', 'ComputeOptimized'. Type: string (or Expression
+         with resultType string).
+        :paramtype compute_type: JSON
         :keyword core_count: Core count of the cluster which will execute data flow job. Supported
-         values are: 8, 16, 32, 48, 80, 144 and 272.
-        :paramtype core_count: int
+         values are: 8, 16, 32, 48, 80, 144 and 272. Type: integer (or Expression with resultType
+         integer).
+        :paramtype core_count: JSON
         """
         super().__init__(**kwargs)
         self.compute_type = compute_type
@@ -24184,7 +24254,7 @@ class ExecuteDataFlowActivityTypePropertiesCompute(_serialization.Model):
 class ExecutePipelineActivity(ControlActivity):  # pylint: disable=too-many-instance-attributes
     """Execute pipeline activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -24296,7 +24366,7 @@ class ExecutePipelineActivity(ControlActivity):  # pylint: disable=too-many-inst
 class ExecuteSSISPackageActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """Execute SSIS package activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -24562,7 +24632,7 @@ class ExposureControlResponse(_serialization.Model):
 class Expression(_serialization.Model):
     """Azure Synapse expression definition.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Expression type. Required. "Expression"
     :vartype type: str or ~azure.synapse.artifacts.models.ExpressionType
@@ -24592,13 +24662,61 @@ class Expression(_serialization.Model):
         self.value = value
 
 
+class ExpressionV2(_serialization.Model):
+    """Nested representation of a complex expression.
+
+    :ivar type: Type of expressions supported by the system. Type: string. Known values are:
+     "Constant", "Field", "Unary", and "Binary".
+    :vartype type: str or ~azure.synapse.artifacts.models.ExpressionV2Type
+    :ivar value: Value for Constant/Field Type: string.
+    :vartype value: str
+    :ivar operator: Expression operator value Type: string.
+    :vartype operator: str
+    :ivar operands: List of nested expressions.
+    :vartype operands: list[~azure.synapse.artifacts.models.ExpressionV2]
+    """
+
+    _attribute_map = {
+        "type": {"key": "type", "type": "str"},
+        "value": {"key": "value", "type": "str"},
+        "operator": {"key": "operator", "type": "str"},
+        "operands": {"key": "operands", "type": "[ExpressionV2]"},
+    }
+
+    def __init__(
+        self,
+        *,
+        type: Optional[Union[str, "_models.ExpressionV2Type"]] = None,
+        value: Optional[str] = None,
+        operator: Optional[str] = None,
+        operands: Optional[List["_models.ExpressionV2"]] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword type: Type of expressions supported by the system. Type: string. Known values are:
+         "Constant", "Field", "Unary", and "Binary".
+        :paramtype type: str or ~azure.synapse.artifacts.models.ExpressionV2Type
+        :keyword value: Value for Constant/Field Type: string.
+        :paramtype value: str
+        :keyword operator: Expression operator value Type: string.
+        :paramtype operator: str
+        :keyword operands: List of nested expressions.
+        :paramtype operands: list[~azure.synapse.artifacts.models.ExpressionV2]
+        """
+        super().__init__(**kwargs)
+        self.type = type
+        self.value = value
+        self.operator = operator
+        self.operands = operands
+
+
 class FailActivity(ControlActivity):
     """This activity will fail within its own scope and output a custom error message and error code.
     The error message and code can provided either as a string literal or as an expression that can
     be evaluated to a string at runtime. The activity scope can be the whole pipeline or a control
     activity (e.g. foreach, switch, until), if the fail activity is contained in it.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -24710,7 +24828,7 @@ class FailActivity(ControlActivity):
 class FileServerLinkedService(LinkedService):
     """File system linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -24814,7 +24932,7 @@ class FileServerLinkedService(LinkedService):
 class FileServerLocation(DatasetLocation):
     """The location of file server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -24868,7 +24986,7 @@ class FileServerLocation(DatasetLocation):
 class FileServerReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-attributes
     """File server read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -24891,8 +25009,9 @@ class FileServerReadSettings(StoreReadSettings):  # pylint: disable=too-many-ins
      configured in the dataset) that you want to copy. Type: string (or Expression with resultType
      string).
     :vartype file_list_path: JSON
-    :ivar enable_partition_discovery: Indicates whether to enable partition discovery.
-    :vartype enable_partition_discovery: bool
+    :ivar enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+     boolean (or Expression with resultType boolean).
+    :vartype enable_partition_discovery: JSON
     :ivar partition_root_path: Specify the root path where partition discovery starts from. Type:
      string (or Expression with resultType string).
     :vartype partition_root_path: JSON
@@ -24922,7 +25041,7 @@ class FileServerReadSettings(StoreReadSettings):  # pylint: disable=too-many-ins
         "wildcard_folder_path": {"key": "wildcardFolderPath", "type": "object"},
         "wildcard_file_name": {"key": "wildcardFileName", "type": "object"},
         "file_list_path": {"key": "fileListPath", "type": "object"},
-        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "bool"},
+        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "object"},
         "partition_root_path": {"key": "partitionRootPath", "type": "object"},
         "delete_files_after_completion": {"key": "deleteFilesAfterCompletion", "type": "object"},
         "modified_datetime_start": {"key": "modifiedDatetimeStart", "type": "object"},
@@ -24939,7 +25058,7 @@ class FileServerReadSettings(StoreReadSettings):  # pylint: disable=too-many-ins
         wildcard_folder_path: Optional[JSON] = None,
         wildcard_file_name: Optional[JSON] = None,
         file_list_path: Optional[JSON] = None,
-        enable_partition_discovery: Optional[bool] = None,
+        enable_partition_discovery: Optional[JSON] = None,
         partition_root_path: Optional[JSON] = None,
         delete_files_after_completion: Optional[JSON] = None,
         modified_datetime_start: Optional[JSON] = None,
@@ -24967,8 +25086,9 @@ class FileServerReadSettings(StoreReadSettings):  # pylint: disable=too-many-ins
          configured in the dataset) that you want to copy. Type: string (or Expression with resultType
          string).
         :paramtype file_list_path: JSON
-        :keyword enable_partition_discovery: Indicates whether to enable partition discovery.
-        :paramtype enable_partition_discovery: bool
+        :keyword enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+         boolean (or Expression with resultType boolean).
+        :paramtype enable_partition_discovery: JSON
         :keyword partition_root_path: Specify the root path where partition discovery starts from.
          Type: string (or Expression with resultType string).
         :paramtype partition_root_path: JSON
@@ -25004,7 +25124,7 @@ class FileServerReadSettings(StoreReadSettings):  # pylint: disable=too-many-ins
 class FileServerWriteSettings(StoreWriteSettings):
     """File server write settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -25016,6 +25136,9 @@ class FileServerWriteSettings(StoreWriteSettings):
     :vartype max_concurrent_connections: JSON
     :ivar copy_behavior: The type of copy behavior for copy sink.
     :vartype copy_behavior: JSON
+    :ivar metadata: Specify the custom metadata to be added to sink data. Type: array of objects
+     (or Expression with resultType array of objects).
+    :vartype metadata: list[~azure.synapse.artifacts.models.MetadataItem]
     """
 
     _validation = {
@@ -25027,6 +25150,7 @@ class FileServerWriteSettings(StoreWriteSettings):
         "type": {"key": "type", "type": "str"},
         "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
         "copy_behavior": {"key": "copyBehavior", "type": "object"},
+        "metadata": {"key": "metadata", "type": "[MetadataItem]"},
     }
 
     def __init__(
@@ -25035,6 +25159,7 @@ class FileServerWriteSettings(StoreWriteSettings):
         additional_properties: Optional[Dict[str, JSON]] = None,
         max_concurrent_connections: Optional[JSON] = None,
         copy_behavior: Optional[JSON] = None,
+        metadata: Optional[List["_models.MetadataItem"]] = None,
         **kwargs: Any
     ) -> None:
         """
@@ -25046,11 +25171,15 @@ class FileServerWriteSettings(StoreWriteSettings):
         :paramtype max_concurrent_connections: JSON
         :keyword copy_behavior: The type of copy behavior for copy sink.
         :paramtype copy_behavior: JSON
+        :keyword metadata: Specify the custom metadata to be added to sink data. Type: array of objects
+         (or Expression with resultType array of objects).
+        :paramtype metadata: list[~azure.synapse.artifacts.models.MetadataItem]
         """
         super().__init__(
             additional_properties=additional_properties,
             max_concurrent_connections=max_concurrent_connections,
             copy_behavior=copy_behavior,
+            metadata=metadata,
             **kwargs
         )
         self.type: str = "FileServerWriteSettings"
@@ -25059,7 +25188,7 @@ class FileServerWriteSettings(StoreWriteSettings):
 class FileShareDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """An on-premises file system dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -25213,7 +25342,7 @@ class FileShareDataset(Dataset):  # pylint: disable=too-many-instance-attributes
 class FileSystemSink(CopySink):
     """A copy activity file system sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -25304,7 +25433,7 @@ class FileSystemSink(CopySink):
 class FileSystemSource(CopySource):
     """A copy activity file system source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -25388,7 +25517,7 @@ class FileSystemSource(CopySource):
 class FilterActivity(ControlActivity):
     """Filter and return results from input array based on the conditions.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -25492,7 +25621,7 @@ class FilterActivity(ControlActivity):
 class Flowlet(DataFlow):
     """Data flow flowlet.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Type of data flow. Required.
     :vartype type: str
@@ -25575,7 +25704,7 @@ class Flowlet(DataFlow):
 class ForEachActivity(ControlActivity):  # pylint: disable=too-many-instance-attributes
     """This activity is used for iterating over a collection and execute given activities.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -25696,7 +25825,7 @@ class ForEachActivity(ControlActivity):  # pylint: disable=too-many-instance-att
 class FtpReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-attributes
     """Ftp read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -25715,8 +25844,9 @@ class FtpReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-a
     :ivar wildcard_file_name: Ftp wildcardFileName. Type: string (or Expression with resultType
      string).
     :vartype wildcard_file_name: JSON
-    :ivar enable_partition_discovery: Indicates whether to enable partition discovery.
-    :vartype enable_partition_discovery: bool
+    :ivar enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+     boolean (or Expression with resultType boolean).
+    :vartype enable_partition_discovery: JSON
     :ivar partition_root_path: Specify the root path where partition discovery starts from. Type:
      string (or Expression with resultType string).
     :vartype partition_root_path: JSON
@@ -25727,8 +25857,9 @@ class FtpReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-a
      configured in the dataset) that you want to copy. Type: string (or Expression with resultType
      string).
     :vartype file_list_path: JSON
-    :ivar use_binary_transfer: Specify whether to use binary transfer mode for FTP stores.
-    :vartype use_binary_transfer: bool
+    :ivar use_binary_transfer: Specify whether to use binary transfer mode for FTP stores. Type:
+     boolean (or Expression with resultType boolean).
+    :vartype use_binary_transfer: JSON
     :ivar disable_chunking: If true, disable parallel reading within each file. Default is false.
      Type: boolean (or Expression with resultType boolean).
     :vartype disable_chunking: JSON
@@ -25745,11 +25876,11 @@ class FtpReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-a
         "recursive": {"key": "recursive", "type": "object"},
         "wildcard_folder_path": {"key": "wildcardFolderPath", "type": "object"},
         "wildcard_file_name": {"key": "wildcardFileName", "type": "object"},
-        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "bool"},
+        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "object"},
         "partition_root_path": {"key": "partitionRootPath", "type": "object"},
         "delete_files_after_completion": {"key": "deleteFilesAfterCompletion", "type": "object"},
         "file_list_path": {"key": "fileListPath", "type": "object"},
-        "use_binary_transfer": {"key": "useBinaryTransfer", "type": "bool"},
+        "use_binary_transfer": {"key": "useBinaryTransfer", "type": "object"},
         "disable_chunking": {"key": "disableChunking", "type": "object"},
     }
 
@@ -25761,11 +25892,11 @@ class FtpReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-a
         recursive: Optional[JSON] = None,
         wildcard_folder_path: Optional[JSON] = None,
         wildcard_file_name: Optional[JSON] = None,
-        enable_partition_discovery: Optional[bool] = None,
+        enable_partition_discovery: Optional[JSON] = None,
         partition_root_path: Optional[JSON] = None,
         delete_files_after_completion: Optional[JSON] = None,
         file_list_path: Optional[JSON] = None,
-        use_binary_transfer: Optional[bool] = None,
+        use_binary_transfer: Optional[JSON] = None,
         disable_chunking: Optional[JSON] = None,
         **kwargs: Any
     ) -> None:
@@ -25785,8 +25916,9 @@ class FtpReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-a
         :keyword wildcard_file_name: Ftp wildcardFileName. Type: string (or Expression with resultType
          string).
         :paramtype wildcard_file_name: JSON
-        :keyword enable_partition_discovery: Indicates whether to enable partition discovery.
-        :paramtype enable_partition_discovery: bool
+        :keyword enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+         boolean (or Expression with resultType boolean).
+        :paramtype enable_partition_discovery: JSON
         :keyword partition_root_path: Specify the root path where partition discovery starts from.
          Type: string (or Expression with resultType string).
         :paramtype partition_root_path: JSON
@@ -25797,8 +25929,9 @@ class FtpReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-a
          configured in the dataset) that you want to copy. Type: string (or Expression with resultType
          string).
         :paramtype file_list_path: JSON
-        :keyword use_binary_transfer: Specify whether to use binary transfer mode for FTP stores.
-        :paramtype use_binary_transfer: bool
+        :keyword use_binary_transfer: Specify whether to use binary transfer mode for FTP stores. Type:
+         boolean (or Expression with resultType boolean).
+        :paramtype use_binary_transfer: JSON
         :keyword disable_chunking: If true, disable parallel reading within each file. Default is
          false. Type: boolean (or Expression with resultType boolean).
         :paramtype disable_chunking: JSON
@@ -25821,7 +25954,7 @@ class FtpReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-a
 class FtpServerLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """A FTP server Linked Service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -25966,7 +26099,7 @@ class FtpServerLinkedService(LinkedService):  # pylint: disable=too-many-instanc
 class FtpServerLocation(DatasetLocation):
     """The location of ftp server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -26020,7 +26153,7 @@ class FtpServerLocation(DatasetLocation):
 class GetMetadataActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """Activity to get metadata of dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -26171,7 +26304,7 @@ class GetSsisObjectMetadataRequest(_serialization.Model):
 class GitHubAccessTokenRequest(_serialization.Model):
     """GitHubAccessTokenRequest.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar git_hub_client_id: The GitHub Client Id. Required.
     :vartype git_hub_client_id: str
@@ -26261,7 +26394,7 @@ class GitHubClientSecret(_serialization.Model):
 class GoogleAdWordsLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Google AdWords service linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -26276,8 +26409,8 @@ class GoogleAdWordsLinkedService(LinkedService):  # pylint: disable=too-many-ins
     :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
     :ivar annotations: List of tags that can be used for describing the linked service.
     :vartype annotations: list[JSON]
-    :ivar connection_properties: Properties used to connect to GoogleAds. It is mutually exclusive
-     with any other properties in the linked service. Type: object.
+    :ivar connection_properties: (Deprecated) Properties used to connect to GoogleAds. It is
+     mutually exclusive with any other properties in the linked service. Type: object.
     :vartype connection_properties: JSON
     :ivar client_customer_id: The Client customer ID of the AdWords account that you want to fetch
      report data for.
@@ -26302,16 +26435,31 @@ class GoogleAdWordsLinkedService(LinkedService):  # pylint: disable=too-many-ins
     :ivar email: The service account email ID that is used for ServiceAuthentication and can only
      be used on self-hosted IR.
     :vartype email: JSON
-    :ivar key_file_path: The full path to the .p12 key file that is used to authenticate the
-     service account email address and can only be used on self-hosted IR.
+    :ivar key_file_path: (Deprecated) The full path to the .p12 key file that is used to
+     authenticate the service account email address and can only be used on self-hosted IR.
     :vartype key_file_path: JSON
-    :ivar trusted_cert_path: The full path of the .pem file containing trusted CA certificates for
-     verifying the server when connecting over SSL. This property can only be set when using SSL on
-     self-hosted IR. The default value is the cacerts.pem file installed with the IR.
+    :ivar trusted_cert_path: (Deprecated) The full path of the .pem file containing trusted CA
+     certificates for verifying the server when connecting over SSL. This property can only be set
+     when using SSL on self-hosted IR. The default value is the cacerts.pem file installed with the
+     IR.
     :vartype trusted_cert_path: JSON
-    :ivar use_system_trust_store: Specifies whether to use a CA certificate from the system trust
-     store or from a specified PEM file. The default value is false.
+    :ivar use_system_trust_store: (Deprecated) Specifies whether to use a CA certificate from the
+     system trust store or from a specified PEM file. The default value is false.
     :vartype use_system_trust_store: JSON
+    :ivar private_key: The private key that is used to authenticate the service account email
+     address and can only be used on self-hosted IR.
+    :vartype private_key: ~azure.synapse.artifacts.models.SecretBase
+    :ivar login_customer_id: The customer ID of the Google Ads Manager account through which you
+     want to fetch report data of specific Customer.
+    :vartype login_customer_id: JSON
+    :ivar google_ads_api_version: The Google Ads API major version such as v14. The supported major
+     versions could be found on https://developers.google.com/google-ads/api/docs/release-notes.
+    :vartype google_ads_api_version: JSON
+    :ivar support_legacy_data_types: Specifies whether to use the legacy data type mappings, which
+     maps float, int32 and int64 from Google to string. Do not set this to true unless you want to
+     keep backward compatibility with legacy driver's data type mappings. Type: boolean (or
+     Expression with resultType boolean).
+    :vartype support_legacy_data_types: JSON
     :ivar encrypted_credential: The encrypted credential used for authentication. Credentials are
      encrypted using the integration runtime credential manager. Type: string (or Expression with
      resultType string).
@@ -26340,6 +26488,10 @@ class GoogleAdWordsLinkedService(LinkedService):  # pylint: disable=too-many-ins
         "key_file_path": {"key": "typeProperties.keyFilePath", "type": "object"},
         "trusted_cert_path": {"key": "typeProperties.trustedCertPath", "type": "object"},
         "use_system_trust_store": {"key": "typeProperties.useSystemTrustStore", "type": "object"},
+        "private_key": {"key": "typeProperties.privateKey", "type": "SecretBase"},
+        "login_customer_id": {"key": "typeProperties.loginCustomerID", "type": "object"},
+        "google_ads_api_version": {"key": "typeProperties.googleAdsApiVersion", "type": "object"},
+        "support_legacy_data_types": {"key": "typeProperties.supportLegacyDataTypes", "type": "object"},
         "encrypted_credential": {"key": "typeProperties.encryptedCredential", "type": "object"},
     }
 
@@ -26362,6 +26514,10 @@ class GoogleAdWordsLinkedService(LinkedService):  # pylint: disable=too-many-ins
         key_file_path: Optional[JSON] = None,
         trusted_cert_path: Optional[JSON] = None,
         use_system_trust_store: Optional[JSON] = None,
+        private_key: Optional["_models.SecretBase"] = None,
+        login_customer_id: Optional[JSON] = None,
+        google_ads_api_version: Optional[JSON] = None,
+        support_legacy_data_types: Optional[JSON] = None,
         encrypted_credential: Optional[JSON] = None,
         **kwargs: Any
     ) -> None:
@@ -26377,8 +26533,8 @@ class GoogleAdWordsLinkedService(LinkedService):  # pylint: disable=too-many-ins
         :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
         :keyword annotations: List of tags that can be used for describing the linked service.
         :paramtype annotations: list[JSON]
-        :keyword connection_properties: Properties used to connect to GoogleAds. It is mutually
-         exclusive with any other properties in the linked service. Type: object.
+        :keyword connection_properties: (Deprecated) Properties used to connect to GoogleAds. It is
+         mutually exclusive with any other properties in the linked service. Type: object.
         :paramtype connection_properties: JSON
         :keyword client_customer_id: The Client customer ID of the AdWords account that you want to
          fetch report data for.
@@ -26403,16 +26559,32 @@ class GoogleAdWordsLinkedService(LinkedService):  # pylint: disable=too-many-ins
         :keyword email: The service account email ID that is used for ServiceAuthentication and can
          only be used on self-hosted IR.
         :paramtype email: JSON
-        :keyword key_file_path: The full path to the .p12 key file that is used to authenticate the
-         service account email address and can only be used on self-hosted IR.
+        :keyword key_file_path: (Deprecated) The full path to the .p12 key file that is used to
+         authenticate the service account email address and can only be used on self-hosted IR.
         :paramtype key_file_path: JSON
-        :keyword trusted_cert_path: The full path of the .pem file containing trusted CA certificates
-         for verifying the server when connecting over SSL. This property can only be set when using SSL
-         on self-hosted IR. The default value is the cacerts.pem file installed with the IR.
+        :keyword trusted_cert_path: (Deprecated) The full path of the .pem file containing trusted CA
+         certificates for verifying the server when connecting over SSL. This property can only be set
+         when using SSL on self-hosted IR. The default value is the cacerts.pem file installed with the
+         IR.
         :paramtype trusted_cert_path: JSON
-        :keyword use_system_trust_store: Specifies whether to use a CA certificate from the system
-         trust store or from a specified PEM file. The default value is false.
+        :keyword use_system_trust_store: (Deprecated) Specifies whether to use a CA certificate from
+         the system trust store or from a specified PEM file. The default value is false.
         :paramtype use_system_trust_store: JSON
+        :keyword private_key: The private key that is used to authenticate the service account email
+         address and can only be used on self-hosted IR.
+        :paramtype private_key: ~azure.synapse.artifacts.models.SecretBase
+        :keyword login_customer_id: The customer ID of the Google Ads Manager account through which you
+         want to fetch report data of specific Customer.
+        :paramtype login_customer_id: JSON
+        :keyword google_ads_api_version: The Google Ads API major version such as v14. The supported
+         major versions could be found on
+         https://developers.google.com/google-ads/api/docs/release-notes.
+        :paramtype google_ads_api_version: JSON
+        :keyword support_legacy_data_types: Specifies whether to use the legacy data type mappings,
+         which maps float, int32 and int64 from Google to string. Do not set this to true unless you
+         want to keep backward compatibility with legacy driver's data type mappings. Type: boolean (or
+         Expression with resultType boolean).
+        :paramtype support_legacy_data_types: JSON
         :keyword encrypted_credential: The encrypted credential used for authentication. Credentials
          are encrypted using the integration runtime credential manager. Type: string (or Expression
          with resultType string).
@@ -26438,13 +26610,17 @@ class GoogleAdWordsLinkedService(LinkedService):  # pylint: disable=too-many-ins
         self.key_file_path = key_file_path
         self.trusted_cert_path = trusted_cert_path
         self.use_system_trust_store = use_system_trust_store
+        self.private_key = private_key
+        self.login_customer_id = login_customer_id
+        self.google_ads_api_version = google_ads_api_version
+        self.support_legacy_data_types = support_legacy_data_types
         self.encrypted_credential = encrypted_credential
 
 
 class GoogleAdWordsObjectDataset(Dataset):
     """Google AdWords service dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -26546,7 +26722,7 @@ class GoogleAdWordsObjectDataset(Dataset):
 class GoogleAdWordsSource(TabularSource):
     """A copy activity Google AdWords service source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -26639,7 +26815,7 @@ class GoogleAdWordsSource(TabularSource):
 class GoogleBigQueryLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Google BigQuery service linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -26822,7 +26998,7 @@ class GoogleBigQueryLinkedService(LinkedService):  # pylint: disable=too-many-in
 class GoogleBigQueryObjectDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Google BigQuery service dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -26944,7 +27120,7 @@ class GoogleBigQueryObjectDataset(Dataset):  # pylint: disable=too-many-instance
 class GoogleBigQuerySource(TabularSource):
     """A copy activity Google BigQuery service source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -27034,10 +27210,350 @@ class GoogleBigQuerySource(TabularSource):
         self.query = query
 
 
+class GoogleBigQueryV2LinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
+    """Google BigQuery service linked service.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Type of linked service. Required.
+    :vartype type: str
+    :ivar connect_via: The integration runtime reference.
+    :vartype connect_via: ~azure.synapse.artifacts.models.IntegrationRuntimeReference
+    :ivar description: Linked service description.
+    :vartype description: str
+    :ivar parameters: Parameters for linked service.
+    :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+    :ivar annotations: List of tags that can be used for describing the linked service.
+    :vartype annotations: list[JSON]
+    :ivar project_id: The default BigQuery project id to query against. Required.
+    :vartype project_id: JSON
+    :ivar authentication_type: The OAuth 2.0 authentication mechanism used for authentication.
+     Required. Known values are: "ServiceAuthentication" and "UserAuthentication".
+    :vartype authentication_type: str or
+     ~azure.synapse.artifacts.models.GoogleBigQueryV2AuthenticationType
+    :ivar client_id: The client id of the google application used to acquire the refresh token.
+     Type: string (or Expression with resultType string).
+    :vartype client_id: JSON
+    :ivar client_secret: The client secret of the google application used to acquire the refresh
+     token.
+    :vartype client_secret: ~azure.synapse.artifacts.models.SecretBase
+    :ivar refresh_token: The refresh token obtained from Google for authorizing access to BigQuery
+     for UserAuthentication.
+    :vartype refresh_token: ~azure.synapse.artifacts.models.SecretBase
+    :ivar key_file_content: The content of the .json key file that is used to authenticate the
+     service account.
+    :vartype key_file_content: ~azure.synapse.artifacts.models.SecretBase
+    :ivar encrypted_credential: The encrypted credential used for authentication. Credentials are
+     encrypted using the integration runtime credential manager. Type: string (or Expression with
+     resultType string).
+    :vartype encrypted_credential: str
+    """
+
+    _validation = {
+        "type": {"required": True},
+        "project_id": {"required": True},
+        "authentication_type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "connect_via": {"key": "connectVia", "type": "IntegrationRuntimeReference"},
+        "description": {"key": "description", "type": "str"},
+        "parameters": {"key": "parameters", "type": "{ParameterSpecification}"},
+        "annotations": {"key": "annotations", "type": "[object]"},
+        "project_id": {"key": "typeProperties.projectId", "type": "object"},
+        "authentication_type": {"key": "typeProperties.authenticationType", "type": "str"},
+        "client_id": {"key": "typeProperties.clientId", "type": "object"},
+        "client_secret": {"key": "typeProperties.clientSecret", "type": "SecretBase"},
+        "refresh_token": {"key": "typeProperties.refreshToken", "type": "SecretBase"},
+        "key_file_content": {"key": "typeProperties.keyFileContent", "type": "SecretBase"},
+        "encrypted_credential": {"key": "typeProperties.encryptedCredential", "type": "str"},
+    }
+
+    def __init__(
+        self,
+        *,
+        project_id: JSON,
+        authentication_type: Union[str, "_models.GoogleBigQueryV2AuthenticationType"],
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        connect_via: Optional["_models.IntegrationRuntimeReference"] = None,
+        description: Optional[str] = None,
+        parameters: Optional[Dict[str, "_models.ParameterSpecification"]] = None,
+        annotations: Optional[List[JSON]] = None,
+        client_id: Optional[JSON] = None,
+        client_secret: Optional["_models.SecretBase"] = None,
+        refresh_token: Optional["_models.SecretBase"] = None,
+        key_file_content: Optional["_models.SecretBase"] = None,
+        encrypted_credential: Optional[str] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword connect_via: The integration runtime reference.
+        :paramtype connect_via: ~azure.synapse.artifacts.models.IntegrationRuntimeReference
+        :keyword description: Linked service description.
+        :paramtype description: str
+        :keyword parameters: Parameters for linked service.
+        :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+        :keyword annotations: List of tags that can be used for describing the linked service.
+        :paramtype annotations: list[JSON]
+        :keyword project_id: The default BigQuery project id to query against. Required.
+        :paramtype project_id: JSON
+        :keyword authentication_type: The OAuth 2.0 authentication mechanism used for authentication.
+         Required. Known values are: "ServiceAuthentication" and "UserAuthentication".
+        :paramtype authentication_type: str or
+         ~azure.synapse.artifacts.models.GoogleBigQueryV2AuthenticationType
+        :keyword client_id: The client id of the google application used to acquire the refresh token.
+         Type: string (or Expression with resultType string).
+        :paramtype client_id: JSON
+        :keyword client_secret: The client secret of the google application used to acquire the refresh
+         token.
+        :paramtype client_secret: ~azure.synapse.artifacts.models.SecretBase
+        :keyword refresh_token: The refresh token obtained from Google for authorizing access to
+         BigQuery for UserAuthentication.
+        :paramtype refresh_token: ~azure.synapse.artifacts.models.SecretBase
+        :keyword key_file_content: The content of the .json key file that is used to authenticate the
+         service account.
+        :paramtype key_file_content: ~azure.synapse.artifacts.models.SecretBase
+        :keyword encrypted_credential: The encrypted credential used for authentication. Credentials
+         are encrypted using the integration runtime credential manager. Type: string (or Expression
+         with resultType string).
+        :paramtype encrypted_credential: str
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            connect_via=connect_via,
+            description=description,
+            parameters=parameters,
+            annotations=annotations,
+            **kwargs
+        )
+        self.type: str = "GoogleBigQueryV2"
+        self.project_id = project_id
+        self.authentication_type = authentication_type
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.refresh_token = refresh_token
+        self.key_file_content = key_file_content
+        self.encrypted_credential = encrypted_credential
+
+
+class GoogleBigQueryV2ObjectDataset(Dataset):  # pylint: disable=too-many-instance-attributes
+    """Google BigQuery service dataset.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Type of dataset. Required.
+    :vartype type: str
+    :ivar description: Dataset description.
+    :vartype description: str
+    :ivar structure: Columns that define the structure of the dataset. Type: array (or Expression
+     with resultType array), itemType: DatasetDataElement.
+    :vartype structure: JSON
+    :ivar schema: Columns that define the physical type schema of the dataset. Type: array (or
+     Expression with resultType array), itemType: DatasetSchemaDataElement.
+    :vartype schema: JSON
+    :ivar linked_service_name: Linked service reference. Required.
+    :vartype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
+    :ivar parameters: Parameters for dataset.
+    :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+    :ivar annotations: List of tags that can be used for describing the Dataset.
+    :vartype annotations: list[JSON]
+    :ivar folder: The folder that this Dataset is in. If not specified, Dataset will appear at the
+     root level.
+    :vartype folder: ~azure.synapse.artifacts.models.DatasetFolder
+    :ivar table: The table name of the Google BigQuery. Type: string (or Expression with resultType
+     string).
+    :vartype table: JSON
+    :ivar dataset: The database name of the Google BigQuery. Type: string (or Expression with
+     resultType string).
+    :vartype dataset: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+        "linked_service_name": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "description": {"key": "description", "type": "str"},
+        "structure": {"key": "structure", "type": "object"},
+        "schema": {"key": "schema", "type": "object"},
+        "linked_service_name": {"key": "linkedServiceName", "type": "LinkedServiceReference"},
+        "parameters": {"key": "parameters", "type": "{ParameterSpecification}"},
+        "annotations": {"key": "annotations", "type": "[object]"},
+        "folder": {"key": "folder", "type": "DatasetFolder"},
+        "table": {"key": "typeProperties.table", "type": "object"},
+        "dataset": {"key": "typeProperties.dataset", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        linked_service_name: "_models.LinkedServiceReference",
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        description: Optional[str] = None,
+        structure: Optional[JSON] = None,
+        schema: Optional[JSON] = None,
+        parameters: Optional[Dict[str, "_models.ParameterSpecification"]] = None,
+        annotations: Optional[List[JSON]] = None,
+        folder: Optional["_models.DatasetFolder"] = None,
+        table: Optional[JSON] = None,
+        dataset: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword description: Dataset description.
+        :paramtype description: str
+        :keyword structure: Columns that define the structure of the dataset. Type: array (or
+         Expression with resultType array), itemType: DatasetDataElement.
+        :paramtype structure: JSON
+        :keyword schema: Columns that define the physical type schema of the dataset. Type: array (or
+         Expression with resultType array), itemType: DatasetSchemaDataElement.
+        :paramtype schema: JSON
+        :keyword linked_service_name: Linked service reference. Required.
+        :paramtype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
+        :keyword parameters: Parameters for dataset.
+        :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+        :keyword annotations: List of tags that can be used for describing the Dataset.
+        :paramtype annotations: list[JSON]
+        :keyword folder: The folder that this Dataset is in. If not specified, Dataset will appear at
+         the root level.
+        :paramtype folder: ~azure.synapse.artifacts.models.DatasetFolder
+        :keyword table: The table name of the Google BigQuery. Type: string (or Expression with
+         resultType string).
+        :paramtype table: JSON
+        :keyword dataset: The database name of the Google BigQuery. Type: string (or Expression with
+         resultType string).
+        :paramtype dataset: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            description=description,
+            structure=structure,
+            schema=schema,
+            linked_service_name=linked_service_name,
+            parameters=parameters,
+            annotations=annotations,
+            folder=folder,
+            **kwargs
+        )
+        self.type: str = "GoogleBigQueryV2Object"
+        self.table = table
+        self.dataset = dataset
+
+
+class GoogleBigQueryV2Source(TabularSource):
+    """A copy activity Google BigQuery service source.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Copy source type. Required.
+    :vartype type: str
+    :ivar source_retry_count: Source retry count. Type: integer (or Expression with resultType
+     integer).
+    :vartype source_retry_count: JSON
+    :ivar source_retry_wait: Source retry wait. Type: string (or Expression with resultType
+     string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype source_retry_wait: JSON
+    :ivar max_concurrent_connections: The maximum concurrent connection count for the source data
+     store. Type: integer (or Expression with resultType integer).
+    :vartype max_concurrent_connections: JSON
+    :ivar query_timeout: Query timeout. Type: string (or Expression with resultType string),
+     pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype query_timeout: JSON
+    :ivar additional_columns: Specifies the additional columns to be added to source data. Type:
+     array of objects(AdditionalColumns) (or Expression with resultType array of objects).
+    :vartype additional_columns: JSON
+    :ivar query: A query to retrieve data from source. Type: string (or Expression with resultType
+     string).
+    :vartype query: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "source_retry_count": {"key": "sourceRetryCount", "type": "object"},
+        "source_retry_wait": {"key": "sourceRetryWait", "type": "object"},
+        "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
+        "query_timeout": {"key": "queryTimeout", "type": "object"},
+        "additional_columns": {"key": "additionalColumns", "type": "object"},
+        "query": {"key": "query", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        source_retry_count: Optional[JSON] = None,
+        source_retry_wait: Optional[JSON] = None,
+        max_concurrent_connections: Optional[JSON] = None,
+        query_timeout: Optional[JSON] = None,
+        additional_columns: Optional[JSON] = None,
+        query: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword source_retry_count: Source retry count. Type: integer (or Expression with resultType
+         integer).
+        :paramtype source_retry_count: JSON
+        :keyword source_retry_wait: Source retry wait. Type: string (or Expression with resultType
+         string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype source_retry_wait: JSON
+        :keyword max_concurrent_connections: The maximum concurrent connection count for the source
+         data store. Type: integer (or Expression with resultType integer).
+        :paramtype max_concurrent_connections: JSON
+        :keyword query_timeout: Query timeout. Type: string (or Expression with resultType string),
+         pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype query_timeout: JSON
+        :keyword additional_columns: Specifies the additional columns to be added to source data. Type:
+         array of objects(AdditionalColumns) (or Expression with resultType array of objects).
+        :paramtype additional_columns: JSON
+        :keyword query: A query to retrieve data from source. Type: string (or Expression with
+         resultType string).
+        :paramtype query: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            source_retry_count=source_retry_count,
+            source_retry_wait=source_retry_wait,
+            max_concurrent_connections=max_concurrent_connections,
+            query_timeout=query_timeout,
+            additional_columns=additional_columns,
+            **kwargs
+        )
+        self.type: str = "GoogleBigQueryV2Source"
+        self.query = query
+
+
 class GoogleCloudStorageLinkedService(LinkedService):
     """Linked service for Google Cloud Storage.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -27146,7 +27662,7 @@ class GoogleCloudStorageLinkedService(LinkedService):
 class GoogleCloudStorageLocation(DatasetLocation):
     """The location of Google Cloud Storage dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -27218,7 +27734,7 @@ class GoogleCloudStorageLocation(DatasetLocation):
 class GoogleCloudStorageReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-attributes
     """Google Cloud Storage read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -27244,8 +27760,9 @@ class GoogleCloudStorageReadSettings(StoreReadSettings):  # pylint: disable=too-
      configured in the dataset) that you want to copy. Type: string (or Expression with resultType
      string).
     :vartype file_list_path: JSON
-    :ivar enable_partition_discovery: Indicates whether to enable partition discovery.
-    :vartype enable_partition_discovery: bool
+    :ivar enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+     boolean (or Expression with resultType boolean).
+    :vartype enable_partition_discovery: JSON
     :ivar partition_root_path: Specify the root path where partition discovery starts from. Type:
      string (or Expression with resultType string).
     :vartype partition_root_path: JSON
@@ -27273,7 +27790,7 @@ class GoogleCloudStorageReadSettings(StoreReadSettings):  # pylint: disable=too-
         "wildcard_file_name": {"key": "wildcardFileName", "type": "object"},
         "prefix": {"key": "prefix", "type": "object"},
         "file_list_path": {"key": "fileListPath", "type": "object"},
-        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "bool"},
+        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "object"},
         "partition_root_path": {"key": "partitionRootPath", "type": "object"},
         "delete_files_after_completion": {"key": "deleteFilesAfterCompletion", "type": "object"},
         "modified_datetime_start": {"key": "modifiedDatetimeStart", "type": "object"},
@@ -27290,7 +27807,7 @@ class GoogleCloudStorageReadSettings(StoreReadSettings):  # pylint: disable=too-
         wildcard_file_name: Optional[JSON] = None,
         prefix: Optional[JSON] = None,
         file_list_path: Optional[JSON] = None,
-        enable_partition_discovery: Optional[bool] = None,
+        enable_partition_discovery: Optional[JSON] = None,
         partition_root_path: Optional[JSON] = None,
         delete_files_after_completion: Optional[JSON] = None,
         modified_datetime_start: Optional[JSON] = None,
@@ -27320,8 +27837,9 @@ class GoogleCloudStorageReadSettings(StoreReadSettings):  # pylint: disable=too-
          configured in the dataset) that you want to copy. Type: string (or Expression with resultType
          string).
         :paramtype file_list_path: JSON
-        :keyword enable_partition_discovery: Indicates whether to enable partition discovery.
-        :paramtype enable_partition_discovery: bool
+        :keyword enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+         boolean (or Expression with resultType boolean).
+        :paramtype enable_partition_discovery: JSON
         :keyword partition_root_path: Specify the root path where partition discovery starts from.
          Type: string (or Expression with resultType string).
         :paramtype partition_root_path: JSON
@@ -27354,7 +27872,7 @@ class GoogleCloudStorageReadSettings(StoreReadSettings):  # pylint: disable=too-
 class GoogleSheetsLinkedService(LinkedService):
     """Linked service for GoogleSheets.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -27440,7 +27958,7 @@ class GoogleSheetsLinkedService(LinkedService):
 class GreenplumLinkedService(LinkedService):
     """Greenplum Database linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -27534,7 +28052,7 @@ class GreenplumLinkedService(LinkedService):
 class GreenplumSource(TabularSource):
     """A copy activity Greenplum Database source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -27627,7 +28145,7 @@ class GreenplumSource(TabularSource):
 class GreenplumTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Greenplum Database dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -27748,7 +28266,7 @@ class GreenplumTableDataset(Dataset):  # pylint: disable=too-many-instance-attri
 class HBaseLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """HBase server linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -27915,7 +28433,7 @@ class HBaseLinkedService(LinkedService):  # pylint: disable=too-many-instance-at
 class HBaseObjectDataset(Dataset):
     """HBase server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -28017,7 +28535,7 @@ class HBaseObjectDataset(Dataset):
 class HBaseSource(TabularSource):
     """A copy activity HBase server source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -28110,7 +28628,7 @@ class HBaseSource(TabularSource):
 class HdfsLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Hadoop Distributed File System (HDFS) linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -28223,7 +28741,7 @@ class HdfsLinkedService(LinkedService):  # pylint: disable=too-many-instance-att
 class HdfsLocation(DatasetLocation):
     """The location of HDFS.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -28277,7 +28795,7 @@ class HdfsLocation(DatasetLocation):
 class HdfsReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-attributes
     """HDFS read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -28300,8 +28818,9 @@ class HdfsReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-
      configured in the dataset) that you want to copy. Type: string (or Expression with resultType
      string).
     :vartype file_list_path: JSON
-    :ivar enable_partition_discovery: Indicates whether to enable partition discovery.
-    :vartype enable_partition_discovery: bool
+    :ivar enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+     boolean (or Expression with resultType boolean).
+    :vartype enable_partition_discovery: JSON
     :ivar partition_root_path: Specify the root path where partition discovery starts from. Type:
      string (or Expression with resultType string).
     :vartype partition_root_path: JSON
@@ -28330,7 +28849,7 @@ class HdfsReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-
         "wildcard_folder_path": {"key": "wildcardFolderPath", "type": "object"},
         "wildcard_file_name": {"key": "wildcardFileName", "type": "object"},
         "file_list_path": {"key": "fileListPath", "type": "object"},
-        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "bool"},
+        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "object"},
         "partition_root_path": {"key": "partitionRootPath", "type": "object"},
         "modified_datetime_start": {"key": "modifiedDatetimeStart", "type": "object"},
         "modified_datetime_end": {"key": "modifiedDatetimeEnd", "type": "object"},
@@ -28347,7 +28866,7 @@ class HdfsReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-
         wildcard_folder_path: Optional[JSON] = None,
         wildcard_file_name: Optional[JSON] = None,
         file_list_path: Optional[JSON] = None,
-        enable_partition_discovery: Optional[bool] = None,
+        enable_partition_discovery: Optional[JSON] = None,
         partition_root_path: Optional[JSON] = None,
         modified_datetime_start: Optional[JSON] = None,
         modified_datetime_end: Optional[JSON] = None,
@@ -28375,8 +28894,9 @@ class HdfsReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-
          configured in the dataset) that you want to copy. Type: string (or Expression with resultType
          string).
         :paramtype file_list_path: JSON
-        :keyword enable_partition_discovery: Indicates whether to enable partition discovery.
-        :paramtype enable_partition_discovery: bool
+        :keyword enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+         boolean (or Expression with resultType boolean).
+        :paramtype enable_partition_discovery: JSON
         :keyword partition_root_path: Specify the root path where partition discovery starts from.
          Type: string (or Expression with resultType string).
         :paramtype partition_root_path: JSON
@@ -28411,7 +28931,7 @@ class HdfsReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-
 class HdfsSource(CopySource):
     """A copy activity HDFS source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -28493,7 +29013,7 @@ class HdfsSource(CopySource):
 class HDInsightHiveActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """HDInsight Hive activity type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -28656,7 +29176,7 @@ class HDInsightHiveActivity(ExecutionActivity):  # pylint: disable=too-many-inst
 class HDInsightLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """HDInsight linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -28797,7 +29317,7 @@ class HDInsightLinkedService(LinkedService):  # pylint: disable=too-many-instanc
 class HDInsightMapReduceActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """HDInsight MapReduce activity type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -28961,7 +29481,7 @@ class HDInsightMapReduceActivity(ExecutionActivity):  # pylint: disable=too-many
 class HDInsightOnDemandLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """HDInsight ondemand linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -29066,7 +29586,7 @@ class HDInsightOnDemandLinkedService(LinkedService):  # pylint: disable=too-many
     :vartype zookeeper_node_size: JSON
     :ivar script_actions: Custom script actions to run on HDI ondemand cluster once it's up. Please
      refer to
-     https://docs.microsoft.com/en-us/azure/hdinsight/hdinsight-hadoop-customize-cluster-linux?toc=%2Fen-us%2Fazure%2Fhdinsight%2Fr-server%2FTOC.json&bc=%2Fen-us%2Fazure%2Fbread%2Ftoc.json#understanding-script-actions.
+     https://docs.microsoft.com/en-us/azure/hdinsight/hdinsight-hadoop-customize-cluster-linux?toc=%2Fen-us%2Fazure%2Fhdinsight%2Fr-server%2FTOC.json&bc=%2Fen-us%2Fazure%2Fbread%2Ftoc.json#understanding-script-actions.  # pylint: disable=line-too-long
     :vartype script_actions: list[~azure.synapse.artifacts.models.ScriptAction]
     :ivar virtual_network_id: The ARM resource ID for the vNet to which the cluster should be
      joined after creation. Type: string (or Expression with resultType string).
@@ -29285,7 +29805,7 @@ class HDInsightOnDemandLinkedService(LinkedService):  # pylint: disable=too-many
         :paramtype zookeeper_node_size: JSON
         :keyword script_actions: Custom script actions to run on HDI ondemand cluster once it's up.
          Please refer to
-         https://docs.microsoft.com/en-us/azure/hdinsight/hdinsight-hadoop-customize-cluster-linux?toc=%2Fen-us%2Fazure%2Fhdinsight%2Fr-server%2FTOC.json&bc=%2Fen-us%2Fazure%2Fbread%2Ftoc.json#understanding-script-actions.
+         https://docs.microsoft.com/en-us/azure/hdinsight/hdinsight-hadoop-customize-cluster-linux?toc=%2Fen-us%2Fazure%2Fhdinsight%2Fr-server%2FTOC.json&bc=%2Fen-us%2Fazure%2Fbread%2Ftoc.json#understanding-script-actions.  # pylint: disable=line-too-long
         :paramtype script_actions: list[~azure.synapse.artifacts.models.ScriptAction]
         :keyword virtual_network_id: The ARM resource ID for the vNet to which the cluster should be
          joined after creation. Type: string (or Expression with resultType string).
@@ -29344,7 +29864,7 @@ class HDInsightOnDemandLinkedService(LinkedService):  # pylint: disable=too-many
 class HDInsightPigActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """HDInsight Pig activity type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -29493,7 +30013,7 @@ class HDInsightPigActivity(ExecutionActivity):  # pylint: disable=too-many-insta
 class HDInsightSparkActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """HDInsight Spark activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -29663,7 +30183,7 @@ class HDInsightSparkActivity(ExecutionActivity):  # pylint: disable=too-many-ins
 class HDInsightStreamingActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """HDInsight streaming activity type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -29863,7 +30383,7 @@ class HDInsightStreamingActivity(ExecutionActivity):  # pylint: disable=too-many
 class HiveLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Hive Server linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -30085,7 +30605,7 @@ class HiveLinkedService(LinkedService):  # pylint: disable=too-many-instance-att
 class HiveObjectDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Hive Server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -30206,7 +30726,7 @@ class HiveObjectDataset(Dataset):  # pylint: disable=too-many-instance-attribute
 class HiveSource(TabularSource):
     """A copy activity Hive Server source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -30299,7 +30819,7 @@ class HiveSource(TabularSource):
 class HttpDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """A file in an HTTP web server.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -30450,7 +30970,7 @@ class HttpDataset(Dataset):  # pylint: disable=too-many-instance-attributes
 class HttpLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Linked service for an HTTP source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -30601,9 +31121,9 @@ class HttpLinkedService(LinkedService):  # pylint: disable=too-many-instance-att
 
 
 class HttpReadSettings(StoreReadSettings):
-    """Sftp read settings.
+    """Http read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -30625,11 +31145,15 @@ class HttpReadSettings(StoreReadSettings):
     :ivar request_timeout: Specifies the timeout for a HTTP client to get HTTP response from HTTP
      server.
     :vartype request_timeout: JSON
-    :ivar enable_partition_discovery: Indicates whether to enable partition discovery.
-    :vartype enable_partition_discovery: bool
+    :ivar enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+     boolean (or Expression with resultType boolean).
+    :vartype enable_partition_discovery: JSON
     :ivar partition_root_path: Specify the root path where partition discovery starts from. Type:
      string (or Expression with resultType string).
     :vartype partition_root_path: JSON
+    :ivar additional_columns: Specifies the additional columns to be added to source data. Type:
+     array of objects(AdditionalColumns) (or Expression with resultType array of objects).
+    :vartype additional_columns: JSON
     """
 
     _validation = {
@@ -30644,8 +31168,9 @@ class HttpReadSettings(StoreReadSettings):
         "request_body": {"key": "requestBody", "type": "object"},
         "additional_headers": {"key": "additionalHeaders", "type": "object"},
         "request_timeout": {"key": "requestTimeout", "type": "object"},
-        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "bool"},
+        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "object"},
         "partition_root_path": {"key": "partitionRootPath", "type": "object"},
+        "additional_columns": {"key": "additionalColumns", "type": "object"},
     }
 
     def __init__(
@@ -30657,8 +31182,9 @@ class HttpReadSettings(StoreReadSettings):
         request_body: Optional[JSON] = None,
         additional_headers: Optional[JSON] = None,
         request_timeout: Optional[JSON] = None,
-        enable_partition_discovery: Optional[bool] = None,
+        enable_partition_discovery: Optional[JSON] = None,
         partition_root_path: Optional[JSON] = None,
+        additional_columns: Optional[JSON] = None,
         **kwargs: Any
     ) -> None:
         """
@@ -30680,11 +31206,15 @@ class HttpReadSettings(StoreReadSettings):
         :keyword request_timeout: Specifies the timeout for a HTTP client to get HTTP response from
          HTTP server.
         :paramtype request_timeout: JSON
-        :keyword enable_partition_discovery: Indicates whether to enable partition discovery.
-        :paramtype enable_partition_discovery: bool
+        :keyword enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+         boolean (or Expression with resultType boolean).
+        :paramtype enable_partition_discovery: JSON
         :keyword partition_root_path: Specify the root path where partition discovery starts from.
          Type: string (or Expression with resultType string).
         :paramtype partition_root_path: JSON
+        :keyword additional_columns: Specifies the additional columns to be added to source data. Type:
+         array of objects(AdditionalColumns) (or Expression with resultType array of objects).
+        :paramtype additional_columns: JSON
         """
         super().__init__(
             additional_properties=additional_properties, max_concurrent_connections=max_concurrent_connections, **kwargs
@@ -30696,12 +31226,13 @@ class HttpReadSettings(StoreReadSettings):
         self.request_timeout = request_timeout
         self.enable_partition_discovery = enable_partition_discovery
         self.partition_root_path = partition_root_path
+        self.additional_columns = additional_columns
 
 
 class HttpServerLocation(DatasetLocation):
     """The location of http server.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -30764,7 +31295,7 @@ class HttpServerLocation(DatasetLocation):
 class HttpSource(CopySource):
     """A copy activity source for an HTTP file.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -30843,7 +31374,7 @@ class HttpSource(CopySource):
 class HubspotLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Hubspot Service linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -30983,7 +31514,7 @@ class HubspotLinkedService(LinkedService):  # pylint: disable=too-many-instance-
 class HubspotObjectDataset(Dataset):
     """Hubspot Service dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -31085,7 +31616,7 @@ class HubspotObjectDataset(Dataset):
 class HubspotSource(TabularSource):
     """A copy activity Hubspot Service source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -31180,7 +31711,7 @@ class IfConditionActivity(ControlActivity):  # pylint: disable=too-many-instance
     ifTrueActivities property or the ifFalseActivities property depending on the result of the
     expression.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -31298,7 +31829,7 @@ class IfConditionActivity(ControlActivity):  # pylint: disable=too-many-instance
 class ImpalaLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Impala server linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -31467,7 +31998,7 @@ class ImpalaLinkedService(LinkedService):  # pylint: disable=too-many-instance-a
 class ImpalaObjectDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Impala server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -31588,7 +32119,7 @@ class ImpalaObjectDataset(Dataset):  # pylint: disable=too-many-instance-attribu
 class ImpalaSource(TabularSource):
     """A copy activity Impala server source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -31681,7 +32212,7 @@ class ImpalaSource(TabularSource):
 class InformixLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Informix linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -31807,7 +32338,7 @@ class InformixLinkedService(LinkedService):  # pylint: disable=too-many-instance
 class InformixSink(CopySink):
     """A copy activity Informix sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -31900,7 +32431,7 @@ class InformixSink(CopySink):
 class InformixSource(TabularSource):
     """A copy activity source for Informix.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -31991,7 +32522,7 @@ class InformixSource(TabularSource):
 class InformixTableDataset(Dataset):
     """The Informix table dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -32097,7 +32628,7 @@ class IntegrationRuntime(_serialization.Model):
     You probably want to use the sub-classes and not this class directly. Known sub-classes are:
     ManagedIntegrationRuntime, SelfHostedIntegrationRuntime
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -32223,7 +32754,7 @@ class IntegrationRuntimeComputeProperties(_serialization.Model):
         self.v_net_properties = v_net_properties
 
 
-class IntegrationRuntimeCustomSetupScriptProperties(_serialization.Model):
+class IntegrationRuntimeCustomSetupScriptProperties(_serialization.Model):  # pylint: disable=name-too-long
     """Custom setup script properties for a managed dedicated integration runtime.
 
     :ivar blob_container_uri: The URI of the Azure blob container that contains the custom setup
@@ -32366,7 +32897,7 @@ class IntegrationRuntimeDataProxyProperties(_serialization.Model):
 class IntegrationRuntimeDebugResource(SubResourceDebugResource):
     """Integration runtime debug resource.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: The resource name.
     :vartype name: str
@@ -32397,7 +32928,7 @@ class IntegrationRuntimeDebugResource(SubResourceDebugResource):
 class IntegrationRuntimeListResponse(_serialization.Model):
     """A list of integration runtime resources.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: List of integration runtimes. Required.
     :vartype value: list[~azure.synapse.artifacts.models.IntegrationRuntimeResource]
@@ -32431,7 +32962,7 @@ class IntegrationRuntimeListResponse(_serialization.Model):
 class IntegrationRuntimeReference(_serialization.Model):
     """Integration runtime reference type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Type of integration runtime. Required. "IntegrationRuntimeReference"
     :vartype type: str or ~azure.synapse.artifacts.models.IntegrationRuntimeReferenceType
@@ -32479,10 +33010,10 @@ class IntegrationRuntimeResource(SubResource):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -32726,7 +33257,7 @@ class IntegrationRuntimeVNetProperties(_serialization.Model):
 class JiraLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Jira Service linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -32868,7 +33399,7 @@ class JiraLinkedService(LinkedService):  # pylint: disable=too-many-instance-att
 class JiraObjectDataset(Dataset):
     """Jira Service dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -32970,7 +33501,7 @@ class JiraObjectDataset(Dataset):
 class JiraSource(TabularSource):
     """A copy activity Jira Service source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -33063,7 +33594,7 @@ class JiraSource(TabularSource):
 class JsonDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Json dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -33187,7 +33718,7 @@ class JsonDataset(Dataset):  # pylint: disable=too-many-instance-attributes
 class JsonFormat(DatasetStorageFormat):
     """The data stored in JSON format.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -33294,7 +33825,7 @@ class JsonFormat(DatasetStorageFormat):
 class JsonReadSettings(FormatReadSettings):
     """Json read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -33337,7 +33868,7 @@ class JsonReadSettings(FormatReadSettings):
 class JsonSink(CopySink):
     """A copy activity Json sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -33435,7 +33966,7 @@ class JsonSink(CopySink):
 class JsonSource(CopySource):
     """A copy activity Json source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -33524,7 +34055,7 @@ class JsonSource(CopySource):
 class JsonWriteSettings(FormatWriteSettings):
     """Json write settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -33770,6 +34301,710 @@ class KqlScriptsResourceCollectionResponse(_serialization.Model):
         self.next_link = next_link
 
 
+class LakeHouseLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
+    """Microsoft Fabric LakeHouse linked service.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Type of linked service. Required.
+    :vartype type: str
+    :ivar connect_via: The integration runtime reference.
+    :vartype connect_via: ~azure.synapse.artifacts.models.IntegrationRuntimeReference
+    :ivar description: Linked service description.
+    :vartype description: str
+    :ivar parameters: Parameters for linked service.
+    :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+    :ivar annotations: List of tags that can be used for describing the linked service.
+    :vartype annotations: list[JSON]
+    :ivar workspace_id: The ID of Microsoft Fabric workspace. Type: string (or Expression with
+     resultType string).
+    :vartype workspace_id: JSON
+    :ivar artifact_id: The ID of Microsoft Fabric LakeHouse artifact. Type: string (or Expression
+     with resultType string).
+    :vartype artifact_id: JSON
+    :ivar service_principal_id: The ID of the application used to authenticate against Microsoft
+     Fabric LakeHouse. Type: string (or Expression with resultType string).
+    :vartype service_principal_id: JSON
+    :ivar service_principal_key: The Key of the application used to authenticate against Microsoft
+     Fabric LakeHouse.
+    :vartype service_principal_key: ~azure.synapse.artifacts.models.SecretBase
+    :ivar tenant: The name or ID of the tenant to which the service principal belongs. Type: string
+     (or Expression with resultType string).
+    :vartype tenant: JSON
+    :ivar encrypted_credential: The encrypted credential used for authentication. Credentials are
+     encrypted using the integration runtime credential manager. Type: string.
+    :vartype encrypted_credential: str
+    :ivar service_principal_credential_type: The service principal credential type to use in
+     Server-To-Server authentication. 'ServicePrincipalKey' for key/secret, 'ServicePrincipalCert'
+     for certificate. Type: string (or Expression with resultType string).
+    :vartype service_principal_credential_type: JSON
+    :ivar service_principal_credential: The credential of the service principal object in Azure
+     Active Directory. If servicePrincipalCredentialType is 'ServicePrincipalKey',
+     servicePrincipalCredential can be SecureString or AzureKeyVaultSecretReference. If
+     servicePrincipalCredentialType is 'ServicePrincipalCert', servicePrincipalCredential can only
+     be AzureKeyVaultSecretReference.
+    :vartype service_principal_credential: ~azure.synapse.artifacts.models.SecretBase
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "connect_via": {"key": "connectVia", "type": "IntegrationRuntimeReference"},
+        "description": {"key": "description", "type": "str"},
+        "parameters": {"key": "parameters", "type": "{ParameterSpecification}"},
+        "annotations": {"key": "annotations", "type": "[object]"},
+        "workspace_id": {"key": "typeProperties.workspaceId", "type": "object"},
+        "artifact_id": {"key": "typeProperties.artifactId", "type": "object"},
+        "service_principal_id": {"key": "typeProperties.servicePrincipalId", "type": "object"},
+        "service_principal_key": {"key": "typeProperties.servicePrincipalKey", "type": "SecretBase"},
+        "tenant": {"key": "typeProperties.tenant", "type": "object"},
+        "encrypted_credential": {"key": "typeProperties.encryptedCredential", "type": "str"},
+        "service_principal_credential_type": {"key": "typeProperties.servicePrincipalCredentialType", "type": "object"},
+        "service_principal_credential": {"key": "typeProperties.servicePrincipalCredential", "type": "SecretBase"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        connect_via: Optional["_models.IntegrationRuntimeReference"] = None,
+        description: Optional[str] = None,
+        parameters: Optional[Dict[str, "_models.ParameterSpecification"]] = None,
+        annotations: Optional[List[JSON]] = None,
+        workspace_id: Optional[JSON] = None,
+        artifact_id: Optional[JSON] = None,
+        service_principal_id: Optional[JSON] = None,
+        service_principal_key: Optional["_models.SecretBase"] = None,
+        tenant: Optional[JSON] = None,
+        encrypted_credential: Optional[str] = None,
+        service_principal_credential_type: Optional[JSON] = None,
+        service_principal_credential: Optional["_models.SecretBase"] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword connect_via: The integration runtime reference.
+        :paramtype connect_via: ~azure.synapse.artifacts.models.IntegrationRuntimeReference
+        :keyword description: Linked service description.
+        :paramtype description: str
+        :keyword parameters: Parameters for linked service.
+        :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+        :keyword annotations: List of tags that can be used for describing the linked service.
+        :paramtype annotations: list[JSON]
+        :keyword workspace_id: The ID of Microsoft Fabric workspace. Type: string (or Expression with
+         resultType string).
+        :paramtype workspace_id: JSON
+        :keyword artifact_id: The ID of Microsoft Fabric LakeHouse artifact. Type: string (or
+         Expression with resultType string).
+        :paramtype artifact_id: JSON
+        :keyword service_principal_id: The ID of the application used to authenticate against Microsoft
+         Fabric LakeHouse. Type: string (or Expression with resultType string).
+        :paramtype service_principal_id: JSON
+        :keyword service_principal_key: The Key of the application used to authenticate against
+         Microsoft Fabric LakeHouse.
+        :paramtype service_principal_key: ~azure.synapse.artifacts.models.SecretBase
+        :keyword tenant: The name or ID of the tenant to which the service principal belongs. Type:
+         string (or Expression with resultType string).
+        :paramtype tenant: JSON
+        :keyword encrypted_credential: The encrypted credential used for authentication. Credentials
+         are encrypted using the integration runtime credential manager. Type: string.
+        :paramtype encrypted_credential: str
+        :keyword service_principal_credential_type: The service principal credential type to use in
+         Server-To-Server authentication. 'ServicePrincipalKey' for key/secret, 'ServicePrincipalCert'
+         for certificate. Type: string (or Expression with resultType string).
+        :paramtype service_principal_credential_type: JSON
+        :keyword service_principal_credential: The credential of the service principal object in Azure
+         Active Directory. If servicePrincipalCredentialType is 'ServicePrincipalKey',
+         servicePrincipalCredential can be SecureString or AzureKeyVaultSecretReference. If
+         servicePrincipalCredentialType is 'ServicePrincipalCert', servicePrincipalCredential can only
+         be AzureKeyVaultSecretReference.
+        :paramtype service_principal_credential: ~azure.synapse.artifacts.models.SecretBase
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            connect_via=connect_via,
+            description=description,
+            parameters=parameters,
+            annotations=annotations,
+            **kwargs
+        )
+        self.type: str = "LakeHouse"
+        self.workspace_id = workspace_id
+        self.artifact_id = artifact_id
+        self.service_principal_id = service_principal_id
+        self.service_principal_key = service_principal_key
+        self.tenant = tenant
+        self.encrypted_credential = encrypted_credential
+        self.service_principal_credential_type = service_principal_credential_type
+        self.service_principal_credential = service_principal_credential
+
+
+class LakeHouseLocation(DatasetLocation):
+    """The location of Microsoft Fabric LakeHouse Files dataset.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Type of dataset storage location. Required.
+    :vartype type: str
+    :ivar folder_path: Specify the folder path of dataset. Type: string (or Expression with
+     resultType string).
+    :vartype folder_path: JSON
+    :ivar file_name: Specify the file name of dataset. Type: string (or Expression with resultType
+     string).
+    :vartype file_name: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "folder_path": {"key": "folderPath", "type": "object"},
+        "file_name": {"key": "fileName", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        folder_path: Optional[JSON] = None,
+        file_name: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword folder_path: Specify the folder path of dataset. Type: string (or Expression with
+         resultType string).
+        :paramtype folder_path: JSON
+        :keyword file_name: Specify the file name of dataset. Type: string (or Expression with
+         resultType string).
+        :paramtype file_name: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties, folder_path=folder_path, file_name=file_name, **kwargs
+        )
+        self.type: str = "LakeHouseLocation"
+
+
+class LakeHouseReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-attributes
+    """Microsoft Fabric LakeHouse Files read settings.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: The read setting type. Required.
+    :vartype type: str
+    :ivar max_concurrent_connections: The maximum concurrent connection count for the source data
+     store. Type: integer (or Expression with resultType integer).
+    :vartype max_concurrent_connections: JSON
+    :ivar recursive: If true, files under the folder path will be read recursively. Default is
+     true. Type: boolean (or Expression with resultType boolean).
+    :vartype recursive: JSON
+    :ivar wildcard_folder_path: Microsoft Fabric LakeHouse Files wildcardFolderPath. Type: string
+     (or Expression with resultType string).
+    :vartype wildcard_folder_path: JSON
+    :ivar wildcard_file_name: Microsoft Fabric LakeHouse Files wildcardFileName. Type: string (or
+     Expression with resultType string).
+    :vartype wildcard_file_name: JSON
+    :ivar file_list_path: Point to a text file that lists each file (relative path to the path
+     configured in the dataset) that you want to copy. Type: string (or Expression with resultType
+     string).
+    :vartype file_list_path: JSON
+    :ivar enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+     boolean (or Expression with resultType boolean).
+    :vartype enable_partition_discovery: JSON
+    :ivar partition_root_path: Specify the root path where partition discovery starts from. Type:
+     string (or Expression with resultType string).
+    :vartype partition_root_path: JSON
+    :ivar delete_files_after_completion: Indicates whether the source files need to be deleted
+     after copy completion. Default is false. Type: boolean (or Expression with resultType boolean).
+    :vartype delete_files_after_completion: JSON
+    :ivar modified_datetime_start: The start of file's modified datetime. Type: string (or
+     Expression with resultType string).
+    :vartype modified_datetime_start: JSON
+    :ivar modified_datetime_end: The end of file's modified datetime. Type: string (or Expression
+     with resultType string).
+    :vartype modified_datetime_end: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
+        "recursive": {"key": "recursive", "type": "object"},
+        "wildcard_folder_path": {"key": "wildcardFolderPath", "type": "object"},
+        "wildcard_file_name": {"key": "wildcardFileName", "type": "object"},
+        "file_list_path": {"key": "fileListPath", "type": "object"},
+        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "object"},
+        "partition_root_path": {"key": "partitionRootPath", "type": "object"},
+        "delete_files_after_completion": {"key": "deleteFilesAfterCompletion", "type": "object"},
+        "modified_datetime_start": {"key": "modifiedDatetimeStart", "type": "object"},
+        "modified_datetime_end": {"key": "modifiedDatetimeEnd", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        max_concurrent_connections: Optional[JSON] = None,
+        recursive: Optional[JSON] = None,
+        wildcard_folder_path: Optional[JSON] = None,
+        wildcard_file_name: Optional[JSON] = None,
+        file_list_path: Optional[JSON] = None,
+        enable_partition_discovery: Optional[JSON] = None,
+        partition_root_path: Optional[JSON] = None,
+        delete_files_after_completion: Optional[JSON] = None,
+        modified_datetime_start: Optional[JSON] = None,
+        modified_datetime_end: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword max_concurrent_connections: The maximum concurrent connection count for the source
+         data store. Type: integer (or Expression with resultType integer).
+        :paramtype max_concurrent_connections: JSON
+        :keyword recursive: If true, files under the folder path will be read recursively. Default is
+         true. Type: boolean (or Expression with resultType boolean).
+        :paramtype recursive: JSON
+        :keyword wildcard_folder_path: Microsoft Fabric LakeHouse Files wildcardFolderPath. Type:
+         string (or Expression with resultType string).
+        :paramtype wildcard_folder_path: JSON
+        :keyword wildcard_file_name: Microsoft Fabric LakeHouse Files wildcardFileName. Type: string
+         (or Expression with resultType string).
+        :paramtype wildcard_file_name: JSON
+        :keyword file_list_path: Point to a text file that lists each file (relative path to the path
+         configured in the dataset) that you want to copy. Type: string (or Expression with resultType
+         string).
+        :paramtype file_list_path: JSON
+        :keyword enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+         boolean (or Expression with resultType boolean).
+        :paramtype enable_partition_discovery: JSON
+        :keyword partition_root_path: Specify the root path where partition discovery starts from.
+         Type: string (or Expression with resultType string).
+        :paramtype partition_root_path: JSON
+        :keyword delete_files_after_completion: Indicates whether the source files need to be deleted
+         after copy completion. Default is false. Type: boolean (or Expression with resultType boolean).
+        :paramtype delete_files_after_completion: JSON
+        :keyword modified_datetime_start: The start of file's modified datetime. Type: string (or
+         Expression with resultType string).
+        :paramtype modified_datetime_start: JSON
+        :keyword modified_datetime_end: The end of file's modified datetime. Type: string (or
+         Expression with resultType string).
+        :paramtype modified_datetime_end: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties, max_concurrent_connections=max_concurrent_connections, **kwargs
+        )
+        self.type: str = "LakeHouseReadSettings"
+        self.recursive = recursive
+        self.wildcard_folder_path = wildcard_folder_path
+        self.wildcard_file_name = wildcard_file_name
+        self.file_list_path = file_list_path
+        self.enable_partition_discovery = enable_partition_discovery
+        self.partition_root_path = partition_root_path
+        self.delete_files_after_completion = delete_files_after_completion
+        self.modified_datetime_start = modified_datetime_start
+        self.modified_datetime_end = modified_datetime_end
+
+
+class LakeHouseTableDataset(Dataset):
+    """Microsoft Fabric LakeHouse Table.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Type of dataset. Required.
+    :vartype type: str
+    :ivar description: Dataset description.
+    :vartype description: str
+    :ivar structure: Columns that define the structure of the dataset. Type: array (or Expression
+     with resultType array), itemType: DatasetDataElement.
+    :vartype structure: JSON
+    :ivar schema: Columns that define the physical type schema of the dataset. Type: array (or
+     Expression with resultType array), itemType: DatasetSchemaDataElement.
+    :vartype schema: JSON
+    :ivar linked_service_name: Linked service reference. Required.
+    :vartype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
+    :ivar parameters: Parameters for dataset.
+    :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+    :ivar annotations: List of tags that can be used for describing the Dataset.
+    :vartype annotations: list[JSON]
+    :ivar folder: The folder that this Dataset is in. If not specified, Dataset will appear at the
+     root level.
+    :vartype folder: ~azure.synapse.artifacts.models.DatasetFolder
+    :ivar table: The name of Microsoft Fabric LakeHouse Table. Type: string (or Expression with
+     resultType string).
+    :vartype table: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+        "linked_service_name": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "description": {"key": "description", "type": "str"},
+        "structure": {"key": "structure", "type": "object"},
+        "schema": {"key": "schema", "type": "object"},
+        "linked_service_name": {"key": "linkedServiceName", "type": "LinkedServiceReference"},
+        "parameters": {"key": "parameters", "type": "{ParameterSpecification}"},
+        "annotations": {"key": "annotations", "type": "[object]"},
+        "folder": {"key": "folder", "type": "DatasetFolder"},
+        "table": {"key": "typeProperties.table", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        linked_service_name: "_models.LinkedServiceReference",
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        description: Optional[str] = None,
+        structure: Optional[JSON] = None,
+        schema: Optional[JSON] = None,
+        parameters: Optional[Dict[str, "_models.ParameterSpecification"]] = None,
+        annotations: Optional[List[JSON]] = None,
+        folder: Optional["_models.DatasetFolder"] = None,
+        table: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword description: Dataset description.
+        :paramtype description: str
+        :keyword structure: Columns that define the structure of the dataset. Type: array (or
+         Expression with resultType array), itemType: DatasetDataElement.
+        :paramtype structure: JSON
+        :keyword schema: Columns that define the physical type schema of the dataset. Type: array (or
+         Expression with resultType array), itemType: DatasetSchemaDataElement.
+        :paramtype schema: JSON
+        :keyword linked_service_name: Linked service reference. Required.
+        :paramtype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
+        :keyword parameters: Parameters for dataset.
+        :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+        :keyword annotations: List of tags that can be used for describing the Dataset.
+        :paramtype annotations: list[JSON]
+        :keyword folder: The folder that this Dataset is in. If not specified, Dataset will appear at
+         the root level.
+        :paramtype folder: ~azure.synapse.artifacts.models.DatasetFolder
+        :keyword table: The name of Microsoft Fabric LakeHouse Table. Type: string (or Expression with
+         resultType string).
+        :paramtype table: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            description=description,
+            structure=structure,
+            schema=schema,
+            linked_service_name=linked_service_name,
+            parameters=parameters,
+            annotations=annotations,
+            folder=folder,
+            **kwargs
+        )
+        self.type: str = "LakeHouseTable"
+        self.table = table
+
+
+class LakeHouseTableSink(CopySink):
+    """A copy activity for Microsoft Fabric LakeHouse Table sink.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Copy sink type. Required.
+    :vartype type: str
+    :ivar write_batch_size: Write batch size. Type: integer (or Expression with resultType
+     integer), minimum: 0.
+    :vartype write_batch_size: JSON
+    :ivar write_batch_timeout: Write batch timeout. Type: string (or Expression with resultType
+     string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype write_batch_timeout: JSON
+    :ivar sink_retry_count: Sink retry count. Type: integer (or Expression with resultType
+     integer).
+    :vartype sink_retry_count: JSON
+    :ivar sink_retry_wait: Sink retry wait. Type: string (or Expression with resultType string),
+     pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype sink_retry_wait: JSON
+    :ivar max_concurrent_connections: The maximum concurrent connection count for the sink data
+     store. Type: integer (or Expression with resultType integer).
+    :vartype max_concurrent_connections: JSON
+    :ivar table_action_option: The type of table action for LakeHouse Table sink. Possible values
+     include: "None", "Append", "Overwrite".
+    :vartype table_action_option: JSON
+    :ivar partition_option: Create partitions in folder structure based on one or multiple columns.
+     Each distinct column value (pair) will be a new partition. Possible values include: "None",
+     "PartitionByKey".
+    :vartype partition_option: JSON
+    :ivar partition_name_list: Specify the partition column names from sink columns. Type: array of
+     objects (or Expression with resultType array of objects).
+    :vartype partition_name_list: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "write_batch_size": {"key": "writeBatchSize", "type": "object"},
+        "write_batch_timeout": {"key": "writeBatchTimeout", "type": "object"},
+        "sink_retry_count": {"key": "sinkRetryCount", "type": "object"},
+        "sink_retry_wait": {"key": "sinkRetryWait", "type": "object"},
+        "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
+        "table_action_option": {"key": "tableActionOption", "type": "object"},
+        "partition_option": {"key": "partitionOption", "type": "object"},
+        "partition_name_list": {"key": "partitionNameList", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        write_batch_size: Optional[JSON] = None,
+        write_batch_timeout: Optional[JSON] = None,
+        sink_retry_count: Optional[JSON] = None,
+        sink_retry_wait: Optional[JSON] = None,
+        max_concurrent_connections: Optional[JSON] = None,
+        table_action_option: Optional[JSON] = None,
+        partition_option: Optional[JSON] = None,
+        partition_name_list: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword write_batch_size: Write batch size. Type: integer (or Expression with resultType
+         integer), minimum: 0.
+        :paramtype write_batch_size: JSON
+        :keyword write_batch_timeout: Write batch timeout. Type: string (or Expression with resultType
+         string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype write_batch_timeout: JSON
+        :keyword sink_retry_count: Sink retry count. Type: integer (or Expression with resultType
+         integer).
+        :paramtype sink_retry_count: JSON
+        :keyword sink_retry_wait: Sink retry wait. Type: string (or Expression with resultType string),
+         pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype sink_retry_wait: JSON
+        :keyword max_concurrent_connections: The maximum concurrent connection count for the sink data
+         store. Type: integer (or Expression with resultType integer).
+        :paramtype max_concurrent_connections: JSON
+        :keyword table_action_option: The type of table action for LakeHouse Table sink. Possible
+         values include: "None", "Append", "Overwrite".
+        :paramtype table_action_option: JSON
+        :keyword partition_option: Create partitions in folder structure based on one or multiple
+         columns. Each distinct column value (pair) will be a new partition. Possible values include:
+         "None", "PartitionByKey".
+        :paramtype partition_option: JSON
+        :keyword partition_name_list: Specify the partition column names from sink columns. Type: array
+         of objects (or Expression with resultType array of objects).
+        :paramtype partition_name_list: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            write_batch_size=write_batch_size,
+            write_batch_timeout=write_batch_timeout,
+            sink_retry_count=sink_retry_count,
+            sink_retry_wait=sink_retry_wait,
+            max_concurrent_connections=max_concurrent_connections,
+            **kwargs
+        )
+        self.type: str = "LakeHouseTableSink"
+        self.table_action_option = table_action_option
+        self.partition_option = partition_option
+        self.partition_name_list = partition_name_list
+
+
+class LakeHouseTableSource(CopySource):
+    """A copy activity source for Microsoft Fabric LakeHouse Table.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Copy source type. Required.
+    :vartype type: str
+    :ivar source_retry_count: Source retry count. Type: integer (or Expression with resultType
+     integer).
+    :vartype source_retry_count: JSON
+    :ivar source_retry_wait: Source retry wait. Type: string (or Expression with resultType
+     string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype source_retry_wait: JSON
+    :ivar max_concurrent_connections: The maximum concurrent connection count for the source data
+     store. Type: integer (or Expression with resultType integer).
+    :vartype max_concurrent_connections: JSON
+    :ivar timestamp_as_of: Query an older snapshot by timestamp. Type: string (or Expression with
+     resultType string).
+    :vartype timestamp_as_of: JSON
+    :ivar version_as_of: Query an older snapshot by version. Type: integer (or Expression with
+     resultType integer).
+    :vartype version_as_of: JSON
+    :ivar additional_columns: Specifies the additional columns to be added to source data. Type:
+     array of objects(AdditionalColumns) (or Expression with resultType array of objects).
+    :vartype additional_columns: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "source_retry_count": {"key": "sourceRetryCount", "type": "object"},
+        "source_retry_wait": {"key": "sourceRetryWait", "type": "object"},
+        "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
+        "timestamp_as_of": {"key": "timestampAsOf", "type": "object"},
+        "version_as_of": {"key": "versionAsOf", "type": "object"},
+        "additional_columns": {"key": "additionalColumns", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        source_retry_count: Optional[JSON] = None,
+        source_retry_wait: Optional[JSON] = None,
+        max_concurrent_connections: Optional[JSON] = None,
+        timestamp_as_of: Optional[JSON] = None,
+        version_as_of: Optional[JSON] = None,
+        additional_columns: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword source_retry_count: Source retry count. Type: integer (or Expression with resultType
+         integer).
+        :paramtype source_retry_count: JSON
+        :keyword source_retry_wait: Source retry wait. Type: string (or Expression with resultType
+         string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype source_retry_wait: JSON
+        :keyword max_concurrent_connections: The maximum concurrent connection count for the source
+         data store. Type: integer (or Expression with resultType integer).
+        :paramtype max_concurrent_connections: JSON
+        :keyword timestamp_as_of: Query an older snapshot by timestamp. Type: string (or Expression
+         with resultType string).
+        :paramtype timestamp_as_of: JSON
+        :keyword version_as_of: Query an older snapshot by version. Type: integer (or Expression with
+         resultType integer).
+        :paramtype version_as_of: JSON
+        :keyword additional_columns: Specifies the additional columns to be added to source data. Type:
+         array of objects(AdditionalColumns) (or Expression with resultType array of objects).
+        :paramtype additional_columns: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            source_retry_count=source_retry_count,
+            source_retry_wait=source_retry_wait,
+            max_concurrent_connections=max_concurrent_connections,
+            **kwargs
+        )
+        self.type: str = "LakeHouseTableSource"
+        self.timestamp_as_of = timestamp_as_of
+        self.version_as_of = version_as_of
+        self.additional_columns = additional_columns
+
+
+class LakeHouseWriteSettings(StoreWriteSettings):
+    """Microsoft Fabric LakeHouse Files write settings.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: The write setting type. Required.
+    :vartype type: str
+    :ivar max_concurrent_connections: The maximum concurrent connection count for the source data
+     store. Type: integer (or Expression with resultType integer).
+    :vartype max_concurrent_connections: JSON
+    :ivar copy_behavior: The type of copy behavior for copy sink.
+    :vartype copy_behavior: JSON
+    :ivar metadata: Specify the custom metadata to be added to sink data. Type: array of objects
+     (or Expression with resultType array of objects).
+    :vartype metadata: list[~azure.synapse.artifacts.models.MetadataItem]
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
+        "copy_behavior": {"key": "copyBehavior", "type": "object"},
+        "metadata": {"key": "metadata", "type": "[MetadataItem]"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        max_concurrent_connections: Optional[JSON] = None,
+        copy_behavior: Optional[JSON] = None,
+        metadata: Optional[List["_models.MetadataItem"]] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword max_concurrent_connections: The maximum concurrent connection count for the source
+         data store. Type: integer (or Expression with resultType integer).
+        :paramtype max_concurrent_connections: JSON
+        :keyword copy_behavior: The type of copy behavior for copy sink.
+        :paramtype copy_behavior: JSON
+        :keyword metadata: Specify the custom metadata to be added to sink data. Type: array of objects
+         (or Expression with resultType array of objects).
+        :paramtype metadata: list[~azure.synapse.artifacts.models.MetadataItem]
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            max_concurrent_connections=max_concurrent_connections,
+            copy_behavior=copy_behavior,
+            metadata=metadata,
+            **kwargs
+        )
+        self.type: str = "LakeHouseWriteSettings"
+
+
 class LibraryInfo(_serialization.Model):
     """Library/package information of a Big Data pool powered by Apache Spark.
 
@@ -33841,7 +35076,7 @@ class LibraryInfo(_serialization.Model):
 class LibraryListResponse(_serialization.Model):
     """A list of Library resources.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: List of Library. Required.
     :vartype value: list[~azure.synapse.artifacts.models.LibraryResource]
@@ -33913,10 +35148,10 @@ class LibraryResource(SubResource):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -33960,7 +35195,7 @@ class LibraryResourceInfo(_serialization.Model):
     Variables are only populated by the server, and will be ignored when sending a request.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar record_id: record Id of the library/package.
     :vartype record_id: int
@@ -34309,7 +35544,7 @@ class LinkConnectionLandingZone(_serialization.Model):
 class LinkConnectionListResponse(_serialization.Model):
     """LinkConnectionListResponse.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: List link connection value. Required.
     :vartype value: list[~azure.synapse.artifacts.models.LinkConnectionResource]
@@ -34403,7 +35638,7 @@ class LinkConnectionRefreshStatus(_serialization.Model):
 class LinkConnectionResource(_serialization.Model):
     """LinkConnectionResource.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: Link connection id.
     :vartype id: str
@@ -34493,7 +35728,7 @@ class LinkConnectionSourceDatabase(_serialization.Model):
         self.type_properties = type_properties
 
 
-class LinkConnectionSourceDatabaseTypeProperties(_serialization.Model):
+class LinkConnectionSourceDatabaseTypeProperties(_serialization.Model):  # pylint: disable=name-too-long
     """LinkConnectionSourceDatabaseTypeProperties.
 
     :ivar resource_id: Link connection source database server's resource id.
@@ -34553,7 +35788,7 @@ class LinkConnectionTargetDatabase(_serialization.Model):
         self.type_properties = type_properties
 
 
-class LinkConnectionTargetDatabaseTypeProperties(_serialization.Model):
+class LinkConnectionTargetDatabaseTypeProperties(_serialization.Model):  # pylint: disable=name-too-long
     """LinkConnectionTargetDatabaseTypeProperties.
 
     :ivar cross_table_transaction: Enable cross table transaction consistency on target database.
@@ -34607,7 +35842,7 @@ class LinkedIntegrationRuntimeType(_serialization.Model):
     You probably want to use the sub-classes and not this class directly. Known sub-classes are:
     LinkedIntegrationRuntimeKeyAuthorization, LinkedIntegrationRuntimeRbacAuthorization
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar authorization_type: The authorization type for integration runtime sharing. Required.
     :vartype authorization_type: str
@@ -34637,7 +35872,7 @@ class LinkedIntegrationRuntimeType(_serialization.Model):
 class LinkedIntegrationRuntimeKeyAuthorization(LinkedIntegrationRuntimeType):
     """The key authorization type integration runtime.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar authorization_type: The authorization type for integration runtime sharing. Required.
     :vartype authorization_type: str
@@ -34665,10 +35900,10 @@ class LinkedIntegrationRuntimeKeyAuthorization(LinkedIntegrationRuntimeType):
         self.key = key
 
 
-class LinkedIntegrationRuntimeRbacAuthorization(LinkedIntegrationRuntimeType):
+class LinkedIntegrationRuntimeRbacAuthorization(LinkedIntegrationRuntimeType):  # pylint: disable=name-too-long
     """The role based access control (RBAC) authorization type integration runtime.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar authorization_type: The authorization type for integration runtime sharing. Required.
     :vartype authorization_type: str
@@ -34700,7 +35935,7 @@ class LinkedIntegrationRuntimeRbacAuthorization(LinkedIntegrationRuntimeType):
 class LinkedServiceDebugResource(SubResourceDebugResource):
     """Linked service debug resource.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: The resource name.
     :vartype name: str
@@ -34731,7 +35966,7 @@ class LinkedServiceDebugResource(SubResourceDebugResource):
 class LinkedServiceListResponse(_serialization.Model):
     """A list of linked service resources.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: List of linked services. Required.
     :vartype value: list[~azure.synapse.artifacts.models.LinkedServiceResource]
@@ -34765,7 +36000,7 @@ class LinkedServiceListResponse(_serialization.Model):
 class LinkedServiceReference(_serialization.Model):
     """Linked service reference type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Linked service reference type. Required. "LinkedServiceReference"
     :vartype type: str or ~azure.synapse.artifacts.models.Type
@@ -34813,10 +36048,10 @@ class LinkedServiceResource(SubResource):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -34996,7 +36231,7 @@ class LinkTableRequestTarget(_serialization.Model):
         self.structure_options = structure_options
 
 
-class LinkTableRequestTargetDistributionOptions(_serialization.Model):
+class LinkTableRequestTargetDistributionOptions(_serialization.Model):  # pylint: disable=name-too-long
     """LinkTableRequestTargetDistributionOptions.
 
     :ivar type: Target table distribution type.
@@ -35176,7 +36411,7 @@ class LinkTableStatus(_serialization.Model):
 class LogLocationSettings(_serialization.Model):
     """Log location settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar linked_service_name: Log storage linked service reference. Required.
     :vartype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
@@ -35212,7 +36447,7 @@ class LogLocationSettings(_serialization.Model):
 class LogSettings(_serialization.Model):
     """Log settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar enable_copy_activity_log: Specifies whether to enable copy activity log. Type: boolean
      (or Expression with resultType boolean).
@@ -35261,7 +36496,7 @@ class LogSettings(_serialization.Model):
 class LogStorageSettings(_serialization.Model):
     """(Deprecated. Please use LogSettings) Log storage settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -35328,7 +36563,7 @@ class LogStorageSettings(_serialization.Model):
 class LookupActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """Lookup activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -35455,7 +36690,7 @@ class LookupActivity(ExecutionActivity):  # pylint: disable=too-many-instance-at
 class MagentoLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Magento server linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -35577,7 +36812,7 @@ class MagentoLinkedService(LinkedService):  # pylint: disable=too-many-instance-
 class MagentoObjectDataset(Dataset):
     """Magento server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -35679,7 +36914,7 @@ class MagentoObjectDataset(Dataset):
 class MagentoSource(TabularSource):
     """A copy activity Magento server source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -35812,7 +37047,7 @@ class ManagedIntegrationRuntime(IntegrationRuntime):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -35890,7 +37125,7 @@ class ManagedIntegrationRuntime(IntegrationRuntime):
 class ManagedVirtualNetworkReference(_serialization.Model):
     """Managed Virtual Network reference type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Managed Virtual Network reference type. Required. "ManagedVirtualNetworkReference"
     :vartype type: str or ~azure.synapse.artifacts.models.ManagedVirtualNetworkReferenceType
@@ -35965,7 +37200,7 @@ class ManagedVirtualNetworkSettings(_serialization.Model):
 class MappingDataFlow(DataFlow):
     """Mapping data flow.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Type of data flow. Required.
     :vartype type: str
@@ -36045,10 +37280,10 @@ class MappingDataFlow(DataFlow):
         self.script_lines = script_lines
 
 
-class MariaDBLinkedService(LinkedService):
+class MariaDBLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """MariaDB server linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -36063,11 +37298,23 @@ class MariaDBLinkedService(LinkedService):
     :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
     :ivar annotations: List of tags that can be used for describing the linked service.
     :vartype annotations: list[JSON]
+    :ivar driver_version: The version of the MariaDB driver. Type: string. V1 or empty for legacy
+     driver, V2 for new driver. V1 can support connection string and property bag, V2 can only
+     support connection string.
+    :vartype driver_version: JSON
     :ivar connection_string: An ODBC connection string. Type: string, SecureString or
      AzureKeyVaultSecretReference.
     :vartype connection_string: JSON
-    :ivar pwd: The Azure key vault secret reference of password in connection string.
-    :vartype pwd: ~azure.synapse.artifacts.models.AzureKeyVaultSecretReference
+    :ivar server: Server name for connection. Type: string.
+    :vartype server: JSON
+    :ivar port: The port for the connection. Type: integer.
+    :vartype port: JSON
+    :ivar username: Username for authentication. Type: string.
+    :vartype username: JSON
+    :ivar database: Database name for connection. Type: string.
+    :vartype database: JSON
+    :ivar password: The Azure key vault secret reference of password in connection string.
+    :vartype password: ~azure.synapse.artifacts.models.AzureKeyVaultSecretReference
     :ivar encrypted_credential: The encrypted credential used for authentication. Credentials are
      encrypted using the integration runtime credential manager. Type: string (or Expression with
      resultType string).
@@ -36085,8 +37332,13 @@ class MariaDBLinkedService(LinkedService):
         "description": {"key": "description", "type": "str"},
         "parameters": {"key": "parameters", "type": "{ParameterSpecification}"},
         "annotations": {"key": "annotations", "type": "[object]"},
+        "driver_version": {"key": "typeProperties.driverVersion", "type": "object"},
         "connection_string": {"key": "typeProperties.connectionString", "type": "object"},
-        "pwd": {"key": "typeProperties.pwd", "type": "AzureKeyVaultSecretReference"},
+        "server": {"key": "typeProperties.server", "type": "object"},
+        "port": {"key": "typeProperties.port", "type": "object"},
+        "username": {"key": "typeProperties.username", "type": "object"},
+        "database": {"key": "typeProperties.database", "type": "object"},
+        "password": {"key": "typeProperties.password", "type": "AzureKeyVaultSecretReference"},
         "encrypted_credential": {"key": "typeProperties.encryptedCredential", "type": "object"},
     }
 
@@ -36098,8 +37350,13 @@ class MariaDBLinkedService(LinkedService):
         description: Optional[str] = None,
         parameters: Optional[Dict[str, "_models.ParameterSpecification"]] = None,
         annotations: Optional[List[JSON]] = None,
+        driver_version: Optional[JSON] = None,
         connection_string: Optional[JSON] = None,
-        pwd: Optional["_models.AzureKeyVaultSecretReference"] = None,
+        server: Optional[JSON] = None,
+        port: Optional[JSON] = None,
+        username: Optional[JSON] = None,
+        database: Optional[JSON] = None,
+        password: Optional["_models.AzureKeyVaultSecretReference"] = None,
         encrypted_credential: Optional[JSON] = None,
         **kwargs: Any
     ) -> None:
@@ -36115,11 +37372,23 @@ class MariaDBLinkedService(LinkedService):
         :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
         :keyword annotations: List of tags that can be used for describing the linked service.
         :paramtype annotations: list[JSON]
+        :keyword driver_version: The version of the MariaDB driver. Type: string. V1 or empty for
+         legacy driver, V2 for new driver. V1 can support connection string and property bag, V2 can
+         only support connection string.
+        :paramtype driver_version: JSON
         :keyword connection_string: An ODBC connection string. Type: string, SecureString or
          AzureKeyVaultSecretReference.
         :paramtype connection_string: JSON
-        :keyword pwd: The Azure key vault secret reference of password in connection string.
-        :paramtype pwd: ~azure.synapse.artifacts.models.AzureKeyVaultSecretReference
+        :keyword server: Server name for connection. Type: string.
+        :paramtype server: JSON
+        :keyword port: The port for the connection. Type: integer.
+        :paramtype port: JSON
+        :keyword username: Username for authentication. Type: string.
+        :paramtype username: JSON
+        :keyword database: Database name for connection. Type: string.
+        :paramtype database: JSON
+        :keyword password: The Azure key vault secret reference of password in connection string.
+        :paramtype password: ~azure.synapse.artifacts.models.AzureKeyVaultSecretReference
         :keyword encrypted_credential: The encrypted credential used for authentication. Credentials
          are encrypted using the integration runtime credential manager. Type: string (or Expression
          with resultType string).
@@ -36134,15 +37403,20 @@ class MariaDBLinkedService(LinkedService):
             **kwargs
         )
         self.type: str = "MariaDB"
+        self.driver_version = driver_version
         self.connection_string = connection_string
-        self.pwd = pwd
+        self.server = server
+        self.port = port
+        self.username = username
+        self.database = database
+        self.password = password
         self.encrypted_credential = encrypted_credential
 
 
 class MariaDBSource(TabularSource):
     """A copy activity MariaDB server source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -36235,7 +37509,7 @@ class MariaDBSource(TabularSource):
 class MariaDBTableDataset(Dataset):
     """MariaDB server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -36337,7 +37611,7 @@ class MariaDBTableDataset(Dataset):
 class MarketoLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Marketo server linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -36468,7 +37742,7 @@ class MarketoLinkedService(LinkedService):  # pylint: disable=too-many-instance-
 class MarketoObjectDataset(Dataset):
     """Marketo server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -36570,7 +37844,7 @@ class MarketoObjectDataset(Dataset):
 class MarketoSource(TabularSource):
     """A copy activity Marketo server source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -36660,10 +37934,36 @@ class MarketoSource(TabularSource):
         self.query = query
 
 
+class MetadataItem(_serialization.Model):
+    """Specify the name and value of custom metadata item.
+
+    :ivar name: Metadata item key name. Type: string (or Expression with resultType string).
+    :vartype name: JSON
+    :ivar value: Metadata item value. Type: string (or Expression with resultType string).
+    :vartype value: JSON
+    """
+
+    _attribute_map = {
+        "name": {"key": "name", "type": "object"},
+        "value": {"key": "value", "type": "object"},
+    }
+
+    def __init__(self, *, name: Optional[JSON] = None, value: Optional[JSON] = None, **kwargs: Any) -> None:
+        """
+        :keyword name: Metadata item key name. Type: string (or Expression with resultType string).
+        :paramtype name: JSON
+        :keyword value: Metadata item value. Type: string (or Expression with resultType string).
+        :paramtype value: JSON
+        """
+        super().__init__(**kwargs)
+        self.name = name
+        self.value = value
+
+
 class MetastoreRegisterObject(_serialization.Model):
     """MetastoreRegisterObject.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar input_folder: The input folder containing CDM files. Required.
     :vartype input_folder: str
@@ -36733,7 +38033,7 @@ class MetastoreRequestSuccessResponse(_serialization.Model):
 class MetastoreUpdateObject(_serialization.Model):
     """MetastoreUpdateObject.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar input_folder: The input folder containing CDM files. Required.
     :vartype input_folder: str
@@ -36781,7 +38081,7 @@ class MetastoreUpdationResponse(_serialization.Model):
 class MicrosoftAccessLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Microsoft Access linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -36907,7 +38207,7 @@ class MicrosoftAccessLinkedService(LinkedService):  # pylint: disable=too-many-i
 class MicrosoftAccessSink(CopySink):
     """A copy activity Microsoft Access sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -37000,7 +38300,7 @@ class MicrosoftAccessSink(CopySink):
 class MicrosoftAccessSource(CopySource):
     """A copy activity source for Microsoft Access.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -37082,7 +38382,7 @@ class MicrosoftAccessSource(CopySource):
 class MicrosoftAccessTableDataset(Dataset):
     """The Microsoft Access table dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -37186,7 +38486,7 @@ class MicrosoftAccessTableDataset(Dataset):
 class MongoDbAtlasCollectionDataset(Dataset):
     """The MongoDB Atlas database dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -37291,7 +38591,7 @@ class MongoDbAtlasCollectionDataset(Dataset):
 class MongoDbAtlasLinkedService(LinkedService):
     """Linked service for MongoDB Atlas data source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -37389,7 +38689,7 @@ class MongoDbAtlasLinkedService(LinkedService):
 class MongoDbAtlasSource(CopySource):
     """A copy activity source for a MongoDB Atlas database.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -37504,7 +38804,7 @@ class MongoDbAtlasSource(CopySource):
 class MongoDbCollectionDataset(Dataset):
     """The MongoDB database dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -37678,7 +38978,7 @@ class MongoDbCursorMethodsProperties(_serialization.Model):
 class MongoDbLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Linked service for MongoDb data source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -37840,7 +39140,7 @@ class MongoDbLinkedService(LinkedService):  # pylint: disable=too-many-instance-
 class MongoDbSource(CopySource):
     """A copy activity source for a MongoDB database.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -37924,7 +39224,7 @@ class MongoDbSource(CopySource):
 class MongoDbV2CollectionDataset(Dataset):
     """The MongoDB database dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -38029,7 +39329,7 @@ class MongoDbV2CollectionDataset(Dataset):
 class MongoDbV2LinkedService(LinkedService):
     """Linked service for MongoDB data source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -38118,7 +39418,7 @@ class MongoDbV2LinkedService(LinkedService):
 class MongoDbV2Source(CopySource):
     """A copy activity source for a MongoDB database.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -38230,10 +39530,10 @@ class MongoDbV2Source(CopySource):
         self.additional_columns = additional_columns
 
 
-class MySqlLinkedService(LinkedService):
+class MySqlLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Linked service for MySQL data source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -38248,8 +39548,26 @@ class MySqlLinkedService(LinkedService):
     :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
     :ivar annotations: List of tags that can be used for describing the linked service.
     :vartype annotations: list[JSON]
-    :ivar connection_string: The connection string. Required.
+    :ivar driver_version: The version of the MySQL driver. Type: string. V1 or empty for legacy
+     driver, V2 for new driver. V1 can support connection string and property bag, V2 can only
+     support connection string.
+    :vartype driver_version: JSON
+    :ivar connection_string: The connection string.
     :vartype connection_string: JSON
+    :ivar server: Server name for connection. Type: string.
+    :vartype server: JSON
+    :ivar port: The port for the connection. Type: integer.
+    :vartype port: JSON
+    :ivar username: Username for authentication. Type: string.
+    :vartype username: JSON
+    :ivar database: Database name for connection. Type: string.
+    :vartype database: JSON
+    :ivar ssl_mode: SSL mode for connection. Type: integer. 0: disable, 1: prefer, 2: require, 3:
+     verify-ca, 4: verify-full.
+    :vartype ssl_mode: JSON
+    :ivar use_system_trust_store: Use system trust store for connection. Type: integer. 0: enable,
+     1: disable.
+    :vartype use_system_trust_store: JSON
     :ivar password: The Azure key vault secret reference of password in connection string.
     :vartype password: ~azure.synapse.artifacts.models.AzureKeyVaultSecretReference
     :ivar encrypted_credential: The encrypted credential used for authentication. Credentials are
@@ -38260,7 +39578,6 @@ class MySqlLinkedService(LinkedService):
 
     _validation = {
         "type": {"required": True},
-        "connection_string": {"required": True},
     }
 
     _attribute_map = {
@@ -38270,7 +39587,14 @@ class MySqlLinkedService(LinkedService):
         "description": {"key": "description", "type": "str"},
         "parameters": {"key": "parameters", "type": "{ParameterSpecification}"},
         "annotations": {"key": "annotations", "type": "[object]"},
+        "driver_version": {"key": "typeProperties.driverVersion", "type": "object"},
         "connection_string": {"key": "typeProperties.connectionString", "type": "object"},
+        "server": {"key": "typeProperties.server", "type": "object"},
+        "port": {"key": "typeProperties.port", "type": "object"},
+        "username": {"key": "typeProperties.username", "type": "object"},
+        "database": {"key": "typeProperties.database", "type": "object"},
+        "ssl_mode": {"key": "typeProperties.sslMode", "type": "object"},
+        "use_system_trust_store": {"key": "typeProperties.useSystemTrustStore", "type": "object"},
         "password": {"key": "typeProperties.password", "type": "AzureKeyVaultSecretReference"},
         "encrypted_credential": {"key": "typeProperties.encryptedCredential", "type": "object"},
     }
@@ -38278,12 +39602,19 @@ class MySqlLinkedService(LinkedService):
     def __init__(
         self,
         *,
-        connection_string: JSON,
         additional_properties: Optional[Dict[str, JSON]] = None,
         connect_via: Optional["_models.IntegrationRuntimeReference"] = None,
         description: Optional[str] = None,
         parameters: Optional[Dict[str, "_models.ParameterSpecification"]] = None,
         annotations: Optional[List[JSON]] = None,
+        driver_version: Optional[JSON] = None,
+        connection_string: Optional[JSON] = None,
+        server: Optional[JSON] = None,
+        port: Optional[JSON] = None,
+        username: Optional[JSON] = None,
+        database: Optional[JSON] = None,
+        ssl_mode: Optional[JSON] = None,
+        use_system_trust_store: Optional[JSON] = None,
         password: Optional["_models.AzureKeyVaultSecretReference"] = None,
         encrypted_credential: Optional[JSON] = None,
         **kwargs: Any
@@ -38300,8 +39631,26 @@ class MySqlLinkedService(LinkedService):
         :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
         :keyword annotations: List of tags that can be used for describing the linked service.
         :paramtype annotations: list[JSON]
-        :keyword connection_string: The connection string. Required.
+        :keyword driver_version: The version of the MySQL driver. Type: string. V1 or empty for legacy
+         driver, V2 for new driver. V1 can support connection string and property bag, V2 can only
+         support connection string.
+        :paramtype driver_version: JSON
+        :keyword connection_string: The connection string.
         :paramtype connection_string: JSON
+        :keyword server: Server name for connection. Type: string.
+        :paramtype server: JSON
+        :keyword port: The port for the connection. Type: integer.
+        :paramtype port: JSON
+        :keyword username: Username for authentication. Type: string.
+        :paramtype username: JSON
+        :keyword database: Database name for connection. Type: string.
+        :paramtype database: JSON
+        :keyword ssl_mode: SSL mode for connection. Type: integer. 0: disable, 1: prefer, 2: require,
+         3: verify-ca, 4: verify-full.
+        :paramtype ssl_mode: JSON
+        :keyword use_system_trust_store: Use system trust store for connection. Type: integer. 0:
+         enable, 1: disable.
+        :paramtype use_system_trust_store: JSON
         :keyword password: The Azure key vault secret reference of password in connection string.
         :paramtype password: ~azure.synapse.artifacts.models.AzureKeyVaultSecretReference
         :keyword encrypted_credential: The encrypted credential used for authentication. Credentials
@@ -38318,7 +39667,14 @@ class MySqlLinkedService(LinkedService):
             **kwargs
         )
         self.type: str = "MySql"
+        self.driver_version = driver_version
         self.connection_string = connection_string
+        self.server = server
+        self.port = port
+        self.username = username
+        self.database = database
+        self.ssl_mode = ssl_mode
+        self.use_system_trust_store = use_system_trust_store
         self.password = password
         self.encrypted_credential = encrypted_credential
 
@@ -38326,7 +39682,7 @@ class MySqlLinkedService(LinkedService):
 class MySqlSource(TabularSource):
     """A copy activity source for MySQL databases.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -38417,7 +39773,7 @@ class MySqlSource(TabularSource):
 class MySqlTableDataset(Dataset):
     """The MySQL table dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -38519,7 +39875,7 @@ class MySqlTableDataset(Dataset):
 class NetezzaLinkedService(LinkedService):
     """Netezza linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -38662,7 +40018,7 @@ class NetezzaPartitionSettings(_serialization.Model):
 class NetezzaSource(TabularSource):
     """A copy activity Netezza source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -38772,7 +40128,7 @@ class NetezzaSource(TabularSource):
 class NetezzaTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Netezza dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -38894,7 +40250,7 @@ class NetezzaTableDataset(Dataset):  # pylint: disable=too-many-instance-attribu
 class Notebook(_serialization.Model):
     """Notebook.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -39001,7 +40357,7 @@ class Notebook(_serialization.Model):
 class NotebookCell(_serialization.Model):
     """Notebook cell.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -39071,7 +40427,7 @@ class NotebookCell(_serialization.Model):
 class NotebookCellOutputItem(_serialization.Model):
     """An item of the notebook cell execution output.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: For output_type=stream, determines the name of stream (stdout / stderr).
     :vartype name: str
@@ -39162,7 +40518,7 @@ class NotebookFolder(_serialization.Model):
 class NotebookKernelSpec(_serialization.Model):
     """Kernel information.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -39205,7 +40561,7 @@ class NotebookKernelSpec(_serialization.Model):
 class NotebookLanguageInfo(_serialization.Model):
     """Language info.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -39252,7 +40608,7 @@ class NotebookLanguageInfo(_serialization.Model):
 class NotebookListResponse(_serialization.Model):
     """A list of Notebook resources.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: List of Notebooks. Required.
     :vartype value: list[~azure.synapse.artifacts.models.NotebookResource]
@@ -39329,7 +40685,8 @@ class NotebookParameter(_serialization.Model):
 
     :ivar value: Notebook parameter value. Type: string (or Expression with resultType string).
     :vartype value: JSON
-    :ivar type: Notebook parameter type. Known values are: "string", "int", "float", and "bool".
+    :ivar type: Notebook parameter type. Known values are: "string", "int", "float", "bool", and
+     "int".
     :vartype type: str or ~azure.synapse.artifacts.models.NotebookParameterType
     """
 
@@ -39348,7 +40705,8 @@ class NotebookParameter(_serialization.Model):
         """
         :keyword value: Notebook parameter value. Type: string (or Expression with resultType string).
         :paramtype value: JSON
-        :keyword type: Notebook parameter type. Known values are: "string", "int", "float", and "bool".
+        :keyword type: Notebook parameter type. Known values are: "string", "int", "float", "bool", and
+         "int".
         :paramtype type: str or ~azure.synapse.artifacts.models.NotebookParameterType
         """
         super().__init__(**kwargs)
@@ -39361,10 +40719,10 @@ class NotebookResource(_serialization.Model):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: Fully qualified resource Id for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource. Required.
     :vartype name: str
@@ -39411,7 +40769,7 @@ class NotebookResource(_serialization.Model):
 class NotebookSessionProperties(_serialization.Model):
     """Session properties.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar driver_memory: Amount of memory to use for the driver process. Required.
     :vartype driver_memory: str
@@ -39474,7 +40832,7 @@ class NotebookSessionProperties(_serialization.Model):
 class ODataLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Open Data Protocol (OData) linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -39677,7 +41035,7 @@ class ODataLinkedService(LinkedService):  # pylint: disable=too-many-instance-at
 class ODataResourceDataset(Dataset):
     """The Open Data Protocol (OData) resource dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -39779,7 +41137,7 @@ class ODataResourceDataset(Dataset):
 class ODataSource(CopySource):
     """A copy activity source for OData source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -39876,7 +41234,7 @@ class ODataSource(CopySource):
 class OdbcLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Open Database Connectivity (ODBC) linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -40000,7 +41358,7 @@ class OdbcLinkedService(LinkedService):  # pylint: disable=too-many-instance-att
 class OdbcSink(CopySink):
     """A copy activity ODBC sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -40093,7 +41451,7 @@ class OdbcSink(CopySink):
 class OdbcSource(TabularSource):
     """A copy activity source for ODBC databases.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -40184,7 +41542,7 @@ class OdbcSource(TabularSource):
 class OdbcTableDataset(Dataset):
     """The ODBC table dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -40286,7 +41644,7 @@ class OdbcTableDataset(Dataset):
 class Office365Dataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The Office365 account.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -40400,7 +41758,7 @@ class Office365Dataset(Dataset):  # pylint: disable=too-many-instance-attributes
 class Office365LinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Office365 linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -40516,7 +41874,7 @@ class Office365LinkedService(LinkedService):  # pylint: disable=too-many-instanc
 class Office365Source(CopySource):  # pylint: disable=too-many-instance-attributes
     """A copy activity source for an Office 365 service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -40694,7 +42052,7 @@ class OperationResult(_serialization.Model):
 class OracleLinkedService(LinkedService):
     """Oracle database.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -40845,7 +42203,7 @@ class OraclePartitionSettings(_serialization.Model):
 class OracleServiceCloudLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Oracle Service Cloud linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -40980,7 +42338,7 @@ class OracleServiceCloudLinkedService(LinkedService):  # pylint: disable=too-man
 class OracleServiceCloudObjectDataset(Dataset):
     """Oracle Service Cloud dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -41082,7 +42440,7 @@ class OracleServiceCloudObjectDataset(Dataset):
 class OracleServiceCloudSource(TabularSource):
     """A copy activity Oracle Service Cloud source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -41175,7 +42533,7 @@ class OracleServiceCloudSource(TabularSource):
 class OracleSink(CopySink):
     """A copy activity Oracle sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -41268,7 +42626,7 @@ class OracleSink(CopySink):
 class OracleSource(CopySource):
     """A copy activity Oracle source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -41378,7 +42736,7 @@ class OracleSource(CopySource):
 class OracleTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The on-premises Oracle database dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -41500,7 +42858,7 @@ class OracleTableDataset(Dataset):  # pylint: disable=too-many-instance-attribut
 class OrcDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """ORC dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -41611,7 +42969,7 @@ class OrcDataset(Dataset):  # pylint: disable=too-many-instance-attributes
 class OrcFormat(DatasetStorageFormat):
     """The data stored in Optimized Row Columnar (ORC) format.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -41661,7 +43019,7 @@ class OrcFormat(DatasetStorageFormat):
 class OrcSink(CopySink):
     """A copy activity ORC sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -41759,7 +43117,7 @@ class OrcSink(CopySink):
 class OrcSource(CopySource):
     """A copy activity ORC source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -41841,7 +43199,7 @@ class OrcSource(CopySource):
 class OrcWriteSettings(FormatWriteSettings):
     """Orc write settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -41917,10 +43275,10 @@ class OutputColumn(_serialization.Model):
 class ParameterSpecification(_serialization.Model):
     """Definition of a single parameter for an entity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Parameter type. Required. Known values are: "Object", "String", "Int", "Float",
-     "Bool", "Array", and "SecureString".
+     "Bool", "Array", "SecureString", and "Int".
     :vartype type: str or ~azure.synapse.artifacts.models.ParameterType
     :ivar default_value: Default value of parameter.
     :vartype default_value: JSON
@@ -41940,7 +43298,7 @@ class ParameterSpecification(_serialization.Model):
     ) -> None:
         """
         :keyword type: Parameter type. Required. Known values are: "Object", "String", "Int", "Float",
-         "Bool", "Array", and "SecureString".
+         "Bool", "Array", "SecureString", and "Int".
         :paramtype type: str or ~azure.synapse.artifacts.models.ParameterType
         :keyword default_value: Default value of parameter.
         :paramtype default_value: JSON
@@ -41953,7 +43311,7 @@ class ParameterSpecification(_serialization.Model):
 class ParquetDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Parquet dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -42062,7 +43420,7 @@ class ParquetDataset(Dataset):  # pylint: disable=too-many-instance-attributes
 class ParquetFormat(DatasetStorageFormat):
     """The data stored in Parquet format.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -42109,10 +43467,53 @@ class ParquetFormat(DatasetStorageFormat):
         self.type: str = "ParquetFormat"
 
 
+class ParquetReadSettings(FormatReadSettings):
+    """Parquet read settings.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: The read setting type. Required.
+    :vartype type: str
+    :ivar compression_properties: Compression settings.
+    :vartype compression_properties: ~azure.synapse.artifacts.models.CompressionReadSettings
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "compression_properties": {"key": "compressionProperties", "type": "CompressionReadSettings"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        compression_properties: Optional["_models.CompressionReadSettings"] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword compression_properties: Compression settings.
+        :paramtype compression_properties: ~azure.synapse.artifacts.models.CompressionReadSettings
+        """
+        super().__init__(additional_properties=additional_properties, **kwargs)
+        self.type: str = "ParquetReadSettings"
+        self.compression_properties = compression_properties
+
+
 class ParquetSink(CopySink):
     """A copy activity Parquet sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -42210,7 +43611,7 @@ class ParquetSink(CopySink):
 class ParquetSource(CopySource):
     """A copy activity Parquet source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -42228,6 +43629,8 @@ class ParquetSource(CopySource):
     :vartype max_concurrent_connections: JSON
     :ivar store_settings: Parquet store settings.
     :vartype store_settings: ~azure.synapse.artifacts.models.StoreReadSettings
+    :ivar format_settings: Parquet format settings.
+    :vartype format_settings: ~azure.synapse.artifacts.models.ParquetReadSettings
     :ivar additional_columns: Specifies the additional columns to be added to source data. Type:
      array of objects(AdditionalColumns) (or Expression with resultType array of objects).
     :vartype additional_columns: JSON
@@ -42244,6 +43647,7 @@ class ParquetSource(CopySource):
         "source_retry_wait": {"key": "sourceRetryWait", "type": "object"},
         "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
         "store_settings": {"key": "storeSettings", "type": "StoreReadSettings"},
+        "format_settings": {"key": "formatSettings", "type": "ParquetReadSettings"},
         "additional_columns": {"key": "additionalColumns", "type": "object"},
     }
 
@@ -42255,6 +43659,7 @@ class ParquetSource(CopySource):
         source_retry_wait: Optional[JSON] = None,
         max_concurrent_connections: Optional[JSON] = None,
         store_settings: Optional["_models.StoreReadSettings"] = None,
+        format_settings: Optional["_models.ParquetReadSettings"] = None,
         additional_columns: Optional[JSON] = None,
         **kwargs: Any
     ) -> None:
@@ -42273,6 +43678,8 @@ class ParquetSource(CopySource):
         :paramtype max_concurrent_connections: JSON
         :keyword store_settings: Parquet store settings.
         :paramtype store_settings: ~azure.synapse.artifacts.models.StoreReadSettings
+        :keyword format_settings: Parquet format settings.
+        :paramtype format_settings: ~azure.synapse.artifacts.models.ParquetReadSettings
         :keyword additional_columns: Specifies the additional columns to be added to source data. Type:
          array of objects(AdditionalColumns) (or Expression with resultType array of objects).
         :paramtype additional_columns: JSON
@@ -42286,13 +43693,14 @@ class ParquetSource(CopySource):
         )
         self.type: str = "ParquetSource"
         self.store_settings = store_settings
+        self.format_settings = format_settings
         self.additional_columns = additional_columns
 
 
 class ParquetWriteSettings(FormatWriteSettings):
     """Parquet write settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -42348,7 +43756,7 @@ class ParquetWriteSettings(FormatWriteSettings):
 class PaypalLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Paypal Service linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -42478,7 +43886,7 @@ class PaypalLinkedService(LinkedService):  # pylint: disable=too-many-instance-a
 class PaypalObjectDataset(Dataset):
     """Paypal Service dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -42580,7 +43988,7 @@ class PaypalObjectDataset(Dataset):
 class PaypalSource(TabularSource):
     """A copy activity Paypal Service source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -42673,7 +44081,7 @@ class PaypalSource(TabularSource):
 class PhoenixLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Phoenix server linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -42855,7 +44263,7 @@ class PhoenixLinkedService(LinkedService):  # pylint: disable=too-many-instance-
 class PhoenixObjectDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Phoenix server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -42977,7 +44385,7 @@ class PhoenixObjectDataset(Dataset):  # pylint: disable=too-many-instance-attrib
 class PhoenixSource(TabularSource):
     """A copy activity Phoenix server source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -43090,7 +44498,7 @@ class PipelineFolder(_serialization.Model):
 class PipelineListResponse(_serialization.Model):
     """A list of pipeline resources.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: List of pipelines. Required.
     :vartype value: list[~azure.synapse.artifacts.models.PipelineResource]
@@ -43124,7 +44532,7 @@ class PipelineListResponse(_serialization.Model):
 class PipelineReference(_serialization.Model):
     """Pipeline reference type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Pipeline reference type. Required. "PipelineReference"
     :vartype type: str or ~azure.synapse.artifacts.models.PipelineReferenceType
@@ -43173,7 +44581,7 @@ class PipelineResource(SubResource):  # pylint: disable=too-many-instance-attrib
     Variables are only populated by the server, and will be ignored when sending a request.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -43400,7 +44808,7 @@ class PipelineRunInvokedBy(_serialization.Model):
 class PipelineRunsQueryResponse(_serialization.Model):
     """A list pipeline runs.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: List of pipeline runs. Required.
     :vartype value: list[~azure.synapse.artifacts.models.PipelineRun]
@@ -43501,7 +44909,7 @@ class PolybaseSettings(_serialization.Model):
 class PostgreSqlLinkedService(LinkedService):
     """Linked service for PostgreSQL data source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -43594,7 +45002,7 @@ class PostgreSqlLinkedService(LinkedService):
 class PostgreSqlSource(TabularSource):
     """A copy activity source for PostgreSQL databases.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -43685,7 +45093,7 @@ class PostgreSqlSource(TabularSource):
 class PostgreSqlTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The PostgreSQL table dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -43802,10 +45210,442 @@ class PostgreSqlTableDataset(Dataset):  # pylint: disable=too-many-instance-attr
         self.schema_type_properties_schema = schema_type_properties_schema
 
 
+class PostgreSqlV2LinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
+    """Linked service for PostgreSQLV2 data source.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Type of linked service. Required.
+    :vartype type: str
+    :ivar connect_via: The integration runtime reference.
+    :vartype connect_via: ~azure.synapse.artifacts.models.IntegrationRuntimeReference
+    :ivar description: Linked service description.
+    :vartype description: str
+    :ivar parameters: Parameters for linked service.
+    :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+    :ivar annotations: List of tags that can be used for describing the linked service.
+    :vartype annotations: list[JSON]
+    :ivar server: Server name for connection. Type: string. Required.
+    :vartype server: JSON
+    :ivar port: The port for the connection. Type: integer.
+    :vartype port: JSON
+    :ivar username: Username for authentication. Type: string. Required.
+    :vartype username: JSON
+    :ivar database: Database name for connection. Type: string. Required.
+    :vartype database: JSON
+    :ivar ssl_mode: SSL mode for connection. Type: integer. 0: disable, 1:allow, 2: prefer, 3:
+     require, 4: verify-ca, 5: verify-full. Type: integer. Required.
+    :vartype ssl_mode: JSON
+    :ivar schema: Sets the schema search path. Type: string.
+    :vartype schema: JSON
+    :ivar pooling: Whether connection pooling should be used. Type: boolean.
+    :vartype pooling: JSON
+    :ivar connection_timeout: The time to wait (in seconds) while trying to establish a connection
+     before terminating the attempt and generating an error. Type: integer.
+    :vartype connection_timeout: JSON
+    :ivar command_timeout: The time to wait (in seconds) while trying to execute a command before
+     terminating the attempt and generating an error. Set to zero for infinity. Type: integer.
+    :vartype command_timeout: JSON
+    :ivar trust_server_certificate: Whether to trust the server certificate without validating it.
+     Type: boolean.
+    :vartype trust_server_certificate: JSON
+    :ivar ssl_certificate: Location of a client certificate to be sent to the server. Type: string.
+    :vartype ssl_certificate: JSON
+    :ivar ssl_key: Location of a client key for a client certificate to be sent to the server.
+     Type: string.
+    :vartype ssl_key: JSON
+    :ivar ssl_password: Password for a key for a client certificate. Type: string.
+    :vartype ssl_password: JSON
+    :ivar read_buffer_size: Determines the size of the internal buffer uses when reading.
+     Increasing may improve performance if transferring large values from the database. Type:
+     integer.
+    :vartype read_buffer_size: JSON
+    :ivar log_parameters: When enabled, parameter values are logged when commands are executed.
+     Type: boolean.
+    :vartype log_parameters: JSON
+    :ivar timezone: Gets or sets the session timezone. Type: string.
+    :vartype timezone: JSON
+    :ivar encoding: Gets or sets the .NET encoding that will be used to encode/decode PostgreSQL
+     string data. Type: string.
+    :vartype encoding: JSON
+    :ivar password: The Azure key vault secret reference of password in connection string. Type:
+     string.
+    :vartype password: ~azure.synapse.artifacts.models.AzureKeyVaultSecretReference
+    :ivar encrypted_credential: The encrypted credential used for authentication. Credentials are
+     encrypted using the integration runtime credential manager. Type: string (or Expression with
+     resultType string).
+    :vartype encrypted_credential: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+        "server": {"required": True},
+        "username": {"required": True},
+        "database": {"required": True},
+        "ssl_mode": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "connect_via": {"key": "connectVia", "type": "IntegrationRuntimeReference"},
+        "description": {"key": "description", "type": "str"},
+        "parameters": {"key": "parameters", "type": "{ParameterSpecification}"},
+        "annotations": {"key": "annotations", "type": "[object]"},
+        "server": {"key": "typeProperties.server", "type": "object"},
+        "port": {"key": "typeProperties.port", "type": "object"},
+        "username": {"key": "typeProperties.username", "type": "object"},
+        "database": {"key": "typeProperties.database", "type": "object"},
+        "ssl_mode": {"key": "typeProperties.sslMode", "type": "object"},
+        "schema": {"key": "typeProperties.schema", "type": "object"},
+        "pooling": {"key": "typeProperties.pooling", "type": "object"},
+        "connection_timeout": {"key": "typeProperties.connectionTimeout", "type": "object"},
+        "command_timeout": {"key": "typeProperties.commandTimeout", "type": "object"},
+        "trust_server_certificate": {"key": "typeProperties.trustServerCertificate", "type": "object"},
+        "ssl_certificate": {"key": "typeProperties.sslCertificate", "type": "object"},
+        "ssl_key": {"key": "typeProperties.sslKey", "type": "object"},
+        "ssl_password": {"key": "typeProperties.sslPassword", "type": "object"},
+        "read_buffer_size": {"key": "typeProperties.readBufferSize", "type": "object"},
+        "log_parameters": {"key": "typeProperties.logParameters", "type": "object"},
+        "timezone": {"key": "typeProperties.timezone", "type": "object"},
+        "encoding": {"key": "typeProperties.encoding", "type": "object"},
+        "password": {"key": "typeProperties.password", "type": "AzureKeyVaultSecretReference"},
+        "encrypted_credential": {"key": "typeProperties.encryptedCredential", "type": "object"},
+    }
+
+    def __init__(  # pylint: disable=too-many-locals
+        self,
+        *,
+        server: JSON,
+        username: JSON,
+        database: JSON,
+        ssl_mode: JSON,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        connect_via: Optional["_models.IntegrationRuntimeReference"] = None,
+        description: Optional[str] = None,
+        parameters: Optional[Dict[str, "_models.ParameterSpecification"]] = None,
+        annotations: Optional[List[JSON]] = None,
+        port: Optional[JSON] = None,
+        schema: Optional[JSON] = None,
+        pooling: Optional[JSON] = None,
+        connection_timeout: Optional[JSON] = None,
+        command_timeout: Optional[JSON] = None,
+        trust_server_certificate: Optional[JSON] = None,
+        ssl_certificate: Optional[JSON] = None,
+        ssl_key: Optional[JSON] = None,
+        ssl_password: Optional[JSON] = None,
+        read_buffer_size: Optional[JSON] = None,
+        log_parameters: Optional[JSON] = None,
+        timezone: Optional[JSON] = None,
+        encoding: Optional[JSON] = None,
+        password: Optional["_models.AzureKeyVaultSecretReference"] = None,
+        encrypted_credential: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword connect_via: The integration runtime reference.
+        :paramtype connect_via: ~azure.synapse.artifacts.models.IntegrationRuntimeReference
+        :keyword description: Linked service description.
+        :paramtype description: str
+        :keyword parameters: Parameters for linked service.
+        :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+        :keyword annotations: List of tags that can be used for describing the linked service.
+        :paramtype annotations: list[JSON]
+        :keyword server: Server name for connection. Type: string. Required.
+        :paramtype server: JSON
+        :keyword port: The port for the connection. Type: integer.
+        :paramtype port: JSON
+        :keyword username: Username for authentication. Type: string. Required.
+        :paramtype username: JSON
+        :keyword database: Database name for connection. Type: string. Required.
+        :paramtype database: JSON
+        :keyword ssl_mode: SSL mode for connection. Type: integer. 0: disable, 1:allow, 2: prefer, 3:
+         require, 4: verify-ca, 5: verify-full. Type: integer. Required.
+        :paramtype ssl_mode: JSON
+        :keyword schema: Sets the schema search path. Type: string.
+        :paramtype schema: JSON
+        :keyword pooling: Whether connection pooling should be used. Type: boolean.
+        :paramtype pooling: JSON
+        :keyword connection_timeout: The time to wait (in seconds) while trying to establish a
+         connection before terminating the attempt and generating an error. Type: integer.
+        :paramtype connection_timeout: JSON
+        :keyword command_timeout: The time to wait (in seconds) while trying to execute a command
+         before terminating the attempt and generating an error. Set to zero for infinity. Type:
+         integer.
+        :paramtype command_timeout: JSON
+        :keyword trust_server_certificate: Whether to trust the server certificate without validating
+         it. Type: boolean.
+        :paramtype trust_server_certificate: JSON
+        :keyword ssl_certificate: Location of a client certificate to be sent to the server. Type:
+         string.
+        :paramtype ssl_certificate: JSON
+        :keyword ssl_key: Location of a client key for a client certificate to be sent to the server.
+         Type: string.
+        :paramtype ssl_key: JSON
+        :keyword ssl_password: Password for a key for a client certificate. Type: string.
+        :paramtype ssl_password: JSON
+        :keyword read_buffer_size: Determines the size of the internal buffer uses when reading.
+         Increasing may improve performance if transferring large values from the database. Type:
+         integer.
+        :paramtype read_buffer_size: JSON
+        :keyword log_parameters: When enabled, parameter values are logged when commands are executed.
+         Type: boolean.
+        :paramtype log_parameters: JSON
+        :keyword timezone: Gets or sets the session timezone. Type: string.
+        :paramtype timezone: JSON
+        :keyword encoding: Gets or sets the .NET encoding that will be used to encode/decode PostgreSQL
+         string data. Type: string.
+        :paramtype encoding: JSON
+        :keyword password: The Azure key vault secret reference of password in connection string. Type:
+         string.
+        :paramtype password: ~azure.synapse.artifacts.models.AzureKeyVaultSecretReference
+        :keyword encrypted_credential: The encrypted credential used for authentication. Credentials
+         are encrypted using the integration runtime credential manager. Type: string (or Expression
+         with resultType string).
+        :paramtype encrypted_credential: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            connect_via=connect_via,
+            description=description,
+            parameters=parameters,
+            annotations=annotations,
+            **kwargs
+        )
+        self.type: str = "PostgreSqlV2"
+        self.server = server
+        self.port = port
+        self.username = username
+        self.database = database
+        self.ssl_mode = ssl_mode
+        self.schema = schema
+        self.pooling = pooling
+        self.connection_timeout = connection_timeout
+        self.command_timeout = command_timeout
+        self.trust_server_certificate = trust_server_certificate
+        self.ssl_certificate = ssl_certificate
+        self.ssl_key = ssl_key
+        self.ssl_password = ssl_password
+        self.read_buffer_size = read_buffer_size
+        self.log_parameters = log_parameters
+        self.timezone = timezone
+        self.encoding = encoding
+        self.password = password
+        self.encrypted_credential = encrypted_credential
+
+
+class PostgreSqlV2Source(TabularSource):
+    """A copy activity source for PostgreSQL databases.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Copy source type. Required.
+    :vartype type: str
+    :ivar source_retry_count: Source retry count. Type: integer (or Expression with resultType
+     integer).
+    :vartype source_retry_count: JSON
+    :ivar source_retry_wait: Source retry wait. Type: string (or Expression with resultType
+     string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype source_retry_wait: JSON
+    :ivar max_concurrent_connections: The maximum concurrent connection count for the source data
+     store. Type: integer (or Expression with resultType integer).
+    :vartype max_concurrent_connections: JSON
+    :ivar query_timeout: Query timeout. Type: string (or Expression with resultType string),
+     pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype query_timeout: JSON
+    :ivar additional_columns: Specifies the additional columns to be added to source data. Type:
+     array of objects(AdditionalColumns) (or Expression with resultType array of objects).
+    :vartype additional_columns: JSON
+    :ivar query: Database query. Type: string (or Expression with resultType string).
+    :vartype query: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "source_retry_count": {"key": "sourceRetryCount", "type": "object"},
+        "source_retry_wait": {"key": "sourceRetryWait", "type": "object"},
+        "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
+        "query_timeout": {"key": "queryTimeout", "type": "object"},
+        "additional_columns": {"key": "additionalColumns", "type": "object"},
+        "query": {"key": "query", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        source_retry_count: Optional[JSON] = None,
+        source_retry_wait: Optional[JSON] = None,
+        max_concurrent_connections: Optional[JSON] = None,
+        query_timeout: Optional[JSON] = None,
+        additional_columns: Optional[JSON] = None,
+        query: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword source_retry_count: Source retry count. Type: integer (or Expression with resultType
+         integer).
+        :paramtype source_retry_count: JSON
+        :keyword source_retry_wait: Source retry wait. Type: string (or Expression with resultType
+         string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype source_retry_wait: JSON
+        :keyword max_concurrent_connections: The maximum concurrent connection count for the source
+         data store. Type: integer (or Expression with resultType integer).
+        :paramtype max_concurrent_connections: JSON
+        :keyword query_timeout: Query timeout. Type: string (or Expression with resultType string),
+         pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype query_timeout: JSON
+        :keyword additional_columns: Specifies the additional columns to be added to source data. Type:
+         array of objects(AdditionalColumns) (or Expression with resultType array of objects).
+        :paramtype additional_columns: JSON
+        :keyword query: Database query. Type: string (or Expression with resultType string).
+        :paramtype query: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            source_retry_count=source_retry_count,
+            source_retry_wait=source_retry_wait,
+            max_concurrent_connections=max_concurrent_connections,
+            query_timeout=query_timeout,
+            additional_columns=additional_columns,
+            **kwargs
+        )
+        self.type: str = "PostgreSqlV2Source"
+        self.query = query
+
+
+class PostgreSqlV2TableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
+    """The PostgreSQLV2 table dataset.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Type of dataset. Required.
+    :vartype type: str
+    :ivar description: Dataset description.
+    :vartype description: str
+    :ivar structure: Columns that define the structure of the dataset. Type: array (or Expression
+     with resultType array), itemType: DatasetDataElement.
+    :vartype structure: JSON
+    :ivar schema: Columns that define the physical type schema of the dataset. Type: array (or
+     Expression with resultType array), itemType: DatasetSchemaDataElement.
+    :vartype schema: JSON
+    :ivar linked_service_name: Linked service reference. Required.
+    :vartype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
+    :ivar parameters: Parameters for dataset.
+    :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+    :ivar annotations: List of tags that can be used for describing the Dataset.
+    :vartype annotations: list[JSON]
+    :ivar folder: The folder that this Dataset is in. If not specified, Dataset will appear at the
+     root level.
+    :vartype folder: ~azure.synapse.artifacts.models.DatasetFolder
+    :ivar table: The PostgreSQL table name. Type: string (or Expression with resultType string).
+    :vartype table: JSON
+    :ivar schema_type_properties_schema: The PostgreSQL schema name. Type: string (or Expression
+     with resultType string).
+    :vartype schema_type_properties_schema: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+        "linked_service_name": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "description": {"key": "description", "type": "str"},
+        "structure": {"key": "structure", "type": "object"},
+        "schema": {"key": "schema", "type": "object"},
+        "linked_service_name": {"key": "linkedServiceName", "type": "LinkedServiceReference"},
+        "parameters": {"key": "parameters", "type": "{ParameterSpecification}"},
+        "annotations": {"key": "annotations", "type": "[object]"},
+        "folder": {"key": "folder", "type": "DatasetFolder"},
+        "table": {"key": "typeProperties.table", "type": "object"},
+        "schema_type_properties_schema": {"key": "typeProperties.schema", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        linked_service_name: "_models.LinkedServiceReference",
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        description: Optional[str] = None,
+        structure: Optional[JSON] = None,
+        schema: Optional[JSON] = None,
+        parameters: Optional[Dict[str, "_models.ParameterSpecification"]] = None,
+        annotations: Optional[List[JSON]] = None,
+        folder: Optional["_models.DatasetFolder"] = None,
+        table: Optional[JSON] = None,
+        schema_type_properties_schema: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword description: Dataset description.
+        :paramtype description: str
+        :keyword structure: Columns that define the structure of the dataset. Type: array (or
+         Expression with resultType array), itemType: DatasetDataElement.
+        :paramtype structure: JSON
+        :keyword schema: Columns that define the physical type schema of the dataset. Type: array (or
+         Expression with resultType array), itemType: DatasetSchemaDataElement.
+        :paramtype schema: JSON
+        :keyword linked_service_name: Linked service reference. Required.
+        :paramtype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
+        :keyword parameters: Parameters for dataset.
+        :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+        :keyword annotations: List of tags that can be used for describing the Dataset.
+        :paramtype annotations: list[JSON]
+        :keyword folder: The folder that this Dataset is in. If not specified, Dataset will appear at
+         the root level.
+        :paramtype folder: ~azure.synapse.artifacts.models.DatasetFolder
+        :keyword table: The PostgreSQL table name. Type: string (or Expression with resultType string).
+        :paramtype table: JSON
+        :keyword schema_type_properties_schema: The PostgreSQL schema name. Type: string (or Expression
+         with resultType string).
+        :paramtype schema_type_properties_schema: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            description=description,
+            structure=structure,
+            schema=schema,
+            linked_service_name=linked_service_name,
+            parameters=parameters,
+            annotations=annotations,
+            folder=folder,
+            **kwargs
+        )
+        self.type: str = "PostgreSqlV2Table"
+        self.table = table
+        self.schema_type_properties_schema = schema_type_properties_schema
+
+
 class PowerBIWorkspaceLinkedService(LinkedService):
     """Power BI Workspace linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -43888,7 +45728,7 @@ class PowerBIWorkspaceLinkedService(LinkedService):
 class PrestoLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Presto server linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -44080,7 +45920,7 @@ class PrestoLinkedService(LinkedService):  # pylint: disable=too-many-instance-a
 class PrestoObjectDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Presto server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -44201,7 +46041,7 @@ class PrestoObjectDataset(Dataset):  # pylint: disable=too-many-instance-attribu
 class PrestoSource(TabularSource):
     """A copy activity Presto server source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -44321,7 +46161,7 @@ class ProxyResource(Resource):
     Variables are only populated by the server, and will be ignored when sending a request.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -44330,22 +46170,6 @@ class ProxyResource(Resource):
     :vartype type: str
     """
 
-    _validation = {
-        "id": {"readonly": True},
-        "name": {"readonly": True},
-        "type": {"readonly": True},
-    }
-
-    _attribute_map = {
-        "id": {"key": "id", "type": "str"},
-        "name": {"key": "name", "type": "str"},
-        "type": {"key": "type", "type": "str"},
-    }
-
-    def __init__(self, **kwargs: Any) -> None:
-        """ """
-        super().__init__(**kwargs)
-
 
 class PrivateEndpointConnection(ProxyResource):
     """A private endpoint connection.
@@ -44353,7 +46177,7 @@ class PrivateEndpointConnection(ProxyResource):
     Variables are only populated by the server, and will be ignored when sending a request.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -44533,7 +46357,7 @@ class QueryTableStatusRequest(_serialization.Model):
 class QuickbaseLinkedService(LinkedService):
     """Linked service for Quickbase.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -44629,7 +46453,7 @@ class QuickbaseLinkedService(LinkedService):
 class QuickBooksLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """QuickBooks server linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -44775,7 +46599,7 @@ class QuickBooksLinkedService(LinkedService):  # pylint: disable=too-many-instan
 class QuickBooksObjectDataset(Dataset):
     """QuickBooks server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -44877,7 +46701,7 @@ class QuickBooksObjectDataset(Dataset):
 class QuickBooksSource(TabularSource):
     """A copy activity QuickBooks server source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -45077,7 +46901,7 @@ class RecurrenceScheduleOccurrence(_serialization.Model):
 class RedirectIncompatibleRowSettings(_serialization.Model):
     """Redirect incompatible row settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -45134,7 +46958,7 @@ class RedshiftUnloadSettings(_serialization.Model):
     unload. With this, data from Amazon Redshift source will be unloaded into S3 first and then
     copied into the targeted sink from the interim S3.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar s3_linked_service_name: The name of the Amazon S3 linked service which will be used for
      the unload operation when copying from the Amazon Redshift source. Required.
@@ -45175,7 +46999,7 @@ class RedshiftUnloadSettings(_serialization.Model):
 class RelationalSource(CopySource):
     """A copy activity source for various relational databases.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -45257,7 +47081,7 @@ class RelationalSource(CopySource):
 class RelationalTableDataset(Dataset):
     """The relational table dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -45363,7 +47187,7 @@ class RerunTriggerListResponse(_serialization.Model):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: List of rerun triggers. Required.
     :vartype value: list[~azure.synapse.artifacts.models.RerunTriggerResource]
@@ -45397,10 +47221,10 @@ class RerunTriggerResource(SubResource):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -45444,7 +47268,7 @@ class RerunTumblingWindowTrigger(Trigger):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -45534,10 +47358,10 @@ class RerunTumblingWindowTrigger(Trigger):
         self.rerun_concurrency = rerun_concurrency
 
 
-class RerunTumblingWindowTriggerActionParameters(_serialization.Model):
+class RerunTumblingWindowTriggerActionParameters(_serialization.Model):  # pylint: disable=name-too-long
     """Rerun tumbling window trigger Parameters.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar start_time: The start time for the time period for which restatement is initiated. Only
      UTC time is currently supported. Required.
@@ -45585,7 +47409,7 @@ class RerunTumblingWindowTriggerActionParameters(_serialization.Model):
 class ResponsysLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Responsys linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -45721,7 +47545,7 @@ class ResponsysLinkedService(LinkedService):  # pylint: disable=too-many-instanc
 class ResponsysObjectDataset(Dataset):
     """Responsys dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -45823,7 +47647,7 @@ class ResponsysObjectDataset(Dataset):
 class ResponsysSource(TabularSource):
     """A copy activity Responsys source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -45916,7 +47740,7 @@ class ResponsysSource(TabularSource):
 class RestResourceDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """A Rest service dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -46056,7 +47880,7 @@ class RestResourceDataset(Dataset):  # pylint: disable=too-many-instance-attribu
 class RestServiceLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Rest Service linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -46288,7 +48112,7 @@ class RestServiceLinkedService(LinkedService):  # pylint: disable=too-many-insta
 class RestSink(CopySink):  # pylint: disable=too-many-instance-attributes
     """A copy activity Rest service Sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -46419,7 +48243,7 @@ class RestSink(CopySink):  # pylint: disable=too-many-instance-attributes
 class RestSource(CopySource):  # pylint: disable=too-many-instance-attributes
     """A copy activity Rest service source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -46584,7 +48408,7 @@ class RetryPolicy(_serialization.Model):
 class RunFilterParameters(_serialization.Model):
     """Query parameters for listing runs.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar continuation_token: The continuation token for getting the next page of results. Null for
      first page.
@@ -46803,7 +48627,7 @@ class RunNotebookResult(_serialization.Model):
     :ivar last_checked_on: Timestamp of last update.
     :vartype last_checked_on: str
     :ivar session_id: Livy session id.
-    :vartype session_id: int
+    :vartype session_id: str
     :ivar spark_pool: SparkPool name.
     :vartype spark_pool: str
     :ivar session_detail: Run notebook session details.
@@ -46818,7 +48642,7 @@ class RunNotebookResult(_serialization.Model):
         "run_id": {"key": "runId", "type": "str"},
         "run_status": {"key": "runStatus", "type": "str"},
         "last_checked_on": {"key": "lastCheckedOn", "type": "str"},
-        "session_id": {"key": "sessionId", "type": "int"},
+        "session_id": {"key": "sessionId", "type": "str"},
         "spark_pool": {"key": "sparkPool", "type": "str"},
         "session_detail": {"key": "sessionDetail", "type": "object"},
         "exit_value": {"key": "exitValue", "type": "str"},
@@ -46831,7 +48655,7 @@ class RunNotebookResult(_serialization.Model):
         run_id: Optional[str] = None,
         run_status: Optional[str] = None,
         last_checked_on: Optional[str] = None,
-        session_id: Optional[int] = None,
+        session_id: Optional[str] = None,
         spark_pool: Optional[str] = None,
         session_detail: Optional[JSON] = None,
         exit_value: Optional[str] = None,
@@ -46846,7 +48670,7 @@ class RunNotebookResult(_serialization.Model):
         :keyword last_checked_on: Timestamp of last update.
         :paramtype last_checked_on: str
         :keyword session_id: Livy session id.
-        :paramtype session_id: int
+        :paramtype session_id: str
         :keyword spark_pool: SparkPool name.
         :paramtype spark_pool: str
         :keyword session_detail: Run notebook session details.
@@ -46870,7 +48694,7 @@ class RunNotebookResult(_serialization.Model):
 class RunNotebookSnapshot(_serialization.Model):
     """Run notebook snapshot.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar exit_value: Output of exit command.
     :vartype exit_value: str
@@ -46884,7 +48708,7 @@ class RunNotebookSnapshot(_serialization.Model):
      completes.
     :vartype honor_session_time_to_live: bool
     :ivar session_id: Livy session id.
-    :vartype session_id: int
+    :vartype session_id: str
     :ivar spark_pool: SparkPool name.
     :vartype spark_pool: str
     :ivar parameters: Run notebook parameters.
@@ -46904,7 +48728,7 @@ class RunNotebookSnapshot(_serialization.Model):
         "notebook": {"key": "notebook", "type": "str"},
         "session_options": {"key": "sessionOptions", "type": "RunNotebookSparkSessionOptions"},
         "honor_session_time_to_live": {"key": "honorSessionTimeToLive", "type": "bool"},
-        "session_id": {"key": "sessionId", "type": "int"},
+        "session_id": {"key": "sessionId", "type": "str"},
         "spark_pool": {"key": "sparkPool", "type": "str"},
         "parameters": {"key": "parameters", "type": "{RunNotebookParameter}"},
         "notebook_content": {"key": "notebookContent", "type": "NotebookResource"},
@@ -46918,7 +48742,7 @@ class RunNotebookSnapshot(_serialization.Model):
         exit_value: Optional[str] = None,
         session_options: Optional["_models.RunNotebookSparkSessionOptions"] = None,
         honor_session_time_to_live: Optional[bool] = None,
-        session_id: Optional[int] = None,
+        session_id: Optional[str] = None,
         spark_pool: Optional[str] = None,
         parameters: Optional[Dict[str, "_models.RunNotebookParameter"]] = None,
         notebook_content: Optional["_models.NotebookResource"] = None,
@@ -46937,7 +48761,7 @@ class RunNotebookSnapshot(_serialization.Model):
          completes.
         :paramtype honor_session_time_to_live: bool
         :keyword session_id: Livy session id.
-        :paramtype session_id: int
+        :paramtype session_id: str
         :keyword spark_pool: SparkPool name.
         :paramtype spark_pool: str
         :keyword parameters: Run notebook parameters.
@@ -46990,7 +48814,7 @@ class RunNotebookSnapshotResponse(_serialization.Model):
 class RunNotebookSnapshotResult(_serialization.Model):
     """Run notebook snapshot result.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar snapshot: Run notebook snapshot. Required.
     :vartype snapshot: ~azure.synapse.artifacts.models.RunNotebookSnapshot
@@ -47003,7 +48827,7 @@ class RunNotebookSnapshotResult(_serialization.Model):
     :ivar last_checked_on: Timestamp of last update.
     :vartype last_checked_on: str
     :ivar session_id: Livy session id.
-    :vartype session_id: int
+    :vartype session_id: str
     :ivar spark_pool: SparkPool name.
     :vartype spark_pool: str
     """
@@ -47020,7 +48844,7 @@ class RunNotebookSnapshotResult(_serialization.Model):
         "run_id": {"key": "runId", "type": "str"},
         "run_status": {"key": "runStatus", "type": "str"},
         "last_checked_on": {"key": "lastCheckedOn", "type": "str"},
-        "session_id": {"key": "sessionId", "type": "int"},
+        "session_id": {"key": "sessionId", "type": "str"},
         "spark_pool": {"key": "sparkPool", "type": "str"},
     }
 
@@ -47032,7 +48856,7 @@ class RunNotebookSnapshotResult(_serialization.Model):
         run_status: str,
         error: Optional["_models.RunNotebookError"] = None,
         last_checked_on: Optional[str] = None,
-        session_id: Optional[int] = None,
+        session_id: Optional[str] = None,
         spark_pool: Optional[str] = None,
         **kwargs: Any
     ) -> None:
@@ -47048,7 +48872,7 @@ class RunNotebookSnapshotResult(_serialization.Model):
         :keyword last_checked_on: Timestamp of last update.
         :paramtype last_checked_on: str
         :keyword session_id: Livy session id.
-        :paramtype session_id: int
+        :paramtype session_id: str
         :keyword spark_pool: SparkPool name.
         :paramtype spark_pool: str
         """
@@ -47204,7 +49028,7 @@ class RunNotebookSparkSessionOptions(_serialization.Model):  # pylint: disable=t
 class RunQueryFilter(_serialization.Model):
     """Query filter option for listing runs.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar operand: Parameter name to be used for filter. The allowed operands to query pipeline
      runs are PipelineName, RunStart, RunEnd and Status; to query activity runs are ActivityName,
@@ -47263,7 +49087,7 @@ class RunQueryFilter(_serialization.Model):
 class RunQueryOrderBy(_serialization.Model):
     """An object to provide order by options for listing runs.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar order_by: Parameter name to be used for order by. The allowed parameters to order by for
      pipeline runs are PipelineName, RunStart, RunEnd and Status; for activity runs are
@@ -47312,7 +49136,7 @@ class RunQueryOrderBy(_serialization.Model):
 class SalesforceLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Linked service for Salesforce.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -47435,7 +49259,7 @@ class SalesforceLinkedService(LinkedService):  # pylint: disable=too-many-instan
 class SalesforceMarketingCloudLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Salesforce Marketing Cloud linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -47572,7 +49396,7 @@ class SalesforceMarketingCloudLinkedService(LinkedService):  # pylint: disable=t
 class SalesforceMarketingCloudObjectDataset(Dataset):
     """Salesforce Marketing Cloud dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -47674,7 +49498,7 @@ class SalesforceMarketingCloudObjectDataset(Dataset):
 class SalesforceMarketingCloudSource(TabularSource):
     """A copy activity Salesforce Marketing Cloud source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -47767,7 +49591,7 @@ class SalesforceMarketingCloudSource(TabularSource):
 class SalesforceObjectDataset(Dataset):
     """The Salesforce object dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -47871,7 +49695,7 @@ class SalesforceObjectDataset(Dataset):
 class SalesforceServiceCloudLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Linked service for Salesforce Service Cloud.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -48003,7 +49827,7 @@ class SalesforceServiceCloudLinkedService(LinkedService):  # pylint: disable=too
 class SalesforceServiceCloudObjectDataset(Dataset):
     """The Salesforce Service Cloud object dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -48107,7 +49931,7 @@ class SalesforceServiceCloudObjectDataset(Dataset):
 class SalesforceServiceCloudSink(CopySink):
     """A copy activity Salesforce Service Cloud sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -48227,7 +50051,7 @@ class SalesforceServiceCloudSink(CopySink):
 class SalesforceServiceCloudSource(CopySource):
     """A copy activity Salesforce Service Cloud source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -48315,10 +50139,457 @@ class SalesforceServiceCloudSource(CopySource):
         self.additional_columns = additional_columns
 
 
+class SalesforceServiceCloudV2LinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
+    """Linked service for Salesforce Service Cloud V2.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Type of linked service. Required.
+    :vartype type: str
+    :ivar connect_via: The integration runtime reference.
+    :vartype connect_via: ~azure.synapse.artifacts.models.IntegrationRuntimeReference
+    :ivar description: Linked service description.
+    :vartype description: str
+    :ivar parameters: Parameters for linked service.
+    :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+    :ivar annotations: List of tags that can be used for describing the linked service.
+    :vartype annotations: list[JSON]
+    :ivar environment_url: The URL of Salesforce Service Cloud instance. For example,
+     'https://[domain].my.salesforce.com'. Type: string (or Expression with resultType string).
+    :vartype environment_url: JSON
+    :ivar authentication_type: The authentication type to be used to connect to the Salesforce.
+     Currently, we only support OAuth2ClientCredentials, it is also the default value.
+    :vartype authentication_type: JSON
+    :ivar client_id: The client Id for OAuth 2.0 Client Credentials Flow authentication of the
+     Salesforce instance. Type: string (or Expression with resultType string).
+    :vartype client_id: JSON
+    :ivar client_secret: The client secret for OAuth 2.0 Client Credentials Flow authentication of
+     the Salesforce instance.
+    :vartype client_secret: ~azure.synapse.artifacts.models.SecretBase
+    :ivar api_version: The Salesforce API version used in ADF. The version must be larger than or
+     equal to 47.0 which is required by Salesforce BULK API 2.0. Type: string (or Expression with
+     resultType string).
+    :vartype api_version: JSON
+    :ivar encrypted_credential: The encrypted credential used for authentication. Credentials are
+     encrypted using the integration runtime credential manager. Type: string.
+    :vartype encrypted_credential: str
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "connect_via": {"key": "connectVia", "type": "IntegrationRuntimeReference"},
+        "description": {"key": "description", "type": "str"},
+        "parameters": {"key": "parameters", "type": "{ParameterSpecification}"},
+        "annotations": {"key": "annotations", "type": "[object]"},
+        "environment_url": {"key": "typeProperties.environmentUrl", "type": "object"},
+        "authentication_type": {"key": "typeProperties.authenticationType", "type": "object"},
+        "client_id": {"key": "typeProperties.clientId", "type": "object"},
+        "client_secret": {"key": "typeProperties.clientSecret", "type": "SecretBase"},
+        "api_version": {"key": "typeProperties.apiVersion", "type": "object"},
+        "encrypted_credential": {"key": "typeProperties.encryptedCredential", "type": "str"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        connect_via: Optional["_models.IntegrationRuntimeReference"] = None,
+        description: Optional[str] = None,
+        parameters: Optional[Dict[str, "_models.ParameterSpecification"]] = None,
+        annotations: Optional[List[JSON]] = None,
+        environment_url: Optional[JSON] = None,
+        authentication_type: Optional[JSON] = None,
+        client_id: Optional[JSON] = None,
+        client_secret: Optional["_models.SecretBase"] = None,
+        api_version: Optional[JSON] = None,
+        encrypted_credential: Optional[str] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword connect_via: The integration runtime reference.
+        :paramtype connect_via: ~azure.synapse.artifacts.models.IntegrationRuntimeReference
+        :keyword description: Linked service description.
+        :paramtype description: str
+        :keyword parameters: Parameters for linked service.
+        :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+        :keyword annotations: List of tags that can be used for describing the linked service.
+        :paramtype annotations: list[JSON]
+        :keyword environment_url: The URL of Salesforce Service Cloud instance. For example,
+         'https://[domain].my.salesforce.com'. Type: string (or Expression with resultType string).
+        :paramtype environment_url: JSON
+        :keyword authentication_type: The authentication type to be used to connect to the Salesforce.
+         Currently, we only support OAuth2ClientCredentials, it is also the default value.
+        :paramtype authentication_type: JSON
+        :keyword client_id: The client Id for OAuth 2.0 Client Credentials Flow authentication of the
+         Salesforce instance. Type: string (or Expression with resultType string).
+        :paramtype client_id: JSON
+        :keyword client_secret: The client secret for OAuth 2.0 Client Credentials Flow authentication
+         of the Salesforce instance.
+        :paramtype client_secret: ~azure.synapse.artifacts.models.SecretBase
+        :keyword api_version: The Salesforce API version used in ADF. The version must be larger than
+         or equal to 47.0 which is required by Salesforce BULK API 2.0. Type: string (or Expression with
+         resultType string).
+        :paramtype api_version: JSON
+        :keyword encrypted_credential: The encrypted credential used for authentication. Credentials
+         are encrypted using the integration runtime credential manager. Type: string.
+        :paramtype encrypted_credential: str
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            connect_via=connect_via,
+            description=description,
+            parameters=parameters,
+            annotations=annotations,
+            **kwargs
+        )
+        self.type: str = "SalesforceServiceCloudV2"
+        self.environment_url = environment_url
+        self.authentication_type = authentication_type
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.api_version = api_version
+        self.encrypted_credential = encrypted_credential
+
+
+class SalesforceServiceCloudV2ObjectDataset(Dataset):  # pylint: disable=too-many-instance-attributes
+    """The Salesforce Service Cloud V2 object dataset.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Type of dataset. Required.
+    :vartype type: str
+    :ivar description: Dataset description.
+    :vartype description: str
+    :ivar structure: Columns that define the structure of the dataset. Type: array (or Expression
+     with resultType array), itemType: DatasetDataElement.
+    :vartype structure: JSON
+    :ivar schema: Columns that define the physical type schema of the dataset. Type: array (or
+     Expression with resultType array), itemType: DatasetSchemaDataElement.
+    :vartype schema: JSON
+    :ivar linked_service_name: Linked service reference. Required.
+    :vartype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
+    :ivar parameters: Parameters for dataset.
+    :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+    :ivar annotations: List of tags that can be used for describing the Dataset.
+    :vartype annotations: list[JSON]
+    :ivar folder: The folder that this Dataset is in. If not specified, Dataset will appear at the
+     root level.
+    :vartype folder: ~azure.synapse.artifacts.models.DatasetFolder
+    :ivar object_api_name: The Salesforce Service Cloud V2 object API name. Type: string (or
+     Expression with resultType string).
+    :vartype object_api_name: JSON
+    :ivar report_id: The Salesforce Service Cloud V2 reportId. Type: string (or Expression with
+     resultType string).
+    :vartype report_id: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+        "linked_service_name": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "description": {"key": "description", "type": "str"},
+        "structure": {"key": "structure", "type": "object"},
+        "schema": {"key": "schema", "type": "object"},
+        "linked_service_name": {"key": "linkedServiceName", "type": "LinkedServiceReference"},
+        "parameters": {"key": "parameters", "type": "{ParameterSpecification}"},
+        "annotations": {"key": "annotations", "type": "[object]"},
+        "folder": {"key": "folder", "type": "DatasetFolder"},
+        "object_api_name": {"key": "typeProperties.objectApiName", "type": "object"},
+        "report_id": {"key": "typeProperties.reportId", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        linked_service_name: "_models.LinkedServiceReference",
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        description: Optional[str] = None,
+        structure: Optional[JSON] = None,
+        schema: Optional[JSON] = None,
+        parameters: Optional[Dict[str, "_models.ParameterSpecification"]] = None,
+        annotations: Optional[List[JSON]] = None,
+        folder: Optional["_models.DatasetFolder"] = None,
+        object_api_name: Optional[JSON] = None,
+        report_id: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword description: Dataset description.
+        :paramtype description: str
+        :keyword structure: Columns that define the structure of the dataset. Type: array (or
+         Expression with resultType array), itemType: DatasetDataElement.
+        :paramtype structure: JSON
+        :keyword schema: Columns that define the physical type schema of the dataset. Type: array (or
+         Expression with resultType array), itemType: DatasetSchemaDataElement.
+        :paramtype schema: JSON
+        :keyword linked_service_name: Linked service reference. Required.
+        :paramtype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
+        :keyword parameters: Parameters for dataset.
+        :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+        :keyword annotations: List of tags that can be used for describing the Dataset.
+        :paramtype annotations: list[JSON]
+        :keyword folder: The folder that this Dataset is in. If not specified, Dataset will appear at
+         the root level.
+        :paramtype folder: ~azure.synapse.artifacts.models.DatasetFolder
+        :keyword object_api_name: The Salesforce Service Cloud V2 object API name. Type: string (or
+         Expression with resultType string).
+        :paramtype object_api_name: JSON
+        :keyword report_id: The Salesforce Service Cloud V2 reportId. Type: string (or Expression with
+         resultType string).
+        :paramtype report_id: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            description=description,
+            structure=structure,
+            schema=schema,
+            linked_service_name=linked_service_name,
+            parameters=parameters,
+            annotations=annotations,
+            folder=folder,
+            **kwargs
+        )
+        self.type: str = "SalesforceServiceCloudV2Object"
+        self.object_api_name = object_api_name
+        self.report_id = report_id
+
+
+class SalesforceServiceCloudV2Sink(CopySink):
+    """A copy activity Salesforce Service Cloud V2 sink.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Copy sink type. Required.
+    :vartype type: str
+    :ivar write_batch_size: Write batch size. Type: integer (or Expression with resultType
+     integer), minimum: 0.
+    :vartype write_batch_size: JSON
+    :ivar write_batch_timeout: Write batch timeout. Type: string (or Expression with resultType
+     string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype write_batch_timeout: JSON
+    :ivar sink_retry_count: Sink retry count. Type: integer (or Expression with resultType
+     integer).
+    :vartype sink_retry_count: JSON
+    :ivar sink_retry_wait: Sink retry wait. Type: string (or Expression with resultType string),
+     pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype sink_retry_wait: JSON
+    :ivar max_concurrent_connections: The maximum concurrent connection count for the sink data
+     store. Type: integer (or Expression with resultType integer).
+    :vartype max_concurrent_connections: JSON
+    :ivar write_behavior: The write behavior for the operation. Default is Insert. Known values
+     are: "Insert" and "Upsert".
+    :vartype write_behavior: str or ~azure.synapse.artifacts.models.SalesforceV2SinkWriteBehavior
+    :ivar external_id_field_name: The name of the external ID field for upsert operation. Default
+     value is 'Id' column. Type: string (or Expression with resultType string).
+    :vartype external_id_field_name: JSON
+    :ivar ignore_null_values: The flag indicating whether or not to ignore null values from input
+     dataset (except key fields) during write operation. Default value is false. If set it to true,
+     it means ADF will leave the data in the destination object unchanged when doing upsert/update
+     operation and insert defined default value when doing insert operation, versus ADF will update
+     the data in the destination object to NULL when doing upsert/update operation and insert NULL
+     value when doing insert operation. Type: boolean (or Expression with resultType boolean).
+    :vartype ignore_null_values: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "write_batch_size": {"key": "writeBatchSize", "type": "object"},
+        "write_batch_timeout": {"key": "writeBatchTimeout", "type": "object"},
+        "sink_retry_count": {"key": "sinkRetryCount", "type": "object"},
+        "sink_retry_wait": {"key": "sinkRetryWait", "type": "object"},
+        "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
+        "write_behavior": {"key": "writeBehavior", "type": "str"},
+        "external_id_field_name": {"key": "externalIdFieldName", "type": "object"},
+        "ignore_null_values": {"key": "ignoreNullValues", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        write_batch_size: Optional[JSON] = None,
+        write_batch_timeout: Optional[JSON] = None,
+        sink_retry_count: Optional[JSON] = None,
+        sink_retry_wait: Optional[JSON] = None,
+        max_concurrent_connections: Optional[JSON] = None,
+        write_behavior: Optional[Union[str, "_models.SalesforceV2SinkWriteBehavior"]] = None,
+        external_id_field_name: Optional[JSON] = None,
+        ignore_null_values: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword write_batch_size: Write batch size. Type: integer (or Expression with resultType
+         integer), minimum: 0.
+        :paramtype write_batch_size: JSON
+        :keyword write_batch_timeout: Write batch timeout. Type: string (or Expression with resultType
+         string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype write_batch_timeout: JSON
+        :keyword sink_retry_count: Sink retry count. Type: integer (or Expression with resultType
+         integer).
+        :paramtype sink_retry_count: JSON
+        :keyword sink_retry_wait: Sink retry wait. Type: string (or Expression with resultType string),
+         pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype sink_retry_wait: JSON
+        :keyword max_concurrent_connections: The maximum concurrent connection count for the sink data
+         store. Type: integer (or Expression with resultType integer).
+        :paramtype max_concurrent_connections: JSON
+        :keyword write_behavior: The write behavior for the operation. Default is Insert. Known values
+         are: "Insert" and "Upsert".
+        :paramtype write_behavior: str or ~azure.synapse.artifacts.models.SalesforceV2SinkWriteBehavior
+        :keyword external_id_field_name: The name of the external ID field for upsert operation.
+         Default value is 'Id' column. Type: string (or Expression with resultType string).
+        :paramtype external_id_field_name: JSON
+        :keyword ignore_null_values: The flag indicating whether or not to ignore null values from
+         input dataset (except key fields) during write operation. Default value is false. If set it to
+         true, it means ADF will leave the data in the destination object unchanged when doing
+         upsert/update operation and insert defined default value when doing insert operation, versus
+         ADF will update the data in the destination object to NULL when doing upsert/update operation
+         and insert NULL value when doing insert operation. Type: boolean (or Expression with resultType
+         boolean).
+        :paramtype ignore_null_values: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            write_batch_size=write_batch_size,
+            write_batch_timeout=write_batch_timeout,
+            sink_retry_count=sink_retry_count,
+            sink_retry_wait=sink_retry_wait,
+            max_concurrent_connections=max_concurrent_connections,
+            **kwargs
+        )
+        self.type: str = "SalesforceServiceCloudV2Sink"
+        self.write_behavior = write_behavior
+        self.external_id_field_name = external_id_field_name
+        self.ignore_null_values = ignore_null_values
+
+
+class SalesforceServiceCloudV2Source(CopySource):
+    """A copy activity Salesforce Service Cloud V2 source.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Copy source type. Required.
+    :vartype type: str
+    :ivar source_retry_count: Source retry count. Type: integer (or Expression with resultType
+     integer).
+    :vartype source_retry_count: JSON
+    :ivar source_retry_wait: Source retry wait. Type: string (or Expression with resultType
+     string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype source_retry_wait: JSON
+    :ivar max_concurrent_connections: The maximum concurrent connection count for the source data
+     store. Type: integer (or Expression with resultType integer).
+    :vartype max_concurrent_connections: JSON
+    :ivar soql_query: Database query. Type: string (or Expression with resultType string).
+    :vartype soql_query: JSON
+    :ivar include_deleted_objects: This property control whether query result contains Deleted
+     objects. Default is false. Type: boolean (or Expression with resultType boolean).
+    :vartype include_deleted_objects: JSON
+    :ivar additional_columns: Specifies the additional columns to be added to source data. Type:
+     array of objects(AdditionalColumns) (or Expression with resultType array of objects).
+    :vartype additional_columns: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "source_retry_count": {"key": "sourceRetryCount", "type": "object"},
+        "source_retry_wait": {"key": "sourceRetryWait", "type": "object"},
+        "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
+        "soql_query": {"key": "SOQLQuery", "type": "object"},
+        "include_deleted_objects": {"key": "includeDeletedObjects", "type": "object"},
+        "additional_columns": {"key": "additionalColumns", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        source_retry_count: Optional[JSON] = None,
+        source_retry_wait: Optional[JSON] = None,
+        max_concurrent_connections: Optional[JSON] = None,
+        soql_query: Optional[JSON] = None,
+        include_deleted_objects: Optional[JSON] = None,
+        additional_columns: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword source_retry_count: Source retry count. Type: integer (or Expression with resultType
+         integer).
+        :paramtype source_retry_count: JSON
+        :keyword source_retry_wait: Source retry wait. Type: string (or Expression with resultType
+         string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype source_retry_wait: JSON
+        :keyword max_concurrent_connections: The maximum concurrent connection count for the source
+         data store. Type: integer (or Expression with resultType integer).
+        :paramtype max_concurrent_connections: JSON
+        :keyword soql_query: Database query. Type: string (or Expression with resultType string).
+        :paramtype soql_query: JSON
+        :keyword include_deleted_objects: This property control whether query result contains Deleted
+         objects. Default is false. Type: boolean (or Expression with resultType boolean).
+        :paramtype include_deleted_objects: JSON
+        :keyword additional_columns: Specifies the additional columns to be added to source data. Type:
+         array of objects(AdditionalColumns) (or Expression with resultType array of objects).
+        :paramtype additional_columns: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            source_retry_count=source_retry_count,
+            source_retry_wait=source_retry_wait,
+            max_concurrent_connections=max_concurrent_connections,
+            **kwargs
+        )
+        self.type: str = "SalesforceServiceCloudV2Source"
+        self.soql_query = soql_query
+        self.include_deleted_objects = include_deleted_objects
+        self.additional_columns = additional_columns
+
+
 class SalesforceSink(CopySink):
     """A copy activity Salesforce sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -48438,7 +50709,7 @@ class SalesforceSink(CopySink):
 class SalesforceSource(TabularSource):
     """A copy activity Salesforce source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -48535,10 +50806,466 @@ class SalesforceSource(TabularSource):
         self.read_behavior = read_behavior
 
 
+class SalesforceV2LinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
+    """Linked service for Salesforce V2.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Type of linked service. Required.
+    :vartype type: str
+    :ivar connect_via: The integration runtime reference.
+    :vartype connect_via: ~azure.synapse.artifacts.models.IntegrationRuntimeReference
+    :ivar description: Linked service description.
+    :vartype description: str
+    :ivar parameters: Parameters for linked service.
+    :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+    :ivar annotations: List of tags that can be used for describing the linked service.
+    :vartype annotations: list[JSON]
+    :ivar environment_url: The URL of Salesforce instance. For example,
+     'https://[domain].my.salesforce.com'. Type: string (or Expression with resultType string).
+    :vartype environment_url: JSON
+    :ivar authentication_type: The authentication type to be used to connect to the Salesforce.
+     Currently, we only support OAuth2ClientCredentials, it is also the default value.
+    :vartype authentication_type: JSON
+    :ivar client_id: The client Id for OAuth 2.0 Client Credentials Flow authentication of the
+     Salesforce instance. Type: string (or Expression with resultType string).
+    :vartype client_id: JSON
+    :ivar client_secret: The client secret for OAuth 2.0 Client Credentials Flow authentication of
+     the Salesforce instance.
+    :vartype client_secret: ~azure.synapse.artifacts.models.SecretBase
+    :ivar api_version: The Salesforce API version used in ADF. The version must be larger than or
+     equal to 47.0 which is required by Salesforce BULK API 2.0. Type: string (or Expression with
+     resultType string).
+    :vartype api_version: JSON
+    :ivar encrypted_credential: The encrypted credential used for authentication. Credentials are
+     encrypted using the integration runtime credential manager. Type: string.
+    :vartype encrypted_credential: str
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "connect_via": {"key": "connectVia", "type": "IntegrationRuntimeReference"},
+        "description": {"key": "description", "type": "str"},
+        "parameters": {"key": "parameters", "type": "{ParameterSpecification}"},
+        "annotations": {"key": "annotations", "type": "[object]"},
+        "environment_url": {"key": "typeProperties.environmentUrl", "type": "object"},
+        "authentication_type": {"key": "typeProperties.authenticationType", "type": "object"},
+        "client_id": {"key": "typeProperties.clientId", "type": "object"},
+        "client_secret": {"key": "typeProperties.clientSecret", "type": "SecretBase"},
+        "api_version": {"key": "typeProperties.apiVersion", "type": "object"},
+        "encrypted_credential": {"key": "typeProperties.encryptedCredential", "type": "str"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        connect_via: Optional["_models.IntegrationRuntimeReference"] = None,
+        description: Optional[str] = None,
+        parameters: Optional[Dict[str, "_models.ParameterSpecification"]] = None,
+        annotations: Optional[List[JSON]] = None,
+        environment_url: Optional[JSON] = None,
+        authentication_type: Optional[JSON] = None,
+        client_id: Optional[JSON] = None,
+        client_secret: Optional["_models.SecretBase"] = None,
+        api_version: Optional[JSON] = None,
+        encrypted_credential: Optional[str] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword connect_via: The integration runtime reference.
+        :paramtype connect_via: ~azure.synapse.artifacts.models.IntegrationRuntimeReference
+        :keyword description: Linked service description.
+        :paramtype description: str
+        :keyword parameters: Parameters for linked service.
+        :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+        :keyword annotations: List of tags that can be used for describing the linked service.
+        :paramtype annotations: list[JSON]
+        :keyword environment_url: The URL of Salesforce instance. For example,
+         'https://[domain].my.salesforce.com'. Type: string (or Expression with resultType string).
+        :paramtype environment_url: JSON
+        :keyword authentication_type: The authentication type to be used to connect to the Salesforce.
+         Currently, we only support OAuth2ClientCredentials, it is also the default value.
+        :paramtype authentication_type: JSON
+        :keyword client_id: The client Id for OAuth 2.0 Client Credentials Flow authentication of the
+         Salesforce instance. Type: string (or Expression with resultType string).
+        :paramtype client_id: JSON
+        :keyword client_secret: The client secret for OAuth 2.0 Client Credentials Flow authentication
+         of the Salesforce instance.
+        :paramtype client_secret: ~azure.synapse.artifacts.models.SecretBase
+        :keyword api_version: The Salesforce API version used in ADF. The version must be larger than
+         or equal to 47.0 which is required by Salesforce BULK API 2.0. Type: string (or Expression with
+         resultType string).
+        :paramtype api_version: JSON
+        :keyword encrypted_credential: The encrypted credential used for authentication. Credentials
+         are encrypted using the integration runtime credential manager. Type: string.
+        :paramtype encrypted_credential: str
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            connect_via=connect_via,
+            description=description,
+            parameters=parameters,
+            annotations=annotations,
+            **kwargs
+        )
+        self.type: str = "SalesforceV2"
+        self.environment_url = environment_url
+        self.authentication_type = authentication_type
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.api_version = api_version
+        self.encrypted_credential = encrypted_credential
+
+
+class SalesforceV2ObjectDataset(Dataset):  # pylint: disable=too-many-instance-attributes
+    """The Salesforce V2 object dataset.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Type of dataset. Required.
+    :vartype type: str
+    :ivar description: Dataset description.
+    :vartype description: str
+    :ivar structure: Columns that define the structure of the dataset. Type: array (or Expression
+     with resultType array), itemType: DatasetDataElement.
+    :vartype structure: JSON
+    :ivar schema: Columns that define the physical type schema of the dataset. Type: array (or
+     Expression with resultType array), itemType: DatasetSchemaDataElement.
+    :vartype schema: JSON
+    :ivar linked_service_name: Linked service reference. Required.
+    :vartype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
+    :ivar parameters: Parameters for dataset.
+    :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+    :ivar annotations: List of tags that can be used for describing the Dataset.
+    :vartype annotations: list[JSON]
+    :ivar folder: The folder that this Dataset is in. If not specified, Dataset will appear at the
+     root level.
+    :vartype folder: ~azure.synapse.artifacts.models.DatasetFolder
+    :ivar object_api_name: The Salesforce V2 object API name. Type: string (or Expression with
+     resultType string).
+    :vartype object_api_name: JSON
+    :ivar report_id: The Salesforce V2 report Id. Type: string (or Expression with resultType
+     string).
+    :vartype report_id: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+        "linked_service_name": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "description": {"key": "description", "type": "str"},
+        "structure": {"key": "structure", "type": "object"},
+        "schema": {"key": "schema", "type": "object"},
+        "linked_service_name": {"key": "linkedServiceName", "type": "LinkedServiceReference"},
+        "parameters": {"key": "parameters", "type": "{ParameterSpecification}"},
+        "annotations": {"key": "annotations", "type": "[object]"},
+        "folder": {"key": "folder", "type": "DatasetFolder"},
+        "object_api_name": {"key": "typeProperties.objectApiName", "type": "object"},
+        "report_id": {"key": "typeProperties.reportId", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        linked_service_name: "_models.LinkedServiceReference",
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        description: Optional[str] = None,
+        structure: Optional[JSON] = None,
+        schema: Optional[JSON] = None,
+        parameters: Optional[Dict[str, "_models.ParameterSpecification"]] = None,
+        annotations: Optional[List[JSON]] = None,
+        folder: Optional["_models.DatasetFolder"] = None,
+        object_api_name: Optional[JSON] = None,
+        report_id: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword description: Dataset description.
+        :paramtype description: str
+        :keyword structure: Columns that define the structure of the dataset. Type: array (or
+         Expression with resultType array), itemType: DatasetDataElement.
+        :paramtype structure: JSON
+        :keyword schema: Columns that define the physical type schema of the dataset. Type: array (or
+         Expression with resultType array), itemType: DatasetSchemaDataElement.
+        :paramtype schema: JSON
+        :keyword linked_service_name: Linked service reference. Required.
+        :paramtype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
+        :keyword parameters: Parameters for dataset.
+        :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+        :keyword annotations: List of tags that can be used for describing the Dataset.
+        :paramtype annotations: list[JSON]
+        :keyword folder: The folder that this Dataset is in. If not specified, Dataset will appear at
+         the root level.
+        :paramtype folder: ~azure.synapse.artifacts.models.DatasetFolder
+        :keyword object_api_name: The Salesforce V2 object API name. Type: string (or Expression with
+         resultType string).
+        :paramtype object_api_name: JSON
+        :keyword report_id: The Salesforce V2 report Id. Type: string (or Expression with resultType
+         string).
+        :paramtype report_id: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            description=description,
+            structure=structure,
+            schema=schema,
+            linked_service_name=linked_service_name,
+            parameters=parameters,
+            annotations=annotations,
+            folder=folder,
+            **kwargs
+        )
+        self.type: str = "SalesforceV2Object"
+        self.object_api_name = object_api_name
+        self.report_id = report_id
+
+
+class SalesforceV2Sink(CopySink):
+    """A copy activity Salesforce V2 sink.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Copy sink type. Required.
+    :vartype type: str
+    :ivar write_batch_size: Write batch size. Type: integer (or Expression with resultType
+     integer), minimum: 0.
+    :vartype write_batch_size: JSON
+    :ivar write_batch_timeout: Write batch timeout. Type: string (or Expression with resultType
+     string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype write_batch_timeout: JSON
+    :ivar sink_retry_count: Sink retry count. Type: integer (or Expression with resultType
+     integer).
+    :vartype sink_retry_count: JSON
+    :ivar sink_retry_wait: Sink retry wait. Type: string (or Expression with resultType string),
+     pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype sink_retry_wait: JSON
+    :ivar max_concurrent_connections: The maximum concurrent connection count for the sink data
+     store. Type: integer (or Expression with resultType integer).
+    :vartype max_concurrent_connections: JSON
+    :ivar write_behavior: The write behavior for the operation. Default is Insert. Known values
+     are: "Insert" and "Upsert".
+    :vartype write_behavior: str or ~azure.synapse.artifacts.models.SalesforceV2SinkWriteBehavior
+    :ivar external_id_field_name: The name of the external ID field for upsert operation. Default
+     value is 'Id' column. Type: string (or Expression with resultType string).
+    :vartype external_id_field_name: JSON
+    :ivar ignore_null_values: The flag indicating whether or not to ignore null values from input
+     dataset (except key fields) during write operation. Default value is false. If set it to true,
+     it means ADF will leave the data in the destination object unchanged when doing upsert/update
+     operation and insert defined default value when doing insert operation, versus ADF will update
+     the data in the destination object to NULL when doing upsert/update operation and insert NULL
+     value when doing insert operation. Type: boolean (or Expression with resultType boolean).
+    :vartype ignore_null_values: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "write_batch_size": {"key": "writeBatchSize", "type": "object"},
+        "write_batch_timeout": {"key": "writeBatchTimeout", "type": "object"},
+        "sink_retry_count": {"key": "sinkRetryCount", "type": "object"},
+        "sink_retry_wait": {"key": "sinkRetryWait", "type": "object"},
+        "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
+        "write_behavior": {"key": "writeBehavior", "type": "str"},
+        "external_id_field_name": {"key": "externalIdFieldName", "type": "object"},
+        "ignore_null_values": {"key": "ignoreNullValues", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        write_batch_size: Optional[JSON] = None,
+        write_batch_timeout: Optional[JSON] = None,
+        sink_retry_count: Optional[JSON] = None,
+        sink_retry_wait: Optional[JSON] = None,
+        max_concurrent_connections: Optional[JSON] = None,
+        write_behavior: Optional[Union[str, "_models.SalesforceV2SinkWriteBehavior"]] = None,
+        external_id_field_name: Optional[JSON] = None,
+        ignore_null_values: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword write_batch_size: Write batch size. Type: integer (or Expression with resultType
+         integer), minimum: 0.
+        :paramtype write_batch_size: JSON
+        :keyword write_batch_timeout: Write batch timeout. Type: string (or Expression with resultType
+         string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype write_batch_timeout: JSON
+        :keyword sink_retry_count: Sink retry count. Type: integer (or Expression with resultType
+         integer).
+        :paramtype sink_retry_count: JSON
+        :keyword sink_retry_wait: Sink retry wait. Type: string (or Expression with resultType string),
+         pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype sink_retry_wait: JSON
+        :keyword max_concurrent_connections: The maximum concurrent connection count for the sink data
+         store. Type: integer (or Expression with resultType integer).
+        :paramtype max_concurrent_connections: JSON
+        :keyword write_behavior: The write behavior for the operation. Default is Insert. Known values
+         are: "Insert" and "Upsert".
+        :paramtype write_behavior: str or ~azure.synapse.artifacts.models.SalesforceV2SinkWriteBehavior
+        :keyword external_id_field_name: The name of the external ID field for upsert operation.
+         Default value is 'Id' column. Type: string (or Expression with resultType string).
+        :paramtype external_id_field_name: JSON
+        :keyword ignore_null_values: The flag indicating whether or not to ignore null values from
+         input dataset (except key fields) during write operation. Default value is false. If set it to
+         true, it means ADF will leave the data in the destination object unchanged when doing
+         upsert/update operation and insert defined default value when doing insert operation, versus
+         ADF will update the data in the destination object to NULL when doing upsert/update operation
+         and insert NULL value when doing insert operation. Type: boolean (or Expression with resultType
+         boolean).
+        :paramtype ignore_null_values: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            write_batch_size=write_batch_size,
+            write_batch_timeout=write_batch_timeout,
+            sink_retry_count=sink_retry_count,
+            sink_retry_wait=sink_retry_wait,
+            max_concurrent_connections=max_concurrent_connections,
+            **kwargs
+        )
+        self.type: str = "SalesforceV2Sink"
+        self.write_behavior = write_behavior
+        self.external_id_field_name = external_id_field_name
+        self.ignore_null_values = ignore_null_values
+
+
+class SalesforceV2Source(TabularSource):
+    """A copy activity Salesforce V2 source.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Copy source type. Required.
+    :vartype type: str
+    :ivar source_retry_count: Source retry count. Type: integer (or Expression with resultType
+     integer).
+    :vartype source_retry_count: JSON
+    :ivar source_retry_wait: Source retry wait. Type: string (or Expression with resultType
+     string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype source_retry_wait: JSON
+    :ivar max_concurrent_connections: The maximum concurrent connection count for the source data
+     store. Type: integer (or Expression with resultType integer).
+    :vartype max_concurrent_connections: JSON
+    :ivar query_timeout: Query timeout. Type: string (or Expression with resultType string),
+     pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype query_timeout: JSON
+    :ivar additional_columns: Specifies the additional columns to be added to source data. Type:
+     array of objects(AdditionalColumns) (or Expression with resultType array of objects).
+    :vartype additional_columns: JSON
+    :ivar soql_query: Database query. Type: string (or Expression with resultType string).
+    :vartype soql_query: JSON
+    :ivar include_deleted_objects: This property control whether query result contains Deleted
+     objects. Default is false. Type: boolean (or Expression with resultType boolean).
+    :vartype include_deleted_objects: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "source_retry_count": {"key": "sourceRetryCount", "type": "object"},
+        "source_retry_wait": {"key": "sourceRetryWait", "type": "object"},
+        "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
+        "query_timeout": {"key": "queryTimeout", "type": "object"},
+        "additional_columns": {"key": "additionalColumns", "type": "object"},
+        "soql_query": {"key": "SOQLQuery", "type": "object"},
+        "include_deleted_objects": {"key": "includeDeletedObjects", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        source_retry_count: Optional[JSON] = None,
+        source_retry_wait: Optional[JSON] = None,
+        max_concurrent_connections: Optional[JSON] = None,
+        query_timeout: Optional[JSON] = None,
+        additional_columns: Optional[JSON] = None,
+        soql_query: Optional[JSON] = None,
+        include_deleted_objects: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword source_retry_count: Source retry count. Type: integer (or Expression with resultType
+         integer).
+        :paramtype source_retry_count: JSON
+        :keyword source_retry_wait: Source retry wait. Type: string (or Expression with resultType
+         string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype source_retry_wait: JSON
+        :keyword max_concurrent_connections: The maximum concurrent connection count for the source
+         data store. Type: integer (or Expression with resultType integer).
+        :paramtype max_concurrent_connections: JSON
+        :keyword query_timeout: Query timeout. Type: string (or Expression with resultType string),
+         pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype query_timeout: JSON
+        :keyword additional_columns: Specifies the additional columns to be added to source data. Type:
+         array of objects(AdditionalColumns) (or Expression with resultType array of objects).
+        :paramtype additional_columns: JSON
+        :keyword soql_query: Database query. Type: string (or Expression with resultType string).
+        :paramtype soql_query: JSON
+        :keyword include_deleted_objects: This property control whether query result contains Deleted
+         objects. Default is false. Type: boolean (or Expression with resultType boolean).
+        :paramtype include_deleted_objects: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            source_retry_count=source_retry_count,
+            source_retry_wait=source_retry_wait,
+            max_concurrent_connections=max_concurrent_connections,
+            query_timeout=query_timeout,
+            additional_columns=additional_columns,
+            **kwargs
+        )
+        self.type: str = "SalesforceV2Source"
+        self.soql_query = soql_query
+        self.include_deleted_objects = include_deleted_objects
+
+
 class SapBwCubeDataset(Dataset):
     """The SAP BW cube dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -48633,7 +51360,7 @@ class SapBwCubeDataset(Dataset):
 class SapBWLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """SAP Business Warehouse Linked Service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -48757,7 +51484,7 @@ class SapBWLinkedService(LinkedService):  # pylint: disable=too-many-instance-at
 class SapBwSource(TabularSource):
     """A copy activity source for SapBW server via MDX.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -48848,7 +51575,7 @@ class SapBwSource(TabularSource):
 class SapCloudForCustomerLinkedService(LinkedService):
     """Linked service for SAP Cloud for Customer.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -48954,7 +51681,7 @@ class SapCloudForCustomerLinkedService(LinkedService):
 class SapCloudForCustomerResourceDataset(Dataset):
     """The path of the SAP Cloud for Customer OData entity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -49059,7 +51786,7 @@ class SapCloudForCustomerResourceDataset(Dataset):
 class SapCloudForCustomerSink(CopySink):
     """A copy activity SAP Cloud for Customer sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -49167,7 +51894,7 @@ class SapCloudForCustomerSink(CopySink):
 class SapCloudForCustomerSource(TabularSource):
     """A copy activity source for SAP Cloud for Customer source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -49273,7 +52000,7 @@ class SapCloudForCustomerSource(TabularSource):
 class SapEccLinkedService(LinkedService):
     """Linked service for SAP ERP Central Component(SAP ECC).
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -49379,7 +52106,7 @@ class SapEccLinkedService(LinkedService):
 class SapEccResourceDataset(Dataset):
     """The path of the SAP ECC OData entity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -49484,7 +52211,7 @@ class SapEccResourceDataset(Dataset):
 class SapEccSource(TabularSource):
     """A copy activity source for SAP ECC source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -49590,7 +52317,7 @@ class SapEccSource(TabularSource):
 class SapHanaLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """SAP HANA Linked Service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -49735,7 +52462,7 @@ class SapHanaPartitionSettings(_serialization.Model):
 class SapHanaSource(TabularSource):  # pylint: disable=too-many-instance-attributes
     """A copy activity source for SAP HANA source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -49763,8 +52490,8 @@ class SapHanaSource(TabularSource):  # pylint: disable=too-many-instance-attribu
      resultType integer).
     :vartype packet_size: JSON
     :ivar partition_option: The partition mechanism that will be used for SAP HANA read in
-     parallel. Known values are: "None", "PhysicalPartitionsOfTable", and "SapHanaDynamicRange".
-    :vartype partition_option: str or ~azure.synapse.artifacts.models.SapHanaPartitionOption
+     parallel. Possible values include: "None", "PhysicalPartitionsOfTable", "SapHanaDynamicRange".
+    :vartype partition_option: JSON
     :ivar partition_settings: The settings that will be leveraged for SAP HANA source partitioning.
     :vartype partition_settings: ~azure.synapse.artifacts.models.SapHanaPartitionSettings
     """
@@ -49783,7 +52510,7 @@ class SapHanaSource(TabularSource):  # pylint: disable=too-many-instance-attribu
         "additional_columns": {"key": "additionalColumns", "type": "object"},
         "query": {"key": "query", "type": "object"},
         "packet_size": {"key": "packetSize", "type": "object"},
-        "partition_option": {"key": "partitionOption", "type": "str"},
+        "partition_option": {"key": "partitionOption", "type": "object"},
         "partition_settings": {"key": "partitionSettings", "type": "SapHanaPartitionSettings"},
     }
 
@@ -49798,7 +52525,7 @@ class SapHanaSource(TabularSource):  # pylint: disable=too-many-instance-attribu
         additional_columns: Optional[JSON] = None,
         query: Optional[JSON] = None,
         packet_size: Optional[JSON] = None,
-        partition_option: Optional[Union[str, "_models.SapHanaPartitionOption"]] = None,
+        partition_option: Optional[JSON] = None,
         partition_settings: Optional["_models.SapHanaPartitionSettings"] = None,
         **kwargs: Any
     ) -> None:
@@ -49827,8 +52554,8 @@ class SapHanaSource(TabularSource):  # pylint: disable=too-many-instance-attribu
          with resultType integer).
         :paramtype packet_size: JSON
         :keyword partition_option: The partition mechanism that will be used for SAP HANA read in
-         parallel. Known values are: "None", "PhysicalPartitionsOfTable", and "SapHanaDynamicRange".
-        :paramtype partition_option: str or ~azure.synapse.artifacts.models.SapHanaPartitionOption
+         parallel. Possible values include: "None", "PhysicalPartitionsOfTable", "SapHanaDynamicRange".
+        :paramtype partition_option: JSON
         :keyword partition_settings: The settings that will be leveraged for SAP HANA source
          partitioning.
         :paramtype partition_settings: ~azure.synapse.artifacts.models.SapHanaPartitionSettings
@@ -49852,7 +52579,7 @@ class SapHanaSource(TabularSource):  # pylint: disable=too-many-instance-attribu
 class SapHanaTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """SAP HANA Table properties.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -49964,7 +52691,7 @@ class SapHanaTableDataset(Dataset):  # pylint: disable=too-many-instance-attribu
 class SapOdpLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """SAP ODP Linked Service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -50197,7 +52924,7 @@ class SapOdpLinkedService(LinkedService):  # pylint: disable=too-many-instance-a
 class SapOdpResourceDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """SAP ODP Resource properties.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -50312,7 +53039,7 @@ class SapOdpResourceDataset(Dataset):  # pylint: disable=too-many-instance-attri
 class SapOdpSource(TabularSource):  # pylint: disable=too-many-instance-attributes
     """A copy activity source for SAP ODP source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -50432,7 +53159,7 @@ class SapOdpSource(TabularSource):  # pylint: disable=too-many-instance-attribut
 class SapOpenHubLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """SAP Business Warehouse Open Hub Destination Linked Service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -50606,7 +53333,7 @@ class SapOpenHubLinkedService(LinkedService):  # pylint: disable=too-many-instan
 class SapOpenHubSource(TabularSource):  # pylint: disable=too-many-instance-attributes
     """A copy activity source for SAP Business Warehouse Open Hub Destination source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -50730,7 +53457,7 @@ class SapOpenHubSource(TabularSource):  # pylint: disable=too-many-instance-attr
 class SapOpenHubTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Sap Business Warehouse Open Hub Destination Table properties.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -50855,7 +53582,7 @@ class SapOpenHubTableDataset(Dataset):  # pylint: disable=too-many-instance-attr
 class SapTableLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """SAP Table Linked Service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -51128,7 +53855,7 @@ class SapTablePartitionSettings(_serialization.Model):
 class SapTableResourceDataset(Dataset):
     """SAP Table Resource properties.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -51233,7 +53960,7 @@ class SapTableResourceDataset(Dataset):
 class SapTableSource(TabularSource):  # pylint: disable=too-many-instance-attributes
     """A copy activity source for SAP Table source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -51278,9 +54005,9 @@ class SapTableSource(TabularSource):  # pylint: disable=too-many-instance-attrib
      resultType string).
     :vartype sap_data_column_delimiter: JSON
     :ivar partition_option: The partition mechanism that will be used for SAP table read in
-     parallel. Known values are: "None", "PartitionOnInt", "PartitionOnCalendarYear",
-     "PartitionOnCalendarMonth", "PartitionOnCalendarDate", and "PartitionOnTime".
-    :vartype partition_option: str or ~azure.synapse.artifacts.models.SapTablePartitionOption
+     parallel. Possible values include: "None", "PartitionOnInt", "PartitionOnCalendarYear",
+     "PartitionOnCalendarMonth", "PartitionOnCalendarDate", "PartitionOnTime".
+    :vartype partition_option: JSON
     :ivar partition_settings: The settings that will be leveraged for SAP table source
      partitioning.
     :vartype partition_settings: ~azure.synapse.artifacts.models.SapTablePartitionSettings
@@ -51305,7 +54032,7 @@ class SapTableSource(TabularSource):  # pylint: disable=too-many-instance-attrib
         "batch_size": {"key": "batchSize", "type": "object"},
         "custom_rfc_read_table_function_module": {"key": "customRfcReadTableFunctionModule", "type": "object"},
         "sap_data_column_delimiter": {"key": "sapDataColumnDelimiter", "type": "object"},
-        "partition_option": {"key": "partitionOption", "type": "str"},
+        "partition_option": {"key": "partitionOption", "type": "object"},
         "partition_settings": {"key": "partitionSettings", "type": "SapTablePartitionSettings"},
     }
 
@@ -51325,7 +54052,7 @@ class SapTableSource(TabularSource):  # pylint: disable=too-many-instance-attrib
         batch_size: Optional[JSON] = None,
         custom_rfc_read_table_function_module: Optional[JSON] = None,
         sap_data_column_delimiter: Optional[JSON] = None,
-        partition_option: Optional[Union[str, "_models.SapTablePartitionOption"]] = None,
+        partition_option: Optional[JSON] = None,
         partition_settings: Optional["_models.SapTablePartitionSettings"] = None,
         **kwargs: Any
     ) -> None:
@@ -51371,9 +54098,9 @@ class SapTableSource(TabularSource):  # pylint: disable=too-many-instance-attrib
          resultType string).
         :paramtype sap_data_column_delimiter: JSON
         :keyword partition_option: The partition mechanism that will be used for SAP table read in
-         parallel. Known values are: "None", "PartitionOnInt", "PartitionOnCalendarYear",
-         "PartitionOnCalendarMonth", "PartitionOnCalendarDate", and "PartitionOnTime".
-        :paramtype partition_option: str or ~azure.synapse.artifacts.models.SapTablePartitionOption
+         parallel. Possible values include: "None", "PartitionOnInt", "PartitionOnCalendarYear",
+         "PartitionOnCalendarMonth", "PartitionOnCalendarDate", "PartitionOnTime".
+        :paramtype partition_option: JSON
         :keyword partition_settings: The settings that will be leveraged for SAP table source
          partitioning.
         :paramtype partition_settings: ~azure.synapse.artifacts.models.SapTablePartitionSettings
@@ -51404,7 +54131,7 @@ class ScheduleTrigger(MultiplePipelineTrigger):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -51548,7 +54275,7 @@ class ScheduleTriggerRecurrence(_serialization.Model):
 class ScriptAction(_serialization.Model):
     """Custom script action to run on HDI ondemand cluster once it's up.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: The user provided name of the script action. Required.
     :vartype name: str
@@ -51594,7 +54321,7 @@ class ScriptAction(_serialization.Model):
 class ScriptActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """Script activity type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -51620,6 +54347,10 @@ class ScriptActivity(ExecutionActivity):  # pylint: disable=too-many-instance-at
     :vartype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
     :ivar policy: Activity policy.
     :vartype policy: ~azure.synapse.artifacts.models.ActivityPolicy
+    :ivar script_block_execution_timeout: ScriptBlock execution timeout. Type: string (or
+     Expression with resultType string), pattern:
+     ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype script_block_execution_timeout: JSON
     :ivar scripts: Array of script blocks. Type: array.
     :vartype scripts: list[~azure.synapse.artifacts.models.ScriptActivityScriptBlock]
     :ivar log_settings: Log settings of script activity.
@@ -51642,6 +54373,7 @@ class ScriptActivity(ExecutionActivity):  # pylint: disable=too-many-instance-at
         "user_properties": {"key": "userProperties", "type": "[UserProperty]"},
         "linked_service_name": {"key": "linkedServiceName", "type": "LinkedServiceReference"},
         "policy": {"key": "policy", "type": "ActivityPolicy"},
+        "script_block_execution_timeout": {"key": "typeProperties.scriptBlockExecutionTimeout", "type": "object"},
         "scripts": {"key": "typeProperties.scripts", "type": "[ScriptActivityScriptBlock]"},
         "log_settings": {"key": "typeProperties.logSettings", "type": "ScriptActivityTypePropertiesLogSettings"},
     }
@@ -51658,6 +54390,7 @@ class ScriptActivity(ExecutionActivity):  # pylint: disable=too-many-instance-at
         user_properties: Optional[List["_models.UserProperty"]] = None,
         linked_service_name: Optional["_models.LinkedServiceReference"] = None,
         policy: Optional["_models.ActivityPolicy"] = None,
+        script_block_execution_timeout: Optional[JSON] = None,
         scripts: Optional[List["_models.ScriptActivityScriptBlock"]] = None,
         log_settings: Optional["_models.ScriptActivityTypePropertiesLogSettings"] = None,
         **kwargs: Any
@@ -51685,6 +54418,10 @@ class ScriptActivity(ExecutionActivity):  # pylint: disable=too-many-instance-at
         :paramtype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
         :keyword policy: Activity policy.
         :paramtype policy: ~azure.synapse.artifacts.models.ActivityPolicy
+        :keyword script_block_execution_timeout: ScriptBlock execution timeout. Type: string (or
+         Expression with resultType string), pattern:
+         ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype script_block_execution_timeout: JSON
         :keyword scripts: Array of script blocks. Type: array.
         :paramtype scripts: list[~azure.synapse.artifacts.models.ScriptActivityScriptBlock]
         :keyword log_settings: Log settings of script activity.
@@ -51704,6 +54441,7 @@ class ScriptActivity(ExecutionActivity):  # pylint: disable=too-many-instance-at
             **kwargs
         )
         self.type: str = "Script"
+        self.script_block_execution_timeout = script_block_execution_timeout
         self.scripts = scripts
         self.log_settings = log_settings
 
@@ -51770,13 +54508,13 @@ class ScriptActivityParameter(_serialization.Model):
 class ScriptActivityScriptBlock(_serialization.Model):
     """Script block of scripts.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar text: The query text. Type: string (or Expression with resultType string). Required.
     :vartype text: JSON
-    :ivar type: The type of the query. Type: string. Required. Known values are: "Query" and
-     "NonQuery".
-    :vartype type: str or ~azure.synapse.artifacts.models.ScriptType
+    :ivar type: The type of the query. Please refer to the ScriptType for valid options. Type:
+     string (or Expression with resultType string). Required.
+    :vartype type: JSON
     :ivar parameters: Array of script parameters. Type: array.
     :vartype parameters: list[~azure.synapse.artifacts.models.ScriptActivityParameter]
     """
@@ -51788,7 +54526,7 @@ class ScriptActivityScriptBlock(_serialization.Model):
 
     _attribute_map = {
         "text": {"key": "text", "type": "object"},
-        "type": {"key": "type", "type": "str"},
+        "type": {"key": "type", "type": "object"},
         "parameters": {"key": "parameters", "type": "[ScriptActivityParameter]"},
     }
 
@@ -51796,16 +54534,16 @@ class ScriptActivityScriptBlock(_serialization.Model):
         self,
         *,
         text: JSON,
-        type: Union[str, "_models.ScriptType"],
+        type: JSON,
         parameters: Optional[List["_models.ScriptActivityParameter"]] = None,
         **kwargs: Any
     ) -> None:
         """
         :keyword text: The query text. Type: string (or Expression with resultType string). Required.
         :paramtype text: JSON
-        :keyword type: The type of the query. Type: string. Required. Known values are: "Query" and
-         "NonQuery".
-        :paramtype type: str or ~azure.synapse.artifacts.models.ScriptType
+        :keyword type: The type of the query. Please refer to the ScriptType for valid options. Type:
+         string (or Expression with resultType string). Required.
+        :paramtype type: JSON
         :keyword parameters: Array of script parameters. Type: array.
         :paramtype parameters: list[~azure.synapse.artifacts.models.ScriptActivityParameter]
         """
@@ -51818,7 +54556,7 @@ class ScriptActivityScriptBlock(_serialization.Model):
 class ScriptActivityTypePropertiesLogSettings(_serialization.Model):
     """Log settings of script activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar log_destination: The destination of logs. Type: string. Required. Known values are:
      "ActivityOutput" and "ExternalStore".
@@ -51892,7 +54630,7 @@ class SecureString(SecretBase):
     """Azure Synapse secure string definition. The string value will be masked with asterisks '*'
     during Get or List API calls.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Type of the secret. Required.
     :vartype type: str
@@ -51920,10 +54658,10 @@ class SecureString(SecretBase):
         self.value = value
 
 
-class SelfDependencyTumblingWindowTriggerReference(DependencyReference):
+class SelfDependencyTumblingWindowTriggerReference(DependencyReference):  # pylint: disable=name-too-long
     """Self referenced tumbling window trigger dependency.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: The type of dependency reference. Required.
     :vartype type: str
@@ -51970,7 +54708,7 @@ class SelfDependencyTumblingWindowTriggerReference(DependencyReference):
 class SelfHostedIntegrationRuntime(IntegrationRuntime):
     """Self-hosted integration runtime.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -52020,7 +54758,7 @@ class SelfHostedIntegrationRuntime(IntegrationRuntime):
 class ServiceNowLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """ServiceNow server linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -52181,7 +54919,7 @@ class ServiceNowLinkedService(LinkedService):  # pylint: disable=too-many-instan
 class ServiceNowObjectDataset(Dataset):
     """ServiceNow server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -52283,7 +55021,7 @@ class ServiceNowObjectDataset(Dataset):
 class ServiceNowSource(TabularSource):
     """A copy activity ServiceNow server source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -52373,10 +55111,296 @@ class ServiceNowSource(TabularSource):
         self.query = query
 
 
+class ServiceNowV2LinkedServiceTypeProperties(_serialization.Model):
+    """ServiceNowV2 server linked service properties.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar endpoint: The endpoint of the ServiceNowV2 server. (i.e.
+     :code:`<instance>`.service-now.com). Required.
+    :vartype endpoint: JSON
+    :ivar authentication_type: The authentication type to use. Required. Known values are: "Basic"
+     and "OAuth2".
+    :vartype authentication_type: str or
+     ~azure.synapse.artifacts.models.ServiceNowV2AuthenticationType
+    :ivar username: The user name used to connect to the ServiceNowV2 server for Basic and OAuth2
+     authentication.
+    :vartype username: JSON
+    :ivar password: The password corresponding to the user name for Basic and OAuth2
+     authentication.
+    :vartype password: ~azure.synapse.artifacts.models.SecretBase
+    :ivar client_id: The client id for OAuth2 authentication.
+    :vartype client_id: JSON
+    :ivar client_secret: The client secret for OAuth2 authentication.
+    :vartype client_secret: ~azure.synapse.artifacts.models.SecretBase
+    :ivar grant_type: GrantType for OAuth2 authentication. Default value is password.
+    :vartype grant_type: JSON
+    :ivar encrypted_credential: The encrypted credential used for authentication. Credentials are
+     encrypted using the integration runtime credential manager. Type: string.
+    :vartype encrypted_credential: str
+    """
+
+    _validation = {
+        "endpoint": {"required": True},
+        "authentication_type": {"required": True},
+    }
+
+    _attribute_map = {
+        "endpoint": {"key": "endpoint", "type": "object"},
+        "authentication_type": {"key": "authenticationType", "type": "str"},
+        "username": {"key": "username", "type": "object"},
+        "password": {"key": "password", "type": "SecretBase"},
+        "client_id": {"key": "clientId", "type": "object"},
+        "client_secret": {"key": "clientSecret", "type": "SecretBase"},
+        "grant_type": {"key": "grantType", "type": "object"},
+        "encrypted_credential": {"key": "encryptedCredential", "type": "str"},
+    }
+
+    def __init__(
+        self,
+        *,
+        endpoint: JSON,
+        authentication_type: Union[str, "_models.ServiceNowV2AuthenticationType"],
+        username: Optional[JSON] = None,
+        password: Optional["_models.SecretBase"] = None,
+        client_id: Optional[JSON] = None,
+        client_secret: Optional["_models.SecretBase"] = None,
+        grant_type: Optional[JSON] = None,
+        encrypted_credential: Optional[str] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword endpoint: The endpoint of the ServiceNowV2 server. (i.e.
+         :code:`<instance>`.service-now.com). Required.
+        :paramtype endpoint: JSON
+        :keyword authentication_type: The authentication type to use. Required. Known values are:
+         "Basic" and "OAuth2".
+        :paramtype authentication_type: str or
+         ~azure.synapse.artifacts.models.ServiceNowV2AuthenticationType
+        :keyword username: The user name used to connect to the ServiceNowV2 server for Basic and
+         OAuth2 authentication.
+        :paramtype username: JSON
+        :keyword password: The password corresponding to the user name for Basic and OAuth2
+         authentication.
+        :paramtype password: ~azure.synapse.artifacts.models.SecretBase
+        :keyword client_id: The client id for OAuth2 authentication.
+        :paramtype client_id: JSON
+        :keyword client_secret: The client secret for OAuth2 authentication.
+        :paramtype client_secret: ~azure.synapse.artifacts.models.SecretBase
+        :keyword grant_type: GrantType for OAuth2 authentication. Default value is password.
+        :paramtype grant_type: JSON
+        :keyword encrypted_credential: The encrypted credential used for authentication. Credentials
+         are encrypted using the integration runtime credential manager. Type: string.
+        :paramtype encrypted_credential: str
+        """
+        super().__init__(**kwargs)
+        self.endpoint = endpoint
+        self.authentication_type = authentication_type
+        self.username = username
+        self.password = password
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.grant_type = grant_type
+        self.encrypted_credential = encrypted_credential
+
+
+class ServiceNowV2ObjectDataset(Dataset):
+    """ServiceNowV2 server dataset.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Type of dataset. Required.
+    :vartype type: str
+    :ivar description: Dataset description.
+    :vartype description: str
+    :ivar structure: Columns that define the structure of the dataset. Type: array (or Expression
+     with resultType array), itemType: DatasetDataElement.
+    :vartype structure: JSON
+    :ivar schema: Columns that define the physical type schema of the dataset. Type: array (or
+     Expression with resultType array), itemType: DatasetSchemaDataElement.
+    :vartype schema: JSON
+    :ivar linked_service_name: Linked service reference. Required.
+    :vartype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
+    :ivar parameters: Parameters for dataset.
+    :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+    :ivar annotations: List of tags that can be used for describing the Dataset.
+    :vartype annotations: list[JSON]
+    :ivar folder: The folder that this Dataset is in. If not specified, Dataset will appear at the
+     root level.
+    :vartype folder: ~azure.synapse.artifacts.models.DatasetFolder
+    :ivar table_name: The table name. Type: string (or Expression with resultType string).
+    :vartype table_name: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+        "linked_service_name": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "description": {"key": "description", "type": "str"},
+        "structure": {"key": "structure", "type": "object"},
+        "schema": {"key": "schema", "type": "object"},
+        "linked_service_name": {"key": "linkedServiceName", "type": "LinkedServiceReference"},
+        "parameters": {"key": "parameters", "type": "{ParameterSpecification}"},
+        "annotations": {"key": "annotations", "type": "[object]"},
+        "folder": {"key": "folder", "type": "DatasetFolder"},
+        "table_name": {"key": "typeProperties.tableName", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        linked_service_name: "_models.LinkedServiceReference",
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        description: Optional[str] = None,
+        structure: Optional[JSON] = None,
+        schema: Optional[JSON] = None,
+        parameters: Optional[Dict[str, "_models.ParameterSpecification"]] = None,
+        annotations: Optional[List[JSON]] = None,
+        folder: Optional["_models.DatasetFolder"] = None,
+        table_name: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword description: Dataset description.
+        :paramtype description: str
+        :keyword structure: Columns that define the structure of the dataset. Type: array (or
+         Expression with resultType array), itemType: DatasetDataElement.
+        :paramtype structure: JSON
+        :keyword schema: Columns that define the physical type schema of the dataset. Type: array (or
+         Expression with resultType array), itemType: DatasetSchemaDataElement.
+        :paramtype schema: JSON
+        :keyword linked_service_name: Linked service reference. Required.
+        :paramtype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
+        :keyword parameters: Parameters for dataset.
+        :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+        :keyword annotations: List of tags that can be used for describing the Dataset.
+        :paramtype annotations: list[JSON]
+        :keyword folder: The folder that this Dataset is in. If not specified, Dataset will appear at
+         the root level.
+        :paramtype folder: ~azure.synapse.artifacts.models.DatasetFolder
+        :keyword table_name: The table name. Type: string (or Expression with resultType string).
+        :paramtype table_name: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            description=description,
+            structure=structure,
+            schema=schema,
+            linked_service_name=linked_service_name,
+            parameters=parameters,
+            annotations=annotations,
+            folder=folder,
+            **kwargs
+        )
+        self.type: str = "ServiceNowV2Object"
+        self.table_name = table_name
+
+
+class ServiceNowV2Source(TabularSource):
+    """A copy activity ServiceNowV2 server source.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Copy source type. Required.
+    :vartype type: str
+    :ivar source_retry_count: Source retry count. Type: integer (or Expression with resultType
+     integer).
+    :vartype source_retry_count: JSON
+    :ivar source_retry_wait: Source retry wait. Type: string (or Expression with resultType
+     string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype source_retry_wait: JSON
+    :ivar max_concurrent_connections: The maximum concurrent connection count for the source data
+     store. Type: integer (or Expression with resultType integer).
+    :vartype max_concurrent_connections: JSON
+    :ivar query_timeout: Query timeout. Type: string (or Expression with resultType string),
+     pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype query_timeout: JSON
+    :ivar additional_columns: Specifies the additional columns to be added to source data. Type:
+     array of objects(AdditionalColumns) (or Expression with resultType array of objects).
+    :vartype additional_columns: JSON
+    :ivar expression: Expression to filter data from source.
+    :vartype expression: ~azure.synapse.artifacts.models.ExpressionV2
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "source_retry_count": {"key": "sourceRetryCount", "type": "object"},
+        "source_retry_wait": {"key": "sourceRetryWait", "type": "object"},
+        "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
+        "query_timeout": {"key": "queryTimeout", "type": "object"},
+        "additional_columns": {"key": "additionalColumns", "type": "object"},
+        "expression": {"key": "expression", "type": "ExpressionV2"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        source_retry_count: Optional[JSON] = None,
+        source_retry_wait: Optional[JSON] = None,
+        max_concurrent_connections: Optional[JSON] = None,
+        query_timeout: Optional[JSON] = None,
+        additional_columns: Optional[JSON] = None,
+        expression: Optional["_models.ExpressionV2"] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword source_retry_count: Source retry count. Type: integer (or Expression with resultType
+         integer).
+        :paramtype source_retry_count: JSON
+        :keyword source_retry_wait: Source retry wait. Type: string (or Expression with resultType
+         string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype source_retry_wait: JSON
+        :keyword max_concurrent_connections: The maximum concurrent connection count for the source
+         data store. Type: integer (or Expression with resultType integer).
+        :paramtype max_concurrent_connections: JSON
+        :keyword query_timeout: Query timeout. Type: string (or Expression with resultType string),
+         pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype query_timeout: JSON
+        :keyword additional_columns: Specifies the additional columns to be added to source data. Type:
+         array of objects(AdditionalColumns) (or Expression with resultType array of objects).
+        :paramtype additional_columns: JSON
+        :keyword expression: Expression to filter data from source.
+        :paramtype expression: ~azure.synapse.artifacts.models.ExpressionV2
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            source_retry_count=source_retry_count,
+            source_retry_wait=source_retry_wait,
+            max_concurrent_connections=max_concurrent_connections,
+            query_timeout=query_timeout,
+            additional_columns=additional_columns,
+            **kwargs
+        )
+        self.type: str = "ServiceNowV2Source"
+        self.expression = expression
+
+
 class SetVariableActivity(ControlActivity):  # pylint: disable=too-many-instance-attributes
     """Set value for a Variable.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -52492,7 +55516,7 @@ class SetVariableActivity(ControlActivity):  # pylint: disable=too-many-instance
 class SftpLocation(DatasetLocation):
     """The location of SFTP dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -52546,7 +55570,7 @@ class SftpLocation(DatasetLocation):
 class SftpReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-attributes
     """Sftp read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -52565,8 +55589,9 @@ class SftpReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-
     :ivar wildcard_file_name: Sftp wildcardFileName. Type: string (or Expression with resultType
      string).
     :vartype wildcard_file_name: JSON
-    :ivar enable_partition_discovery: Indicates whether to enable partition discovery.
-    :vartype enable_partition_discovery: bool
+    :ivar enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+     boolean (or Expression with resultType boolean).
+    :vartype enable_partition_discovery: JSON
     :ivar partition_root_path: Specify the root path where partition discovery starts from. Type:
      string (or Expression with resultType string).
     :vartype partition_root_path: JSON
@@ -52599,7 +55624,7 @@ class SftpReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-
         "recursive": {"key": "recursive", "type": "object"},
         "wildcard_folder_path": {"key": "wildcardFolderPath", "type": "object"},
         "wildcard_file_name": {"key": "wildcardFileName", "type": "object"},
-        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "bool"},
+        "enable_partition_discovery": {"key": "enablePartitionDiscovery", "type": "object"},
         "partition_root_path": {"key": "partitionRootPath", "type": "object"},
         "file_list_path": {"key": "fileListPath", "type": "object"},
         "delete_files_after_completion": {"key": "deleteFilesAfterCompletion", "type": "object"},
@@ -52616,7 +55641,7 @@ class SftpReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-
         recursive: Optional[JSON] = None,
         wildcard_folder_path: Optional[JSON] = None,
         wildcard_file_name: Optional[JSON] = None,
-        enable_partition_discovery: Optional[bool] = None,
+        enable_partition_discovery: Optional[JSON] = None,
         partition_root_path: Optional[JSON] = None,
         file_list_path: Optional[JSON] = None,
         delete_files_after_completion: Optional[JSON] = None,
@@ -52641,8 +55666,9 @@ class SftpReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-
         :keyword wildcard_file_name: Sftp wildcardFileName. Type: string (or Expression with resultType
          string).
         :paramtype wildcard_file_name: JSON
-        :keyword enable_partition_discovery: Indicates whether to enable partition discovery.
-        :paramtype enable_partition_discovery: bool
+        :keyword enable_partition_discovery: Indicates whether to enable partition discovery. Type:
+         boolean (or Expression with resultType boolean).
+        :paramtype enable_partition_discovery: JSON
         :keyword partition_root_path: Specify the root path where partition discovery starts from.
          Type: string (or Expression with resultType string).
         :paramtype partition_root_path: JSON
@@ -52682,7 +55708,7 @@ class SftpReadSettings(StoreReadSettings):  # pylint: disable=too-many-instance-
 class SftpServerLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """A linked service for an SSH File Transfer Protocol (SFTP) server.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -52857,7 +55883,7 @@ class SftpServerLinkedService(LinkedService):  # pylint: disable=too-many-instan
 class SftpWriteSettings(StoreWriteSettings):
     """Sftp write settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -52869,6 +55895,9 @@ class SftpWriteSettings(StoreWriteSettings):
     :vartype max_concurrent_connections: JSON
     :ivar copy_behavior: The type of copy behavior for copy sink.
     :vartype copy_behavior: JSON
+    :ivar metadata: Specify the custom metadata to be added to sink data. Type: array of objects
+     (or Expression with resultType array of objects).
+    :vartype metadata: list[~azure.synapse.artifacts.models.MetadataItem]
     :ivar operation_timeout: Specifies the timeout for writing each chunk to SFTP server. Default
      value: 01:00:00 (one hour). Type: string (or Expression with resultType string).
     :vartype operation_timeout: JSON
@@ -52887,6 +55916,7 @@ class SftpWriteSettings(StoreWriteSettings):
         "type": {"key": "type", "type": "str"},
         "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
         "copy_behavior": {"key": "copyBehavior", "type": "object"},
+        "metadata": {"key": "metadata", "type": "[MetadataItem]"},
         "operation_timeout": {"key": "operationTimeout", "type": "object"},
         "use_temp_file_rename": {"key": "useTempFileRename", "type": "object"},
     }
@@ -52897,6 +55927,7 @@ class SftpWriteSettings(StoreWriteSettings):
         additional_properties: Optional[Dict[str, JSON]] = None,
         max_concurrent_connections: Optional[JSON] = None,
         copy_behavior: Optional[JSON] = None,
+        metadata: Optional[List["_models.MetadataItem"]] = None,
         operation_timeout: Optional[JSON] = None,
         use_temp_file_rename: Optional[JSON] = None,
         **kwargs: Any
@@ -52910,6 +55941,9 @@ class SftpWriteSettings(StoreWriteSettings):
         :paramtype max_concurrent_connections: JSON
         :keyword copy_behavior: The type of copy behavior for copy sink.
         :paramtype copy_behavior: JSON
+        :keyword metadata: Specify the custom metadata to be added to sink data. Type: array of objects
+         (or Expression with resultType array of objects).
+        :paramtype metadata: list[~azure.synapse.artifacts.models.MetadataItem]
         :keyword operation_timeout: Specifies the timeout for writing each chunk to SFTP server.
          Default value: 01:00:00 (one hour). Type: string (or Expression with resultType string).
         :paramtype operation_timeout: JSON
@@ -52922,6 +55956,7 @@ class SftpWriteSettings(StoreWriteSettings):
             additional_properties=additional_properties,
             max_concurrent_connections=max_concurrent_connections,
             copy_behavior=copy_behavior,
+            metadata=metadata,
             **kwargs
         )
         self.type: str = "SftpWriteSettings"
@@ -52932,7 +55967,7 @@ class SftpWriteSettings(StoreWriteSettings):
 class SharePointOnlineListLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """SharePoint Online List linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -53056,7 +56091,7 @@ class SharePointOnlineListLinkedService(LinkedService):  # pylint: disable=too-m
 class SharePointOnlineListResourceDataset(Dataset):
     """The sharepoint online list resource dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -53160,7 +56195,7 @@ class SharePointOnlineListResourceDataset(Dataset):
 class SharePointOnlineListSource(CopySource):
     """A copy activity source for sharePoint online list source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -53246,7 +56281,7 @@ class SharePointOnlineListSource(CopySource):
 class ShopifyLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Shopify Service linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -53370,7 +56405,7 @@ class ShopifyLinkedService(LinkedService):  # pylint: disable=too-many-instance-
 class ShopifyObjectDataset(Dataset):
     """Shopify Service dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -53472,7 +56507,7 @@ class ShopifyObjectDataset(Dataset):
 class ShopifySource(TabularSource):
     """A copy activity Shopify Service source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -53633,7 +56668,7 @@ class Sku(_serialization.Model):
 class SmartsheetLinkedService(LinkedService):
     """Linked service for Smartsheet.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -53719,7 +56754,7 @@ class SmartsheetLinkedService(LinkedService):
 class SnowflakeDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The snowflake dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -53832,7 +56867,7 @@ class SnowflakeDataset(Dataset):  # pylint: disable=too-many-instance-attributes
 class SnowflakeExportCopyCommand(ExportSettings):
     """Snowflake export command settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -53894,7 +56929,7 @@ class SnowflakeExportCopyCommand(ExportSettings):
 class SnowflakeImportCopyCommand(ImportSettings):
     """Snowflake import command settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -53956,7 +56991,7 @@ class SnowflakeImportCopyCommand(ImportSettings):
 class SnowflakeLinkedService(LinkedService):
     """Snowflake linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -54051,7 +57086,7 @@ class SnowflakeLinkedService(LinkedService):
 class SnowflakeSink(CopySink):
     """A copy activity snowflake sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -54151,7 +57186,7 @@ class SnowflakeSink(CopySink):
 class SnowflakeSource(CopySource):
     """A copy activity snowflake source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -54229,10 +57264,483 @@ class SnowflakeSource(CopySource):
         self.export_settings = export_settings
 
 
+class SnowflakeV2Dataset(Dataset):  # pylint: disable=too-many-instance-attributes
+    """The snowflake dataset.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Type of dataset. Required.
+    :vartype type: str
+    :ivar description: Dataset description.
+    :vartype description: str
+    :ivar structure: Columns that define the structure of the dataset. Type: array (or Expression
+     with resultType array), itemType: DatasetDataElement.
+    :vartype structure: JSON
+    :ivar schema: Columns that define the physical type schema of the dataset. Type: array (or
+     Expression with resultType array), itemType: DatasetSchemaDataElement.
+    :vartype schema: JSON
+    :ivar linked_service_name: Linked service reference. Required.
+    :vartype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
+    :ivar parameters: Parameters for dataset.
+    :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+    :ivar annotations: List of tags that can be used for describing the Dataset.
+    :vartype annotations: list[JSON]
+    :ivar folder: The folder that this Dataset is in. If not specified, Dataset will appear at the
+     root level.
+    :vartype folder: ~azure.synapse.artifacts.models.DatasetFolder
+    :ivar schema_type_properties_schema: The schema name of the Snowflake database. Type: string
+     (or Expression with resultType string).
+    :vartype schema_type_properties_schema: JSON
+    :ivar table: The table name of the Snowflake database. Type: string (or Expression with
+     resultType string).
+    :vartype table: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+        "linked_service_name": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "description": {"key": "description", "type": "str"},
+        "structure": {"key": "structure", "type": "object"},
+        "schema": {"key": "schema", "type": "object"},
+        "linked_service_name": {"key": "linkedServiceName", "type": "LinkedServiceReference"},
+        "parameters": {"key": "parameters", "type": "{ParameterSpecification}"},
+        "annotations": {"key": "annotations", "type": "[object]"},
+        "folder": {"key": "folder", "type": "DatasetFolder"},
+        "schema_type_properties_schema": {"key": "typeProperties.schema", "type": "object"},
+        "table": {"key": "typeProperties.table", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        linked_service_name: "_models.LinkedServiceReference",
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        description: Optional[str] = None,
+        structure: Optional[JSON] = None,
+        schema: Optional[JSON] = None,
+        parameters: Optional[Dict[str, "_models.ParameterSpecification"]] = None,
+        annotations: Optional[List[JSON]] = None,
+        folder: Optional["_models.DatasetFolder"] = None,
+        schema_type_properties_schema: Optional[JSON] = None,
+        table: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword description: Dataset description.
+        :paramtype description: str
+        :keyword structure: Columns that define the structure of the dataset. Type: array (or
+         Expression with resultType array), itemType: DatasetDataElement.
+        :paramtype structure: JSON
+        :keyword schema: Columns that define the physical type schema of the dataset. Type: array (or
+         Expression with resultType array), itemType: DatasetSchemaDataElement.
+        :paramtype schema: JSON
+        :keyword linked_service_name: Linked service reference. Required.
+        :paramtype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
+        :keyword parameters: Parameters for dataset.
+        :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+        :keyword annotations: List of tags that can be used for describing the Dataset.
+        :paramtype annotations: list[JSON]
+        :keyword folder: The folder that this Dataset is in. If not specified, Dataset will appear at
+         the root level.
+        :paramtype folder: ~azure.synapse.artifacts.models.DatasetFolder
+        :keyword schema_type_properties_schema: The schema name of the Snowflake database. Type: string
+         (or Expression with resultType string).
+        :paramtype schema_type_properties_schema: JSON
+        :keyword table: The table name of the Snowflake database. Type: string (or Expression with
+         resultType string).
+        :paramtype table: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            description=description,
+            structure=structure,
+            schema=schema,
+            linked_service_name=linked_service_name,
+            parameters=parameters,
+            annotations=annotations,
+            folder=folder,
+            **kwargs
+        )
+        self.type: str = "SnowflakeV2Table"
+        self.schema_type_properties_schema = schema_type_properties_schema
+        self.table = table
+
+
+class SnowflakeV2LinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
+    """Snowflake linked service.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Type of linked service. Required.
+    :vartype type: str
+    :ivar connect_via: The integration runtime reference.
+    :vartype connect_via: ~azure.synapse.artifacts.models.IntegrationRuntimeReference
+    :ivar description: Linked service description.
+    :vartype description: str
+    :ivar parameters: Parameters for linked service.
+    :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+    :ivar annotations: List of tags that can be used for describing the linked service.
+    :vartype annotations: list[JSON]
+    :ivar account_identifier: The account identifier of your Snowflake account, e.g.
+     xy12345.east-us-2.azure. Required.
+    :vartype account_identifier: JSON
+    :ivar user: The name of the Snowflake user.
+    :vartype user: JSON
+    :ivar password: The Azure key vault secret reference of password in connection string.
+    :vartype password: ~azure.synapse.artifacts.models.SecretBase
+    :ivar database: The name of the Snowflake database. Required.
+    :vartype database: JSON
+    :ivar warehouse: The name of the Snowflake warehouse. Required.
+    :vartype warehouse: JSON
+    :ivar authentication_type: The type used for authentication. Type: string. Known values are:
+     "Basic", "KeyPair", and "AADServicePrincipal".
+    :vartype authentication_type: str or
+     ~azure.synapse.artifacts.models.SnowflakeAuthenticationType
+    :ivar client_id: The client ID of the application registered in Azure Active Directory for
+     AADServicePrincipal authentication.
+    :vartype client_id: JSON
+    :ivar client_secret: The Azure key vault secret reference of client secret for
+     AADServicePrincipal authentication.
+    :vartype client_secret: ~azure.synapse.artifacts.models.SecretBase
+    :ivar tenant_id: The tenant ID of the application registered in Azure Active Directory for
+     AADServicePrincipal authentication.
+    :vartype tenant_id: JSON
+    :ivar scope: The scope of the application registered in Azure Active Directory for
+     AADServicePrincipal authentication.
+    :vartype scope: JSON
+    :ivar private_key: The Azure key vault secret reference of privateKey for KeyPair auth.
+    :vartype private_key: ~azure.synapse.artifacts.models.SecretBase
+    :ivar private_key_passphrase: The Azure key vault secret reference of private key password for
+     KeyPair auth with encrypted private key.
+    :vartype private_key_passphrase: ~azure.synapse.artifacts.models.SecretBase
+    :ivar encrypted_credential: The encrypted credential used for authentication. Credentials are
+     encrypted using the integration runtime credential manager. Type: string.
+    :vartype encrypted_credential: str
+    """
+
+    _validation = {
+        "type": {"required": True},
+        "account_identifier": {"required": True},
+        "database": {"required": True},
+        "warehouse": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "connect_via": {"key": "connectVia", "type": "IntegrationRuntimeReference"},
+        "description": {"key": "description", "type": "str"},
+        "parameters": {"key": "parameters", "type": "{ParameterSpecification}"},
+        "annotations": {"key": "annotations", "type": "[object]"},
+        "account_identifier": {"key": "typeProperties.accountIdentifier", "type": "object"},
+        "user": {"key": "typeProperties.user", "type": "object"},
+        "password": {"key": "typeProperties.password", "type": "SecretBase"},
+        "database": {"key": "typeProperties.database", "type": "object"},
+        "warehouse": {"key": "typeProperties.warehouse", "type": "object"},
+        "authentication_type": {"key": "typeProperties.authenticationType", "type": "str"},
+        "client_id": {"key": "typeProperties.clientId", "type": "object"},
+        "client_secret": {"key": "typeProperties.clientSecret", "type": "SecretBase"},
+        "tenant_id": {"key": "typeProperties.tenantId", "type": "object"},
+        "scope": {"key": "typeProperties.scope", "type": "object"},
+        "private_key": {"key": "typeProperties.privateKey", "type": "SecretBase"},
+        "private_key_passphrase": {"key": "typeProperties.privateKeyPassphrase", "type": "SecretBase"},
+        "encrypted_credential": {"key": "typeProperties.encryptedCredential", "type": "str"},
+    }
+
+    def __init__(
+        self,
+        *,
+        account_identifier: JSON,
+        database: JSON,
+        warehouse: JSON,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        connect_via: Optional["_models.IntegrationRuntimeReference"] = None,
+        description: Optional[str] = None,
+        parameters: Optional[Dict[str, "_models.ParameterSpecification"]] = None,
+        annotations: Optional[List[JSON]] = None,
+        user: Optional[JSON] = None,
+        password: Optional["_models.SecretBase"] = None,
+        authentication_type: Union[str, "_models.SnowflakeAuthenticationType"] = "Basic",
+        client_id: Optional[JSON] = None,
+        client_secret: Optional["_models.SecretBase"] = None,
+        tenant_id: Optional[JSON] = None,
+        scope: Optional[JSON] = None,
+        private_key: Optional["_models.SecretBase"] = None,
+        private_key_passphrase: Optional["_models.SecretBase"] = None,
+        encrypted_credential: Optional[str] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword connect_via: The integration runtime reference.
+        :paramtype connect_via: ~azure.synapse.artifacts.models.IntegrationRuntimeReference
+        :keyword description: Linked service description.
+        :paramtype description: str
+        :keyword parameters: Parameters for linked service.
+        :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+        :keyword annotations: List of tags that can be used for describing the linked service.
+        :paramtype annotations: list[JSON]
+        :keyword account_identifier: The account identifier of your Snowflake account, e.g.
+         xy12345.east-us-2.azure. Required.
+        :paramtype account_identifier: JSON
+        :keyword user: The name of the Snowflake user.
+        :paramtype user: JSON
+        :keyword password: The Azure key vault secret reference of password in connection string.
+        :paramtype password: ~azure.synapse.artifacts.models.SecretBase
+        :keyword database: The name of the Snowflake database. Required.
+        :paramtype database: JSON
+        :keyword warehouse: The name of the Snowflake warehouse. Required.
+        :paramtype warehouse: JSON
+        :keyword authentication_type: The type used for authentication. Type: string. Known values are:
+         "Basic", "KeyPair", and "AADServicePrincipal".
+        :paramtype authentication_type: str or
+         ~azure.synapse.artifacts.models.SnowflakeAuthenticationType
+        :keyword client_id: The client ID of the application registered in Azure Active Directory for
+         AADServicePrincipal authentication.
+        :paramtype client_id: JSON
+        :keyword client_secret: The Azure key vault secret reference of client secret for
+         AADServicePrincipal authentication.
+        :paramtype client_secret: ~azure.synapse.artifacts.models.SecretBase
+        :keyword tenant_id: The tenant ID of the application registered in Azure Active Directory for
+         AADServicePrincipal authentication.
+        :paramtype tenant_id: JSON
+        :keyword scope: The scope of the application registered in Azure Active Directory for
+         AADServicePrincipal authentication.
+        :paramtype scope: JSON
+        :keyword private_key: The Azure key vault secret reference of privateKey for KeyPair auth.
+        :paramtype private_key: ~azure.synapse.artifacts.models.SecretBase
+        :keyword private_key_passphrase: The Azure key vault secret reference of private key password
+         for KeyPair auth with encrypted private key.
+        :paramtype private_key_passphrase: ~azure.synapse.artifacts.models.SecretBase
+        :keyword encrypted_credential: The encrypted credential used for authentication. Credentials
+         are encrypted using the integration runtime credential manager. Type: string.
+        :paramtype encrypted_credential: str
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            connect_via=connect_via,
+            description=description,
+            parameters=parameters,
+            annotations=annotations,
+            **kwargs
+        )
+        self.type: str = "SnowflakeV2"
+        self.account_identifier = account_identifier
+        self.user = user
+        self.password = password
+        self.database = database
+        self.warehouse = warehouse
+        self.authentication_type = authentication_type
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.tenant_id = tenant_id
+        self.scope = scope
+        self.private_key = private_key
+        self.private_key_passphrase = private_key_passphrase
+        self.encrypted_credential = encrypted_credential
+
+
+class SnowflakeV2Sink(CopySink):
+    """A copy activity snowflake sink.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Copy sink type. Required.
+    :vartype type: str
+    :ivar write_batch_size: Write batch size. Type: integer (or Expression with resultType
+     integer), minimum: 0.
+    :vartype write_batch_size: JSON
+    :ivar write_batch_timeout: Write batch timeout. Type: string (or Expression with resultType
+     string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype write_batch_timeout: JSON
+    :ivar sink_retry_count: Sink retry count. Type: integer (or Expression with resultType
+     integer).
+    :vartype sink_retry_count: JSON
+    :ivar sink_retry_wait: Sink retry wait. Type: string (or Expression with resultType string),
+     pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype sink_retry_wait: JSON
+    :ivar max_concurrent_connections: The maximum concurrent connection count for the sink data
+     store. Type: integer (or Expression with resultType integer).
+    :vartype max_concurrent_connections: JSON
+    :ivar pre_copy_script: SQL pre-copy script. Type: string (or Expression with resultType
+     string).
+    :vartype pre_copy_script: JSON
+    :ivar import_settings: Snowflake import settings.
+    :vartype import_settings: ~azure.synapse.artifacts.models.SnowflakeImportCopyCommand
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "write_batch_size": {"key": "writeBatchSize", "type": "object"},
+        "write_batch_timeout": {"key": "writeBatchTimeout", "type": "object"},
+        "sink_retry_count": {"key": "sinkRetryCount", "type": "object"},
+        "sink_retry_wait": {"key": "sinkRetryWait", "type": "object"},
+        "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
+        "pre_copy_script": {"key": "preCopyScript", "type": "object"},
+        "import_settings": {"key": "importSettings", "type": "SnowflakeImportCopyCommand"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        write_batch_size: Optional[JSON] = None,
+        write_batch_timeout: Optional[JSON] = None,
+        sink_retry_count: Optional[JSON] = None,
+        sink_retry_wait: Optional[JSON] = None,
+        max_concurrent_connections: Optional[JSON] = None,
+        pre_copy_script: Optional[JSON] = None,
+        import_settings: Optional["_models.SnowflakeImportCopyCommand"] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword write_batch_size: Write batch size. Type: integer (or Expression with resultType
+         integer), minimum: 0.
+        :paramtype write_batch_size: JSON
+        :keyword write_batch_timeout: Write batch timeout. Type: string (or Expression with resultType
+         string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype write_batch_timeout: JSON
+        :keyword sink_retry_count: Sink retry count. Type: integer (or Expression with resultType
+         integer).
+        :paramtype sink_retry_count: JSON
+        :keyword sink_retry_wait: Sink retry wait. Type: string (or Expression with resultType string),
+         pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype sink_retry_wait: JSON
+        :keyword max_concurrent_connections: The maximum concurrent connection count for the sink data
+         store. Type: integer (or Expression with resultType integer).
+        :paramtype max_concurrent_connections: JSON
+        :keyword pre_copy_script: SQL pre-copy script. Type: string (or Expression with resultType
+         string).
+        :paramtype pre_copy_script: JSON
+        :keyword import_settings: Snowflake import settings.
+        :paramtype import_settings: ~azure.synapse.artifacts.models.SnowflakeImportCopyCommand
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            write_batch_size=write_batch_size,
+            write_batch_timeout=write_batch_timeout,
+            sink_retry_count=sink_retry_count,
+            sink_retry_wait=sink_retry_wait,
+            max_concurrent_connections=max_concurrent_connections,
+            **kwargs
+        )
+        self.type: str = "SnowflakeV2Sink"
+        self.pre_copy_script = pre_copy_script
+        self.import_settings = import_settings
+
+
+class SnowflakeV2Source(CopySource):
+    """A copy activity snowflake source.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Copy source type. Required.
+    :vartype type: str
+    :ivar source_retry_count: Source retry count. Type: integer (or Expression with resultType
+     integer).
+    :vartype source_retry_count: JSON
+    :ivar source_retry_wait: Source retry wait. Type: string (or Expression with resultType
+     string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype source_retry_wait: JSON
+    :ivar max_concurrent_connections: The maximum concurrent connection count for the source data
+     store. Type: integer (or Expression with resultType integer).
+    :vartype max_concurrent_connections: JSON
+    :ivar query: Snowflake Sql query. Type: string (or Expression with resultType string).
+    :vartype query: JSON
+    :ivar export_settings: Snowflake export settings. Required.
+    :vartype export_settings: ~azure.synapse.artifacts.models.SnowflakeExportCopyCommand
+    """
+
+    _validation = {
+        "type": {"required": True},
+        "export_settings": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "source_retry_count": {"key": "sourceRetryCount", "type": "object"},
+        "source_retry_wait": {"key": "sourceRetryWait", "type": "object"},
+        "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
+        "query": {"key": "query", "type": "object"},
+        "export_settings": {"key": "exportSettings", "type": "SnowflakeExportCopyCommand"},
+    }
+
+    def __init__(
+        self,
+        *,
+        export_settings: "_models.SnowflakeExportCopyCommand",
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        source_retry_count: Optional[JSON] = None,
+        source_retry_wait: Optional[JSON] = None,
+        max_concurrent_connections: Optional[JSON] = None,
+        query: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword source_retry_count: Source retry count. Type: integer (or Expression with resultType
+         integer).
+        :paramtype source_retry_count: JSON
+        :keyword source_retry_wait: Source retry wait. Type: string (or Expression with resultType
+         string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype source_retry_wait: JSON
+        :keyword max_concurrent_connections: The maximum concurrent connection count for the source
+         data store. Type: integer (or Expression with resultType integer).
+        :paramtype max_concurrent_connections: JSON
+        :keyword query: Snowflake Sql query. Type: string (or Expression with resultType string).
+        :paramtype query: JSON
+        :keyword export_settings: Snowflake export settings. Required.
+        :paramtype export_settings: ~azure.synapse.artifacts.models.SnowflakeExportCopyCommand
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            source_retry_count=source_retry_count,
+            source_retry_wait=source_retry_wait,
+            max_concurrent_connections=max_concurrent_connections,
+            **kwargs
+        )
+        self.type: str = "SnowflakeV2Source"
+        self.query = query
+        self.export_settings = export_settings
+
+
 class SparkBatchJob(_serialization.Model):  # pylint: disable=too-many-instance-attributes
     """SparkBatchJob.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar livy_info:
     :vartype livy_info: ~azure.synapse.artifacts.models.SparkBatchJobState
@@ -54467,7 +57975,7 @@ class SparkBatchJobState(_serialization.Model):
 class SparkConfiguration(_serialization.Model):
     """SparkConfiguration Artifact information.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar description: Description about the SparkConfiguration.
     :vartype description: str
@@ -54540,7 +58048,7 @@ class SparkConfiguration(_serialization.Model):
 class SparkConfigurationListResponse(_serialization.Model):
     """A list of sparkconfiguration resources.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: List of sparkconfigurations. Required.
     :vartype value: list[~azure.synapse.artifacts.models.SparkConfigurationResource]
@@ -54571,10 +58079,10 @@ class SparkConfigurationListResponse(_serialization.Model):
         self.next_link = next_link
 
 
-class SparkConfigurationParametrizationReference(_serialization.Model):
+class SparkConfigurationParametrizationReference(_serialization.Model):  # pylint: disable=name-too-long
     """Spark configuration reference.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Spark configuration reference type. Required. "SparkConfigurationReference"
     :vartype type: str or ~azure.synapse.artifacts.models.SparkConfigurationReferenceType
@@ -54611,7 +58119,7 @@ class SparkConfigurationParametrizationReference(_serialization.Model):
 class SparkConfigurationReference(_serialization.Model):
     """Spark configuration reference.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Spark configuration reference type. Required. "SparkConfigurationReference"
     :vartype type: str or ~azure.synapse.artifacts.models.SparkConfigurationReferenceType
@@ -54648,10 +58156,10 @@ class SparkConfigurationResource(SubResource):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -54692,7 +58200,7 @@ class SparkConfigurationResource(SubResource):
 class SparkJobDefinition(_serialization.Model):
     """Spark job definition.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -54802,10 +58310,10 @@ class SparkJobDefinitionResource(SubResource):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -54846,7 +58354,7 @@ class SparkJobDefinitionResource(SubResource):
 class SparkJobDefinitionsListResponse(_serialization.Model):
     """A list of spark job definitions resources.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: List of spark job definitions. Required.
     :vartype value: list[~azure.synapse.artifacts.models.SparkJobDefinitionResource]
@@ -54880,7 +58388,7 @@ class SparkJobDefinitionsListResponse(_serialization.Model):
 class SparkJobProperties(_serialization.Model):  # pylint: disable=too-many-instance-attributes
     """The properties of the Spark job.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -55009,7 +58517,7 @@ class SparkJobProperties(_serialization.Model):  # pylint: disable=too-many-inst
 class SparkLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Spark Server linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -55206,7 +58714,7 @@ class SparkLinkedService(LinkedService):  # pylint: disable=too-many-instance-at
 class SparkObjectDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Spark Server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -55597,7 +59105,7 @@ class SparkServicePlugin(_serialization.Model):
 class SparkSource(TabularSource):
     """A copy activity Spark Server source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -55690,7 +59198,7 @@ class SparkSource(TabularSource):
 class SqlAlwaysEncryptedProperties(_serialization.Model):
     """Sql always encrypted properties.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar always_encrypted_akv_auth_type: Sql always encrypted AKV authentication type. Type:
      string. Required. Known values are: "ServicePrincipal", "ManagedIdentity", and
@@ -55807,7 +59315,7 @@ class SqlConnection(_serialization.Model):
 class SqlDWSink(CopySink):  # pylint: disable=too-many-instance-attributes
     """A copy activity SQL Data Warehouse sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -55943,7 +59451,7 @@ class SqlDWSink(CopySink):  # pylint: disable=too-many-instance-attributes
 class SqlDWSource(TabularSource):  # pylint: disable=too-many-instance-attributes
     """A copy activity SQL Data Warehouse source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -56085,7 +59593,7 @@ class SqlDWSource(TabularSource):  # pylint: disable=too-many-instance-attribute
 class SqlMISink(CopySink):  # pylint: disable=too-many-instance-attributes
     """A copy activity Azure SQL Managed Instance sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -56117,8 +59625,7 @@ class SqlMISink(CopySink):  # pylint: disable=too-many-instance-attributes
      string).
     :vartype pre_copy_script: JSON
     :ivar stored_procedure_parameters: SQL stored procedure parameters.
-    :vartype stored_procedure_parameters: dict[str,
-     ~azure.synapse.artifacts.models.StoredProcedureParameter]
+    :vartype stored_procedure_parameters: JSON
     :ivar stored_procedure_table_type_parameter_name: The stored procedure parameter name of the
      table type. Type: string (or Expression with resultType string).
     :vartype stored_procedure_table_type_parameter_name: JSON
@@ -56142,7 +59649,7 @@ class SqlMISink(CopySink):  # pylint: disable=too-many-instance-attributes
         "sql_writer_stored_procedure_name": {"key": "sqlWriterStoredProcedureName", "type": "object"},
         "sql_writer_table_type": {"key": "sqlWriterTableType", "type": "object"},
         "pre_copy_script": {"key": "preCopyScript", "type": "object"},
-        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "{StoredProcedureParameter}"},
+        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "object"},
         "stored_procedure_table_type_parameter_name": {
             "key": "storedProcedureTableTypeParameterName",
             "type": "object",
@@ -56162,7 +59669,7 @@ class SqlMISink(CopySink):  # pylint: disable=too-many-instance-attributes
         sql_writer_stored_procedure_name: Optional[JSON] = None,
         sql_writer_table_type: Optional[JSON] = None,
         pre_copy_script: Optional[JSON] = None,
-        stored_procedure_parameters: Optional[Dict[str, "_models.StoredProcedureParameter"]] = None,
+        stored_procedure_parameters: Optional[JSON] = None,
         stored_procedure_table_type_parameter_name: Optional[JSON] = None,
         table_option: Optional[JSON] = None,
         **kwargs: Any
@@ -56196,8 +59703,7 @@ class SqlMISink(CopySink):  # pylint: disable=too-many-instance-attributes
          string).
         :paramtype pre_copy_script: JSON
         :keyword stored_procedure_parameters: SQL stored procedure parameters.
-        :paramtype stored_procedure_parameters: dict[str,
-         ~azure.synapse.artifacts.models.StoredProcedureParameter]
+        :paramtype stored_procedure_parameters: JSON
         :keyword stored_procedure_table_type_parameter_name: The stored procedure parameter name of the
          table type. Type: string (or Expression with resultType string).
         :paramtype stored_procedure_table_type_parameter_name: JSON
@@ -56226,7 +59732,7 @@ class SqlMISink(CopySink):  # pylint: disable=too-many-instance-attributes
 class SqlMISource(TabularSource):  # pylint: disable=too-many-instance-attributes
     """A copy activity Azure SQL Managed Instance source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -56256,8 +59762,7 @@ class SqlMISource(TabularSource):  # pylint: disable=too-many-instance-attribute
     :vartype sql_reader_stored_procedure_name: JSON
     :ivar stored_procedure_parameters: Value and type setting for stored procedure parameters.
      Example: "{Parameter1: {value: "1", type: "int"}}".
-    :vartype stored_procedure_parameters: dict[str,
-     ~azure.synapse.artifacts.models.StoredProcedureParameter]
+    :vartype stored_procedure_parameters: JSON
     :ivar isolation_level: Specifies the transaction locking behavior for the SQL source. Allowed
      values: ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default value
      is ReadCommitted. Type: string (or Expression with resultType string).
@@ -56285,7 +59790,7 @@ class SqlMISource(TabularSource):  # pylint: disable=too-many-instance-attribute
         "additional_columns": {"key": "additionalColumns", "type": "object"},
         "sql_reader_query": {"key": "sqlReaderQuery", "type": "object"},
         "sql_reader_stored_procedure_name": {"key": "sqlReaderStoredProcedureName", "type": "object"},
-        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "{StoredProcedureParameter}"},
+        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "object"},
         "isolation_level": {"key": "isolationLevel", "type": "object"},
         "produce_additional_types": {"key": "produceAdditionalTypes", "type": "object"},
         "partition_option": {"key": "partitionOption", "type": "object"},
@@ -56303,7 +59808,7 @@ class SqlMISource(TabularSource):  # pylint: disable=too-many-instance-attribute
         additional_columns: Optional[JSON] = None,
         sql_reader_query: Optional[JSON] = None,
         sql_reader_stored_procedure_name: Optional[JSON] = None,
-        stored_procedure_parameters: Optional[Dict[str, "_models.StoredProcedureParameter"]] = None,
+        stored_procedure_parameters: Optional[JSON] = None,
         isolation_level: Optional[JSON] = None,
         produce_additional_types: Optional[JSON] = None,
         partition_option: Optional[JSON] = None,
@@ -56338,8 +59843,7 @@ class SqlMISource(TabularSource):  # pylint: disable=too-many-instance-attribute
         :paramtype sql_reader_stored_procedure_name: JSON
         :keyword stored_procedure_parameters: Value and type setting for stored procedure parameters.
          Example: "{Parameter1: {value: "1", type: "int"}}".
-        :paramtype stored_procedure_parameters: dict[str,
-         ~azure.synapse.artifacts.models.StoredProcedureParameter]
+        :paramtype stored_procedure_parameters: JSON
         :keyword isolation_level: Specifies the transaction locking behavior for the SQL source.
          Allowed values: ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default
          value is ReadCommitted. Type: string (or Expression with resultType string).
@@ -56433,10 +59937,10 @@ class SqlPool(TrackedResource):  # pylint: disable=too-many-instance-attributes
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -56609,7 +60113,7 @@ class SqlPoolInfoListResult(_serialization.Model):
 class SqlPoolReference(_serialization.Model):
     """SQL pool reference type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: SQL pool reference type. Required. "SqlPoolReference"
     :vartype type: str or ~azure.synapse.artifacts.models.SqlPoolReferenceType
@@ -56642,7 +60146,7 @@ class SqlPoolReference(_serialization.Model):
 class SqlPoolStoredProcedureActivity(Activity):  # pylint: disable=too-many-instance-attributes
     """Execute SQL pool stored procedure activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -56671,8 +60175,7 @@ class SqlPoolStoredProcedureActivity(Activity):  # pylint: disable=too-many-inst
     :vartype stored_procedure_name: JSON
     :ivar stored_procedure_parameters: Value and type setting for stored procedure parameters.
      Example: "{Parameter1: {value: "1", type: "int"}}".
-    :vartype stored_procedure_parameters: dict[str,
-     ~azure.synapse.artifacts.models.StoredProcedureParameter]
+    :vartype stored_procedure_parameters: JSON
     """
 
     _validation = {
@@ -56693,10 +60196,7 @@ class SqlPoolStoredProcedureActivity(Activity):  # pylint: disable=too-many-inst
         "user_properties": {"key": "userProperties", "type": "[UserProperty]"},
         "sql_pool": {"key": "sqlPool", "type": "SqlPoolReference"},
         "stored_procedure_name": {"key": "typeProperties.storedProcedureName", "type": "object"},
-        "stored_procedure_parameters": {
-            "key": "typeProperties.storedProcedureParameters",
-            "type": "{StoredProcedureParameter}",
-        },
+        "stored_procedure_parameters": {"key": "typeProperties.storedProcedureParameters", "type": "object"},
     }
 
     def __init__(
@@ -56711,7 +60211,7 @@ class SqlPoolStoredProcedureActivity(Activity):  # pylint: disable=too-many-inst
         on_inactive_mark_as: Optional[Union[str, "_models.ActivityOnInactiveMarkAs"]] = None,
         depends_on: Optional[List["_models.ActivityDependency"]] = None,
         user_properties: Optional[List["_models.UserProperty"]] = None,
-        stored_procedure_parameters: Optional[Dict[str, "_models.StoredProcedureParameter"]] = None,
+        stored_procedure_parameters: Optional[JSON] = None,
         **kwargs: Any
     ) -> None:
         """
@@ -56740,8 +60240,7 @@ class SqlPoolStoredProcedureActivity(Activity):  # pylint: disable=too-many-inst
         :paramtype stored_procedure_name: JSON
         :keyword stored_procedure_parameters: Value and type setting for stored procedure parameters.
          Example: "{Parameter1: {value: "1", type: "int"}}".
-        :paramtype stored_procedure_parameters: dict[str,
-         ~azure.synapse.artifacts.models.StoredProcedureParameter]
+        :paramtype stored_procedure_parameters: JSON
         """
         super().__init__(
             additional_properties=additional_properties,
@@ -56762,7 +60261,7 @@ class SqlPoolStoredProcedureActivity(Activity):  # pylint: disable=too-many-inst
 class SqlScript(_serialization.Model):
     """SQL script.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -56825,7 +60324,7 @@ class SqlScript(_serialization.Model):
 class SqlScriptContent(_serialization.Model):
     """The content of the SQL script.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -56939,10 +60438,10 @@ class SqlScriptResource(_serialization.Model):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: Fully qualified resource Id for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource. Required.
     :vartype name: str
@@ -56989,7 +60488,7 @@ class SqlScriptResource(_serialization.Model):
 class SqlScriptsListResponse(_serialization.Model):
     """A list of sql scripts resources.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: List of sql scripts. Required.
     :vartype value: list[~azure.synapse.artifacts.models.SqlScriptResource]
@@ -57023,7 +60522,7 @@ class SqlScriptsListResponse(_serialization.Model):
 class SqlServerLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """SQL Server linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -57139,7 +60638,7 @@ class SqlServerLinkedService(LinkedService):  # pylint: disable=too-many-instanc
 class SqlServerSink(CopySink):  # pylint: disable=too-many-instance-attributes
     """A copy activity SQL server sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -57171,8 +60670,7 @@ class SqlServerSink(CopySink):  # pylint: disable=too-many-instance-attributes
      string).
     :vartype pre_copy_script: JSON
     :ivar stored_procedure_parameters: SQL stored procedure parameters.
-    :vartype stored_procedure_parameters: dict[str,
-     ~azure.synapse.artifacts.models.StoredProcedureParameter]
+    :vartype stored_procedure_parameters: JSON
     :ivar stored_procedure_table_type_parameter_name: The stored procedure parameter name of the
      table type. Type: string (or Expression with resultType string).
     :vartype stored_procedure_table_type_parameter_name: JSON
@@ -57196,7 +60694,7 @@ class SqlServerSink(CopySink):  # pylint: disable=too-many-instance-attributes
         "sql_writer_stored_procedure_name": {"key": "sqlWriterStoredProcedureName", "type": "object"},
         "sql_writer_table_type": {"key": "sqlWriterTableType", "type": "object"},
         "pre_copy_script": {"key": "preCopyScript", "type": "object"},
-        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "{StoredProcedureParameter}"},
+        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "object"},
         "stored_procedure_table_type_parameter_name": {
             "key": "storedProcedureTableTypeParameterName",
             "type": "object",
@@ -57216,7 +60714,7 @@ class SqlServerSink(CopySink):  # pylint: disable=too-many-instance-attributes
         sql_writer_stored_procedure_name: Optional[JSON] = None,
         sql_writer_table_type: Optional[JSON] = None,
         pre_copy_script: Optional[JSON] = None,
-        stored_procedure_parameters: Optional[Dict[str, "_models.StoredProcedureParameter"]] = None,
+        stored_procedure_parameters: Optional[JSON] = None,
         stored_procedure_table_type_parameter_name: Optional[JSON] = None,
         table_option: Optional[JSON] = None,
         **kwargs: Any
@@ -57250,8 +60748,7 @@ class SqlServerSink(CopySink):  # pylint: disable=too-many-instance-attributes
          string).
         :paramtype pre_copy_script: JSON
         :keyword stored_procedure_parameters: SQL stored procedure parameters.
-        :paramtype stored_procedure_parameters: dict[str,
-         ~azure.synapse.artifacts.models.StoredProcedureParameter]
+        :paramtype stored_procedure_parameters: JSON
         :keyword stored_procedure_table_type_parameter_name: The stored procedure parameter name of the
          table type. Type: string (or Expression with resultType string).
         :paramtype stored_procedure_table_type_parameter_name: JSON
@@ -57280,7 +60777,7 @@ class SqlServerSink(CopySink):  # pylint: disable=too-many-instance-attributes
 class SqlServerSource(TabularSource):  # pylint: disable=too-many-instance-attributes
     """A copy activity SQL server source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -57310,8 +60807,7 @@ class SqlServerSource(TabularSource):  # pylint: disable=too-many-instance-attri
     :vartype sql_reader_stored_procedure_name: JSON
     :ivar stored_procedure_parameters: Value and type setting for stored procedure parameters.
      Example: "{Parameter1: {value: "1", type: "int"}}".
-    :vartype stored_procedure_parameters: dict[str,
-     ~azure.synapse.artifacts.models.StoredProcedureParameter]
+    :vartype stored_procedure_parameters: JSON
     :ivar isolation_level: Specifies the transaction locking behavior for the SQL source. Allowed
      values: ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default value
      is ReadCommitted. Type: string (or Expression with resultType string).
@@ -57339,7 +60835,7 @@ class SqlServerSource(TabularSource):  # pylint: disable=too-many-instance-attri
         "additional_columns": {"key": "additionalColumns", "type": "object"},
         "sql_reader_query": {"key": "sqlReaderQuery", "type": "object"},
         "sql_reader_stored_procedure_name": {"key": "sqlReaderStoredProcedureName", "type": "object"},
-        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "{StoredProcedureParameter}"},
+        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "object"},
         "isolation_level": {"key": "isolationLevel", "type": "object"},
         "produce_additional_types": {"key": "produceAdditionalTypes", "type": "object"},
         "partition_option": {"key": "partitionOption", "type": "object"},
@@ -57357,7 +60853,7 @@ class SqlServerSource(TabularSource):  # pylint: disable=too-many-instance-attri
         additional_columns: Optional[JSON] = None,
         sql_reader_query: Optional[JSON] = None,
         sql_reader_stored_procedure_name: Optional[JSON] = None,
-        stored_procedure_parameters: Optional[Dict[str, "_models.StoredProcedureParameter"]] = None,
+        stored_procedure_parameters: Optional[JSON] = None,
         isolation_level: Optional[JSON] = None,
         produce_additional_types: Optional[JSON] = None,
         partition_option: Optional[JSON] = None,
@@ -57392,8 +60888,7 @@ class SqlServerSource(TabularSource):  # pylint: disable=too-many-instance-attri
         :paramtype sql_reader_stored_procedure_name: JSON
         :keyword stored_procedure_parameters: Value and type setting for stored procedure parameters.
          Example: "{Parameter1: {value: "1", type: "int"}}".
-        :paramtype stored_procedure_parameters: dict[str,
-         ~azure.synapse.artifacts.models.StoredProcedureParameter]
+        :paramtype stored_procedure_parameters: JSON
         :keyword isolation_level: Specifies the transaction locking behavior for the SQL source.
          Allowed values: ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default
          value is ReadCommitted. Type: string (or Expression with resultType string).
@@ -57428,7 +60923,7 @@ class SqlServerSource(TabularSource):  # pylint: disable=too-many-instance-attri
 class SqlServerStoredProcedureActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """SQL stored procedure activity type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -57549,7 +61044,7 @@ class SqlServerStoredProcedureActivity(ExecutionActivity):  # pylint: disable=to
 class SqlServerTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The on-premises SQL Server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -57671,7 +61166,7 @@ class SqlServerTableDataset(Dataset):  # pylint: disable=too-many-instance-attri
 class SqlSink(CopySink):  # pylint: disable=too-many-instance-attributes
     """A copy activity SQL sink.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -57703,8 +61198,7 @@ class SqlSink(CopySink):  # pylint: disable=too-many-instance-attributes
      string).
     :vartype pre_copy_script: JSON
     :ivar stored_procedure_parameters: SQL stored procedure parameters.
-    :vartype stored_procedure_parameters: dict[str,
-     ~azure.synapse.artifacts.models.StoredProcedureParameter]
+    :vartype stored_procedure_parameters: JSON
     :ivar stored_procedure_table_type_parameter_name: The stored procedure parameter name of the
      table type. Type: string (or Expression with resultType string).
     :vartype stored_procedure_table_type_parameter_name: JSON
@@ -57728,7 +61222,7 @@ class SqlSink(CopySink):  # pylint: disable=too-many-instance-attributes
         "sql_writer_stored_procedure_name": {"key": "sqlWriterStoredProcedureName", "type": "object"},
         "sql_writer_table_type": {"key": "sqlWriterTableType", "type": "object"},
         "pre_copy_script": {"key": "preCopyScript", "type": "object"},
-        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "{StoredProcedureParameter}"},
+        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "object"},
         "stored_procedure_table_type_parameter_name": {
             "key": "storedProcedureTableTypeParameterName",
             "type": "object",
@@ -57748,7 +61242,7 @@ class SqlSink(CopySink):  # pylint: disable=too-many-instance-attributes
         sql_writer_stored_procedure_name: Optional[JSON] = None,
         sql_writer_table_type: Optional[JSON] = None,
         pre_copy_script: Optional[JSON] = None,
-        stored_procedure_parameters: Optional[Dict[str, "_models.StoredProcedureParameter"]] = None,
+        stored_procedure_parameters: Optional[JSON] = None,
         stored_procedure_table_type_parameter_name: Optional[JSON] = None,
         table_option: Optional[JSON] = None,
         **kwargs: Any
@@ -57782,8 +61276,7 @@ class SqlSink(CopySink):  # pylint: disable=too-many-instance-attributes
          string).
         :paramtype pre_copy_script: JSON
         :keyword stored_procedure_parameters: SQL stored procedure parameters.
-        :paramtype stored_procedure_parameters: dict[str,
-         ~azure.synapse.artifacts.models.StoredProcedureParameter]
+        :paramtype stored_procedure_parameters: JSON
         :keyword stored_procedure_table_type_parameter_name: The stored procedure parameter name of the
          table type. Type: string (or Expression with resultType string).
         :paramtype stored_procedure_table_type_parameter_name: JSON
@@ -57812,7 +61305,7 @@ class SqlSink(CopySink):  # pylint: disable=too-many-instance-attributes
 class SqlSource(TabularSource):  # pylint: disable=too-many-instance-attributes
     """A copy activity SQL source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -57842,8 +61335,7 @@ class SqlSource(TabularSource):  # pylint: disable=too-many-instance-attributes
     :vartype sql_reader_stored_procedure_name: JSON
     :ivar stored_procedure_parameters: Value and type setting for stored procedure parameters.
      Example: "{Parameter1: {value: "1", type: "int"}}".
-    :vartype stored_procedure_parameters: dict[str,
-     ~azure.synapse.artifacts.models.StoredProcedureParameter]
+    :vartype stored_procedure_parameters: JSON
     :ivar isolation_level: Specifies the transaction locking behavior for the SQL source. Allowed
      values: ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default value
      is ReadCommitted. Type: string (or Expression with resultType string).
@@ -57869,7 +61361,7 @@ class SqlSource(TabularSource):  # pylint: disable=too-many-instance-attributes
         "additional_columns": {"key": "additionalColumns", "type": "object"},
         "sql_reader_query": {"key": "sqlReaderQuery", "type": "object"},
         "sql_reader_stored_procedure_name": {"key": "sqlReaderStoredProcedureName", "type": "object"},
-        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "{StoredProcedureParameter}"},
+        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "object"},
         "isolation_level": {"key": "isolationLevel", "type": "object"},
         "partition_option": {"key": "partitionOption", "type": "object"},
         "partition_settings": {"key": "partitionSettings", "type": "SqlPartitionSettings"},
@@ -57886,7 +61378,7 @@ class SqlSource(TabularSource):  # pylint: disable=too-many-instance-attributes
         additional_columns: Optional[JSON] = None,
         sql_reader_query: Optional[JSON] = None,
         sql_reader_stored_procedure_name: Optional[JSON] = None,
-        stored_procedure_parameters: Optional[Dict[str, "_models.StoredProcedureParameter"]] = None,
+        stored_procedure_parameters: Optional[JSON] = None,
         isolation_level: Optional[JSON] = None,
         partition_option: Optional[JSON] = None,
         partition_settings: Optional["_models.SqlPartitionSettings"] = None,
@@ -57920,8 +61412,7 @@ class SqlSource(TabularSource):  # pylint: disable=too-many-instance-attributes
         :paramtype sql_reader_stored_procedure_name: JSON
         :keyword stored_procedure_parameters: Value and type setting for stored procedure parameters.
          Example: "{Parameter1: {value: "1", type: "int"}}".
-        :paramtype stored_procedure_parameters: dict[str,
-         ~azure.synapse.artifacts.models.StoredProcedureParameter]
+        :paramtype stored_procedure_parameters: JSON
         :keyword isolation_level: Specifies the transaction locking behavior for the SQL source.
          Allowed values: ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default
          value is ReadCommitted. Type: string (or Expression with resultType string).
@@ -57953,7 +61444,7 @@ class SqlSource(TabularSource):  # pylint: disable=too-many-instance-attributes
 class SquareLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Square Service linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -58102,7 +61593,7 @@ class SquareLinkedService(LinkedService):  # pylint: disable=too-many-instance-a
 class SquareObjectDataset(Dataset):
     """Square Service dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -58204,7 +61695,7 @@ class SquareObjectDataset(Dataset):
 class SquareSource(TabularSource):
     """A copy activity Square Service source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -58297,7 +61788,7 @@ class SquareSource(TabularSource):
 class SSISAccessCredential(_serialization.Model):
     """SSIS access credential.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar domain: Domain for windows authentication. Required.
     :vartype domain: JSON
@@ -58337,7 +61828,7 @@ class SSISAccessCredential(_serialization.Model):
 class SSISChildPackage(_serialization.Model):
     """SSIS embedded child package.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar package_path: Path for embedded child package. Type: string (or Expression with
      resultType string). Required.
@@ -58394,7 +61885,7 @@ class SSISChildPackage(_serialization.Model):
 class SSISExecutionCredential(_serialization.Model):
     """SSIS package execution credential.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar domain: Domain for windows authentication. Required.
     :vartype domain: JSON
@@ -58434,7 +61925,7 @@ class SSISExecutionCredential(_serialization.Model):
 class SSISExecutionParameter(_serialization.Model):
     """SSIS execution parameter.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: SSIS package execution parameter value. Type: string (or Expression with
      resultType string). Required.
@@ -58462,7 +61953,7 @@ class SSISExecutionParameter(_serialization.Model):
 class SSISLogLocation(_serialization.Model):
     """SSIS package execution log location.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar log_path: The SSIS package execution log path. Type: string (or Expression with
      resultType string). Required.
@@ -58666,7 +62157,7 @@ class SSISPackageLocation(_serialization.Model):
 class SSISPropertyOverride(_serialization.Model):
     """SSIS property override.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: SSIS package property override value. Type: string (or Expression with resultType
      string). Required.
@@ -58702,7 +62193,7 @@ class SSISPropertyOverride(_serialization.Model):
 class StagingSettings(_serialization.Model):
     """Staging settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -58858,7 +62349,7 @@ class StoredProcedureParameter(_serialization.Model):
      string).
     :vartype value: JSON
     :ivar type: Stored procedure parameter type. Known values are: "String", "Int", "Int64",
-     "Decimal", "Guid", "Boolean", and "Date".
+     "Decimal", "Guid", "Boolean", "Date", and "Int".
     :vartype type: str or ~azure.synapse.artifacts.models.StoredProcedureParameterType
     """
 
@@ -58879,7 +62370,7 @@ class StoredProcedureParameter(_serialization.Model):
          string).
         :paramtype value: JSON
         :keyword type: Stored procedure parameter type. Known values are: "String", "Int", "Int64",
-         "Decimal", "Guid", "Boolean", and "Date".
+         "Decimal", "Guid", "Boolean", "Date", and "Int".
         :paramtype type: str or ~azure.synapse.artifacts.models.StoredProcedureParameterType
         """
         super().__init__(**kwargs)
@@ -58891,7 +62382,7 @@ class SwitchActivity(ControlActivity):  # pylint: disable=too-many-instance-attr
     """This activity evaluates an expression and executes activities under the cases property that
     correspond to the expression evaluation expected in the equals property.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -59037,7 +62528,7 @@ class SwitchCase(_serialization.Model):
 class SybaseLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Linked service for Sybase data source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -59168,7 +62659,7 @@ class SybaseLinkedService(LinkedService):  # pylint: disable=too-many-instance-a
 class SybaseSource(TabularSource):
     """A copy activity source for Sybase databases.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -59259,7 +62750,7 @@ class SybaseSource(TabularSource):
 class SybaseTableDataset(Dataset):
     """The Sybase table dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -59362,7 +62853,7 @@ class SybaseTableDataset(Dataset):
 class SynapseNotebookActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """Execute Synapse notebook activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -59559,7 +63050,7 @@ class SynapseNotebookActivity(ExecutionActivity):  # pylint: disable=too-many-in
 class SynapseNotebookReference(_serialization.Model):
     """Synapse notebook reference type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Synapse notebook reference type. Required. "NotebookReference"
     :vartype type: str or ~azure.synapse.artifacts.models.NotebookReferenceType
@@ -59596,7 +63087,7 @@ class SynapseNotebookReference(_serialization.Model):
 class SynapseSparkJobDefinitionActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """Execute spark job activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -59864,7 +63355,7 @@ class SynapseSparkJobDefinitionActivity(ExecutionActivity):  # pylint: disable=t
 class SynapseSparkJobReference(_serialization.Model):
     """Synapse spark job reference type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Synapse spark job reference type. Required. "SparkJobDefinitionReference"
     :vartype type: str or ~azure.synapse.artifacts.models.SparkJobReferenceType
@@ -59899,7 +63390,7 @@ class SynapseSparkJobReference(_serialization.Model):
 class TabularTranslator(CopyTranslator):
     """A copy activity tabular translator.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -59922,9 +63413,9 @@ class TabularTranslator(CopyTranslator):
      strings in json format. Type: boolean (or Expression with resultType boolean).
     :vartype map_complex_values_to_string: JSON
     :ivar mappings: Column mappings with logical types. Tabular->tabular example:
-     [{"source":{"name":"CustomerName","type":"String"},"sink":{"name":"ClientName","type":"String"}},{"source":{"name":"CustomerAddress","type":"String"},"sink":{"name":"ClientAddress","type":"String"}}].
+     [{"source":{"name":"CustomerName","type":"String"},"sink":{"name":"ClientName","type":"String"}},{"source":{"name":"CustomerAddress","type":"String"},"sink":{"name":"ClientAddress","type":"String"}}].  # pylint: disable=line-too-long
      Hierarchical->tabular example:
-     [{"source":{"path":"$.CustomerName","type":"String"},"sink":{"name":"ClientName","type":"String"}},{"source":{"path":"$.CustomerAddress","type":"String"},"sink":{"name":"ClientAddress","type":"String"}}].
+     [{"source":{"path":"$.CustomerName","type":"String"},"sink":{"name":"ClientName","type":"String"}},{"source":{"path":"$.CustomerAddress","type":"String"},"sink":{"name":"ClientAddress","type":"String"}}].  # pylint: disable=line-too-long
      Type: object (or Expression with resultType object).
     :vartype mappings: JSON
     :ivar type_conversion: Whether to enable the advanced type conversion feature in the Copy
@@ -59983,9 +63474,9 @@ class TabularTranslator(CopyTranslator):
          simple strings in json format. Type: boolean (or Expression with resultType boolean).
         :paramtype map_complex_values_to_string: JSON
         :keyword mappings: Column mappings with logical types. Tabular->tabular example:
-         [{"source":{"name":"CustomerName","type":"String"},"sink":{"name":"ClientName","type":"String"}},{"source":{"name":"CustomerAddress","type":"String"},"sink":{"name":"ClientAddress","type":"String"}}].
+         [{"source":{"name":"CustomerName","type":"String"},"sink":{"name":"ClientName","type":"String"}},{"source":{"name":"CustomerAddress","type":"String"},"sink":{"name":"ClientAddress","type":"String"}}].  # pylint: disable=line-too-long
          Hierarchical->tabular example:
-         [{"source":{"path":"$.CustomerName","type":"String"},"sink":{"name":"ClientName","type":"String"}},{"source":{"path":"$.CustomerAddress","type":"String"},"sink":{"name":"ClientAddress","type":"String"}}].
+         [{"source":{"path":"$.CustomerName","type":"String"},"sink":{"name":"ClientName","type":"String"}},{"source":{"path":"$.CustomerAddress","type":"String"},"sink":{"name":"ClientAddress","type":"String"}}].  # pylint: disable=line-too-long
          Type: object (or Expression with resultType object).
         :paramtype mappings: JSON
         :keyword type_conversion: Whether to enable the advanced type conversion feature in the Copy
@@ -60008,7 +63499,7 @@ class TabularTranslator(CopyTranslator):
 class TarGZipReadSettings(CompressionReadSettings):
     """The TarGZip compression read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -60053,7 +63544,7 @@ class TarGZipReadSettings(CompressionReadSettings):
 class TarReadSettings(CompressionReadSettings):
     """The Tar compression read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -60098,7 +63589,7 @@ class TarReadSettings(CompressionReadSettings):
 class TeamDeskLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Linked service for TeamDesk.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -60220,7 +63711,7 @@ class TeamDeskLinkedService(LinkedService):  # pylint: disable=too-many-instance
 class TeradataLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Linked service for Teradata data source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -60390,7 +63881,7 @@ class TeradataPartitionSettings(_serialization.Model):
 class TeradataSource(TabularSource):
     """A copy activity Teradata source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -60498,7 +63989,7 @@ class TeradataSource(TabularSource):
 class TeradataTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The Teradata database dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -60610,7 +64101,7 @@ class TeradataTableDataset(Dataset):  # pylint: disable=too-many-instance-attrib
 class TextFormat(DatasetStorageFormat):  # pylint: disable=too-many-instance-attributes
     """The data stored in text format.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -60743,7 +64234,7 @@ class TextFormat(DatasetStorageFormat):  # pylint: disable=too-many-instance-att
 class TriggerDependencyProvisioningStatus(_serialization.Model):
     """Defines the response of a provision trigger dependency operation.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar trigger_name: Trigger name. Required.
     :vartype trigger_name: str
@@ -60779,7 +64270,7 @@ class TriggerDependencyReference(DependencyReference):
     You probably want to use the sub-classes and not this class directly. Known sub-classes are:
     TumblingWindowTriggerDependencyReference
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: The type of dependency reference. Required.
     :vartype type: str
@@ -60812,7 +64303,7 @@ class TriggerDependencyReference(DependencyReference):
 class TriggerListResponse(_serialization.Model):
     """A list of trigger resources.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: List of triggers. Required.
     :vartype value: list[~azure.synapse.artifacts.models.TriggerResource]
@@ -60878,7 +64369,7 @@ class TriggerPipelineReference(_serialization.Model):
 class TriggerReference(_serialization.Model):
     """Trigger reference type.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Trigger reference type. Required. "TriggerReference"
     :vartype type: str or ~azure.synapse.artifacts.models.TriggerReferenceType
@@ -60913,10 +64404,10 @@ class TriggerResource(SubResource):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -61025,7 +64516,7 @@ class TriggerRun(_serialization.Model):
 class TriggerRunsQueryResponse(_serialization.Model):
     """A list of trigger runs.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar value: List of trigger runs. Required.
     :vartype value: list[~azure.synapse.artifacts.models.TriggerRun]
@@ -61093,7 +64584,7 @@ class TumblingWindowTrigger(Trigger):  # pylint: disable=too-many-instance-attri
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -61234,7 +64725,7 @@ class TumblingWindowTrigger(Trigger):  # pylint: disable=too-many-instance-attri
 class TumblingWindowTriggerDependencyReference(TriggerDependencyReference):
     """Referenced tumbling window trigger dependency.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: The type of dependency reference. Required.
     :vartype type: str
@@ -61293,7 +64784,7 @@ class TumblingWindowTriggerDependencyReference(TriggerDependencyReference):
 class TwilioLinkedService(LinkedService):
     """Linked service for Twilio.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -61449,7 +64940,7 @@ class UntilActivity(ControlActivity):  # pylint: disable=too-many-instance-attri
     """This activity executes inner activities until the specified boolean expression results to true
     or timeout is reached, whichever is earlier.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -61590,7 +65081,7 @@ class UpdateLandingZoneCredential(_serialization.Model):
 class UserProperty(_serialization.Model):
     """User property.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar name: User property name. Required.
     :vartype name: str
@@ -61625,7 +65116,7 @@ class UserProperty(_serialization.Model):
 class ValidationActivity(ControlActivity):  # pylint: disable=too-many-instance-attributes
     """This activity verifies that an external resource exists.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -61763,7 +65254,7 @@ class ValidationActivity(ControlActivity):  # pylint: disable=too-many-instance-
 class VariableSpecification(_serialization.Model):
     """Definition of a single variable for a Pipeline.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Variable type. Required. Known values are: "String", "Bool", "Boolean", and
      "Array".
@@ -61799,7 +65290,7 @@ class VariableSpecification(_serialization.Model):
 class VerticaLinkedService(LinkedService):
     """Vertica linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -61893,7 +65384,7 @@ class VerticaLinkedService(LinkedService):
 class VerticaSource(TabularSource):
     """A copy activity Vertica source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -61986,7 +65477,7 @@ class VerticaSource(TabularSource):
 class VerticaTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Vertica dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -62128,7 +65619,7 @@ class VirtualNetworkProfile(_serialization.Model):
 class WaitActivity(ControlActivity):
     """This activity suspends pipeline execution for the specified interval.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -62221,10 +65712,554 @@ class WaitActivity(ControlActivity):
         self.wait_time_in_seconds = wait_time_in_seconds
 
 
+class WarehouseLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
+    """Microsoft Fabric Warehouse linked service.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Type of linked service. Required.
+    :vartype type: str
+    :ivar connect_via: The integration runtime reference.
+    :vartype connect_via: ~azure.synapse.artifacts.models.IntegrationRuntimeReference
+    :ivar description: Linked service description.
+    :vartype description: str
+    :ivar parameters: Parameters for linked service.
+    :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+    :ivar annotations: List of tags that can be used for describing the linked service.
+    :vartype annotations: list[JSON]
+    :ivar artifact_id: The ID of Microsoft Fabric Warehouse artifact. Type: string (or Expression
+     with resultType string). Required.
+    :vartype artifact_id: JSON
+    :ivar endpoint: The endpoint of Microsoft Fabric Warehouse server. Type: string (or Expression
+     with resultType string). Required.
+    :vartype endpoint: JSON
+    :ivar workspace_id: The ID of Microsoft Fabric workspace. Type: string (or Expression with
+     resultType string).
+    :vartype workspace_id: JSON
+    :ivar service_principal_id: The ID of the application used to authenticate against Microsoft
+     Fabric Warehouse. Type: string (or Expression with resultType string).
+    :vartype service_principal_id: JSON
+    :ivar service_principal_key: The Key of the application used to authenticate against Microsoft
+     Fabric Warehouse.
+    :vartype service_principal_key: ~azure.synapse.artifacts.models.SecretBase
+    :ivar tenant: The name or ID of the tenant to which the service principal belongs. Type: string
+     (or Expression with resultType string).
+    :vartype tenant: JSON
+    :ivar encrypted_credential: The encrypted credential used for authentication. Credentials are
+     encrypted using the integration runtime credential manager. Type: string.
+    :vartype encrypted_credential: str
+    :ivar service_principal_credential_type: The service principal credential type to use in
+     Server-To-Server authentication. 'ServicePrincipalKey' for key/secret, 'ServicePrincipalCert'
+     for certificate. Type: string (or Expression with resultType string).
+    :vartype service_principal_credential_type: JSON
+    :ivar service_principal_credential: The credential of the service principal object in Azure
+     Active Directory. If servicePrincipalCredentialType is 'ServicePrincipalKey',
+     servicePrincipalCredential can be SecureString or AzureKeyVaultSecretReference. If
+     servicePrincipalCredentialType is 'ServicePrincipalCert', servicePrincipalCredential can only
+     be AzureKeyVaultSecretReference.
+    :vartype service_principal_credential: ~azure.synapse.artifacts.models.SecretBase
+    """
+
+    _validation = {
+        "type": {"required": True},
+        "artifact_id": {"required": True},
+        "endpoint": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "connect_via": {"key": "connectVia", "type": "IntegrationRuntimeReference"},
+        "description": {"key": "description", "type": "str"},
+        "parameters": {"key": "parameters", "type": "{ParameterSpecification}"},
+        "annotations": {"key": "annotations", "type": "[object]"},
+        "artifact_id": {"key": "typeProperties.artifactId", "type": "object"},
+        "endpoint": {"key": "typeProperties.endpoint", "type": "object"},
+        "workspace_id": {"key": "typeProperties.workspaceId", "type": "object"},
+        "service_principal_id": {"key": "typeProperties.servicePrincipalId", "type": "object"},
+        "service_principal_key": {"key": "typeProperties.servicePrincipalKey", "type": "SecretBase"},
+        "tenant": {"key": "typeProperties.tenant", "type": "object"},
+        "encrypted_credential": {"key": "typeProperties.encryptedCredential", "type": "str"},
+        "service_principal_credential_type": {"key": "typeProperties.servicePrincipalCredentialType", "type": "object"},
+        "service_principal_credential": {"key": "typeProperties.servicePrincipalCredential", "type": "SecretBase"},
+    }
+
+    def __init__(
+        self,
+        *,
+        artifact_id: JSON,
+        endpoint: JSON,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        connect_via: Optional["_models.IntegrationRuntimeReference"] = None,
+        description: Optional[str] = None,
+        parameters: Optional[Dict[str, "_models.ParameterSpecification"]] = None,
+        annotations: Optional[List[JSON]] = None,
+        workspace_id: Optional[JSON] = None,
+        service_principal_id: Optional[JSON] = None,
+        service_principal_key: Optional["_models.SecretBase"] = None,
+        tenant: Optional[JSON] = None,
+        encrypted_credential: Optional[str] = None,
+        service_principal_credential_type: Optional[JSON] = None,
+        service_principal_credential: Optional["_models.SecretBase"] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword connect_via: The integration runtime reference.
+        :paramtype connect_via: ~azure.synapse.artifacts.models.IntegrationRuntimeReference
+        :keyword description: Linked service description.
+        :paramtype description: str
+        :keyword parameters: Parameters for linked service.
+        :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+        :keyword annotations: List of tags that can be used for describing the linked service.
+        :paramtype annotations: list[JSON]
+        :keyword artifact_id: The ID of Microsoft Fabric Warehouse artifact. Type: string (or
+         Expression with resultType string). Required.
+        :paramtype artifact_id: JSON
+        :keyword endpoint: The endpoint of Microsoft Fabric Warehouse server. Type: string (or
+         Expression with resultType string). Required.
+        :paramtype endpoint: JSON
+        :keyword workspace_id: The ID of Microsoft Fabric workspace. Type: string (or Expression with
+         resultType string).
+        :paramtype workspace_id: JSON
+        :keyword service_principal_id: The ID of the application used to authenticate against Microsoft
+         Fabric Warehouse. Type: string (or Expression with resultType string).
+        :paramtype service_principal_id: JSON
+        :keyword service_principal_key: The Key of the application used to authenticate against
+         Microsoft Fabric Warehouse.
+        :paramtype service_principal_key: ~azure.synapse.artifacts.models.SecretBase
+        :keyword tenant: The name or ID of the tenant to which the service principal belongs. Type:
+         string (or Expression with resultType string).
+        :paramtype tenant: JSON
+        :keyword encrypted_credential: The encrypted credential used for authentication. Credentials
+         are encrypted using the integration runtime credential manager. Type: string.
+        :paramtype encrypted_credential: str
+        :keyword service_principal_credential_type: The service principal credential type to use in
+         Server-To-Server authentication. 'ServicePrincipalKey' for key/secret, 'ServicePrincipalCert'
+         for certificate. Type: string (or Expression with resultType string).
+        :paramtype service_principal_credential_type: JSON
+        :keyword service_principal_credential: The credential of the service principal object in Azure
+         Active Directory. If servicePrincipalCredentialType is 'ServicePrincipalKey',
+         servicePrincipalCredential can be SecureString or AzureKeyVaultSecretReference. If
+         servicePrincipalCredentialType is 'ServicePrincipalCert', servicePrincipalCredential can only
+         be AzureKeyVaultSecretReference.
+        :paramtype service_principal_credential: ~azure.synapse.artifacts.models.SecretBase
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            connect_via=connect_via,
+            description=description,
+            parameters=parameters,
+            annotations=annotations,
+            **kwargs
+        )
+        self.type: str = "Warehouse"
+        self.artifact_id = artifact_id
+        self.endpoint = endpoint
+        self.workspace_id = workspace_id
+        self.service_principal_id = service_principal_id
+        self.service_principal_key = service_principal_key
+        self.tenant = tenant
+        self.encrypted_credential = encrypted_credential
+        self.service_principal_credential_type = service_principal_credential_type
+        self.service_principal_credential = service_principal_credential
+
+
+class WarehouseSink(CopySink):  # pylint: disable=too-many-instance-attributes
+    """A copy activity Microsoft Fabric Warehouse sink.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Copy sink type. Required.
+    :vartype type: str
+    :ivar write_batch_size: Write batch size. Type: integer (or Expression with resultType
+     integer), minimum: 0.
+    :vartype write_batch_size: JSON
+    :ivar write_batch_timeout: Write batch timeout. Type: string (or Expression with resultType
+     string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype write_batch_timeout: JSON
+    :ivar sink_retry_count: Sink retry count. Type: integer (or Expression with resultType
+     integer).
+    :vartype sink_retry_count: JSON
+    :ivar sink_retry_wait: Sink retry wait. Type: string (or Expression with resultType string),
+     pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype sink_retry_wait: JSON
+    :ivar max_concurrent_connections: The maximum concurrent connection count for the sink data
+     store. Type: integer (or Expression with resultType integer).
+    :vartype max_concurrent_connections: JSON
+    :ivar pre_copy_script: SQL pre-copy script. Type: string (or Expression with resultType
+     string).
+    :vartype pre_copy_script: JSON
+    :ivar allow_copy_command: Indicates to use Copy Command to copy data into SQL Data Warehouse.
+     Type: boolean (or Expression with resultType boolean).
+    :vartype allow_copy_command: JSON
+    :ivar copy_command_settings: Specifies Copy Command related settings when allowCopyCommand is
+     true.
+    :vartype copy_command_settings: ~azure.synapse.artifacts.models.DWCopyCommandSettings
+    :ivar table_option: The option to handle sink table, such as autoCreate. For now only
+     'autoCreate' value is supported. Type: string (or Expression with resultType string).
+    :vartype table_option: JSON
+    :ivar write_behavior: Write behavior when copying data into azure Microsoft Fabric Data
+     Warehouse. Type: DWWriteBehaviorEnum (or Expression with resultType DWWriteBehaviorEnum).
+    :vartype write_behavior: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "write_batch_size": {"key": "writeBatchSize", "type": "object"},
+        "write_batch_timeout": {"key": "writeBatchTimeout", "type": "object"},
+        "sink_retry_count": {"key": "sinkRetryCount", "type": "object"},
+        "sink_retry_wait": {"key": "sinkRetryWait", "type": "object"},
+        "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
+        "pre_copy_script": {"key": "preCopyScript", "type": "object"},
+        "allow_copy_command": {"key": "allowCopyCommand", "type": "object"},
+        "copy_command_settings": {"key": "copyCommandSettings", "type": "DWCopyCommandSettings"},
+        "table_option": {"key": "tableOption", "type": "object"},
+        "write_behavior": {"key": "writeBehavior", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        write_batch_size: Optional[JSON] = None,
+        write_batch_timeout: Optional[JSON] = None,
+        sink_retry_count: Optional[JSON] = None,
+        sink_retry_wait: Optional[JSON] = None,
+        max_concurrent_connections: Optional[JSON] = None,
+        pre_copy_script: Optional[JSON] = None,
+        allow_copy_command: Optional[JSON] = None,
+        copy_command_settings: Optional["_models.DWCopyCommandSettings"] = None,
+        table_option: Optional[JSON] = None,
+        write_behavior: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword write_batch_size: Write batch size. Type: integer (or Expression with resultType
+         integer), minimum: 0.
+        :paramtype write_batch_size: JSON
+        :keyword write_batch_timeout: Write batch timeout. Type: string (or Expression with resultType
+         string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype write_batch_timeout: JSON
+        :keyword sink_retry_count: Sink retry count. Type: integer (or Expression with resultType
+         integer).
+        :paramtype sink_retry_count: JSON
+        :keyword sink_retry_wait: Sink retry wait. Type: string (or Expression with resultType string),
+         pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype sink_retry_wait: JSON
+        :keyword max_concurrent_connections: The maximum concurrent connection count for the sink data
+         store. Type: integer (or Expression with resultType integer).
+        :paramtype max_concurrent_connections: JSON
+        :keyword pre_copy_script: SQL pre-copy script. Type: string (or Expression with resultType
+         string).
+        :paramtype pre_copy_script: JSON
+        :keyword allow_copy_command: Indicates to use Copy Command to copy data into SQL Data
+         Warehouse. Type: boolean (or Expression with resultType boolean).
+        :paramtype allow_copy_command: JSON
+        :keyword copy_command_settings: Specifies Copy Command related settings when allowCopyCommand
+         is true.
+        :paramtype copy_command_settings: ~azure.synapse.artifacts.models.DWCopyCommandSettings
+        :keyword table_option: The option to handle sink table, such as autoCreate. For now only
+         'autoCreate' value is supported. Type: string (or Expression with resultType string).
+        :paramtype table_option: JSON
+        :keyword write_behavior: Write behavior when copying data into azure Microsoft Fabric Data
+         Warehouse. Type: DWWriteBehaviorEnum (or Expression with resultType DWWriteBehaviorEnum).
+        :paramtype write_behavior: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            write_batch_size=write_batch_size,
+            write_batch_timeout=write_batch_timeout,
+            sink_retry_count=sink_retry_count,
+            sink_retry_wait=sink_retry_wait,
+            max_concurrent_connections=max_concurrent_connections,
+            **kwargs
+        )
+        self.type: str = "WarehouseSink"
+        self.pre_copy_script = pre_copy_script
+        self.allow_copy_command = allow_copy_command
+        self.copy_command_settings = copy_command_settings
+        self.table_option = table_option
+        self.write_behavior = write_behavior
+
+
+class WarehouseSource(TabularSource):  # pylint: disable=too-many-instance-attributes
+    """A copy activity Microsoft Fabric Warehouse source.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Copy source type. Required.
+    :vartype type: str
+    :ivar source_retry_count: Source retry count. Type: integer (or Expression with resultType
+     integer).
+    :vartype source_retry_count: JSON
+    :ivar source_retry_wait: Source retry wait. Type: string (or Expression with resultType
+     string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype source_retry_wait: JSON
+    :ivar max_concurrent_connections: The maximum concurrent connection count for the source data
+     store. Type: integer (or Expression with resultType integer).
+    :vartype max_concurrent_connections: JSON
+    :ivar query_timeout: Query timeout. Type: string (or Expression with resultType string),
+     pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+    :vartype query_timeout: JSON
+    :ivar additional_columns: Specifies the additional columns to be added to source data. Type:
+     array of objects(AdditionalColumns) (or Expression with resultType array of objects).
+    :vartype additional_columns: JSON
+    :ivar sql_reader_query: Microsoft Fabric Warehouse reader query. Type: string (or Expression
+     with resultType string).
+    :vartype sql_reader_query: JSON
+    :ivar sql_reader_stored_procedure_name: Name of the stored procedure for a Microsoft Fabric
+     Warehouse source. This cannot be used at the same time as SqlReaderQuery. Type: string (or
+     Expression with resultType string).
+    :vartype sql_reader_stored_procedure_name: JSON
+    :ivar stored_procedure_parameters: Value and type setting for stored procedure parameters.
+     Example: "{Parameter1: {value: "1", type: "int"}}". Type: object (or Expression with resultType
+     object), itemType: StoredProcedureParameter.
+    :vartype stored_procedure_parameters: JSON
+    :ivar isolation_level: Specifies the transaction locking behavior for the Microsoft Fabric
+     Warehouse source. Allowed values:
+     ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default value is
+     ReadCommitted. Type: string (or Expression with resultType string).
+    :vartype isolation_level: JSON
+    :ivar partition_option: The partition mechanism that will be used for Sql read in parallel.
+     Possible values include: "None", "PhysicalPartitionsOfTable", "DynamicRange".
+    :vartype partition_option: JSON
+    :ivar partition_settings: The settings that will be leveraged for Sql source partitioning.
+    :vartype partition_settings: ~azure.synapse.artifacts.models.SqlPartitionSettings
+    """
+
+    _validation = {
+        "type": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "source_retry_count": {"key": "sourceRetryCount", "type": "object"},
+        "source_retry_wait": {"key": "sourceRetryWait", "type": "object"},
+        "max_concurrent_connections": {"key": "maxConcurrentConnections", "type": "object"},
+        "query_timeout": {"key": "queryTimeout", "type": "object"},
+        "additional_columns": {"key": "additionalColumns", "type": "object"},
+        "sql_reader_query": {"key": "sqlReaderQuery", "type": "object"},
+        "sql_reader_stored_procedure_name": {"key": "sqlReaderStoredProcedureName", "type": "object"},
+        "stored_procedure_parameters": {"key": "storedProcedureParameters", "type": "object"},
+        "isolation_level": {"key": "isolationLevel", "type": "object"},
+        "partition_option": {"key": "partitionOption", "type": "object"},
+        "partition_settings": {"key": "partitionSettings", "type": "SqlPartitionSettings"},
+    }
+
+    def __init__(
+        self,
+        *,
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        source_retry_count: Optional[JSON] = None,
+        source_retry_wait: Optional[JSON] = None,
+        max_concurrent_connections: Optional[JSON] = None,
+        query_timeout: Optional[JSON] = None,
+        additional_columns: Optional[JSON] = None,
+        sql_reader_query: Optional[JSON] = None,
+        sql_reader_stored_procedure_name: Optional[JSON] = None,
+        stored_procedure_parameters: Optional[JSON] = None,
+        isolation_level: Optional[JSON] = None,
+        partition_option: Optional[JSON] = None,
+        partition_settings: Optional["_models.SqlPartitionSettings"] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword source_retry_count: Source retry count. Type: integer (or Expression with resultType
+         integer).
+        :paramtype source_retry_count: JSON
+        :keyword source_retry_wait: Source retry wait. Type: string (or Expression with resultType
+         string), pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype source_retry_wait: JSON
+        :keyword max_concurrent_connections: The maximum concurrent connection count for the source
+         data store. Type: integer (or Expression with resultType integer).
+        :paramtype max_concurrent_connections: JSON
+        :keyword query_timeout: Query timeout. Type: string (or Expression with resultType string),
+         pattern: ((\d+).)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+        :paramtype query_timeout: JSON
+        :keyword additional_columns: Specifies the additional columns to be added to source data. Type:
+         array of objects(AdditionalColumns) (or Expression with resultType array of objects).
+        :paramtype additional_columns: JSON
+        :keyword sql_reader_query: Microsoft Fabric Warehouse reader query. Type: string (or Expression
+         with resultType string).
+        :paramtype sql_reader_query: JSON
+        :keyword sql_reader_stored_procedure_name: Name of the stored procedure for a Microsoft Fabric
+         Warehouse source. This cannot be used at the same time as SqlReaderQuery. Type: string (or
+         Expression with resultType string).
+        :paramtype sql_reader_stored_procedure_name: JSON
+        :keyword stored_procedure_parameters: Value and type setting for stored procedure parameters.
+         Example: "{Parameter1: {value: "1", type: "int"}}". Type: object (or Expression with resultType
+         object), itemType: StoredProcedureParameter.
+        :paramtype stored_procedure_parameters: JSON
+        :keyword isolation_level: Specifies the transaction locking behavior for the Microsoft Fabric
+         Warehouse source. Allowed values:
+         ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default value is
+         ReadCommitted. Type: string (or Expression with resultType string).
+        :paramtype isolation_level: JSON
+        :keyword partition_option: The partition mechanism that will be used for Sql read in parallel.
+         Possible values include: "None", "PhysicalPartitionsOfTable", "DynamicRange".
+        :paramtype partition_option: JSON
+        :keyword partition_settings: The settings that will be leveraged for Sql source partitioning.
+        :paramtype partition_settings: ~azure.synapse.artifacts.models.SqlPartitionSettings
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            source_retry_count=source_retry_count,
+            source_retry_wait=source_retry_wait,
+            max_concurrent_connections=max_concurrent_connections,
+            query_timeout=query_timeout,
+            additional_columns=additional_columns,
+            **kwargs
+        )
+        self.type: str = "WarehouseSource"
+        self.sql_reader_query = sql_reader_query
+        self.sql_reader_stored_procedure_name = sql_reader_stored_procedure_name
+        self.stored_procedure_parameters = stored_procedure_parameters
+        self.isolation_level = isolation_level
+        self.partition_option = partition_option
+        self.partition_settings = partition_settings
+
+
+class WarehouseTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
+    """Microsoft Fabric Warehouse dataset.
+
+    All required parameters must be populated in order to send to server.
+
+    :ivar additional_properties: Unmatched properties from the message are deserialized to this
+     collection.
+    :vartype additional_properties: dict[str, JSON]
+    :ivar type: Type of dataset. Required.
+    :vartype type: str
+    :ivar description: Dataset description.
+    :vartype description: str
+    :ivar structure: Columns that define the structure of the dataset. Type: array (or Expression
+     with resultType array), itemType: DatasetDataElement.
+    :vartype structure: JSON
+    :ivar schema: Columns that define the physical type schema of the dataset. Type: array (or
+     Expression with resultType array), itemType: DatasetSchemaDataElement.
+    :vartype schema: JSON
+    :ivar linked_service_name: Linked service reference. Required.
+    :vartype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
+    :ivar parameters: Parameters for dataset.
+    :vartype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+    :ivar annotations: List of tags that can be used for describing the Dataset.
+    :vartype annotations: list[JSON]
+    :ivar folder: The folder that this Dataset is in. If not specified, Dataset will appear at the
+     root level.
+    :vartype folder: ~azure.synapse.artifacts.models.DatasetFolder
+    :ivar schema_type_properties_schema: The schema name of the Microsoft Fabric Warehouse. Type:
+     string (or Expression with resultType string).
+    :vartype schema_type_properties_schema: JSON
+    :ivar table: The table name of the Microsoft Fabric Warehouse. Type: string (or Expression with
+     resultType string).
+    :vartype table: JSON
+    """
+
+    _validation = {
+        "type": {"required": True},
+        "linked_service_name": {"required": True},
+    }
+
+    _attribute_map = {
+        "additional_properties": {"key": "", "type": "{object}"},
+        "type": {"key": "type", "type": "str"},
+        "description": {"key": "description", "type": "str"},
+        "structure": {"key": "structure", "type": "object"},
+        "schema": {"key": "schema", "type": "object"},
+        "linked_service_name": {"key": "linkedServiceName", "type": "LinkedServiceReference"},
+        "parameters": {"key": "parameters", "type": "{ParameterSpecification}"},
+        "annotations": {"key": "annotations", "type": "[object]"},
+        "folder": {"key": "folder", "type": "DatasetFolder"},
+        "schema_type_properties_schema": {"key": "typeProperties.schema", "type": "object"},
+        "table": {"key": "typeProperties.table", "type": "object"},
+    }
+
+    def __init__(
+        self,
+        *,
+        linked_service_name: "_models.LinkedServiceReference",
+        additional_properties: Optional[Dict[str, JSON]] = None,
+        description: Optional[str] = None,
+        structure: Optional[JSON] = None,
+        schema: Optional[JSON] = None,
+        parameters: Optional[Dict[str, "_models.ParameterSpecification"]] = None,
+        annotations: Optional[List[JSON]] = None,
+        folder: Optional["_models.DatasetFolder"] = None,
+        schema_type_properties_schema: Optional[JSON] = None,
+        table: Optional[JSON] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        :keyword additional_properties: Unmatched properties from the message are deserialized to this
+         collection.
+        :paramtype additional_properties: dict[str, JSON]
+        :keyword description: Dataset description.
+        :paramtype description: str
+        :keyword structure: Columns that define the structure of the dataset. Type: array (or
+         Expression with resultType array), itemType: DatasetDataElement.
+        :paramtype structure: JSON
+        :keyword schema: Columns that define the physical type schema of the dataset. Type: array (or
+         Expression with resultType array), itemType: DatasetSchemaDataElement.
+        :paramtype schema: JSON
+        :keyword linked_service_name: Linked service reference. Required.
+        :paramtype linked_service_name: ~azure.synapse.artifacts.models.LinkedServiceReference
+        :keyword parameters: Parameters for dataset.
+        :paramtype parameters: dict[str, ~azure.synapse.artifacts.models.ParameterSpecification]
+        :keyword annotations: List of tags that can be used for describing the Dataset.
+        :paramtype annotations: list[JSON]
+        :keyword folder: The folder that this Dataset is in. If not specified, Dataset will appear at
+         the root level.
+        :paramtype folder: ~azure.synapse.artifacts.models.DatasetFolder
+        :keyword schema_type_properties_schema: The schema name of the Microsoft Fabric Warehouse.
+         Type: string (or Expression with resultType string).
+        :paramtype schema_type_properties_schema: JSON
+        :keyword table: The table name of the Microsoft Fabric Warehouse. Type: string (or Expression
+         with resultType string).
+        :paramtype table: JSON
+        """
+        super().__init__(
+            additional_properties=additional_properties,
+            description=description,
+            structure=structure,
+            schema=schema,
+            linked_service_name=linked_service_name,
+            parameters=parameters,
+            annotations=annotations,
+            folder=folder,
+            **kwargs
+        )
+        self.type: str = "WarehouseTable"
+        self.schema_type_properties_schema = schema_type_properties_schema
+        self.table = table
+
+
 class WebActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attributes
     """Web activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -62394,14 +66429,15 @@ class WebActivity(ExecutionActivity):  # pylint: disable=too-many-instance-attri
 class WebActivityAuthentication(_serialization.Model):
     """Web activity authentication properties.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: Web activity authentication (Basic/ClientCertificate/MSI). Required.
     :vartype type: str
     :ivar pfx: Base64-encoded contents of a PFX file.
     :vartype pfx: ~azure.synapse.artifacts.models.SecretBase
-    :ivar username: Web activity authentication user name for basic authentication.
-    :vartype username: str
+    :ivar username: Web activity authentication user name for basic authentication. Type: string
+     (or Expression with resultType string).
+    :vartype username: JSON
     :ivar password: Password for the PFX file or basic authentication.
     :vartype password: ~azure.synapse.artifacts.models.SecretBase
     :ivar resource: Resource for which Azure Auth token will be requested when using MSI
@@ -62421,7 +66457,7 @@ class WebActivityAuthentication(_serialization.Model):
     _attribute_map = {
         "type": {"key": "type", "type": "str"},
         "pfx": {"key": "pfx", "type": "SecretBase"},
-        "username": {"key": "username", "type": "str"},
+        "username": {"key": "username", "type": "object"},
         "password": {"key": "password", "type": "SecretBase"},
         "resource": {"key": "resource", "type": "object"},
         "user_tenant": {"key": "userTenant", "type": "object"},
@@ -62433,7 +66469,7 @@ class WebActivityAuthentication(_serialization.Model):
         *,
         type: str,
         pfx: Optional["_models.SecretBase"] = None,
-        username: Optional[str] = None,
+        username: Optional[JSON] = None,
         password: Optional["_models.SecretBase"] = None,
         resource: Optional[JSON] = None,
         user_tenant: Optional[JSON] = None,
@@ -62445,8 +66481,9 @@ class WebActivityAuthentication(_serialization.Model):
         :paramtype type: str
         :keyword pfx: Base64-encoded contents of a PFX file.
         :paramtype pfx: ~azure.synapse.artifacts.models.SecretBase
-        :keyword username: Web activity authentication user name for basic authentication.
-        :paramtype username: str
+        :keyword username: Web activity authentication user name for basic authentication. Type: string
+         (or Expression with resultType string).
+        :paramtype username: JSON
         :keyword password: Password for the PFX file or basic authentication.
         :paramtype password: ~azure.synapse.artifacts.models.SecretBase
         :keyword resource: Resource for which Azure Auth token will be requested when using MSI
@@ -62475,7 +66512,7 @@ class WebLinkedServiceTypeProperties(_serialization.Model):
     You probably want to use the sub-classes and not this class directly. Known sub-classes are:
     WebAnonymousAuthentication, WebBasicAuthentication, WebClientCertificateAuthentication
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar url: The URL of the web service endpoint, e.g. http://www.microsoft.com . Type: string
      (or Expression with resultType string). Required.
@@ -62517,7 +66554,7 @@ class WebLinkedServiceTypeProperties(_serialization.Model):
 class WebAnonymousAuthentication(WebLinkedServiceTypeProperties):
     """A WebLinkedService that uses anonymous authentication to communicate with an HTTP endpoint.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar url: The URL of the web service endpoint, e.g. http://www.microsoft.com . Type: string
      (or Expression with resultType string). Required.
@@ -62550,7 +66587,7 @@ class WebAnonymousAuthentication(WebLinkedServiceTypeProperties):
 class WebBasicAuthentication(WebLinkedServiceTypeProperties):
     """A WebLinkedService that uses basic authentication to communicate with an HTTP endpoint.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar url: The URL of the web service endpoint, e.g. http://www.microsoft.com . Type: string
      (or Expression with resultType string). Required.
@@ -62601,7 +66638,7 @@ class WebClientCertificateAuthentication(WebLinkedServiceTypeProperties):
     HTTP endpoint. This scheme follows mutual authentication; the server must also provide valid
     credentials to the client.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar url: The URL of the web service endpoint, e.g. http://www.microsoft.com . Type: string
      (or Expression with resultType string). Required.
@@ -62648,7 +66685,7 @@ class WebClientCertificateAuthentication(WebLinkedServiceTypeProperties):
 class WebHookActivity(ControlActivity):  # pylint: disable=too-many-instance-attributes
     """WebHook activity.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -62805,7 +66842,7 @@ class WebHookActivity(ControlActivity):  # pylint: disable=too-many-instance-att
 class WebLinkedService(LinkedService):
     """Web linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -62880,7 +66917,7 @@ class WebLinkedService(LinkedService):
 class WebSource(CopySource):
     """A copy activity source for web page table.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -62955,7 +66992,7 @@ class WebSource(CopySource):
 class WebTableDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """The dataset points to a HTML table in the web page.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -63071,10 +67108,10 @@ class Workspace(TrackedResource):  # pylint: disable=too-many-instance-attribute
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.  # pylint: disable=line-too-long
     :vartype id: str
     :ivar name: The name of the resource.
     :vartype name: str
@@ -63262,7 +67299,7 @@ class WorkspaceIdentity(_serialization.Model):
 
     Variables are only populated by the server, and will be ignored when sending a request.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar type: The identity type. Currently the only supported type is 'SystemAssigned'. Required.
      Default value is "SystemAssigned".
@@ -63452,7 +67489,7 @@ class WorkspaceUpdateParameters(_serialization.Model):
 class XeroLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Xero Service linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -63595,7 +67632,7 @@ class XeroLinkedService(LinkedService):  # pylint: disable=too-many-instance-att
 class XeroObjectDataset(Dataset):
     """Xero Service dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -63697,7 +67734,7 @@ class XeroObjectDataset(Dataset):
 class XeroSource(TabularSource):
     """A copy activity Xero Service source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -63790,7 +67827,7 @@ class XeroSource(TabularSource):
 class XmlDataset(Dataset):  # pylint: disable=too-many-instance-attributes
     """Xml dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -63922,7 +67959,7 @@ class XmlDataset(Dataset):  # pylint: disable=too-many-instance-attributes
 class XmlReadSettings(FormatReadSettings):
     """Xml read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -64005,7 +68042,7 @@ class XmlReadSettings(FormatReadSettings):
 class XmlSource(CopySource):
     """A copy activity Xml source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -64094,7 +68131,7 @@ class XmlSource(CopySource):
 class ZendeskLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Linked service for Zendesk.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -64216,7 +68253,7 @@ class ZendeskLinkedService(LinkedService):  # pylint: disable=too-many-instance-
 class ZipDeflateReadSettings(CompressionReadSettings):
     """The ZipDeflate compression read settings.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -64261,7 +68298,7 @@ class ZipDeflateReadSettings(CompressionReadSettings):
 class ZohoLinkedService(LinkedService):  # pylint: disable=too-many-instance-attributes
     """Zoho server linked service.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -64392,7 +68429,7 @@ class ZohoLinkedService(LinkedService):  # pylint: disable=too-many-instance-att
 class ZohoObjectDataset(Dataset):
     """Zoho server dataset.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.
@@ -64494,7 +68531,7 @@ class ZohoObjectDataset(Dataset):
 class ZohoSource(TabularSource):
     """A copy activity Zoho server source.
 
-    All required parameters must be populated in order to send to Azure.
+    All required parameters must be populated in order to send to server.
 
     :ivar additional_properties: Unmatched properties from the message are deserialized to this
      collection.

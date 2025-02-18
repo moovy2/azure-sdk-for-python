@@ -10,7 +10,7 @@ urlFragment: containerregistry-samples
 
 # Samples for Azure Container Registry
 
-These code samples show common scenario operations with the Azure Container Registry client library. The code samples assume an environment variable `CONTAINERREGISTRY_ENDPOINT` is set, which includes the name of the login server and the `https://` prefix. For more information on using AAD with Azure Container Registry, please see the service's [Authentication Overview](https://docs.microsoft.com/azure/container-registry/container-registry-authentication).
+These code samples show common scenario operations with the Azure Container Registry client library. The code samples assume an environment variable `CONTAINERREGISTRY_ENDPOINT` is set, which includes the name of the login server and the `https://` prefix. For more information on using AAD with Azure Container Registry, please see the service's [Authentication Overview](https://learn.microsoft.com/azure/container-registry/container-registry-authentication).
 
 
 |**File Name**|**Description**|
@@ -23,7 +23,7 @@ These code samples show common scenario operations with the Azure Container Regi
 |[sample_set_get_image.py][set_get_image] ([sample_set_get_image_async.py][set_get_image_async]) | Set and get a manifest, and upload and download a blob to and from a repository |
 
 ### Prerequisites
-* Python 3.7 or later is required to use this package.
+* Python 3.8 or later is required to use this package.
 * You need an [Azure subscription][azure_sub] and a [Container Registry account][container_registry_docs] to use this package.
 
 ## Setup
@@ -49,8 +49,8 @@ Check out the [API reference documentation][rest_docs] to learn more about what 
 
 <!-- LINKS -->
 [azure_sub]: https://azure.microsoft.com/free/
-[rest_docs]: https://docs.microsoft.com/rest/api/containerregistry/
-[container_registry_docs]: https://docs.microsoft.com/azure/container-registry/container-registry-intro
+[rest_docs]: https://learn.microsoft.com/rest/api/containerregistry/
+[container_registry_docs]: https://learn.microsoft.com/azure/container-registry/container-registry-intro
 [hello_world]: https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/containerregistry/azure-containerregistry/samples/sample_hello_world.py
 [hello_world_async]: https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/containerregistry/azure-containerregistry/samples/sample_hello_world_async.py
 [delete_tags]: https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/containerregistry/azure-containerregistry/samples/sample_delete_tags.py

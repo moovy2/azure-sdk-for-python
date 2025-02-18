@@ -1,16 +1,47 @@
 # Release History
 
-## 12.4.4 (Unreleased)
+## 12.7.0b1 (Unreleased)
+
+### Features Added
+* Added to support customized encoding and decoding in entity CRUD operations.
+* Added to support Entity property in Tuple and Enum types.
+* Added to support flatten Entity metadata in entity deserialization by passing kwarg `flatten_result_entity` when creating clients.
+
+### Bugs Fixed
+* Fixed duplicate odata tag bug in encoder when Entity property has "@odata.type" provided.
+* Fixed a bug in encoder that int32 and int64 are mapped to int32 when no "@odata.type" provided.
+
+### Other Changes
+* Removed value range validation for Entity property in int64.
+
+## 12.6.0 (2024-11-21)
+
+### Features Added
+* Added support for Microsoft Entra auth with Azure Cosmos DB for Table's OAuth scope (`https://cosmos.azure.com/.default`).
+
+## 12.5.0 (2024-01-10)
+
+### Bugs Fixed
+* Fixed issue in serializing EntityProperty tuples where a value of None could be serialized as the string "None".
+
+### Other Changes
+* Refactored batching code to use latest Core models and improve typing.
+* Added a public type `EntityMetadata`, it is used in `TableEntity`'s metadata.
+* Added support for Python 3.12.
+* Python 3.7 is no longer supported. Please use Python version 3.8 or later.
+
+## 12.4.4 (2023-09-14)
 
 ### Features Added
 * Enabled to specify resource type `container` in account SAS access.
 
-### Breaking Changes
-
 ### Bugs Fixed
+* Fixed a bug when submitting transactions with an empty operation list. ([#31471](https://github.com/Azure/azure-sdk-for-python/issues/31471))
+* Fixed a bug when decoding response body in string type. Thanks @kldtz for the contribution! ([#31265](https://github.com/Azure/azure-sdk-for-python/pull/31265))
+* Fixed a bug when retrieving an entity with partition key and/or row key in empty string, the empty string values were disappeared in result. ([#31920](https://github.com/Azure/azure-sdk-for-python/issues/31920))
 
 ### Other Changes
-* Bumped minimum dependency on `azure-core` to `>=1.27.1`. ([#28918](https://github.com/Azure/azure-sdk-for-python/issues/28918))
+* Bumped minimum dependency on `azure-core` to `>=1.29.4`. ([#28918](https://github.com/Azure/azure-sdk-for-python/issues/28918) [#31471](https://github.com/Azure/azure-sdk-for-python/issues/31471))
 
 ## 12.4.3 (2023-06-13)
 

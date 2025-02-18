@@ -2,9 +2,9 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # ---------------------------------------------------------
 
-# pylint: disable=protected-access,no-member
+# pylint: disable=protected-access
 
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from azure.ai.ml._restclient.v2023_04_01_preview.models import AutoMLJob as RestAutoMLJob
 from azure.ai.ml._restclient.v2023_04_01_preview.models import Forecasting as RestForecasting
@@ -25,7 +25,17 @@ from azure.ai.ml.entities._util import load_from_dict
 
 
 class ForecastingJob(AutoMLTabular):
-    """Configuration for AutoML Forecasting Task."""
+    """
+    Configuration for AutoML Forecasting Task.
+
+    :param primary_metric: The primary metric to use for model selection.
+    :type primary_metric: Optional[str]
+    :param forecasting_settings: The settings for the forecasting task.
+    :type forecasting_settings:
+        Optional[~azure.ai.ml.automl.ForecastingSettings]
+    :param kwargs: Job-specific arguments
+    :type kwargs: Dict[str, Any]
+    """
 
     _DEFAULT_PRIMARY_METRIC = ForecastingPrimaryMetrics.NORMALIZED_ROOT_MEAN_SQUARED_ERROR
 
@@ -34,17 +44,9 @@ class ForecastingJob(AutoMLTabular):
         *,
         primary_metric: Optional[str] = None,
         forecasting_settings: Optional[ForecastingSettings] = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
-        """Initialize a new AutoML Forecasting task.
-
-        :param primary_metric: The primary metric to use for optimization
-        :type primary_metric: str
-        :param forecasting_settings: The settings for the forecasting task
-        :type forecasting_settings: ForecastingSettings
-        :param kwargs: Job-specific arguments
-        :type kwargs: dict
-        """
+        """Initialize a new AutoML Forecasting task."""
         # Extract any task specific settings
         featurization = kwargs.pop("featurization", None)
         limits = kwargs.pop("limits", None)
@@ -62,11 +64,23 @@ class ForecastingJob(AutoMLTabular):
         self._forecasting_settings = forecasting_settings
 
     @property
-    def primary_metric(self):
+    def primary_metric(self) -> Optional[str]:
+        """
+        Return the primary metric to use for model selection.
+
+        :return: The primary metric for model selection.
+        :rtype: Optional[str]
+        """
         return self._primary_metric
 
     @primary_metric.setter
-    def primary_metric(self, value: Union[str, ForecastingPrimaryMetrics]):
+    def primary_metric(self, value: Union[str, ForecastingPrimaryMetrics]) -> None:
+        """
+        Set the primary metric to use for model selection.
+
+        :param value: The primary metric for model selection.
+        :type: Union[str, ~azure.ai.ml.automl.ForecastingPrimaryMetrics]
+        """
         if is_data_binding_expression(str(value), ["parent"]):
             self._primary_metric = value
             return
@@ -76,12 +90,28 @@ class ForecastingJob(AutoMLTabular):
             else ForecastingPrimaryMetrics[camel_to_snake(value).upper()]
         )
 
-    @property
+    @property  # type: ignore
     def training(self) -> ForecastingTrainingSettings:
+        """
+        Return the forecast training settings.
+
+        :return: training settings.
+        :rtype: ~azure.ai.ml.automl.ForecastingTrainingSettings
+        """
         return self._training or ForecastingTrainingSettings()
 
+    @training.setter
+    def training(self, value: Union[Dict, ForecastingTrainingSettings]) -> None:  # pylint: disable=unused-argument
+        ...
+
     @property
-    def forecasting_settings(self) -> ForecastingSettings:
+    def forecasting_settings(self) -> Optional[ForecastingSettings]:
+        """
+        Return the forecast settings.
+
+        :return: forecast settings.
+        :rtype: ~azure.ai.ml.automl.ForecastingSettings
+        """
         return self._forecasting_settings
 
     def set_forecast_settings(
@@ -113,17 +143,17 @@ class ForecastingJob(AutoMLTabular):
 
             Units are based on the time interval of your training data, e.g., monthly, weekly that the forecaster
             should predict out. When task type is forecasting, this parameter is required. For more information on
-            setting forecasting parameters, see `Auto-train a time-series forecast model <https://docs.microsoft.com/
+            setting forecasting parameters, see `Auto-train a time-series forecast model <https://learn.microsoft.com/
             azure/machine-learning/how-to-auto-train-forecast>`_.
-        :type forecast_horizon: Optional[Union[str, int]]
+        :type forecast_horizon: Optional[Union[int, str]]
         :keyword time_series_id_column_names:
-            The names of columns used to group a timeseries.
+            The names of columns used to group a time series.
             It can be used to create multiple series. If time series id column names is not defined or
             the identifier columns specified do not identify all the series in the dataset, the time series identifiers
-            will be automatically created for your dataset.
+            will be automatically created for your data set.
         :paramtype time_series_id_column_names: Optional[Union[str, List[str]]]
-        :keyword target_lags:
-            The number of past periods to lag from the target column. By default the lags are turned off.
+        :keyword target_lags: The number of past periods to lag from the target column. By default the lags are turned
+            off.
 
             When forecasting, this parameter represents the number of rows to lag the target values based
             on the frequency of the data. This is represented as a list or single integer. Lag should be used
@@ -132,7 +162,7 @@ class ForecastingJob(AutoMLTabular):
             month may depend on the price of specific commodities 3 months prior. In this example, you may want
             to lag the target (demand) negatively by 3 months so that the model is training on the correct
             relationship. For more information, see `Auto-train a time-series forecast model
-            <https://docs.microsoft.com/azure/machine-learning/how-to-auto-train-forecast>`_.
+            <https://learn.microsoft.com/azure/machine-learning/how-to-auto-train-forecast>`_.
 
             **Note on auto detection of target lags and rolling window size.
             Please see the corresponding comments in the rolling window section.**
@@ -153,38 +183,41 @@ class ForecastingJob(AutoMLTabular):
             #. We scan the PACF values from the beginning and the value before the first insignificant
                auto correlation will designate the lag. If first significant element (value correlate with
                itself) is followed by insignificant, the lag will be 0 and we will not use look back features.
+
         :type target_lags: Optional[Union[str, int, List[int]]]
         :keyword feature_lags: Flag for generating lags for the numeric features with 'auto' or None.
         :paramtype feature_lags: Optional[str]
-        :keyword target_rolling_window_size:
-            The number of past periods used to create a rolling window average of the target column.
+        :keyword target_rolling_window_size: The number of past periods used to create a rolling window average of the
+            target column.
 
             When forecasting, this parameter represents `n` historical periods to use to generate forecasted values,
             <= training set size. If omitted, `n` is the full training set size. Specify this parameter
             when you only want to consider a certain amount of history when training the model.
             If set to 'auto', rolling window will be estimated as the last
             value where the PACF is more then the significance threshold. Please see target_lags section for details.
-        :paramtype target_rolling_window_size: Optional[Union[int, str]]
+        :paramtype target_rolling_window_size: Optional[Union[str, int]]
         :keyword country_or_region_for_holidays: The country/region used to generate holiday features.
             These should be ISO 3166 two-letter country/region codes, for example 'US' or 'GB'.
         :paramtype country_or_region_for_holidays: Optional[str]
         :keyword use_stl: Configure STL Decomposition of the time-series target column.
-                    use_stl can take three values: None (default) - no stl decomposition, 'season' - only generate
-                    season component and season_trend - generate both season and trend components.
+            use_stl can take three values: None (default) - no stl decomposition, 'season' - only generate
+            season component and season_trend - generate both season and trend components.
         :type use_stl: Optional[str]
         :keyword seasonality: Set time series seasonality as an integer multiple of the series frequency.
-                    If seasonality is set to 'auto', it will be inferred.
-                    If set to None, the time series is assumed non-seasonal which is equivalent to seasonality=1.
+            If seasonality is set to 'auto', it will be inferred.
+            If set to None, the time series is assumed non-seasonal which is equivalent to seasonality=1.
         :paramtype seasonality: Optional[Union[int, str]
         :keyword short_series_handling_config:
             The parameter defining how if AutoML should handle short time series.
 
             Possible values: 'auto' (default), 'pad', 'drop' and None.
+
             * **auto** short series will be padded if there are no long series,
-            otherwise short series will be dropped.
+                otherwise short series will be dropped.
             * **pad** all the short series will be padded.
             * **drop**  all the short series will be dropped".
             * **None** the short series will not be modified.
+
             If set to 'pad', the table will be padded with the zeroes and
             empty values for the regressors and random values for target with the mean
             equal to target value median for given time series id. If median is more or equal
@@ -217,25 +250,27 @@ class ForecastingJob(AutoMLTabular):
             short_series_handling for brevity are marked as handling_configuration and handling
             respectively).
 
-            +-----------+------------------------+--------------------+----------------------------------+
-            |  handling | handling_configuration | resulting handling | resulting handling_configuration |
-            +===========+========================+====================+==================================+
-            | True      | auto                   | True               | auto                             |
-            +-----------+------------------------+--------------------+----------------------------------+
-            | True      | pad                    | True               | auto                             |
-            +-----------+------------------------+--------------------+----------------------------------+
-            | True      | drop                   | True               | auto                             |
-            +-----------+------------------------+--------------------+----------------------------------+
-            | True      | None                   | False              | None                             |
-            +-----------+------------------------+--------------------+----------------------------------+
-            | False     | auto                   | False              | None                             |
-            +-----------+------------------------+--------------------+----------------------------------+
-            | False     | pad                    | False              | None                             |
-            +-----------+------------------------+--------------------+----------------------------------+
-            | False     | drop                   | False              | None                             |
-            +-----------+------------------------+--------------------+----------------------------------+
-            | False     | None                   | False              | None                             |
-            +-----------+------------------------+--------------------+----------------------------------+
+            +------------+--------------------------+----------------------+-----------------------------+
+            | | handling | | handling               | | resulting          | | resulting                 |
+            |            | | configuration          | | handling           | | handling                  |
+            |            |                          |                      | | configuration             |
+            +============+==========================+======================+=============================+
+            | True       | auto                     | True                 | auto                        |
+            +------------+--------------------------+----------------------+-----------------------------+
+            | True       | pad                      | True                 | auto                        |
+            +------------+--------------------------+----------------------+-----------------------------+
+            | True       | drop                     | True                 | auto                        |
+            +------------+--------------------------+----------------------+-----------------------------+
+            | True       | None                     | False                | None                        |
+            +------------+--------------------------+----------------------+-----------------------------+
+            | False      | auto                     | False                | None                        |
+            +------------+--------------------------+----------------------+-----------------------------+
+            | False      | pad                      | False                | None                        |
+            +------------+--------------------------+----------------------+-----------------------------+
+            | False      | drop                     | False                | None                        |
+            +------------+--------------------------+----------------------+-----------------------------+
+            | False      | None                     | False                | None                        |
+            +------------+--------------------------+----------------------+-----------------------------+
 
         :type short_series_handling_config: Optional[str]
         :keyword frequency: Forecast frequency.
@@ -250,10 +285,10 @@ class ForecastingJob(AutoMLTabular):
             https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#dateoffset-objects
         :type frequency: Optional[str]
         :keyword target_aggregate_function: The function to be used to aggregate the time series target
-                                            column to conform to a user specified frequency. If the
-                                            target_aggregation_function is set, but the freq parameter
-                                            is not set, the error is raised. The possible target
-                                            aggregation functions are: "sum", "max", "min" and "mean".
+            column to conform to a user specified frequency. If the target_aggregation_function is set,
+            but the freq parameter is not set, the error is raised. The possible target aggregation
+            functions are: "sum", "max", "min" and "mean".
+
                 * The target column values are aggregated based on the specified operation.
                   Typically, sum is appropriate for most scenarios.
                 * Numerical predictor columns in your data are aggregated by sum, mean, minimum value,
@@ -263,34 +298,55 @@ class ForecastingJob(AutoMLTabular):
                   the most prominent category in the window.
                 * Date predictor columns are aggregated by minimum value, maximum value and mode.
 
-                +----------------+-----------------------------+---------------------------------------------+
-                |      freq      | target_aggregation_function |      Data regularity fixing mechanism       |
-                +================+=============================+=============================================+
-                | None (Default) | None (Default)              | The aggregation is not applied.             |
-                |                |                             | If the valid frequency can not be           |
-                |                |                             | determined the error will be raised.        |
-                +----------------+-----------------------------+---------------------------------------------+
-                | Some Value     | None (Default)              | The aggregation is not applied.             |
-                |                |                             | If the number of data points compliant      |
-                |                |                             | to given frequency grid is less then 90%    |
-                |                |                             | these points will be removed, otherwise     |
-                |                |                             | the error will be raised.                   |
-                +----------------+-----------------------------+---------------------------------------------+
-                | None (Default) | Aggregation function        | The error about missing frequency parameter |
-                |                |                             | is raised.                                  |
-                +----------------+-----------------------------+---------------------------------------------+
-                | Some Value     | Aggregation function        | Aggregate to frequency using provided       |
-                |                |                             | aggregation function.                       |
-                +----------------+-----------------------------+---------------------------------------------+
+                +----------------+-------------------------------+--------------------------------------+
+                |     | freq     | | target_aggregation_function | | Data regularity                    |
+                |                |                               | | fixing mechanism                   |
+                +================+===============================+======================================+
+                | None (Default) | None (Default)                | | The aggregation                    |
+                |                |                               | | is not applied.                    |
+                |                |                               | | If the valid                       |
+                |                |                               | | frequency can                      |
+                |                |                               | | not be                             |
+                |                |                               | | determined                         |
+                |                |                               | | the error                          |
+                |                |                               | | will be raised.                    |
+                +----------------+-------------------------------+--------------------------------------+
+                | Some Value     | None (Default)                | | The aggregation                    |
+                |                |                               | | is not applied.                    |
+                |                |                               | | If the number                      |
+                |                |                               | | of data points                     |
+                |                |                               | | compliant to                       |
+                |                |                               | | given frequency                    |
+                |                |                               | | grid is                            |
+                |                |                               | | less then 90%                      |
+                |                |                               | | these points                       |
+                |                |                               | | will be                            |
+                |                |                               | | removed,                           |
+                |                |                               | | otherwise                          |
+                |                |                               | | the error will                     |
+                |                |                               | | be raised.                         |
+                +----------------+-------------------------------+--------------------------------------+
+                | None (Default) | Aggregation function          | | The error about                    |
+                |                |                               | | missing                            |
+                |                |                               | | frequency                          |
+                |                |                               | | parameter is                       |
+                |                |                               | | raised.                            |
+                +----------------+-------------------------------+--------------------------------------+
+                | Some Value     | Aggregation function          | | Aggregate to                       |
+                |                |                               | | frequency using                    |
+                |                |                               | | provided                           |
+                |                |                               | | aggregation                        |
+                |                |                               | | function.                          |
+                +----------------+-------------------------------+--------------------------------------+
 
         :type target_aggregate_function: Optional[str]
-        :keyword cv_step_size:
-            Number of periods between the origin_time of one CV fold and the next fold. For
-            example, if `n_step` = 3 for daily data, the origin time for each fold will be
-            three days apart.
+        :keyword cv_step_size: Number of periods between the origin_time of one CV fold and the next fold.
+            For example, if `n_step` = 3 for daily data, the origin time for each fold will be three days apart.
         :paramtype cv_step_size: Optional[int]
-        :keyword features_unknown_at_forecast_time:
-            The column of features/regressors that are available at training time but unknown at forecast time.
+        :keyword features_unknown_at_forecast_time: The feature columns that are available for training but
+            unknown at the time of forecast/inference. If features_unknown_at_forecast_time is set to an empty
+            list, it is assumed that all the feature columns in the dataset are known at inference time. If this
+            parameter is not set the support for future features is not enabled.
         :paramtype features_unknown_at_forecast_time: Optional[Union[str, List[str]]]
         """
         self._forecasting_settings = self._forecasting_settings or ForecastingSettings()
@@ -369,7 +425,7 @@ class ForecastingJob(AutoMLTabular):
         :keyword enable_onnx_compatible_models:
             Whether to enable or disable enforcing the ONNX-compatible models.
             The default is False. For more information about Open Neural Network Exchange (ONNX) and Azure Machine
-            Learning, see this `article <https://docs.microsoft.com/azure/machine-learning/concept-onnx>`__.
+            Learning, see this `article <https://learn.microsoft.com/azure/machine-learning/concept-onnx>`__.
         :type enable_onnx_compatible: Optional[bool]
         :keyword enable_dnn_training:
             Whether to include DNN based models during model selection.
@@ -378,7 +434,7 @@ class ForecastingJob(AutoMLTabular):
         :keyword enable_model_explainability:
             Whether to enable explaining the best AutoML model at the end of all AutoML training iterations.
             For more information, see `Interpretability: model explanations in automated machine learning
-            <https://docs.microsoft.com/azure/machine-learning/how-to-machine-learning-interpretability-automl>`__.
+            <https://learn.microsoft.com/azure/machine-learning/how-to-machine-learning-interpretability-automl>`__.
             , defaults to None
         :type enable_model_explainability: Optional[bool]
         :keyword enable_stack_ensemble:
@@ -387,13 +443,13 @@ class ForecastingJob(AutoMLTabular):
             Similarly, for Timeseries tasks, StackEnsemble iteration will be disabled by default, to avoid risks of
             overfitting due to small training set used in fitting the meta learner.
             For more information about ensembles, see `Ensemble configuration
-            <https://docs.microsoft.com/azure/machine-learning/how-to-configure-auto-train#ensemble>`__
+            <https://learn.microsoft.com/azure/machine-learning/how-to-configure-auto-train#ensemble>`__
             , defaults to None
         :type enable_stack_ensemble: Optional[bool]
         :keyword enable_vote_ensemble:
             Whether to enable/disable VotingEnsemble iteration.
             For more information about ensembles, see `Ensemble configuration
-            <https://docs.microsoft.com/azure/machine-learning/how-to-configure-auto-train#ensemble>`__
+            <https://learn.microsoft.com/azure/machine-learning/how-to-configure-auto-train#ensemble>`__
             , defaults to None
         :type enable_vote_ensemble: Optional[bool]
         :keyword stack_ensemble_settings:
@@ -440,26 +496,46 @@ class ForecastingJob(AutoMLTabular):
 
         # Disable stack ensemble by default, since it is currently not supported for forecasting tasks
         if enable_stack_ensemble is None:
-            self._training.enable_stack_ensemble = False
+            if self._training is not None:
+                self._training.enable_stack_ensemble = False
 
     def _to_rest_object(self) -> JobBase:
-        forecasting_task = RestForecasting(
-            target_column_name=self.target_column_name,
-            training_data=self.training_data,
-            validation_data=self.validation_data,
-            validation_data_size=self.validation_data_size,
-            weight_column_name=self.weight_column_name,
-            cv_split_column_names=self.cv_split_column_names,
-            n_cross_validations=self.n_cross_validations,
-            test_data=self.test_data,
-            test_data_size=self.test_data_size,
-            featurization_settings=self._featurization._to_rest_object() if self._featurization else None,
-            limit_settings=self._limits._to_rest_object() if self._limits else None,
-            training_settings=self._training._to_rest_object() if self._training else None,
-            primary_metric=self.primary_metric,
-            log_verbosity=self.log_verbosity,
-            forecasting_settings=self._forecasting_settings._to_rest_object(),
-        )
+        if self._forecasting_settings is not None:
+            forecasting_task = RestForecasting(
+                target_column_name=self.target_column_name,
+                training_data=self.training_data,
+                validation_data=self.validation_data,
+                validation_data_size=self.validation_data_size,
+                weight_column_name=self.weight_column_name,
+                cv_split_column_names=self.cv_split_column_names,
+                n_cross_validations=self.n_cross_validations,
+                test_data=self.test_data,
+                test_data_size=self.test_data_size,
+                featurization_settings=self._featurization._to_rest_object() if self._featurization else None,
+                limit_settings=self._limits._to_rest_object() if self._limits else None,
+                training_settings=self._training._to_rest_object() if self._training else None,
+                primary_metric=self.primary_metric,
+                log_verbosity=self.log_verbosity,
+                forecasting_settings=self._forecasting_settings._to_rest_object(),
+            )
+        else:
+            forecasting_task = RestForecasting(
+                target_column_name=self.target_column_name,
+                training_data=self.training_data,
+                validation_data=self.validation_data,
+                validation_data_size=self.validation_data_size,
+                weight_column_name=self.weight_column_name,
+                cv_split_column_names=self.cv_split_column_names,
+                n_cross_validations=self.n_cross_validations,
+                test_data=self.test_data,
+                test_data_size=self.test_data_size,
+                featurization_settings=self._featurization._to_rest_object() if self._featurization else None,
+                limit_settings=self._limits._to_rest_object() if self._limits else None,
+                training_settings=self._training._to_rest_object() if self._training else None,
+                primary_metric=self.primary_metric,
+                log_verbosity=self.log_verbosity,
+                forecasting_settings=None,
+            )
 
         self._resolve_data_inputs(forecasting_task)
         self._validation_data_to_rest(forecasting_task)
@@ -504,9 +580,9 @@ class ForecastingJob(AutoMLTabular):
             "compute": properties.compute_id,
             "outputs": from_rest_data_outputs(properties.outputs),
             "resources": properties.resources,
-            "identity": _BaseJobIdentityConfiguration._from_rest_object(properties.identity)
-            if properties.identity
-            else None,
+            "identity": (
+                _BaseJobIdentityConfiguration._from_rest_object(properties.identity) if properties.identity else None
+            ),
             "queue_settings": properties.queue_settings,
         }
 
@@ -520,19 +596,27 @@ class ForecastingJob(AutoMLTabular):
             n_cross_validations=task_details.n_cross_validations,
             test_data=task_details.test_data,
             test_data_size=task_details.test_data_size,
-            featurization=TabularFeaturizationSettings._from_rest_object(task_details.featurization_settings)
-            if task_details.featurization_settings
-            else None,
-            limits=TabularLimitSettings._from_rest_object(task_details.limit_settings)
-            if task_details.limit_settings
-            else None,
-            training=ForecastingTrainingSettings._from_rest_object(task_details.training_settings)
-            if task_details.training_settings
-            else None,
+            featurization=(
+                TabularFeaturizationSettings._from_rest_object(task_details.featurization_settings)
+                if task_details.featurization_settings
+                else None
+            ),
+            limits=(
+                TabularLimitSettings._from_rest_object(task_details.limit_settings)
+                if task_details.limit_settings
+                else None
+            ),
+            training=(
+                ForecastingTrainingSettings._from_rest_object(task_details.training_settings)
+                if task_details.training_settings
+                else None
+            ),
             primary_metric=task_details.primary_metric,
-            forecasting_settings=ForecastingSettings._from_rest_object(task_details.forecasting_settings)
-            if task_details.forecasting_settings
-            else None,
+            forecasting_settings=(
+                ForecastingSettings._from_rest_object(task_details.forecasting_settings)
+                if task_details.forecasting_settings
+                else None
+            ),
             log_verbosity=task_details.log_verbosity,
             **job_args_dict,
         )
@@ -548,7 +632,7 @@ class ForecastingJob(AutoMLTabular):
         data: Dict,
         context: Dict,
         additional_message: str,
-        **kwargs,
+        **kwargs: Any,
     ) -> "ForecastingJob":
         from azure.ai.ml._schema.automl.table_vertical.forecasting import AutoMLForecastingSchema
         from azure.ai.ml._schema.pipeline.automl_node import AutoMLForecastingNodeSchema
@@ -578,17 +662,18 @@ class ForecastingJob(AutoMLTabular):
         job.set_data(**data_settings)
         return job
 
-    def _to_dict(self, inside_pipeline=False) -> Dict:  # pylint: disable=arguments-differ
+    def _to_dict(self, inside_pipeline: bool = False) -> Dict:
         from azure.ai.ml._schema.automl.table_vertical.forecasting import AutoMLForecastingSchema
         from azure.ai.ml._schema.pipeline.automl_node import AutoMLForecastingNodeSchema
 
+        schema_dict: dict = {}
         if inside_pipeline:
             schema_dict = AutoMLForecastingNodeSchema(context={BASE_PATH_CONTEXT_KEY: "./"}).dump(self)
         else:
             schema_dict = AutoMLForecastingSchema(context={BASE_PATH_CONTEXT_KEY: "./"}).dump(self)
         return schema_dict
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, ForecastingJob):
             return NotImplemented
 
@@ -597,5 +682,5 @@ class ForecastingJob(AutoMLTabular):
 
         return self.primary_metric == other.primary_metric and self._forecasting_settings == other._forecasting_settings
 
-    def __ne__(self, other):
+    def __ne__(self, other: object) -> bool:
         return not self.__eq__(other)

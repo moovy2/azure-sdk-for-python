@@ -12,19 +12,18 @@ from azure.monitor.opentelemetry.exporter._constants import _STATSBEAT_METRIC_NA
 
 class _StatsBeatExporter(AzureMonitorMetricExporter):
 
-    # pylint: disable=protected-access
     def _point_to_envelope(
         self,
         point: DataPointT,
         name: str,
         resource: Optional[Resource] = None,
-        scope: Optional[InstrumentationScope] = None
-    ) -> TelemetryItem:
+        scope: Optional[InstrumentationScope] = None,
+    ) -> Optional[TelemetryItem]:
         # map statsbeat name from OpenTelemetry name
         name = _STATSBEAT_METRIC_NAME_MAPPINGS[name]
         return super()._point_to_envelope(
             point,
             name,
             resource,
-            scope,
+            None,
         )

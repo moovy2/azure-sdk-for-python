@@ -28,8 +28,7 @@ try:
     try:
         ver = azure.__version__
         raise Exception(
-            "This package is incompatible with azure=={}. ".format(ver)
-            + 'Uninstall it with "pip uninstall azure".'
+            "This package is incompatible with azure=={}. ".format(ver) + 'Uninstall it with "pip uninstall azure".'
         )
     except AttributeError:
         pass
@@ -38,9 +37,7 @@ except ImportError:
 
 # Version extraction inspired from 'requests'
 with open(os.path.join(package_folder_path, "_version.py"), "r") as fd:
-    version = re.search(
-        r'^VERSION\s*=\s*[\'"]([^\'"]*)[\'"]', fd.read(), re.MULTILINE
-    ).group(1)
+    version = re.search(r'^VERSION\s*=\s*[\'"]([^\'"]*)[\'"]', fd.read(), re.MULTILINE).group(1)
 
 if not version:
     raise RuntimeError("Cannot find version information")
@@ -48,24 +45,24 @@ if not version:
 setup(
     name=PACKAGE_NAME,
     version=version,
-    description="Microsoft {} Client Library for Python".format(
-        PACKAGE_PPRINT_NAME
-    ),
+    description="Microsoft {} Client Library for Python".format(PACKAGE_PPRINT_NAME),
     long_description=open("README.md", "r").read(),
     long_description_content_type="text/markdown",
     license="MIT License",
     author="Microsoft Corporation",
     author_email="ascl@microsoft.com",
-    url="https://github.com/microsoft/ApplicationInsights-Python/tree/main/azure-monitor-opentelemetry",
+    url="https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/monitor/azure-monitor-opentelemetry",
+    keywords="azure, azure sdk",
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Developers",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "License :: OSI Approved :: MIT License",
     ],
     zip_safe=False,
@@ -82,28 +79,27 @@ setup(
     package_data={
         "pytyped": ["py.typed"],
     },
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     install_requires=[
-        "azure-core<2.0.0,>=1.24.0",
-        "azure-core-tracing-opentelemetry~=1.0.0b10",
-        "azure-monitor-opentelemetry-exporter~=1.0.0b15",
-        "opentelemetry-api~=1.19.0",
-        "opentelemetry-instrumentation-django~=0.40b0",
-        "opentelemetry-instrumentation-fastapi~=0.40b0",
-        "opentelemetry-instrumentation-flask~=0.40b0",
-        "opentelemetry-instrumentation-psycopg2~=0.40b0",
-        "opentelemetry-instrumentation-requests~=0.40b0",
-        "opentelemetry-instrumentation-urllib~=0.40b0",
-        "opentelemetry-instrumentation-urllib3~=0.40b0",
-        "opentelemetry-sdk~=1.19.0",
-        "wrapt >= 1.14.0, < 2.0.0",
+        "azure-core<2.0.0,>=1.28.0",
+        "azure-core-tracing-opentelemetry~=1.0.0b11",
+        "azure-monitor-opentelemetry-exporter~=1.0.0b31",
+        "opentelemetry-instrumentation-django~=0.49b0",
+        "opentelemetry-instrumentation-fastapi~=0.49b0",
+        "opentelemetry-instrumentation-flask~=0.49b0",
+        "opentelemetry-instrumentation-psycopg2~=0.49b0",
+        "opentelemetry-instrumentation-requests~=0.49b0",
+        "opentelemetry-instrumentation-urllib~=0.49b0",
+        "opentelemetry-instrumentation-urllib3~=0.49b0",
+        "opentelemetry-resource-detector-azure~=0.1.4",
+        "opentelemetry-sdk~=1.28",
     ],
     entry_points={
         "opentelemetry_distro": [
-            "azure_monitor_opentelemetry_distro = azure.monitor.opentelemetry.autoinstrumentation._distro:AzureMonitorDistro"
+            "azure_monitor_opentelemetry_distro = azure.monitor.opentelemetry._autoinstrumentation.distro:AzureMonitorDistro"
         ],
         "opentelemetry_configurator": [
-            "azure_monitor_opentelemetry_configurator = azure.monitor.opentelemetry.autoinstrumentation._configurator:AzureMonitorConfigurator"
+            "azure_monitor_opentelemetry_configurator = azure.monitor.opentelemetry._autoinstrumentation.configurator:AzureMonitorConfigurator"
         ],
     },
 )

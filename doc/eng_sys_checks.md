@@ -7,6 +7,7 @@
   - [The pyproject.toml](#the-pyprojecttoml)
   - [Environment variables important to CI](#environment-variables-important-to-ci)
     - [Atomic Overrides](#atomic-overrides)
+    - [Enable test logging in CI pipelines](#enable-test-logging-in-ci-pipelines)
   - [Analyze Checks](#analyze-checks)
     - [MyPy](#mypy)
     - [Pyright](#pyright)
@@ -109,6 +110,10 @@ This is the most useful skip, but the following skip variables are also supporte
   - Omit 'Analyze Dependencies' step in `analyze` job.
 - `Skip.VerifyDependencies`
   - Omit checking that a package's dependencies are on PyPI before releasing.
+- `Skip.KeywordCheck`
+  - Omit checking that a package's keywords are correctly formulated before releasing.
+- `Skip.Black`
+  - Omit checking `black` in the `analyze` job.
 
 ## The pyproject.toml
 
@@ -128,6 +133,7 @@ verifytypes = false
 pyright = false
 pylint = false
 black = false
+sphinx = false
 ```
 
 If a package does not yet have a `pyproject.toml`, creating one with just the section `[tool.azure-sdk-build]` will do no harm to the release of the package in question.
@@ -148,6 +154,8 @@ The various tooling abstracted by the environments within `eng/tox/tox.ini` take
 
 Packages with classifier `Development Status :: 7 - Inactive`, are **not** built by default and as such normal `checks` like `mypy` and `pylint` are also not run against them. Older "core" packages like `azure-common` and `azure-servicemanagement-legacy` are present, but excluded from the build due to this restriction.
 
+Additionally, packages with the pyproject.toml option `ci_enabled = false` will **skip** normal checks and tests. This is used for packages that are not yet compliant with certain CI checks. If `ci_enabled = false` is present in the package's pyproject.toml, it will be blocked from releasing until it is removed and all required CI checks pass.
+
 To temporarily **override** this restriction, a dev need only set the queue time variable: `ENABLE_PACKAGE_NAME`. The `-` in package names should be replaced by an `_`, as that is how the environment variable will be set on the actual CI machine anyway.
 
 - `ENABLE_AZURE_COMMON=true`
@@ -159,6 +167,16 @@ The name that you should use is visible based on what the `tox environment` that
 
 - `AZURE_SERVICEBUS_PYRIGHT=true` <-- enable a check that normally is disabled in `pyproject.toml`
 - `AZURE_CORE_PYLINT=false` <-- disable a check that normally runs
+
+### Enable test logging in CI pipelines
+
+You can enable test logging in a pipeline by setting the queue time variable `PYTEST_LOG_LEVEL` to the desired logging [level](https://docs.python.org/3/library/logging.html#logging-levels). For example,
+
+`PYTEST_LOG_LEVEL=INFO`
+
+This also works locally with tox by setting the `PYTEST_LOG_LEVEL` environment variable.
+
+Note that if you want DEBUG level logging with sensitive information unredacted in the test logs, then you still must pass `logging_enable=True` into the client(s) being used in tests.
 
 ## Analyze Checks
 
@@ -194,6 +212,16 @@ Analyze job in both nightly CI and pull request validation pipeline runs a set o
 1. Go to root of the package.
 2. Execute following command: `tox run -e pylint -c ../../../eng/tox/tox.ini --root .`
 
+Note that the `pylint` environment is configured to run against the **earliest supported python version**. This means that users **must** have `python 3.7` installed on their machine to run this check locally.
+
+### Sphinx and docstring checker
+
+[`Sphinx`](https://www.sphinx-doc.org/en/master/) is the preferred documentation builder for Python libraries. The documentation is always built and attached to each PR builds. Sphinx is configured to
+fail if docstring are invalid, helping to ensure the resulting documentation will be of high quality. Following are the steps to run `sphinx` locally for a specific package with strict docstring checking:
+
+1. Go to root of the package.
+2. Execute following command: `tox run -e sphinx -c ../../../eng/tox/tox.ini --root .`
+
 ### Bandit
 
 `Bandit` is static security analysis tool. This check is triggered for all Azure SDK package as part of analyze job. Following are the steps to `Bandit` tool locally for a specific package.
@@ -211,23 +239,23 @@ Analyze job in both nightly CI and pull request validation pipeline runs a set o
 
 #### Opt-in to formatting validation
 
-Make the following change to your projects `ci.yml`:
+Ensure that `black = true` is present within your `pyproject.toml`:
 
 ```yml
-extends:
-    template: ../../eng/pipelines/templates/stages/archetype-sdk-client.yml
-    parameters:
-        ...
-        ValidateFormatting: true
-        ...
+[tool.azure-sdk-build]
+...other checks enabled/disabled
+black = true
+...other checks enabled/disabled
 ```
+
+to opt into the black invocation.
 
 #### Running locally
 
 1. Go to package root directory.
-2. Execute command: `tox run -e black -c ../../../eng/tox/tox.ini -- .`
+2. Execute command: `tox run -e black -c ../../../eng/tox/tox.ini --root . -- .`
 
-**Tip**: You can provide any arguments that `black` accepts after the `--`. Example: `tox run -e black -c ../../../eng/tox/tox.ini -- path/to/file.py`
+**Tip**: You can provide any arguments that `black` accepts after the `--`. Example: `tox run -e black -c ../../../eng/tox/tox.ini --root . -- path/to/file.py`
 
 ### Change log verification
 
@@ -319,7 +347,7 @@ Note: Any dependency mentioned only in dev_requirements are not considered to id
 Tox name of this test is `latestdependency` and steps to manually run this test locally is as follows.
 
 1. Go to package root. For e.g azure-storage-blob or azure-identity
-2. Run command `tox run -e latestdependency -c ../../../tox/tox.ini --root .`
+2. Run command `tox run -e latestdependency -c ../../../eng/tox/tox.ini --root .`
 
 #### Minimum Dependency Test
 
@@ -336,7 +364,7 @@ Tox name of this test is `mindependency` and steps to manually run this test loc
 
 1. Go to package root. For e.g azure-storage-blob or azure-identity
 2. Run following command
-`tox run -e mindependency -c ../../../tox/tox.ini --root .`
+`tox run -e mindependency -c ../../../eng/tox/tox.ini --root .`
 
 #### Regression Test
 

@@ -6,18 +6,18 @@ Azure Communication Identity client package is intended to be used to setup the 
 | [Package (Pypi)](https://pypi.org/project/azure-communication-identity/)
 | [Package (Conda)](https://anaconda.org/microsoft/azure-communication/)
 | [API reference documentation](https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/communication/azure-communication-identity)
-| [Product documentation](https://docs.microsoft.com/azure/communication-services/quickstarts/access-tokens?pivots=programming-language-python)
+| [Product documentation](https://learn.microsoft.com/azure/communication-services/quickstarts/access-tokens?pivots=programming-language-python)
 
 ## _Disclaimer_
 
 _Azure SDK Python packages support for Python 2.7 has ended 01 January 2022. For more information and questions, please refer to https://github.com/Azure/azure-sdk-for-python/issues/20691_
 
 # Getting started
-### Prerequisites
-- Python 3.7 or later is required to use this package.
+## Prerequisites
+- Python 3.8 or later is required to use this package.
 - You must have an [Azure subscription](https://azure.microsoft.com/free/)
-- A deployed Communication Services resource. You can use the [Azure Portal](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource?tabs=windows&pivots=platform-azp) or the [Azure PowerShell](https://docs.microsoft.com/powershell/module/az.communication/new-azcommunicationservice) to set it up.
-### Install the package
+- A deployed Communication Services resource. You can use the [Azure Portal](https://learn.microsoft.com/azure/communication-services/quickstarts/create-communication-resource?tabs=windows&pivots=platform-azp) or the [Azure PowerShell](https://learn.microsoft.com/powershell/module/az.communication/new-azcommunicationservice) to set it up.
+## Install the package
 Install the Azure Communication Identity client library for Python with [pip](https://pypi.org/project/pip/):
 
 ```bash
@@ -73,8 +73,11 @@ print("User created with id:" + user.properties['id'])
 
 Use the `get_token` method to issue or refresh a scoped access token for the user. \
 Pass in the user object as a parameter, and a list of `CommunicationTokenScope`. Scope options are:
-- `CHAT` (Chat)
-- `VOIP` (VoIP)
+- `CHAT` (Use this for full access to Chat APIs)
+- `VOIP` (Use this for full access to Calling APIs)
+- `CHAT_JOIN` (Access to Chat APIs but without the authorization to create, delete or update chat threads)
+- `CHAT_JOIN_LIMITED` (A more limited version of CHAT_JOIN that doesn't allow to add or remove participants)
+- `VOIP_JOIN` (Access to Calling APIs but without the authorization to start new calls)
 
 ```python
 tokenresponse = identity_client.get_token(user, scopes=[CommunicationTokenScope.CHAT])

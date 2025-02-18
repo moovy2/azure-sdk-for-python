@@ -8,9 +8,12 @@
 
 from copy import deepcopy
 from typing import Any, Awaitable, TYPE_CHECKING
+from typing_extensions import Self
 
+from azure.core.pipeline import policies
 from azure.core.rest import AsyncHttpResponse, HttpRequest
 from azure.mgmt.core import AsyncARMPipelineClient
+from azure.mgmt.core.policies import AsyncARMAutoResourceProviderRegistrationPolicy
 
 from .. import models as _models
 from ..._serialization import Deserializer, Serializer
@@ -49,13 +52,10 @@ from .operations import (
 )
 
 if TYPE_CHECKING:
-    # pylint: disable=unused-import,ungrouped-imports
     from azure.core.credentials_async import AsyncTokenCredential
 
 
-class WebSiteManagementClient(
-    WebSiteManagementClientOperationsMixin
-):  # pylint: disable=client-accepts-api-version-keyword,too-many-instance-attributes
+class WebSiteManagementClient(WebSiteManagementClientOperationsMixin):  # pylint: disable=too-many-instance-attributes
     """WebSite Management Client.
 
     :ivar app_service_certificate_orders: AppServiceCertificateOrdersOperations operations
@@ -157,77 +157,115 @@ class WebSiteManagementClient(
         self._config = WebSiteManagementClientConfiguration(
             credential=credential, subscription_id=subscription_id, **kwargs
         )
-        self._client: AsyncARMPipelineClient = AsyncARMPipelineClient(base_url=base_url, config=self._config, **kwargs)
+        _policies = kwargs.pop("policies", None)
+        if _policies is None:
+            _policies = [
+                policies.RequestIdPolicy(**kwargs),
+                self._config.headers_policy,
+                self._config.user_agent_policy,
+                self._config.proxy_policy,
+                policies.ContentDecodePolicy(**kwargs),
+                AsyncARMAutoResourceProviderRegistrationPolicy(),
+                self._config.redirect_policy,
+                self._config.retry_policy,
+                self._config.authentication_policy,
+                self._config.custom_hook_policy,
+                self._config.logging_policy,
+                policies.DistributedTracingPolicy(**kwargs),
+                policies.SensitiveHeaderCleanupPolicy(**kwargs) if self._config.redirect_policy else None,
+                self._config.http_logging_policy,
+            ]
+        self._client: AsyncARMPipelineClient = AsyncARMPipelineClient(base_url=base_url, policies=_policies, **kwargs)
 
         client_models = {k: v for k, v in _models.__dict__.items() if isinstance(v, type)}
         self._serialize = Serializer(client_models)
         self._deserialize = Deserializer(client_models)
         self._serialize.client_side_validation = False
         self.app_service_certificate_orders = AppServiceCertificateOrdersOperations(
-            self._client, self._config, self._serialize, self._deserialize
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
         )
         self.certificate_orders_diagnostics = CertificateOrdersDiagnosticsOperations(
-            self._client, self._config, self._serialize, self._deserialize
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
         )
         self.certificate_registration_provider = CertificateRegistrationProviderOperations(
-            self._client, self._config, self._serialize, self._deserialize
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
         )
-        self.domains = DomainsOperations(self._client, self._config, self._serialize, self._deserialize)
+        self.domains = DomainsOperations(self._client, self._config, self._serialize, self._deserialize, "2022-09-01")
         self.top_level_domains = TopLevelDomainsOperations(
-            self._client, self._config, self._serialize, self._deserialize
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
         )
         self.domain_registration_provider = DomainRegistrationProviderOperations(
-            self._client, self._config, self._serialize, self._deserialize
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
         )
         self.app_service_environments = AppServiceEnvironmentsOperations(
-            self._client, self._config, self._serialize, self._deserialize
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
         )
         self.app_service_plans = AppServicePlansOperations(
-            self._client, self._config, self._serialize, self._deserialize
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
         )
-        self.certificates = CertificatesOperations(self._client, self._config, self._serialize, self._deserialize)
-        self.container_apps = ContainerAppsOperations(self._client, self._config, self._serialize, self._deserialize)
+        self.certificates = CertificatesOperations(
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
+        )
+        self.container_apps = ContainerAppsOperations(
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
+        )
         self.container_apps_revisions = ContainerAppsRevisionsOperations(
-            self._client, self._config, self._serialize, self._deserialize
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
         )
-        self.deleted_web_apps = DeletedWebAppsOperations(self._client, self._config, self._serialize, self._deserialize)
-        self.diagnostics = DiagnosticsOperations(self._client, self._config, self._serialize, self._deserialize)
-        self.global_operations = GlobalOperations(self._client, self._config, self._serialize, self._deserialize)
+        self.deleted_web_apps = DeletedWebAppsOperations(
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
+        )
+        self.diagnostics = DiagnosticsOperations(
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
+        )
+        self.global_operations = GlobalOperations(
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
+        )
         self.kube_environments = KubeEnvironmentsOperations(
-            self._client, self._config, self._serialize, self._deserialize
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
         )
-        self.provider = ProviderOperations(self._client, self._config, self._serialize, self._deserialize)
-        self.recommendations = RecommendationsOperations(self._client, self._config, self._serialize, self._deserialize)
+        self.provider = ProviderOperations(self._client, self._config, self._serialize, self._deserialize, "2022-09-01")
+        self.recommendations = RecommendationsOperations(
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
+        )
         self.resource_health_metadata = ResourceHealthMetadataOperations(
-            self._client, self._config, self._serialize, self._deserialize
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
         )
-        self.static_sites = StaticSitesOperations(self._client, self._config, self._serialize, self._deserialize)
-        self.web_apps = WebAppsOperations(self._client, self._config, self._serialize, self._deserialize)
-        self.workflows = WorkflowsOperations(self._client, self._config, self._serialize, self._deserialize)
-        self.workflow_runs = WorkflowRunsOperations(self._client, self._config, self._serialize, self._deserialize)
+        self.static_sites = StaticSitesOperations(
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
+        )
+        self.web_apps = WebAppsOperations(self._client, self._config, self._serialize, self._deserialize, "2022-09-01")
+        self.workflows = WorkflowsOperations(
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
+        )
+        self.workflow_runs = WorkflowRunsOperations(
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
+        )
         self.workflow_run_actions = WorkflowRunActionsOperations(
-            self._client, self._config, self._serialize, self._deserialize
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
         )
         self.workflow_run_action_repetitions = WorkflowRunActionRepetitionsOperations(
-            self._client, self._config, self._serialize, self._deserialize
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
         )
         self.workflow_run_action_repetitions_request_histories = WorkflowRunActionRepetitionsRequestHistoriesOperations(
-            self._client, self._config, self._serialize, self._deserialize
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
         )
         self.workflow_run_action_scope_repetitions = WorkflowRunActionScopeRepetitionsOperations(
-            self._client, self._config, self._serialize, self._deserialize
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
         )
         self.workflow_triggers = WorkflowTriggersOperations(
-            self._client, self._config, self._serialize, self._deserialize
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
         )
         self.workflow_trigger_histories = WorkflowTriggerHistoriesOperations(
-            self._client, self._config, self._serialize, self._deserialize
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
         )
         self.workflow_versions = WorkflowVersionsOperations(
-            self._client, self._config, self._serialize, self._deserialize
+            self._client, self._config, self._serialize, self._deserialize, "2022-09-01"
         )
 
-    def _send_request(self, request: HttpRequest, **kwargs: Any) -> Awaitable[AsyncHttpResponse]:
+    def _send_request(
+        self, request: HttpRequest, *, stream: bool = False, **kwargs: Any
+    ) -> Awaitable[AsyncHttpResponse]:
         """Runs the network request through the client's chained policies.
 
         >>> from azure.core.rest import HttpRequest
@@ -247,12 +285,12 @@ class WebSiteManagementClient(
 
         request_copy = deepcopy(request)
         request_copy.url = self._client.format_url(request_copy.url)
-        return self._client.send_request(request_copy, **kwargs)
+        return self._client.send_request(request_copy, stream=stream, **kwargs)  # type: ignore
 
     async def close(self) -> None:
         await self._client.close()
 
-    async def __aenter__(self) -> "WebSiteManagementClient":
+    async def __aenter__(self) -> Self:
         await self._client.__aenter__()
         return self
 

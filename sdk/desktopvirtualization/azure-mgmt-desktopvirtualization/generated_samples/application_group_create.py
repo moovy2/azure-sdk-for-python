@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.desktopvirtualization import DesktopVirtualizationMgmtClient
 
 """
@@ -39,6 +40,7 @@ def main():
                 "description": "des1",
                 "friendlyName": "friendly",
                 "hostPoolArmPath": "/subscriptions/daefabc0-95b4-48b3-b645-8a753a63c4fa/resourceGroups/resourceGroup1/providers/Microsoft.DesktopVirtualization/hostPools/hostPool1",
+                "showInFeed": True,
             },
             "tags": {"tag1": "value1", "tag2": "value2"},
         },
@@ -46,6 +48,6 @@ def main():
     print(response)
 
 
-# x-ms-original-file: specification/desktopvirtualization/resource-manager/Microsoft.DesktopVirtualization/stable/2022-09-09/examples/ApplicationGroup_Create.json
+# x-ms-original-file: specification/desktopvirtualization/resource-manager/Microsoft.DesktopVirtualization/stable/2024-04-03/examples/ApplicationGroup_Create.json
 if __name__ == "__main__":
     main()

@@ -31,6 +31,7 @@ COMPUTE_MANAGED_IDENTITY_TYPE = "ManagedIdentity"
 DEFAULT_DATA_DRIFT_SIGNAL_NAME = "data-drift-signal"
 DEFAULT_PREDICTION_DRIFT_SIGNAL_NAME = "prediction-drift-signal"
 DEFAULT_DATA_QUALITY_SIGNAL_NAME = "data-quality-signal"
+DEFAULT_TOKEN_USAGE_SIGNAL_NAME = "token-usage-signal"
 
 
 @experimental
@@ -41,6 +42,8 @@ class MonitorSignalType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     MODEL_PERFORMANCE = "model_performance"
     FEATURE_ATTRIBUTION_DRIFT = "feature_attribution_drift"
     CUSTOM = "custom"
+    GENERATION_SAFETY_QUALITY = "generation_safety_quality"
+    GENERATION_TOKEN_STATISTICS = "generation_token_statistics"
 
 
 @experimental
@@ -91,6 +94,15 @@ class MonitorTargetTasks(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     CLASSIFICATION = "Classification"
     REGRESSION = "Regression"
     QUESTION_ANSWERING = "QuestionAnswering"
+
+
+class MonitorInputDataType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
+    #: An input data with a fixed window size.
+    STATIC = "Static"
+    #: An input data which trailing relatively to the monitor's current run.
+    TRAILING = "Trailing"
+    #: An input data with tabular format which doesn't require preprocessing.
+    FIXED = "Fixed"
 
 
 class FADColumnNames(str, Enum, metaclass=CaseInsensitiveEnumMeta):

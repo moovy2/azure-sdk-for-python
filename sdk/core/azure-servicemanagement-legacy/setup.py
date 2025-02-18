@@ -40,7 +40,7 @@ except ImportError:
 
 setup(
     name='azure-servicemanagement-legacy',
-    version='0.20.7',
+    version='0.20.8',
     description='Microsoft Azure Legacy Service Management Client Library for Python',
     long_description=open('README.md', 'r').read(),
     long_description_content_type='text/markdown',
@@ -48,6 +48,7 @@ setup(
     author='Microsoft Corporation',
     author_email='ptvshelp@microsoft.com',
     url='https://github.com/Azure/azure-sdk-for-python',
+    keywords="azure, azure sdk",
     classifiers=[
         'Development Status :: 7 - Inactive',
         'Programming Language :: Python',

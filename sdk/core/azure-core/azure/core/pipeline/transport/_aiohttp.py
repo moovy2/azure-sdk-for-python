@@ -23,8 +23,19 @@
 # IN THE SOFTWARE.
 #
 # --------------------------------------------------------------------------
+from __future__ import annotations
 import sys
-from typing import Any, Optional, AsyncIterator as AsyncIteratorType, TYPE_CHECKING, overload, cast, Union, Type
+from typing import (
+    Any,
+    Optional,
+    AsyncIterator as AsyncIteratorType,
+    TYPE_CHECKING,
+    overload,
+    cast,
+    Union,
+    Type,
+    MutableMapping,
+)
 from types import TracebackType
 from collections.abc import AsyncIterator
 
@@ -45,7 +56,10 @@ from azure.core.pipeline import AsyncPipeline
 
 from ._base import HttpRequest
 from ._base_async import AsyncHttpTransport, AsyncHttpResponse, _ResponseStopIteration
-from ...utils._pipeline_transport_rest_shared import _aiohttp_body_helper
+from ...utils._pipeline_transport_rest_shared import (
+    _aiohttp_body_helper,
+    get_file_items,
+)
 from .._tools import is_rest as _is_rest
 from .._tools_async import (
     handle_no_stream_rest_response as _handle_no_stream_rest_response,
@@ -56,6 +70,7 @@ if TYPE_CHECKING:
         HttpRequest as RestHttpRequest,
         AsyncHttpResponse as RestAsyncHttpResponse,
     )
+    from ...rest._aiohttp import RestAioHttpTransportResponse
 
 # Matching requests, because why not?
 CONTENT_CHUNK_SIZE = 10 * 1024
@@ -70,7 +85,6 @@ class AioHttpTransport(AsyncHttpTransport):
     :keyword session: The client session.
     :paramtype session: ~aiohttp.ClientSession
     :keyword bool session_owner: Session owner. Defaults True.
-
     :keyword bool use_env_settings: Uses proxy settings from environment. Defaults to True.
 
     .. admonition:: Example:
@@ -84,15 +98,24 @@ class AioHttpTransport(AsyncHttpTransport):
     """
 
     def __init__(
-        self, *, session: Optional[aiohttp.ClientSession] = None, loop=None, session_owner: bool = True, **kwargs
+        self,
+        *,
+        session: Optional[aiohttp.ClientSession] = None,
+        loop=None,
+        session_owner: bool = True,
+        **kwargs,
     ):
         if loop and sys.version_info >= (3, 10):
             raise ValueError("Starting with Python 3.10, asyncio doesn’t support loop as a parameter anymore")
         self._loop = loop
         self._session_owner = session_owner
         self.session = session
+        if not self._session_owner and not self.session:
+            raise ValueError("session_owner cannot be False if no session is provided")
         self.connection_config = ConnectionConfiguration(**kwargs)
         self._use_env_settings = kwargs.pop("use_env_settings", True)
+        # See https://github.com/Azure/azure-sdk-for-python/issues/25640 to understand why we track this
+        self._has_been_opened = False
 
     async def __aenter__(self):
         await self.open()
@@ -107,25 +130,33 @@ class AioHttpTransport(AsyncHttpTransport):
         await self.close()
 
     async def open(self):
-        """Opens the connection."""
-        if not self.session and self._session_owner:
-            jar = aiohttp.DummyCookieJar()
-            clientsession_kwargs = {
-                "trust_env": self._use_env_settings,
-                "cookie_jar": jar,
-                "auto_decompress": False,
-            }
-            if self._loop is not None:
-                clientsession_kwargs["loop"] = self._loop
-            self.session = aiohttp.ClientSession(**clientsession_kwargs)
-        if self.session is not None:
-            await self.session.__aenter__()
+        if self._has_been_opened and not self.session:
+            raise ValueError(
+                "HTTP transport has already been closed. "
+                "You may check if you're calling a function outside of the `async with` of your client creation, "
+                "or if you called `await close()` on your client already."
+            )
+        if not self.session:
+            if self._session_owner:
+                jar = aiohttp.DummyCookieJar()
+                clientsession_kwargs = {
+                    "trust_env": self._use_env_settings,
+                    "cookie_jar": jar,
+                    "auto_decompress": False,
+                }
+                if self._loop is not None:
+                    clientsession_kwargs["loop"] = self._loop
+                self.session = aiohttp.ClientSession(**clientsession_kwargs)
+            else:
+                raise ValueError("session_owner cannot be False and no session is available")
+
+        self._has_been_opened = True
+        await self.session.__aenter__()
 
     async def close(self):
         """Closes the connection."""
         if self._session_owner and self.session:
             await self.session.close()
-            self._session_owner = False
             self.session = None
 
     def _build_ssl_config(self, cert, verify):
@@ -133,7 +164,7 @@ class AioHttpTransport(AsyncHttpTransport):
 
         :param tuple cert: Cert information
         :param bool verify: SSL verification or path to CA file or directory
-        :rtype: bool or str or :class:`ssl.SSLContext`
+        :rtype: bool or str or ssl.SSLContext
         :return: SSL Configuration
         """
         ssl_ctx = None
@@ -159,8 +190,8 @@ class AioHttpTransport(AsyncHttpTransport):
         :return: The request data
         """
         if request.files:
-            form_data = aiohttp.FormData()
-            for form_file, data in request.files.items():
+            form_data = aiohttp.FormData(request.data or {})
+            for form_file, data in get_file_items(request.files):
                 content_type = data[2] if len(data) > 2 else None
                 try:
                     form_data.add_field(form_file, data[1], filename=data[0], content_type=content_type)
@@ -170,7 +201,14 @@ class AioHttpTransport(AsyncHttpTransport):
         return request.data
 
     @overload
-    async def send(self, request: HttpRequest, **config: Any) -> AsyncHttpResponse:
+    async def send(
+        self,
+        request: HttpRequest,
+        *,
+        stream: bool = False,
+        proxies: Optional[MutableMapping[str, str]] = None,
+        **config: Any,
+    ) -> AsyncHttpResponse:
         """Send the request using this HTTP sender.
 
         Will pre-load the body into memory to be available with a sync method.
@@ -178,17 +216,22 @@ class AioHttpTransport(AsyncHttpTransport):
 
         :param request: The HttpRequest object
         :type request: ~azure.core.pipeline.transport.HttpRequest
-        :keyword any config: Any keyword arguments
         :return: The AsyncHttpResponse
         :rtype: ~azure.core.pipeline.transport.AsyncHttpResponse
 
         :keyword bool stream: Defaults to False.
-        :keyword dict proxies: dict of proxy to used based on protocol. Proxy is a dict (protocol, url)
-        :keyword str proxy: will define the proxy to use all the time
+        :keyword MutableMapping proxies: dict of proxy to used based on protocol. Proxy is a dict (protocol, url)
         """
 
     @overload
-    async def send(self, request: "RestHttpRequest", **config: Any) -> "RestAsyncHttpResponse":
+    async def send(
+        self,
+        request: RestHttpRequest,
+        *,
+        stream: bool = False,
+        proxies: Optional[MutableMapping[str, str]] = None,
+        **config: Any,
+    ) -> RestAsyncHttpResponse:
         """Send the `azure.core.rest` request using this HTTP sender.
 
         Will pre-load the body into memory to be available with a sync method.
@@ -196,18 +239,21 @@ class AioHttpTransport(AsyncHttpTransport):
 
         :param request: The HttpRequest object
         :type request: ~azure.core.rest.HttpRequest
-        :keyword any config: Any keyword arguments
         :return: The AsyncHttpResponse
         :rtype: ~azure.core.rest.AsyncHttpResponse
 
         :keyword bool stream: Defaults to False.
-        :keyword dict proxies: dict of proxy to used based on protocol. Proxy is a dict (protocol, url)
-        :keyword str proxy: will define the proxy to use all the time
+        :keyword MutableMapping proxies: dict of proxy to used based on protocol. Proxy is a dict (protocol, url)
         """
 
     async def send(
-        self, request: Union[HttpRequest, "RestHttpRequest"], **config
-    ) -> Union[AsyncHttpResponse, "RestAsyncHttpResponse"]:
+        self,
+        request: Union[HttpRequest, RestHttpRequest],
+        *,
+        stream: bool = False,
+        proxies: Optional[MutableMapping[str, str]] = None,
+        **config,
+    ) -> Union[AsyncHttpResponse, RestAsyncHttpResponse]:
         """Send the request using this HTTP sender.
 
         Will pre-load the body into memory to be available with a sync method.
@@ -215,13 +261,11 @@ class AioHttpTransport(AsyncHttpTransport):
 
         :param request: The HttpRequest object
         :type request: ~azure.core.rest.HttpRequest
-        :keyword any config: Any keyword arguments
         :return: The AsyncHttpResponse
         :rtype: ~azure.core.rest.AsyncHttpResponse
 
         :keyword bool stream: Defaults to False.
-        :keyword dict proxies: dict of proxy to used based on protocol. Proxy is a dict (protocol, url)
-        :keyword str proxy: will define the proxy to use all the time
+        :keyword MutableMapping proxies: dict of proxy to used based on protocol. Proxy is a dict (protocol, url)
         """
         await self.open()
         try:
@@ -230,28 +274,31 @@ class AioHttpTransport(AsyncHttpTransport):
             # auto_decompress is introduced in aiohttp 3.7. We need this to handle aiohttp 3.6-.
             auto_decompress = False
 
-        proxies = config.pop("proxies", None)
-        if proxies and "proxy" not in config:
+        proxy = config.pop("proxy", None)
+        if proxies and not proxy:
             # aiohttp needs a single proxy, so iterating until we found the right protocol
 
             # Sort by longest string first, so "http" is not used for "https" ;-)
             for protocol in sorted(proxies.keys(), reverse=True):
                 if request.url.startswith(protocol):
-                    config["proxy"] = proxies[protocol]
+                    proxy = proxies[protocol]
                     break
 
-        response: Optional[Union[AsyncHttpResponse, "RestAsyncHttpResponse"]] = None
-        config["ssl"] = self._build_ssl_config(
+        response: Optional[Union[AsyncHttpResponse, RestAsyncHttpResponse]] = None
+        ssl = self._build_ssl_config(
             cert=config.pop("connection_cert", self.connection_config.cert),
             verify=config.pop("connection_verify", self.connection_config.verify),
         )
+        # If ssl=True, we just use default ssl context from aiohttp
+        if ssl is not True:
+            config["ssl"] = ssl
         # If we know for sure there is not body, disable "auto content type"
         # Otherwise, aiohttp will send "application/octet-stream" even for empty POST request
         # and that break services like storage signature
         if not request.data and not request.files:
             config["skip_auto_headers"] = ["Content-Type"]
         try:
-            stream_response = config.pop("stream", False)
+            stream_response = stream
             timeout = config.pop("connection_timeout", self.connection_config.timeout)
             read_timeout = config.pop("read_timeout", self.connection_config.read_timeout)
             socket_timeout = aiohttp.ClientTimeout(sock_connect=timeout, sock_read=read_timeout)
@@ -262,7 +309,8 @@ class AioHttpTransport(AsyncHttpTransport):
                 data=self._get_request_data(request),
                 timeout=socket_timeout,
                 allow_redirects=False,
-                **config
+                proxy=proxy,
+                **config,
             )
             if _is_rest(request):
                 from azure.core.rest._aiohttp import RestAioHttpTransportResponse
@@ -287,6 +335,13 @@ class AioHttpTransport(AsyncHttpTransport):
                 )
                 if not stream_response:
                     await response.load_body()
+        except AttributeError as err:
+            if self.session is None:
+                raise ValueError(
+                    "No session available for request. "
+                    "Please report this issue to https://github.com/Azure/azure-sdk-for-python/issues."
+                ) from err
+            raise
         except aiohttp.client_exceptions.ClientResponseError as err:
             raise ServiceResponseError(err, error=err) from err
         except asyncio.TimeoutError as err:
@@ -307,7 +362,31 @@ class AioHttpStreamDownloadGenerator(AsyncIterator):
         on the *content-encoding* header.
     """
 
-    def __init__(self, pipeline: AsyncPipeline, response: AsyncHttpResponse, *, decompress: bool = True) -> None:
+    @overload
+    def __init__(
+        self,
+        pipeline: AsyncPipeline[HttpRequest, AsyncHttpResponse],
+        response: AioHttpTransportResponse,
+        *,
+        decompress: bool = True,
+    ) -> None: ...
+
+    @overload
+    def __init__(
+        self,
+        pipeline: AsyncPipeline[RestHttpRequest, RestAsyncHttpResponse],
+        response: RestAioHttpTransportResponse,
+        *,
+        decompress: bool = True,
+    ) -> None: ...
+
+    def __init__(
+        self,
+        pipeline: AsyncPipeline,
+        response: Union[AioHttpTransportResponse, RestAioHttpTransportResponse],
+        *,
+        decompress: bool = True,
+    ) -> None:
         self.pipeline = pipeline
         self.request = response.request
         self.response = response
@@ -380,7 +459,7 @@ class AioHttpTransportResponse(AsyncHttpResponse):
         aiohttp_response: aiohttp.ClientResponse,
         block_size: Optional[int] = None,
         *,
-        decompress: bool = True
+        decompress: bool = True,
     ) -> None:
         super(AioHttpTransportResponse, self).__init__(request, aiohttp_response, block_size=block_size)
         # https://aiohttp.readthedocs.io/en/stable/client_reference.html#aiohttp.ClientResponse
@@ -462,7 +541,13 @@ class AioHttpTransportResponse(AsyncHttpResponse):
         except aiohttp.client_exceptions.ClientError as err:
             raise ServiceRequestError(err, error=err) from err
 
-    def stream_download(self, pipeline, **kwargs) -> AsyncIteratorType[bytes]:
+    def stream_download(
+        self,
+        pipeline: AsyncPipeline[HttpRequest, AsyncHttpResponse],
+        *,
+        decompress: bool = True,
+        **kwargs,
+    ) -> AsyncIteratorType[bytes]:
         """Generator for streaming response body data.
 
         :param pipeline: The pipeline object
@@ -472,7 +557,7 @@ class AioHttpTransportResponse(AsyncHttpResponse):
         :rtype: AsyncIterator[bytes]
         :return: An iterator of bytes chunks.
         """
-        return AioHttpStreamDownloadGenerator(pipeline, self, **kwargs)
+        return AioHttpStreamDownloadGenerator(pipeline, self, decompress=decompress, **kwargs)
 
     def __getstate__(self):
         # Be sure body is loaded in memory, otherwise not pickable and let it throw

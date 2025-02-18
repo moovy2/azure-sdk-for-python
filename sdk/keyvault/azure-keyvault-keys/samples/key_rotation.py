@@ -3,12 +3,13 @@
 # Licensed under the MIT License.
 # ------------------------------------
 import os
+
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.keys import KeyClient
 
 # ----------------------------------------------------------------------------------------------------------
 # Prerequisites:
-# 1. An Azure Key Vault (https://docs.microsoft.com/azure/key-vault/quick-create-cli)
+# 1. An Azure Key Vault (https://learn.microsoft.com/azure/key-vault/quick-create-cli)
 #
 # 2. azure-keyvault-keys and azure-identity libraries (pip install these)
 #
@@ -72,6 +73,7 @@ policy_action = None
 for i in range(len(current_policy.lifetime_actions)):
     if current_policy.lifetime_actions[i].action == KeyRotationPolicyAction.rotate:
         policy_action = current_policy.lifetime_actions[i]
+assert policy_action
 print(f"\nCurrent rotation policy: {policy_action.action} after {policy_action.time_after_create}")
 
 # Update the key's automated rotation policy to notify 10 days before the key expires

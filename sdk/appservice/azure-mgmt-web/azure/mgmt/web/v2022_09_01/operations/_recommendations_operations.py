@@ -20,20 +20,18 @@ from azure.core.exceptions import (
 )
 from azure.core.paging import ItemPaged
 from azure.core.pipeline import PipelineResponse
-from azure.core.pipeline.transport import HttpResponse
-from azure.core.rest import HttpRequest
+from azure.core.rest import HttpRequest, HttpResponse
 from azure.core.tracing.decorator import distributed_trace
 from azure.core.utils import case_insensitive_dict
 from azure.mgmt.core.exceptions import ARMErrorFormat
 
 from .. import models as _models
 from ..._serialization import Serializer
-from .._vendor import WebSiteManagementClientMixinABC, _convert_request, _format_url_section
 
-if sys.version_info >= (3, 8):
-    from typing import Literal  # pylint: disable=no-name-in-module, ungrouped-imports
+if sys.version_info >= (3, 9):
+    from collections.abc import MutableMapping
 else:
-    from typing_extensions import Literal  # type: ignore  # pylint: disable=ungrouped-imports
+    from typing import MutableMapping  # type: ignore
 T = TypeVar("T")
 ClsType = Optional[Callable[[PipelineResponse[HttpRequest, HttpResponse], T, Dict[str, Any]], Any]]
 
@@ -47,7 +45,7 @@ def build_list_request(
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -56,7 +54,7 @@ def build_list_request(
         "subscriptionId": _SERIALIZER.url("subscription_id", subscription_id, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     if featured is not None:
@@ -75,7 +73,7 @@ def build_reset_all_filters_request(subscription_id: str, **kwargs: Any) -> Http
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -84,7 +82,7 @@ def build_reset_all_filters_request(subscription_id: str, **kwargs: Any) -> Http
         "subscriptionId": _SERIALIZER.url("subscription_id", subscription_id, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["api-version"] = _SERIALIZER.query("api_version", api_version, "str")
@@ -95,13 +93,13 @@ def build_reset_all_filters_request(subscription_id: str, **kwargs: Any) -> Http
     return HttpRequest(method="POST", url=_url, params=_params, headers=_headers, **kwargs)
 
 
-def build_disable_recommendation_for_subscription_request(
+def build_disable_recommendation_for_subscription_request(  # pylint: disable=name-too-long
     name: str, subscription_id: str, **kwargs: Any
 ) -> HttpRequest:
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -113,7 +111,7 @@ def build_disable_recommendation_for_subscription_request(
         "subscriptionId": _SERIALIZER.url("subscription_id", subscription_id, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["api-version"] = _SERIALIZER.query("api_version", api_version, "str")
@@ -124,7 +122,7 @@ def build_disable_recommendation_for_subscription_request(
     return HttpRequest(method="POST", url=_url, params=_params, headers=_headers, **kwargs)
 
 
-def build_list_history_for_hosting_environment_request(
+def build_list_history_for_hosting_environment_request(  # pylint: disable=name-too-long
     resource_group_name: str,
     hosting_environment_name: str,
     subscription_id: str,
@@ -136,7 +134,7 @@ def build_list_history_for_hosting_environment_request(
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -157,7 +155,7 @@ def build_list_history_for_hosting_environment_request(
         "subscriptionId": _SERIALIZER.url("subscription_id", subscription_id, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     if expired_only is not None:
@@ -172,7 +170,7 @@ def build_list_history_for_hosting_environment_request(
     return HttpRequest(method="GET", url=_url, params=_params, headers=_headers, **kwargs)
 
 
-def build_list_recommended_rules_for_hosting_environment_request(
+def build_list_recommended_rules_for_hosting_environment_request(  # pylint: disable=name-too-long
     resource_group_name: str,
     hosting_environment_name: str,
     subscription_id: str,
@@ -184,7 +182,7 @@ def build_list_recommended_rules_for_hosting_environment_request(
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -205,7 +203,7 @@ def build_list_recommended_rules_for_hosting_environment_request(
         "subscriptionId": _SERIALIZER.url("subscription_id", subscription_id, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     if featured is not None:
@@ -220,7 +218,7 @@ def build_list_recommended_rules_for_hosting_environment_request(
     return HttpRequest(method="GET", url=_url, params=_params, headers=_headers, **kwargs)
 
 
-def build_disable_all_for_hosting_environment_request(
+def build_disable_all_for_hosting_environment_request(  # pylint: disable=name-too-long
     resource_group_name: str,
     hosting_environment_name: str,
     subscription_id: str,
@@ -231,7 +229,7 @@ def build_disable_all_for_hosting_environment_request(
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -252,7 +250,7 @@ def build_disable_all_for_hosting_environment_request(
         "subscriptionId": _SERIALIZER.url("subscription_id", subscription_id, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["environmentName"] = _SERIALIZER.query("environment_name", environment_name, "str")
@@ -264,7 +262,7 @@ def build_disable_all_for_hosting_environment_request(
     return HttpRequest(method="POST", url=_url, params=_params, headers=_headers, **kwargs)
 
 
-def build_reset_all_filters_for_hosting_environment_request(
+def build_reset_all_filters_for_hosting_environment_request(  # pylint: disable=name-too-long
     resource_group_name: str,
     hosting_environment_name: str,
     subscription_id: str,
@@ -275,7 +273,7 @@ def build_reset_all_filters_for_hosting_environment_request(
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -296,7 +294,7 @@ def build_reset_all_filters_for_hosting_environment_request(
         "subscriptionId": _SERIALIZER.url("subscription_id", subscription_id, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["environmentName"] = _SERIALIZER.query("environment_name", environment_name, "str")
@@ -308,7 +306,7 @@ def build_reset_all_filters_for_hosting_environment_request(
     return HttpRequest(method="POST", url=_url, params=_params, headers=_headers, **kwargs)
 
 
-def build_get_rule_details_by_hosting_environment_request(
+def build_get_rule_details_by_hosting_environment_request(  # pylint: disable=name-too-long
     resource_group_name: str,
     hosting_environment_name: str,
     name: str,
@@ -321,7 +319,7 @@ def build_get_rule_details_by_hosting_environment_request(
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -343,7 +341,7 @@ def build_get_rule_details_by_hosting_environment_request(
         "subscriptionId": _SERIALIZER.url("subscription_id", subscription_id, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     if update_seen is not None:
@@ -358,7 +356,7 @@ def build_get_rule_details_by_hosting_environment_request(
     return HttpRequest(method="GET", url=_url, params=_params, headers=_headers, **kwargs)
 
 
-def build_disable_recommendation_for_hosting_environment_request(
+def build_disable_recommendation_for_hosting_environment_request(  # pylint: disable=name-too-long
     resource_group_name: str,
     name: str,
     hosting_environment_name: str,
@@ -370,7 +368,7 @@ def build_disable_recommendation_for_hosting_environment_request(
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -392,7 +390,7 @@ def build_disable_recommendation_for_hosting_environment_request(
         "subscriptionId": _SERIALIZER.url("subscription_id", subscription_id, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["environmentName"] = _SERIALIZER.query("environment_name", environment_name, "str")
@@ -416,7 +414,7 @@ def build_list_history_for_web_app_request(
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -437,7 +435,7 @@ def build_list_history_for_web_app_request(
         "subscriptionId": _SERIALIZER.url("subscription_id", subscription_id, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     if expired_only is not None:
@@ -452,7 +450,7 @@ def build_list_history_for_web_app_request(
     return HttpRequest(method="GET", url=_url, params=_params, headers=_headers, **kwargs)
 
 
-def build_list_recommended_rules_for_web_app_request(
+def build_list_recommended_rules_for_web_app_request(  # pylint: disable=name-too-long
     resource_group_name: str,
     site_name: str,
     subscription_id: str,
@@ -464,7 +462,7 @@ def build_list_recommended_rules_for_web_app_request(
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -485,7 +483,7 @@ def build_list_recommended_rules_for_web_app_request(
         "subscriptionId": _SERIALIZER.url("subscription_id", subscription_id, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     if featured is not None:
@@ -506,7 +504,7 @@ def build_disable_all_for_web_app_request(
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -527,7 +525,7 @@ def build_disable_all_for_web_app_request(
         "subscriptionId": _SERIALIZER.url("subscription_id", subscription_id, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["api-version"] = _SERIALIZER.query("api_version", api_version, "str")
@@ -538,13 +536,13 @@ def build_disable_all_for_web_app_request(
     return HttpRequest(method="POST", url=_url, params=_params, headers=_headers, **kwargs)
 
 
-def build_reset_all_filters_for_web_app_request(
+def build_reset_all_filters_for_web_app_request(  # pylint: disable=name-too-long
     resource_group_name: str, site_name: str, subscription_id: str, **kwargs: Any
 ) -> HttpRequest:
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -565,7 +563,7 @@ def build_reset_all_filters_for_web_app_request(
         "subscriptionId": _SERIALIZER.url("subscription_id", subscription_id, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["api-version"] = _SERIALIZER.query("api_version", api_version, "str")
@@ -576,7 +574,7 @@ def build_reset_all_filters_for_web_app_request(
     return HttpRequest(method="POST", url=_url, params=_params, headers=_headers, **kwargs)
 
 
-def build_get_rule_details_by_web_app_request(
+def build_get_rule_details_by_web_app_request(  # pylint: disable=name-too-long
     resource_group_name: str,
     site_name: str,
     name: str,
@@ -589,7 +587,7 @@ def build_get_rule_details_by_web_app_request(
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -611,7 +609,7 @@ def build_get_rule_details_by_web_app_request(
         "subscriptionId": _SERIALIZER.url("subscription_id", subscription_id, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     if update_seen is not None:
@@ -626,13 +624,13 @@ def build_get_rule_details_by_web_app_request(
     return HttpRequest(method="GET", url=_url, params=_params, headers=_headers, **kwargs)
 
 
-def build_disable_recommendation_for_site_request(
+def build_disable_recommendation_for_site_request(  # pylint: disable=name-too-long
     resource_group_name: str, site_name: str, name: str, subscription_id: str, **kwargs: Any
 ) -> HttpRequest:
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -654,7 +652,7 @@ def build_disable_recommendation_for_site_request(
         "subscriptionId": _SERIALIZER.url("subscription_id", subscription_id, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     _params["api-version"] = _SERIALIZER.query("api_version", api_version, "str")
@@ -683,6 +681,7 @@ class RecommendationsOperations:
         self._config = input_args.pop(0) if input_args else kwargs.pop("config")
         self._serialize = input_args.pop(0) if input_args else kwargs.pop("serializer")
         self._deserialize = input_args.pop(0) if input_args else kwargs.pop("deserializer")
+        self._api_version = input_args.pop(0) if input_args else kwargs.pop("api_version")
 
     @distributed_trace
     def list(
@@ -700,7 +699,6 @@ class RecommendationsOperations:
          channel eq 'Notification' and startTime eq 2014-01-01T00:00:00Z and endTime eq
          2014-12-31T23:59:59Z and timeGrain eq duration'[PT1H|PT1M|P1D]. Default value is None.
         :type filter: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: An iterator like instance of either Recommendation or the result of cls(response)
         :rtype: ~azure.core.paging.ItemPaged[~azure.mgmt.web.v2022_09_01.models.Recommendation]
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -708,10 +706,10 @@ class RecommendationsOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[_models.RecommendationCollection] = kwargs.pop("cls", None)
 
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -722,17 +720,15 @@ class RecommendationsOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_list_request(
+                _request = build_list_request(
                     subscription_id=self._config.subscription_id,
                     featured=featured,
                     filter=filter,
                     api_version=api_version,
-                    template_url=self.list.metadata["url"],
                     headers=_headers,
                     params=_params,
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
+                _request.url = self._client.format_url(_request.url)
 
             else:
                 # make call to next link with the client's api-version
@@ -743,14 +739,13 @@ class RecommendationsOperations:
                         for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
                     }
                 )
-                _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _next_request_params["api-version"] = self._api_version
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
-                request.method = "GET"
-            return request
+                _request.url = self._client.format_url(_request.url)
+                _request.method = "GET"
+            return _request
 
         def extract_data(pipeline_response):
             deserialized = self._deserialize("RecommendationCollection", pipeline_response)
@@ -760,11 +755,11 @@ class RecommendationsOperations:
             return deserialized.next_link or None, iter(list_of_elem)
 
         def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -777,20 +772,17 @@ class RecommendationsOperations:
 
         return ItemPaged(get_next, extract_data)
 
-    list.metadata = {"url": "/subscriptions/{subscriptionId}/providers/Microsoft.Web/recommendations"}
-
     @distributed_trace
     def reset_all_filters(self, **kwargs: Any) -> None:  # pylint: disable=inconsistent-return-statements
         """Reset all recommendation opt-out settings for a subscription.
 
         Description for Reset all recommendation opt-out settings for a subscription.
 
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: None or the result of cls(response)
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
         """
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -801,22 +793,20 @@ class RecommendationsOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[None] = kwargs.pop("cls", None)
 
-        request = build_reset_all_filters_request(
+        _request = build_reset_all_filters_request(
             subscription_id=self._config.subscription_id,
             api_version=api_version,
-            template_url=self.reset_all_filters.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
-        request.url = self._client.format_url(request.url)
+        _request.url = self._client.format_url(_request.url)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -827,11 +817,7 @@ class RecommendationsOperations:
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if cls:
-            return cls(pipeline_response, None, {})
-
-    reset_all_filters.metadata = {
-        "url": "/subscriptions/{subscriptionId}/providers/Microsoft.Web/recommendations/reset"
-    }
+            return cls(pipeline_response, None, {})  # type: ignore
 
     @distributed_trace
     def disable_recommendation_for_subscription(  # pylint: disable=inconsistent-return-statements
@@ -844,12 +830,11 @@ class RecommendationsOperations:
 
         :param name: Rule name. Required.
         :type name: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: None or the result of cls(response)
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
         """
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -860,23 +845,21 @@ class RecommendationsOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[None] = kwargs.pop("cls", None)
 
-        request = build_disable_recommendation_for_subscription_request(
+        _request = build_disable_recommendation_for_subscription_request(
             name=name,
             subscription_id=self._config.subscription_id,
             api_version=api_version,
-            template_url=self.disable_recommendation_for_subscription.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
-        request.url = self._client.format_url(request.url)
+        _request.url = self._client.format_url(_request.url)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -887,11 +870,7 @@ class RecommendationsOperations:
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if cls:
-            return cls(pipeline_response, None, {})
-
-    disable_recommendation_for_subscription.metadata = {
-        "url": "/subscriptions/{subscriptionId}/providers/Microsoft.Web/recommendations/{name}/disable"
-    }
+            return cls(pipeline_response, None, {})  # type: ignore
 
     @distributed_trace
     def list_history_for_hosting_environment(
@@ -918,7 +897,6 @@ class RecommendationsOperations:
          channel eq 'Notification' and startTime eq 2014-01-01T00:00:00Z and endTime eq
          2014-12-31T23:59:59Z and timeGrain eq duration'[PT1H|PT1M|P1D]. Default value is None.
         :type filter: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: An iterator like instance of either Recommendation or the result of cls(response)
         :rtype: ~azure.core.paging.ItemPaged[~azure.mgmt.web.v2022_09_01.models.Recommendation]
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -926,10 +904,10 @@ class RecommendationsOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[_models.RecommendationCollection] = kwargs.pop("cls", None)
 
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -940,19 +918,17 @@ class RecommendationsOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_list_history_for_hosting_environment_request(
+                _request = build_list_history_for_hosting_environment_request(
                     resource_group_name=resource_group_name,
                     hosting_environment_name=hosting_environment_name,
                     subscription_id=self._config.subscription_id,
                     expired_only=expired_only,
                     filter=filter,
                     api_version=api_version,
-                    template_url=self.list_history_for_hosting_environment.metadata["url"],
                     headers=_headers,
                     params=_params,
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
+                _request.url = self._client.format_url(_request.url)
 
             else:
                 # make call to next link with the client's api-version
@@ -963,14 +939,13 @@ class RecommendationsOperations:
                         for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
                     }
                 )
-                _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _next_request_params["api-version"] = self._api_version
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
-                request.method = "GET"
-            return request
+                _request.url = self._client.format_url(_request.url)
+                _request.method = "GET"
+            return _request
 
         def extract_data(pipeline_response):
             deserialized = self._deserialize("RecommendationCollection", pipeline_response)
@@ -980,11 +955,11 @@ class RecommendationsOperations:
             return deserialized.next_link or None, iter(list_of_elem)
 
         def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -997,12 +972,8 @@ class RecommendationsOperations:
 
         return ItemPaged(get_next, extract_data)
 
-    list_history_for_hosting_environment.metadata = {
-        "url": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/hostingEnvironments/{hostingEnvironmentName}/recommendationHistory"
-    }
-
     @distributed_trace
-    def list_recommended_rules_for_hosting_environment(
+    def list_recommended_rules_for_hosting_environment(  # pylint: disable=name-too-long
         self,
         resource_group_name: str,
         hosting_environment_name: str,
@@ -1025,7 +996,6 @@ class RecommendationsOperations:
         :param filter: Return only channels specified in the filter. Filter is specified by using OData
          syntax. Example: $filter=channel eq 'Api' or channel eq 'Notification'. Default value is None.
         :type filter: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: An iterator like instance of either Recommendation or the result of cls(response)
         :rtype: ~azure.core.paging.ItemPaged[~azure.mgmt.web.v2022_09_01.models.Recommendation]
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -1033,10 +1003,10 @@ class RecommendationsOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[_models.RecommendationCollection] = kwargs.pop("cls", None)
 
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -1047,19 +1017,17 @@ class RecommendationsOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_list_recommended_rules_for_hosting_environment_request(
+                _request = build_list_recommended_rules_for_hosting_environment_request(
                     resource_group_name=resource_group_name,
                     hosting_environment_name=hosting_environment_name,
                     subscription_id=self._config.subscription_id,
                     featured=featured,
                     filter=filter,
                     api_version=api_version,
-                    template_url=self.list_recommended_rules_for_hosting_environment.metadata["url"],
                     headers=_headers,
                     params=_params,
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
+                _request.url = self._client.format_url(_request.url)
 
             else:
                 # make call to next link with the client's api-version
@@ -1070,14 +1038,13 @@ class RecommendationsOperations:
                         for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
                     }
                 )
-                _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _next_request_params["api-version"] = self._api_version
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
-                request.method = "GET"
-            return request
+                _request.url = self._client.format_url(_request.url)
+                _request.method = "GET"
+            return _request
 
         def extract_data(pipeline_response):
             deserialized = self._deserialize("RecommendationCollection", pipeline_response)
@@ -1087,11 +1054,11 @@ class RecommendationsOperations:
             return deserialized.next_link or None, iter(list_of_elem)
 
         def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -1103,10 +1070,6 @@ class RecommendationsOperations:
             return pipeline_response
 
         return ItemPaged(get_next, extract_data)
-
-    list_recommended_rules_for_hosting_environment.metadata = {
-        "url": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/hostingEnvironments/{hostingEnvironmentName}/recommendations"
-    }
 
     @distributed_trace
     def disable_all_for_hosting_environment(  # pylint: disable=inconsistent-return-statements
@@ -1122,12 +1085,11 @@ class RecommendationsOperations:
         :type environment_name: str
         :param hosting_environment_name: Required.
         :type hosting_environment_name: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: None or the result of cls(response)
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
         """
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -1138,25 +1100,23 @@ class RecommendationsOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[None] = kwargs.pop("cls", None)
 
-        request = build_disable_all_for_hosting_environment_request(
+        _request = build_disable_all_for_hosting_environment_request(
             resource_group_name=resource_group_name,
             hosting_environment_name=hosting_environment_name,
             subscription_id=self._config.subscription_id,
             environment_name=environment_name,
             api_version=api_version,
-            template_url=self.disable_all_for_hosting_environment.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
-        request.url = self._client.format_url(request.url)
+        _request.url = self._client.format_url(_request.url)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -1167,14 +1127,10 @@ class RecommendationsOperations:
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if cls:
-            return cls(pipeline_response, None, {})
-
-    disable_all_for_hosting_environment.metadata = {
-        "url": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/hostingEnvironments/{hostingEnvironmentName}/recommendations/disable"
-    }
+            return cls(pipeline_response, None, {})  # type: ignore
 
     @distributed_trace
-    def reset_all_filters_for_hosting_environment(  # pylint: disable=inconsistent-return-statements
+    def reset_all_filters_for_hosting_environment(  # pylint: disable=inconsistent-return-statements,name-too-long
         self, resource_group_name: str, environment_name: str, hosting_environment_name: str, **kwargs: Any
     ) -> None:
         """Reset all recommendation opt-out settings for an app.
@@ -1187,12 +1143,11 @@ class RecommendationsOperations:
         :type environment_name: str
         :param hosting_environment_name: Required.
         :type hosting_environment_name: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: None or the result of cls(response)
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
         """
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -1203,25 +1158,23 @@ class RecommendationsOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[None] = kwargs.pop("cls", None)
 
-        request = build_reset_all_filters_for_hosting_environment_request(
+        _request = build_reset_all_filters_for_hosting_environment_request(
             resource_group_name=resource_group_name,
             hosting_environment_name=hosting_environment_name,
             subscription_id=self._config.subscription_id,
             environment_name=environment_name,
             api_version=api_version,
-            template_url=self.reset_all_filters_for_hosting_environment.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
-        request.url = self._client.format_url(request.url)
+        _request.url = self._client.format_url(_request.url)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -1232,11 +1185,7 @@ class RecommendationsOperations:
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if cls:
-            return cls(pipeline_response, None, {})
-
-    reset_all_filters_for_hosting_environment.metadata = {
-        "url": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/hostingEnvironments/{hostingEnvironmentName}/recommendations/reset"
-    }
+            return cls(pipeline_response, None, {})  # type: ignore
 
     @distributed_trace
     def get_rule_details_by_hosting_environment(
@@ -1264,12 +1213,11 @@ class RecommendationsOperations:
         :param recommendation_id: The GUID of the recommendation object if you query an expired one.
          You don't need to specify it to query an active entry. Default value is None.
         :type recommendation_id: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: RecommendationRule or the result of cls(response)
         :rtype: ~azure.mgmt.web.v2022_09_01.models.RecommendationRule
         :raises ~azure.core.exceptions.HttpResponseError:
         """
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -1280,10 +1228,10 @@ class RecommendationsOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[_models.RecommendationRule] = kwargs.pop("cls", None)
 
-        request = build_get_rule_details_by_hosting_environment_request(
+        _request = build_get_rule_details_by_hosting_environment_request(
             resource_group_name=resource_group_name,
             hosting_environment_name=hosting_environment_name,
             name=name,
@@ -1291,16 +1239,14 @@ class RecommendationsOperations:
             update_seen=update_seen,
             recommendation_id=recommendation_id,
             api_version=api_version,
-            template_url=self.get_rule_details_by_hosting_environment.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
-        request.url = self._client.format_url(request.url)
+        _request.url = self._client.format_url(_request.url)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -1310,19 +1256,15 @@ class RecommendationsOperations:
             error = self._deserialize.failsafe_deserialize(_models.DefaultErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
-        deserialized = self._deserialize("RecommendationRule", pipeline_response)
+        deserialized = self._deserialize("RecommendationRule", pipeline_response.http_response)
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {})  # type: ignore
 
-        return deserialized
-
-    get_rule_details_by_hosting_environment.metadata = {
-        "url": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/hostingEnvironments/{hostingEnvironmentName}/recommendations/{name}"
-    }
+        return deserialized  # type: ignore
 
     @distributed_trace
-    def disable_recommendation_for_hosting_environment(  # pylint: disable=inconsistent-return-statements
+    def disable_recommendation_for_hosting_environment(  # pylint: disable=inconsistent-return-statements,name-too-long
         self, resource_group_name: str, environment_name: str, name: str, hosting_environment_name: str, **kwargs: Any
     ) -> None:
         """Disables the specific rule for a web site permanently.
@@ -1337,12 +1279,11 @@ class RecommendationsOperations:
         :type name: str
         :param hosting_environment_name: Required.
         :type hosting_environment_name: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: None or the result of cls(response)
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
         """
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -1353,26 +1294,24 @@ class RecommendationsOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[None] = kwargs.pop("cls", None)
 
-        request = build_disable_recommendation_for_hosting_environment_request(
+        _request = build_disable_recommendation_for_hosting_environment_request(
             resource_group_name=resource_group_name,
             name=name,
             hosting_environment_name=hosting_environment_name,
             subscription_id=self._config.subscription_id,
             environment_name=environment_name,
             api_version=api_version,
-            template_url=self.disable_recommendation_for_hosting_environment.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
-        request.url = self._client.format_url(request.url)
+        _request.url = self._client.format_url(_request.url)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -1383,11 +1322,7 @@ class RecommendationsOperations:
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if cls:
-            return cls(pipeline_response, None, {})
-
-    disable_recommendation_for_hosting_environment.metadata = {
-        "url": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/hostingEnvironments/{hostingEnvironmentName}/recommendations/{name}/disable"
-    }
+            return cls(pipeline_response, None, {})  # type: ignore
 
     @distributed_trace
     def list_history_for_web_app(
@@ -1414,7 +1349,6 @@ class RecommendationsOperations:
          channel eq 'Notification' and startTime eq 2014-01-01T00:00:00Z and endTime eq
          2014-12-31T23:59:59Z and timeGrain eq duration'[PT1H|PT1M|P1D]. Default value is None.
         :type filter: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: An iterator like instance of either Recommendation or the result of cls(response)
         :rtype: ~azure.core.paging.ItemPaged[~azure.mgmt.web.v2022_09_01.models.Recommendation]
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -1422,10 +1356,10 @@ class RecommendationsOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[_models.RecommendationCollection] = kwargs.pop("cls", None)
 
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -1436,19 +1370,17 @@ class RecommendationsOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_list_history_for_web_app_request(
+                _request = build_list_history_for_web_app_request(
                     resource_group_name=resource_group_name,
                     site_name=site_name,
                     subscription_id=self._config.subscription_id,
                     expired_only=expired_only,
                     filter=filter,
                     api_version=api_version,
-                    template_url=self.list_history_for_web_app.metadata["url"],
                     headers=_headers,
                     params=_params,
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
+                _request.url = self._client.format_url(_request.url)
 
             else:
                 # make call to next link with the client's api-version
@@ -1459,14 +1391,13 @@ class RecommendationsOperations:
                         for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
                     }
                 )
-                _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _next_request_params["api-version"] = self._api_version
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
-                request.method = "GET"
-            return request
+                _request.url = self._client.format_url(_request.url)
+                _request.method = "GET"
+            return _request
 
         def extract_data(pipeline_response):
             deserialized = self._deserialize("RecommendationCollection", pipeline_response)
@@ -1476,11 +1407,11 @@ class RecommendationsOperations:
             return deserialized.next_link or None, iter(list_of_elem)
 
         def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -1492,10 +1423,6 @@ class RecommendationsOperations:
             return pipeline_response
 
         return ItemPaged(get_next, extract_data)
-
-    list_history_for_web_app.metadata = {
-        "url": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{siteName}/recommendationHistory"
-    }
 
     @distributed_trace
     def list_recommended_rules_for_web_app(
@@ -1521,7 +1448,6 @@ class RecommendationsOperations:
         :param filter: Return only channels specified in the filter. Filter is specified by using OData
          syntax. Example: $filter=channel eq 'Api' or channel eq 'Notification'. Default value is None.
         :type filter: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: An iterator like instance of either Recommendation or the result of cls(response)
         :rtype: ~azure.core.paging.ItemPaged[~azure.mgmt.web.v2022_09_01.models.Recommendation]
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -1529,10 +1455,10 @@ class RecommendationsOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[_models.RecommendationCollection] = kwargs.pop("cls", None)
 
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -1543,19 +1469,17 @@ class RecommendationsOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_list_recommended_rules_for_web_app_request(
+                _request = build_list_recommended_rules_for_web_app_request(
                     resource_group_name=resource_group_name,
                     site_name=site_name,
                     subscription_id=self._config.subscription_id,
                     featured=featured,
                     filter=filter,
                     api_version=api_version,
-                    template_url=self.list_recommended_rules_for_web_app.metadata["url"],
                     headers=_headers,
                     params=_params,
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
+                _request.url = self._client.format_url(_request.url)
 
             else:
                 # make call to next link with the client's api-version
@@ -1566,14 +1490,13 @@ class RecommendationsOperations:
                         for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
                     }
                 )
-                _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _next_request_params["api-version"] = self._api_version
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
-                request.method = "GET"
-            return request
+                _request.url = self._client.format_url(_request.url)
+                _request.method = "GET"
+            return _request
 
         def extract_data(pipeline_response):
             deserialized = self._deserialize("RecommendationCollection", pipeline_response)
@@ -1583,11 +1506,11 @@ class RecommendationsOperations:
             return deserialized.next_link or None, iter(list_of_elem)
 
         def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -1599,10 +1522,6 @@ class RecommendationsOperations:
             return pipeline_response
 
         return ItemPaged(get_next, extract_data)
-
-    list_recommended_rules_for_web_app.metadata = {
-        "url": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{siteName}/recommendations"
-    }
 
     @distributed_trace
     def disable_all_for_web_app(  # pylint: disable=inconsistent-return-statements
@@ -1616,12 +1535,11 @@ class RecommendationsOperations:
         :type resource_group_name: str
         :param site_name: Name of the app. Required.
         :type site_name: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: None or the result of cls(response)
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
         """
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -1632,24 +1550,22 @@ class RecommendationsOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[None] = kwargs.pop("cls", None)
 
-        request = build_disable_all_for_web_app_request(
+        _request = build_disable_all_for_web_app_request(
             resource_group_name=resource_group_name,
             site_name=site_name,
             subscription_id=self._config.subscription_id,
             api_version=api_version,
-            template_url=self.disable_all_for_web_app.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
-        request.url = self._client.format_url(request.url)
+        _request.url = self._client.format_url(_request.url)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -1660,11 +1576,7 @@ class RecommendationsOperations:
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if cls:
-            return cls(pipeline_response, None, {})
-
-    disable_all_for_web_app.metadata = {
-        "url": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{siteName}/recommendations/disable"
-    }
+            return cls(pipeline_response, None, {})  # type: ignore
 
     @distributed_trace
     def reset_all_filters_for_web_app(  # pylint: disable=inconsistent-return-statements
@@ -1678,12 +1590,11 @@ class RecommendationsOperations:
         :type resource_group_name: str
         :param site_name: Name of the app. Required.
         :type site_name: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: None or the result of cls(response)
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
         """
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -1694,24 +1605,22 @@ class RecommendationsOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[None] = kwargs.pop("cls", None)
 
-        request = build_reset_all_filters_for_web_app_request(
+        _request = build_reset_all_filters_for_web_app_request(
             resource_group_name=resource_group_name,
             site_name=site_name,
             subscription_id=self._config.subscription_id,
             api_version=api_version,
-            template_url=self.reset_all_filters_for_web_app.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
-        request.url = self._client.format_url(request.url)
+        _request.url = self._client.format_url(_request.url)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -1722,11 +1631,7 @@ class RecommendationsOperations:
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if cls:
-            return cls(pipeline_response, None, {})
-
-    reset_all_filters_for_web_app.metadata = {
-        "url": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{siteName}/recommendations/reset"
-    }
+            return cls(pipeline_response, None, {})  # type: ignore
 
     @distributed_trace
     def get_rule_details_by_web_app(
@@ -1754,12 +1659,11 @@ class RecommendationsOperations:
         :param recommendation_id: The GUID of the recommendation object if you query an expired one.
          You don't need to specify it to query an active entry. Default value is None.
         :type recommendation_id: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: RecommendationRule or the result of cls(response)
         :rtype: ~azure.mgmt.web.v2022_09_01.models.RecommendationRule
         :raises ~azure.core.exceptions.HttpResponseError:
         """
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -1770,10 +1674,10 @@ class RecommendationsOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[_models.RecommendationRule] = kwargs.pop("cls", None)
 
-        request = build_get_rule_details_by_web_app_request(
+        _request = build_get_rule_details_by_web_app_request(
             resource_group_name=resource_group_name,
             site_name=site_name,
             name=name,
@@ -1781,16 +1685,14 @@ class RecommendationsOperations:
             update_seen=update_seen,
             recommendation_id=recommendation_id,
             api_version=api_version,
-            template_url=self.get_rule_details_by_web_app.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
-        request.url = self._client.format_url(request.url)
+        _request.url = self._client.format_url(_request.url)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -1800,16 +1702,12 @@ class RecommendationsOperations:
             error = self._deserialize.failsafe_deserialize(_models.DefaultErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
-        deserialized = self._deserialize("RecommendationRule", pipeline_response)
+        deserialized = self._deserialize("RecommendationRule", pipeline_response.http_response)
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {})  # type: ignore
 
-        return deserialized
-
-    get_rule_details_by_web_app.metadata = {
-        "url": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{siteName}/recommendations/{name}"
-    }
+        return deserialized  # type: ignore
 
     @distributed_trace
     def disable_recommendation_for_site(  # pylint: disable=inconsistent-return-statements
@@ -1825,12 +1723,11 @@ class RecommendationsOperations:
         :type site_name: str
         :param name: Rule name. Required.
         :type name: str
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: None or the result of cls(response)
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
         """
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -1841,25 +1738,23 @@ class RecommendationsOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[None] = kwargs.pop("cls", None)
 
-        request = build_disable_recommendation_for_site_request(
+        _request = build_disable_recommendation_for_site_request(
             resource_group_name=resource_group_name,
             site_name=site_name,
             name=name,
             subscription_id=self._config.subscription_id,
             api_version=api_version,
-            template_url=self.disable_recommendation_for_site.metadata["url"],
             headers=_headers,
             params=_params,
         )
-        request = _convert_request(request)
-        request.url = self._client.format_url(request.url)
+        _request.url = self._client.format_url(_request.url)
 
         _stream = False
         pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -1870,8 +1765,4 @@ class RecommendationsOperations:
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if cls:
-            return cls(pipeline_response, None, {})
-
-    disable_recommendation_for_site.metadata = {
-        "url": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{siteName}/recommendations/{name}/disable"
-    }
+            return cls(pipeline_response, None, {})  # type: ignore

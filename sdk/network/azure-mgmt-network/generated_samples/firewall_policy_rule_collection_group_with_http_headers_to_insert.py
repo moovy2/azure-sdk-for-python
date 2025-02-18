@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.network import NetworkManagementClient
 
 """
@@ -43,7 +44,7 @@ def main():
                         "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
                         "rules": [
                             {
-                                "description": "Insert HTTP header rule",
+                                "description": "Insert trusted tenants header",
                                 "fqdnTags": ["WindowsVirtualDesktop"],
                                 "httpHeadersToInsert": [
                                     {
@@ -65,6 +66,6 @@ def main():
     print(response)
 
 
-# x-ms-original-file: specification/network/resource-manager/Microsoft.Network/stable/2023-04-01/examples/FirewallPolicyRuleCollectionGroupWithHttpHeadersToInsert.json
+# x-ms-original-file: specification/network/resource-manager/Microsoft.Network/stable/2024-05-01/examples/FirewallPolicyRuleCollectionGroupWithHttpHeadersToInsert.json
 if __name__ == "__main__":
     main()

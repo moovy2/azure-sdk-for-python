@@ -3,26 +3,23 @@
 # Licensed under the MIT License. See License.txt in the project root for
 # license information.
 # --------------------------------------------------------------------------
-from typing import NoReturn, TYPE_CHECKING
 import logging
+from typing import NoReturn
 from xml.etree.ElementTree import Element
 
-from azure.core.pipeline.policies import ContentDecodePolicy
 from azure.core.exceptions import (
-    HttpResponseError,
-    ResourceNotFoundError,
-    ResourceModifiedError,
-    ResourceExistsError,
     ClientAuthenticationError,
-    DecodeError)
+    DecodeError,
+    HttpResponseError,
+    ResourceExistsError,
+    ResourceModifiedError,
+    ResourceNotFoundError,
+)
+from azure.core.pipeline.policies import ContentDecodePolicy
 
+from .authentication import AzureSigningError
+from .models import get_enum_value, StorageErrorCode, UserDelegationKey
 from .parser import _to_utc_datetime
-from .models import StorageErrorCode, UserDelegationKey, get_enum_value
-
-
-if TYPE_CHECKING:
-    from datetime import datetime
-    from azure.core.exceptions import AzureError
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -63,9 +60,9 @@ def normalize_headers(headers):
 
 def deserialize_metadata(response, obj, headers):  # pylint: disable=unused-argument
     try:
-        raw_metadata = {k: v for k, v in response.http_response.headers.items() if k.startswith("x-ms-meta-")}
+        raw_metadata = {k: v for k, v in response.http_response.headers.items() if k.lower().startswith('x-ms-meta-')}
     except AttributeError:
-        raw_metadata = {k: v for k, v in response.headers.items() if k.startswith("x-ms-meta-")}
+        raw_metadata = {k: v for k, v in response.headers.items() if k.lower().startswith('x-ms-meta-')}
     return {k[10:]: v for k, v in raw_metadata.items()}
 
 
@@ -85,9 +82,12 @@ def return_raw_deserialized(response, *_):
     return response.http_response.location_mode, response.context[ContentDecodePolicy.CONTEXT_NAME]
 
 
-def process_storage_error(storage_error) -> NoReturn:  # pylint:disable=too-many-statements
+def process_storage_error(storage_error) -> NoReturn: # type: ignore [misc] # pylint:disable=too-many-statements, too-many-branches
     raise_error = HttpResponseError
     serialized = False
+    if isinstance(storage_error, AzureSigningError):
+        storage_error.message = storage_error.message + \
+            '. This is likely due to an invalid shared key. Please check your shared key and try again.'
     if not storage_error.response or storage_error.response.status_code in [200, 204]:
         raise storage_error
     # If it is one of those three then it has been serialized prior by the generated layer.
@@ -101,7 +101,8 @@ def process_storage_error(storage_error) -> NoReturn:  # pylint:disable=too-many
     try:
         error_body = ContentDecodePolicy.deserialize_from_http_generics(storage_error.response)
         try:
-            error_body = error_body or storage_error.response.reason
+            if error_body is None or len(error_body) == 0:
+                error_body = storage_error.response.reason
         except AttributeError:
             error_body = ''
         # If it is an XML response
@@ -119,7 +120,8 @@ def process_storage_error(storage_error) -> NoReturn:  # pylint:disable=too-many
             error_dict = {'message': str(error_body)}
 
         # If we extracted from a Json or XML response
-        if error_dict:
+        # There is a chance error_dict is just a string
+        if error_dict and isinstance(error_dict, dict):
             error_code = error_dict.get('code')
             error_message = error_dict.get('message')
             additional_data = {k: v for k, v in error_dict.items() if k not in {'code', 'message'}}

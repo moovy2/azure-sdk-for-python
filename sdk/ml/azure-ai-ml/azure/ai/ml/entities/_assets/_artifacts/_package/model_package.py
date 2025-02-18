@@ -4,16 +4,17 @@
 
 # pylint: disable=protected-access, redefined-builtin
 
+import re
 from os import PathLike
 from pathlib import Path
-from typing import IO, AnyStr, Dict, List, Optional, Union
+from typing import IO, Any, AnyStr, Dict, List, Optional, Union
 
-from azure.ai.ml._restclient.v2023_02_01_preview.models import CodeConfiguration
-from azure.ai.ml._restclient.v2023_02_01_preview.models import ModelPackageInput as RestModelPackageInput
-from azure.ai.ml._restclient.v2023_02_01_preview.models import PackageInputPathId as RestPackageInputPathId
-from azure.ai.ml._restclient.v2023_02_01_preview.models import PackageInputPathUrl as RestPackageInputPathUrl
-from azure.ai.ml._restclient.v2023_02_01_preview.models import PackageInputPathVersion as RestPackageInputPathVersion
-from azure.ai.ml._restclient.v2023_02_01_preview.models import PackageRequest, PackageResponse
+from azure.ai.ml._restclient.v2023_08_01_preview.models import CodeConfiguration
+from azure.ai.ml._restclient.v2023_08_01_preview.models import ModelPackageInput as RestModelPackageInput
+from azure.ai.ml._restclient.v2023_08_01_preview.models import PackageInputPathId as RestPackageInputPathId
+from azure.ai.ml._restclient.v2023_08_01_preview.models import PackageInputPathUrl as RestPackageInputPathUrl
+from azure.ai.ml._restclient.v2023_08_01_preview.models import PackageInputPathVersion as RestPackageInputPathVersion
+from azure.ai.ml._restclient.v2023_08_01_preview.models import PackageRequest, PackageResponse
 from azure.ai.ml._schema.assets.package.model_package import ModelPackageSchema
 from azure.ai.ml._utils._experimental import experimental
 from azure.ai.ml._utils.utils import dump_yaml_to_file, snake_to_pascal
@@ -37,7 +38,12 @@ class PackageInputPathId:
     :type resource_id: Optional[str]
     """
 
-    def __init__(self, *, input_path_type: Optional[str] = None, resource_id: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        *,
+        input_path_type: Optional[str] = None,
+        resource_id: Optional[str] = None,
+    ) -> None:
         self.input_path_type = input_path_type
         self.resource_id = resource_id
 
@@ -141,7 +147,7 @@ class ModelPackageInput:
 
     .. admonition:: Example:
 
-        .. literalinclude:: ../../../../../../../samples/ml_samples_misc.py
+        .. literalinclude:: ../samples/ml_samples_misc.py
             :start-after: [START model_package_input_entity_create]
             :end-before: [END model_package_input_entity_create]
             :language: python
@@ -163,6 +169,13 @@ class ModelPackageInput:
         self.mount_path = mount_path
 
     def _to_rest_object(self) -> RestModelPackageInput:
+        if self.path is None:
+            return RestModelPackageInput(
+                input_type=snake_to_pascal(self.type),
+                path=None,
+                mode=snake_to_pascal(self.mode),
+                mount_path=self.mount_path,
+            )
         return RestModelPackageInput(
             input_type=snake_to_pascal(self.type),
             path=self.path._to_rest_object(),
@@ -204,7 +217,7 @@ class ModelPackage(Resource, PackageRequest):
 
     .. admonition:: Example:
 
-        .. literalinclude:: ../../../../../../../samples/ml_samples_misc.py
+        .. literalinclude:: ../samples/ml_samples_misc.py
             :start-after: [START model_package_entity_create]
             :end-before: [END model_package_entity_create]
             :language: python
@@ -215,19 +228,30 @@ class ModelPackage(Resource, PackageRequest):
     def __init__(
         self,
         *,
-        target_environment_name: str,
+        target_environment: Union[str, Dict[str, str]],
         inferencing_server: Union[AzureMLOnlineInferencingServer, AzureMLBatchInferencingServer],
-        base_environment_source: BaseEnvironment = None,
-        target_environment_version: Optional[str] = None,
+        base_environment_source: Optional[BaseEnvironment] = None,
         environment_variables: Optional[Dict[str, str]] = None,
         inputs: Optional[List[ModelPackageInput]] = None,
         model_configuration: Optional[ModelConfiguration] = None,
         tags: Optional[Dict[str, str]] = None,
-    ) -> None:
+        **kwargs: Any,
+    ):
+        if isinstance(target_environment, dict):
+            target_environment = target_environment["name"]
+            env_version = None
+        else:
+            parse_id = re.match(r"azureml:(\w+):(\d+)$", target_environment)
+
+            if parse_id:
+                target_environment = parse_id.group(1)
+                env_version = parse_id.group(2)
+            else:
+                env_version = None
+
         super().__init__(
-            name=target_environment_name,
-            target_environment_name=target_environment_name,
-            target_environment_version=target_environment_version,
+            name=target_environment,
+            target_environment_id=target_environment,
             base_environment_source=base_environment_source,
             inferencing_server=inferencing_server,
             model_configuration=model_configuration,
@@ -235,6 +259,7 @@ class ModelPackage(Resource, PackageRequest):
             tags=tags,
             environment_variables=environment_variables,
         )
+        self.environment_version = env_version
 
     @classmethod
     def _load(
@@ -242,7 +267,7 @@ class ModelPackage(Resource, PackageRequest):
         data: Optional[Dict] = None,
         yaml_path: Optional[Union[PathLike, str]] = None,
         params_override: Optional[list] = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> "ModelPackage":
         params_override = params_override or []
         data = data or {}
@@ -250,12 +275,13 @@ class ModelPackage(Resource, PackageRequest):
             BASE_PATH_CONTEXT_KEY: Path(yaml_path).parent if yaml_path else Path("./"),
             PARAMS_OVERRIDE_KEY: params_override,
         }
-        return load_from_dict(ModelPackageSchema, data, context, **kwargs)
+        res: ModelPackage = load_from_dict(ModelPackageSchema, data, context, **kwargs)
+        return res
 
     def dump(
         self,
         dest: Union[str, PathLike, IO[AnyStr]],
-        **kwargs,  # pylint: disable=unused-argument
+        **kwargs: Any,
     ) -> None:
         """Dumps the job content into a file in YAML format.
 
@@ -270,10 +296,10 @@ class ModelPackage(Resource, PackageRequest):
         dump_yaml_to_file(dest, yaml_serialized, default_flow_style=False)
 
     def _to_dict(self) -> Dict:
-        return ModelPackageSchema(context={BASE_PATH_CONTEXT_KEY: "./"}).dump(self)  # pylint: disable=no-member
+        return dict(ModelPackageSchema(context={BASE_PATH_CONTEXT_KEY: "./"}).dump(self))
 
     @classmethod
-    def _from_rest_object(cls, model_package_rest_object: PackageResponse) -> "ModelPackageResponse":
+    def _from_rest_object(cls, model_package_rest_object: PackageResponse) -> Any:
         target_environment_id = model_package_rest_object.target_environment_id
         return target_environment_id
 
@@ -292,15 +318,16 @@ class ModelPackage(Resource, PackageRequest):
                 else self.inferencing_server.code_configuration.code.id
             )
             code = CodeConfiguration(
-                code_id=code_id, scoring_script=self.inferencing_server.code_configuration.scoring_script
+                code_id=code_id,
+                scoring_script=self.inferencing_server.code_configuration.scoring_script,
             )
             self.inferencing_server.code_configuration = code
 
         package_request = PackageRequest(
-            target_environment_name=self.name,
-            base_environment_source=self.base_environment_source._to_rest_object()
-            if self.base_environment_source
-            else None,
+            target_environment_id=self.target_environment_id,
+            base_environment_source=(
+                self.base_environment_source._to_rest_object() if self.base_environment_source else None
+            ),
             inferencing_server=self.inferencing_server._to_rest_object() if self.inferencing_server else None,
             model_configuration=self.model_configuration._to_rest_object() if self.model_configuration else None,
             inputs=[input._to_rest_object() for input in self.inputs] if self.inputs else None,

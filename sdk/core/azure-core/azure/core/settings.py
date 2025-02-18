@@ -31,8 +31,24 @@ from enum import Enum
 import logging
 import os
 import sys
-from typing import Type, Optional, Callable, cast, Union, Dict, Any, TypeVar, Tuple, Generic, Mapping, List
-from azure.core.tracing import AbstractSpan
+from typing import (
+    Type,
+    Optional,
+    Callable,
+    Union,
+    Dict,
+    Any,
+    TypeVar,
+    Tuple,
+    Generic,
+    Mapping,
+    List,
+    TYPE_CHECKING,
+)
+from ._azure_clouds import AzureClouds
+
+if TYPE_CHECKING:
+    from azure.core.tracing import AbstractSpan
 
 ValidInputType = TypeVar("ValidInputType")
 ValueType = TypeVar("ValueType")
@@ -65,9 +81,9 @@ def convert_bool(value: Union[str, bool]) -> bool:
     :raises ValueError: If conversion to bool fails
 
     """
-    if value in (True, False):
-        return cast(bool, value)
-    val = cast(str, value).lower()
+    if isinstance(value, bool):
+        return value
+    val = value.lower()
     if val in ["yes", "1", "on", "true", "True"]:
         return True
     if val in ["no", "0", "off", "false", "False"]:
@@ -103,13 +119,37 @@ def convert_logging(value: Union[str, int]) -> int:
     :raises ValueError: If conversion to log level fails
 
     """
-    if value in set(_levels.values()):
-        return cast(int, value)
-    val = cast(str, value).upper()
+    if isinstance(value, int):
+        # If it's an int, return it. We don't need to check if it's in _levels, as custom int levels are allowed.
+        # https://docs.python.org/3/library/logging.html#levels
+        return value
+    val = value.upper()
     level = _levels.get(val)
     if not level:
         raise ValueError("Cannot convert {} to log level, valid values are: {}".format(value, ", ".join(_levels)))
     return level
+
+
+def convert_azure_cloud(value: Union[str, AzureClouds]) -> AzureClouds:
+    """Convert a string to an Azure Cloud
+
+    :param value: the value to convert
+    :type value: string
+    :returns: An AzureClouds enum value
+    :rtype: AzureClouds
+    :raises ValueError: If conversion to AzureClouds fails
+
+    """
+    if isinstance(value, AzureClouds):
+        return value
+    if isinstance(value, str):
+        azure_clouds = {cloud.name: cloud for cloud in AzureClouds}
+        if value in azure_clouds:
+            return azure_clouds[value]
+        raise ValueError(
+            "Cannot convert {} to Azure Cloud, valid values are: {}".format(value, ", ".join(azure_clouds.keys()))
+        )
+    raise ValueError("Cannot convert {} to Azure Cloud".format(value))
 
 
 def _get_opencensus_span() -> Optional[Type[AbstractSpan]]:
@@ -119,7 +159,7 @@ def _get_opencensus_span() -> Optional[Type[AbstractSpan]]:
     :returns: OpenCensusSpan type or None
     """
     try:
-        from azure.core.tracing.ext.opencensus_span import (  # pylint:disable=redefined-outer-name
+        from azure.core.tracing.ext.opencensus_span import (
             OpenCensusSpan,
         )
 
@@ -135,7 +175,7 @@ def _get_opentelemetry_span() -> Optional[Type[AbstractSpan]]:
     :returns: OpenTelemetrySpan type or None
     """
     try:
-        from azure.core.tracing.ext.opentelemetry_span import (  # pylint:disable=redefined-outer-name
+        from azure.core.tracing.ext.opentelemetry_span import (
             OpenTelemetrySpan,
         )
 
@@ -179,11 +219,10 @@ def convert_tracing_impl(value: Optional[Union[str, Type[AbstractSpan]]]) -> Opt
     """
     if value is None:
         return (
-            _get_opencensus_span_if_opencensus_is_imported() or _get_opentelemetry_span_if_opentelemetry_is_imported()
+            _get_opentelemetry_span_if_opentelemetry_is_imported() or _get_opencensus_span_if_opencensus_is_imported()
         )
 
     if not isinstance(value, str):
-        value = cast(Type[AbstractSpan], value)
         return value
 
     value = value.lower()
@@ -263,7 +302,7 @@ class PrioritizedSetting(Generic[ValidInputType, ValueType]):
         :type value: str or int or float or None
         :returns: the value of the setting
         :rtype: str or int or float
-        :raises: RuntimeError if no value can be determined
+        :raises RuntimeError: if no value can be determined
         """
 
         # 4. immediate values
@@ -271,7 +310,7 @@ class PrioritizedSetting(Generic[ValidInputType, ValueType]):
             return self._convert(value)
 
         # 3. previously user-set value
-        if self._user_value is not _unset:
+        if not isinstance(self._user_value, _Unset):
             return self._convert(self._user_value)
 
         # 2. environment variable
@@ -283,7 +322,7 @@ class PrioritizedSetting(Generic[ValidInputType, ValueType]):
             return self._convert(self._system_hook())
 
         # 0. implicit default
-        if self._default is not _unset:
+        if not isinstance(self._default, _Unset):
             return self._convert(self._default)
 
         raise RuntimeError("No configured value found for setting %r" % self._name)
@@ -437,7 +476,6 @@ class Settings:
     def config(self, **kwargs: Any) -> Tuple[Any, ...]:
         """Return the currently computed settings, with values overridden by parameter values.
 
-        :keyword dict kwargs: Settings to override
         :rtype: namedtuple
         :returns: The current values for all settings, with values overridden by parameter values
 
@@ -480,6 +518,13 @@ class Settings:
         env_var="AZURE_SDK_TRACING_IMPLEMENTATION",
         convert=convert_tracing_impl,
         default=None,
+    )
+
+    azure_cloud: PrioritizedSetting[Union[str, AzureClouds], AzureClouds] = PrioritizedSetting(
+        "azure_cloud",
+        env_var="AZURE_CLOUD",
+        convert=convert_azure_cloud,
+        default=AzureClouds.AZURE_PUBLIC_CLOUD,
     )
 
 

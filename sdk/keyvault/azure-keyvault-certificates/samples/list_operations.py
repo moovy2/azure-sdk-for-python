@@ -3,12 +3,13 @@
 # Licensed under the MIT License.
 # ------------------------------------
 import os
-from azure.keyvault.certificates import CertificateClient, CertificatePolicy
+
+from azure.keyvault.certificates import CertificateClient, CertificatePolicy, KeyVaultCertificate
 from azure.identity import DefaultAzureCredential
 
 # ----------------------------------------------------------------------------------------------------------
 # Prerequisites:
-# 1. An Azure Key Vault (https://docs.microsoft.com/azure/key-vault/quick-create-cli)
+# 1. An Azure Key Vault (https://learn.microsoft.com/azure/key-vault/quick-create-cli)
 #
 # 2. azure-keyvault-certificates and azure-identity packages (pip install these)
 #
@@ -17,7 +18,7 @@ from azure.identity import DefaultAzureCredential
 #
 # ----------------------------------------------------------------------------------------------------------
 # Sample - demonstrates the basic list operations on a vault(certificate) resource for Azure Key Vault.
-# The vault has to be soft-delete enabled to perform one of the following operations: https://docs.microsoft.com/azure/key-vault/key-vault-ovw-soft-delete
+# The vault has to be soft-delete enabled to perform one of the following operations: https://learn.microsoft.com/azure/key-vault/key-vault-ovw-soft-delete
 #
 # 1. Create certificate (begin_create_certificate)
 #
@@ -70,6 +71,7 @@ bank_certificate_poller = client.begin_create_certificate(
     certificate_name=bank_cert_name, policy=CertificatePolicy.get_default(), tags=tags
 )
 bank_certificate = bank_certificate_poller.result()
+assert isinstance(bank_certificate, KeyVaultCertificate) and bank_certificate.properties
 print(
     f"Certificate with name '{bank_certificate.name}' was created again with tags '{bank_certificate.properties.tags}'"
 )

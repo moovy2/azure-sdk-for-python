@@ -8,7 +8,7 @@ import pytest
 from unittest.mock import MagicMock
 
 from azure.core.credentials import AzureNamedKeyCredential
-from azure.core.exceptions import HttpResponseError
+from azure.core.exceptions import ClientAuthenticationError, HttpResponseError
 from azure.storage.filedatalake import (
     AnalyticsLogging,
     CorsRule,
@@ -41,7 +41,7 @@ class TestDatalakeService(StorageRecordedTestCase):
         self._assert_logging_equal(prop['analytics_logging'], AnalyticsLogging())
         self._assert_metrics_equal(prop['hour_metrics'], Metrics())
         self._assert_metrics_equal(prop['minute_metrics'], Metrics())
-        self._assert_cors_equal(prop['cors'], list())
+        self._assert_cors_equal(prop['cors'], [])
 
     def _assert_logging_equal(self, log1, log2):
         if log1 is None or log2 is None:
@@ -122,7 +122,7 @@ class TestDatalakeService(StorageRecordedTestCase):
             analytics_logging=AnalyticsLogging(),
             hour_metrics=Metrics(),
             minute_metrics=Metrics(),
-            cors=list(),
+            cors=[],
             target_version='2014-02-14'
         )
 
@@ -452,3 +452,49 @@ class TestDatalakeService(StorageRecordedTestCase):
         dir_client._datalake_client_for_blob_operation.close.assert_called_once()
         file_client._client.__exit__.assert_called_once()
         file_client._datalake_client_for_blob_operation.close.assert_called_once()
+
+    @DataLakePreparer()
+    @recorded_by_proxy
+    def test_storage_account_audience_service_client(self, **kwargs):
+        datalake_storage_account_name = kwargs.pop("datalake_storage_account_name")
+        datalake_storage_account_key = kwargs.pop("datalake_storage_account_key")
+
+        # Arrange
+        self._setup(datalake_storage_account_name, datalake_storage_account_key)
+        self.dsc.create_file_system('testfs1')
+
+        # Act
+        token_credential = self.get_credential(DataLakeServiceClient)
+        dsc = DataLakeServiceClient(
+            self.account_url(datalake_storage_account_name, "blob"),
+            credential=token_credential,
+            audience=f'https://{datalake_storage_account_name}.blob.core.windows.net/'
+        )
+
+        # Assert
+        response1 = dsc.list_file_systems()
+        response2 = dsc.create_file_system('testfs11')
+        assert response1 is not None
+        assert response2 is not None
+
+    @DataLakePreparer()
+    @recorded_by_proxy
+    def test_bad_audience_service_client(self, **kwargs):
+        datalake_storage_account_name = kwargs.pop("datalake_storage_account_name")
+        datalake_storage_account_key = kwargs.pop("datalake_storage_account_key")
+
+        # Arrange
+        self._setup(datalake_storage_account_name, datalake_storage_account_key)
+        self.dsc.create_file_system('testfs2')
+
+        # Act
+        token_credential = self.get_credential(DataLakeServiceClient)
+        dsc = DataLakeServiceClient(
+            self.account_url(datalake_storage_account_name, "blob"),
+            credential=token_credential,
+            audience=f'https://badaudience.blob.core.windows.net/'
+        )
+
+        # Will not raise ClientAuthenticationError despite bad audience due to Bearer Challenge
+        dsc.list_file_systems()
+        dsc.create_file_system('testfs22')

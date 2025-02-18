@@ -3,14 +3,12 @@
 # Licensed under the MIT License. See LICENSE.txt in the project root for
 # license information.
 # -------------------------------------------------------------------------
+import certifi
+
 import azure.cosmos.documents as documents
 import azure.cosmos.cosmos_client as cosmos_client
 import azure.cosmos.exceptions as exceptions
 from azure.cosmos.partition_key import PartitionKey
-import requests
-import traceback
-import urllib3
-from requests.utils import DEFAULT_CA_BUNDLE_PATH as CaCertPath
 
 import config
 
@@ -36,19 +34,15 @@ PARTITION_KEY = PartitionKey(path='/id', kind='Hash')
 # To run this Demo, please provide your own CA certs file or download one from
 #     http://curl.haxx.se/docs/caextract.html
 # Setup the certificate file in .pem format.
-# If you still get an SSLError, try disabling certificate verification and suppress warnings
+CA_CERT_FILE = certifi.where()
 
 def obtain_client():
-    connection_policy = documents.ConnectionPolicy()
-    connection_policy.SSLConfiguration = documents.SSLConfiguration()
-    # Try to setup the cacert.pem
-    # connection_policy.SSLConfiguration.SSLCaCerts = CaCertPath
-    # Else, disable verification
-    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-    connection_policy.SSLConfiguration.SSLCaCerts = False
-
-    return cosmos_client.CosmosClient(HOST, MASTER_KEY, "Session", connection_policy=connection_policy)
-
+    return cosmos_client.CosmosClient(
+        HOST,
+        MASTER_KEY,
+        "Session",
+        connection_verify=CA_CERT_FILE
+    )
 
 # Query for Entity / Entities
 def query_entities(parent, entity_type, id = None):
@@ -65,18 +59,18 @@ def query_entities(parent, entity_type, id = None):
                 entities = list(parent.list_databases())
             else:
                 entities = list(parent.query_databases(find_entity_by_id_query))
-
         elif entity_type == 'container':
             if id == None:
                 entities = list(parent.list_containers())
             else:
                 entities = list(parent.query_containers(find_entity_by_id_query))
-
         elif entity_type == 'document':
             if id == None:
                 entities = list(parent.read_all_items())
             else:
                 entities = list(parent.query_items(find_entity_by_id_query))
+        else:
+            raise ValueError(f"Unexpected entity type: {entity_type}")
     except exceptions.AzureError as e:
         print("The following error occurred while querying for the entity / entities ", entity_type, id if id != None else "")
         print(e)
@@ -639,12 +633,199 @@ def perform_multi_orderby_query(db):
         print("Entity doesn't exist")
 
 
+def use_geospatial_indexing_policy(db):
+    try:
+        delete_container_if_exists(db, CONTAINER_ID)
+
+        # Create a container with geospatial indexes
+        indexing_policy = {
+            'includedPaths': [
+                {'path': '/"Location"/?',
+                    'indexes': [
+                        {
+                            'kind': 'Spatial',
+                            'dataType': 'Point'
+                        }]
+                 },
+                {
+                    'path': '/'
+                }
+            ]
+        }
+
+        created_container = db.create_container(
+            id=CONTAINER_ID,
+            partition_key=PARTITION_KEY,
+            indexing_policy=indexing_policy
+        )
+        properties = created_container.read()
+        print(created_container)
+
+        print("\n" + "-" * 25 + "\n9. Container created with geospatial indexes")
+        print_dictionary_items(properties["indexingPolicy"])
+
+        # Create some items
+        doc9 = created_container.create_item(body={"id": "loc1", 'Location': {'type': 'Point', 'coordinates': [20.0, 20.0]}})
+        doc9 = created_container.create_item(body={"id": "loc2", 'Location': {'type': 'Point', 'coordinates': [100.0, 100.0]}})
+
+        # Run ST_DISTANCE queries using the geospatial index
+        query = "SELECT * FROM root WHERE (ST_DISTANCE(root.Location, {type: 'Point', coordinates: [20.1, 20]}) < 20000)"
+        query_documents_with_custom_query(created_container, query)
+
+        # Cleanup
+        db.delete_container(created_container)
+        print("\n")
+    except exceptions.CosmosResourceExistsError:
+        print("Entity already exists")
+    except exceptions.CosmosResourceNotFoundError:
+        print("Entity doesn't exist")
+
+
+def use_vector_embedding_policy(db):
+    try:
+        delete_container_if_exists(db, CONTAINER_ID)
+
+        # Create a container with vector embedding policy and vector indexes
+        indexing_policy = {
+            "vectorIndexes": [
+                {"path": "/vector", "type": "quantizedFlat", "quantizationByteSize": 8},
+                {"path": "/vector2", "type": "diskANN", "vectorIndexShardKey": ["/city"], "indexingSearchListSize": 50}
+            ]
+        }
+        vector_embedding_policy = {
+            "vectorEmbeddings": [
+                {
+                    "path": "/vector",
+                    "dataType": "float32",
+                    "dimensions": 256,
+                    "distanceFunction": "euclidean"
+                },
+                {
+                    "path": "/vector2",
+                    "dataType": "int8",
+                    "dimensions": 200,
+                    "distanceFunction": "dotproduct"
+                }
+            ]
+        }
+
+        created_container = db.create_container(
+            id=CONTAINER_ID,
+            partition_key=PARTITION_KEY,
+            indexing_policy=indexing_policy,
+            vector_embedding_policy=vector_embedding_policy
+        )
+        properties = created_container.read()
+        print(created_container)
+
+        print("\n" + "-" * 25 + "\n10. Container created with vector embedding policy and vector indexes")
+        print_dictionary_items(properties["indexingPolicy"])
+        print_dictionary_items(properties["vectorEmbeddingPolicy"])
+
+        # We define our own get_embeddings() function for the sake of the sample, but you should be using a third
+        # party service to generate these properly
+        def get_embeddings(num):
+            return f"{str(num)}, {str(num)}, {str(num)}"
+
+        # Create some items with vector embeddings
+        for i in range(10):
+            created_container.create_item({"id": "vector_item" + str(i), "embeddings": get_embeddings(i)})
+
+        # Run vector similarity search queries using VectorDistance
+        query = "SELECT TOP 5 c.id,VectorDistance(c.embeddings, [{}]) AS " \
+                "SimilarityScore FROM c ORDER BY VectorDistance(c.embeddings, [{}])".format(get_embeddings(1),
+                                                                                            get_embeddings(1))
+        query_documents_with_custom_query(created_container, query)
+
+        # Run vector similarity search queries using VectorDistance with specifications
+        query = "SELECT TOP 5 c.id,VectorDistance(c.embeddings, [{}], true, {{'dataType': 'float32' ," \
+                " 'distanceFunction': 'cosine'}}) AS SimilarityScore FROM c ORDER BY VectorDistance(c.embeddings," \
+                " [{}], true, {{'dataType': 'float32', 'distanceFunction': 'cosine'}})".format(get_embeddings(1),
+                                                                                               get_embeddings(1))
+        query_documents_with_custom_query(created_container, query)
+
+        # Cleanup
+        db.delete_container(created_container)
+        print("\n")
+    except exceptions.CosmosResourceExistsError:
+        print("Entity already exists")
+    except exceptions.CosmosResourceNotFoundError:
+        print("Entity doesn't exist")
+
+
+def use_full_text_policy(db):
+    try:
+        delete_container_if_exists(db, CONTAINER_ID)
+
+        # Create a container with full text policy and full text indexes
+        indexing_policy = {
+            "automatic": True,
+            "fullTextIndexes": [
+                {"path": "/text1"}
+            ]
+        }
+        full_text_policy = {
+            "defaultLanguage": "en-US",
+            "fullTextPaths": [
+                {
+                    "path": "/text1",
+                    "language": "en-US"
+                }
+            ]
+        }
+
+        created_container = db.create_container(
+            id=CONTAINER_ID,
+            partition_key=PARTITION_KEY,
+            indexing_policy=indexing_policy,
+            full_text_policy=full_text_policy
+        )
+        properties = created_container.read()
+        print(created_container)
+
+        print("\n" + "-" * 25 + "\n11. Container created with full text policy and full text indexes")
+        print_dictionary_items(properties["indexingPolicy"])
+        print_dictionary_items(properties["fullTextPolicy"])
+
+        sample_texts = ["Common popular pop music artists include Taylor Swift and The Weekend.",
+                        "The weekend is coming up soon, do you have any plans?",
+                        "Depending on the artist, their music can be very different.",
+                        "Mozart and Beethoven are some of the most recognizable names in classical music.",
+                        "Taylor acts in many movies, and is considered a great artist."]
+
+        # Create some items to use with full text search
+        for i in range(5):
+            created_container.create_item({"id": "full_text_item" + str(i), "text1": sample_texts[i],
+                                           "vector": [1, 2, 3]})
+
+        # Run full text search queries using full text score ranking
+        query = "SELECT TOP 3 c.text1 FROM c ORDER BY RANK FullTextScore(c.text1, ['artist']))"
+        query_documents_with_custom_query(created_container, query)
+
+        # Run full text search queries using RRF ranking
+        query = "SELECT TOP 3 c.text1 FROM c ORDER BY RANK RRF(FullTextScore(c.text1, ['music'])))"
+        query_documents_with_custom_query(created_container, query)
+
+        # Run hybrid search queries using RRF ranking wth vector distances
+        query = "SELECT TOP 3 c.text1 FROM c ORDER BY RANK RRF(FullTextScore(c.text1, ['music'])," \
+                " VectorDistance(c.vector, [1, 2, 3]))"
+        query_documents_with_custom_query(created_container, query)
+
+        # Cleanup
+        db.delete_container(created_container)
+        print("\n")
+    except exceptions.CosmosResourceExistsError:
+        print("Entity already exists")
+    except exceptions.CosmosResourceNotFoundError:
+        print("Entity doesn't exist")
+
+
 def run_sample():
     try:
         client = obtain_client()
         fetch_all_databases(client)
 
-        # Create database if doesn't exist already.
+        # Create database if it doesn't exist already.
         created_db = create_database_if_not_exists(client, DATABASE_ID)
         print(created_db)
 
@@ -668,6 +849,15 @@ def run_sample():
 
         # 8. Perform Multi Orderby queries using composite indexes
         perform_multi_orderby_query(created_db)
+
+        # 9. Create and use a geospatial indexing policy
+        use_geospatial_indexing_policy(created_db)
+
+        # 10. Create and use a vector embedding policy
+        use_vector_embedding_policy(created_db)
+
+        # 11. Create and use a full text policy
+        use_full_text_policy(created_db)
 
     except exceptions.AzureError as e:
         raise e

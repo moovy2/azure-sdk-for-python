@@ -1,4 +1,3 @@
-# pylint: disable=too-many-lines
 # coding=utf-8
 # --------------------------------------------------------------------------
 # Copyright (c) Microsoft Corporation. All rights reserved.
@@ -20,20 +19,18 @@ from azure.core.exceptions import (
 )
 from azure.core.paging import ItemPaged
 from azure.core.pipeline import PipelineResponse
-from azure.core.pipeline.transport import HttpResponse
-from azure.core.rest import HttpRequest
+from azure.core.rest import HttpRequest, HttpResponse
 from azure.core.tracing.decorator import distributed_trace
 from azure.core.utils import case_insensitive_dict
 from azure.mgmt.core.exceptions import ARMErrorFormat
 
 from .. import models as _models
 from ..._serialization import Serializer
-from .._vendor import WebSiteManagementClientMixinABC, _convert_request, _format_url_section
 
-if sys.version_info >= (3, 8):
-    from typing import Literal  # pylint: disable=no-name-in-module, ungrouped-imports
+if sys.version_info >= (3, 9):
+    from collections.abc import MutableMapping
 else:
-    from typing_extensions import Literal  # type: ignore  # pylint: disable=ungrouped-imports
+    from typing import MutableMapping  # type: ignore
 T = TypeVar("T")
 ClsType = Optional[Callable[[PipelineResponse[HttpRequest, HttpResponse], T, Dict[str, Any]], Any]]
 
@@ -47,7 +44,7 @@ def build_get_available_stacks_request(
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -70,7 +67,7 @@ def build_get_function_app_stacks_request(
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -87,13 +84,13 @@ def build_get_function_app_stacks_request(
     return HttpRequest(method="GET", url=_url, params=_params, headers=_headers, **kwargs)
 
 
-def build_get_function_app_stacks_for_location_request(
+def build_get_function_app_stacks_for_location_request(  # pylint: disable=name-too-long
     location: str, *, stack_os_type: Optional[Union[str, _models.ProviderStackOsType]] = None, **kwargs: Any
 ) -> HttpRequest:
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -102,7 +99,7 @@ def build_get_function_app_stacks_for_location_request(
         "location": _SERIALIZER.url("location", location, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     if stack_os_type is not None:
@@ -115,13 +112,13 @@ def build_get_function_app_stacks_for_location_request(
     return HttpRequest(method="GET", url=_url, params=_params, headers=_headers, **kwargs)
 
 
-def build_get_web_app_stacks_for_location_request(
+def build_get_web_app_stacks_for_location_request(  # pylint: disable=name-too-long
     location: str, *, stack_os_type: Optional[Union[str, _models.ProviderStackOsType]] = None, **kwargs: Any
 ) -> HttpRequest:
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -130,7 +127,7 @@ def build_get_web_app_stacks_for_location_request(
         "location": _SERIALIZER.url("location", location, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     if stack_os_type is not None:
@@ -147,7 +144,7 @@ def build_list_operations_request(**kwargs: Any) -> HttpRequest:
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -168,7 +165,7 @@ def build_get_web_app_stacks_request(
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -185,7 +182,7 @@ def build_get_web_app_stacks_request(
     return HttpRequest(method="GET", url=_url, params=_params, headers=_headers, **kwargs)
 
 
-def build_get_available_stacks_on_prem_request(
+def build_get_available_stacks_on_prem_request(  # pylint: disable=name-too-long
     subscription_id: str,
     *,
     os_type_selected: Optional[Union[str, _models.ProviderOsTypeSelected]] = None,
@@ -194,7 +191,7 @@ def build_get_available_stacks_on_prem_request(
     _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
     _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-    api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+    api_version: str = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
     accept = _headers.pop("Accept", "application/json")
 
     # Construct URL
@@ -203,7 +200,7 @@ def build_get_available_stacks_on_prem_request(
         "subscriptionId": _SERIALIZER.url("subscription_id", subscription_id, "str"),
     }
 
-    _url: str = _format_url_section(_url, **path_format_arguments)  # type: ignore
+    _url: str = _url.format(**path_format_arguments)  # type: ignore
 
     # Construct parameters
     if os_type_selected is not None:
@@ -234,6 +231,7 @@ class ProviderOperations:
         self._config = input_args.pop(0) if input_args else kwargs.pop("config")
         self._serialize = input_args.pop(0) if input_args else kwargs.pop("serializer")
         self._deserialize = input_args.pop(0) if input_args else kwargs.pop("deserializer")
+        self._api_version = input_args.pop(0) if input_args else kwargs.pop("api_version")
 
     @distributed_trace
     def get_available_stacks(
@@ -246,7 +244,6 @@ class ProviderOperations:
         :param os_type_selected: Known values are: "Windows", "Linux", "WindowsFunctions",
          "LinuxFunctions", and "All". Default value is None.
         :type os_type_selected: str or ~azure.mgmt.web.v2022_09_01.models.ProviderOsTypeSelected
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: An iterator like instance of either ApplicationStackResource or the result of
          cls(response)
         :rtype:
@@ -256,10 +253,10 @@ class ProviderOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[_models.ApplicationStackCollection] = kwargs.pop("cls", None)
 
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -270,15 +267,13 @@ class ProviderOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_get_available_stacks_request(
+                _request = build_get_available_stacks_request(
                     os_type_selected=os_type_selected,
                     api_version=api_version,
-                    template_url=self.get_available_stacks.metadata["url"],
                     headers=_headers,
                     params=_params,
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
+                _request.url = self._client.format_url(_request.url)
 
             else:
                 # make call to next link with the client's api-version
@@ -289,14 +284,13 @@ class ProviderOperations:
                         for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
                     }
                 )
-                _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _next_request_params["api-version"] = self._api_version
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
-                request.method = "GET"
-            return request
+                _request.url = self._client.format_url(_request.url)
+                _request.method = "GET"
+            return _request
 
         def extract_data(pipeline_response):
             deserialized = self._deserialize("ApplicationStackCollection", pipeline_response)
@@ -306,11 +300,11 @@ class ProviderOperations:
             return deserialized.next_link or None, iter(list_of_elem)
 
         def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -322,8 +316,6 @@ class ProviderOperations:
             return pipeline_response
 
         return ItemPaged(get_next, extract_data)
-
-    get_available_stacks.metadata = {"url": "/providers/Microsoft.Web/availableStacks"}
 
     @distributed_trace
     def get_function_app_stacks(
@@ -336,7 +328,6 @@ class ProviderOperations:
         :param stack_os_type: Stack OS Type. Known values are: "Windows", "Linux", and "All". Default
          value is None.
         :type stack_os_type: str or ~azure.mgmt.web.v2022_09_01.models.ProviderStackOsType
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: An iterator like instance of either FunctionAppStack or the result of cls(response)
         :rtype: ~azure.core.paging.ItemPaged[~azure.mgmt.web.v2022_09_01.models.FunctionAppStack]
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -344,10 +335,10 @@ class ProviderOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[_models.FunctionAppStackCollection] = kwargs.pop("cls", None)
 
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -358,15 +349,13 @@ class ProviderOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_get_function_app_stacks_request(
+                _request = build_get_function_app_stacks_request(
                     stack_os_type=stack_os_type,
                     api_version=api_version,
-                    template_url=self.get_function_app_stacks.metadata["url"],
                     headers=_headers,
                     params=_params,
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
+                _request.url = self._client.format_url(_request.url)
 
             else:
                 # make call to next link with the client's api-version
@@ -377,14 +366,13 @@ class ProviderOperations:
                         for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
                     }
                 )
-                _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _next_request_params["api-version"] = self._api_version
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
-                request.method = "GET"
-            return request
+                _request.url = self._client.format_url(_request.url)
+                _request.method = "GET"
+            return _request
 
         def extract_data(pipeline_response):
             deserialized = self._deserialize("FunctionAppStackCollection", pipeline_response)
@@ -394,11 +382,11 @@ class ProviderOperations:
             return deserialized.next_link or None, iter(list_of_elem)
 
         def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -410,8 +398,6 @@ class ProviderOperations:
             return pipeline_response
 
         return ItemPaged(get_next, extract_data)
-
-    get_function_app_stacks.metadata = {"url": "/providers/Microsoft.Web/functionAppStacks"}
 
     @distributed_trace
     def get_function_app_stacks_for_location(
@@ -426,7 +412,6 @@ class ProviderOperations:
         :param stack_os_type: Stack OS Type. Known values are: "Windows", "Linux", and "All". Default
          value is None.
         :type stack_os_type: str or ~azure.mgmt.web.v2022_09_01.models.ProviderStackOsType
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: An iterator like instance of either FunctionAppStack or the result of cls(response)
         :rtype: ~azure.core.paging.ItemPaged[~azure.mgmt.web.v2022_09_01.models.FunctionAppStack]
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -434,10 +419,10 @@ class ProviderOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[_models.FunctionAppStackCollection] = kwargs.pop("cls", None)
 
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -448,16 +433,14 @@ class ProviderOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_get_function_app_stacks_for_location_request(
+                _request = build_get_function_app_stacks_for_location_request(
                     location=location,
                     stack_os_type=stack_os_type,
                     api_version=api_version,
-                    template_url=self.get_function_app_stacks_for_location.metadata["url"],
                     headers=_headers,
                     params=_params,
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
+                _request.url = self._client.format_url(_request.url)
 
             else:
                 # make call to next link with the client's api-version
@@ -468,14 +451,13 @@ class ProviderOperations:
                         for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
                     }
                 )
-                _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _next_request_params["api-version"] = self._api_version
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
-                request.method = "GET"
-            return request
+                _request.url = self._client.format_url(_request.url)
+                _request.method = "GET"
+            return _request
 
         def extract_data(pipeline_response):
             deserialized = self._deserialize("FunctionAppStackCollection", pipeline_response)
@@ -485,11 +467,11 @@ class ProviderOperations:
             return deserialized.next_link or None, iter(list_of_elem)
 
         def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -501,10 +483,6 @@ class ProviderOperations:
             return pipeline_response
 
         return ItemPaged(get_next, extract_data)
-
-    get_function_app_stacks_for_location.metadata = {
-        "url": "/providers/Microsoft.Web/locations/{location}/functionAppStacks"
-    }
 
     @distributed_trace
     def get_web_app_stacks_for_location(
@@ -519,7 +497,6 @@ class ProviderOperations:
         :param stack_os_type: Stack OS Type. Known values are: "Windows", "Linux", and "All". Default
          value is None.
         :type stack_os_type: str or ~azure.mgmt.web.v2022_09_01.models.ProviderStackOsType
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: An iterator like instance of either WebAppStack or the result of cls(response)
         :rtype: ~azure.core.paging.ItemPaged[~azure.mgmt.web.v2022_09_01.models.WebAppStack]
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -527,10 +504,10 @@ class ProviderOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[_models.WebAppStackCollection] = kwargs.pop("cls", None)
 
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -541,16 +518,14 @@ class ProviderOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_get_web_app_stacks_for_location_request(
+                _request = build_get_web_app_stacks_for_location_request(
                     location=location,
                     stack_os_type=stack_os_type,
                     api_version=api_version,
-                    template_url=self.get_web_app_stacks_for_location.metadata["url"],
                     headers=_headers,
                     params=_params,
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
+                _request.url = self._client.format_url(_request.url)
 
             else:
                 # make call to next link with the client's api-version
@@ -561,14 +536,13 @@ class ProviderOperations:
                         for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
                     }
                 )
-                _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _next_request_params["api-version"] = self._api_version
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
-                request.method = "GET"
-            return request
+                _request.url = self._client.format_url(_request.url)
+                _request.method = "GET"
+            return _request
 
         def extract_data(pipeline_response):
             deserialized = self._deserialize("WebAppStackCollection", pipeline_response)
@@ -578,11 +552,11 @@ class ProviderOperations:
             return deserialized.next_link or None, iter(list_of_elem)
 
         def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -595,8 +569,6 @@ class ProviderOperations:
 
         return ItemPaged(get_next, extract_data)
 
-    get_web_app_stacks_for_location.metadata = {"url": "/providers/Microsoft.Web/locations/{location}/webAppStacks"}
-
     @distributed_trace
     def list_operations(self, **kwargs: Any) -> Iterable["_models.CsmOperationDescription"]:
         """Gets all available operations for the Microsoft.Web resource provider. Also exposes resource
@@ -605,7 +577,6 @@ class ProviderOperations:
         Description for Gets all available operations for the Microsoft.Web resource provider. Also
         exposes resource metric definitions.
 
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: An iterator like instance of either CsmOperationDescription or the result of
          cls(response)
         :rtype:
@@ -615,10 +586,10 @@ class ProviderOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[_models.CsmOperationCollection] = kwargs.pop("cls", None)
 
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -629,14 +600,12 @@ class ProviderOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_list_operations_request(
+                _request = build_list_operations_request(
                     api_version=api_version,
-                    template_url=self.list_operations.metadata["url"],
                     headers=_headers,
                     params=_params,
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
+                _request.url = self._client.format_url(_request.url)
 
             else:
                 # make call to next link with the client's api-version
@@ -647,14 +616,13 @@ class ProviderOperations:
                         for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
                     }
                 )
-                _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _next_request_params["api-version"] = self._api_version
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
-                request.method = "GET"
-            return request
+                _request.url = self._client.format_url(_request.url)
+                _request.method = "GET"
+            return _request
 
         def extract_data(pipeline_response):
             deserialized = self._deserialize("CsmOperationCollection", pipeline_response)
@@ -664,11 +632,11 @@ class ProviderOperations:
             return deserialized.next_link or None, iter(list_of_elem)
 
         def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -680,8 +648,6 @@ class ProviderOperations:
             return pipeline_response
 
         return ItemPaged(get_next, extract_data)
-
-    list_operations.metadata = {"url": "/providers/Microsoft.Web/operations"}
 
     @distributed_trace
     def get_web_app_stacks(
@@ -694,7 +660,6 @@ class ProviderOperations:
         :param stack_os_type: Stack OS Type. Known values are: "Windows", "Linux", and "All". Default
          value is None.
         :type stack_os_type: str or ~azure.mgmt.web.v2022_09_01.models.ProviderStackOsType
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: An iterator like instance of either WebAppStack or the result of cls(response)
         :rtype: ~azure.core.paging.ItemPaged[~azure.mgmt.web.v2022_09_01.models.WebAppStack]
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -702,10 +667,10 @@ class ProviderOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[_models.WebAppStackCollection] = kwargs.pop("cls", None)
 
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -716,15 +681,13 @@ class ProviderOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_get_web_app_stacks_request(
+                _request = build_get_web_app_stacks_request(
                     stack_os_type=stack_os_type,
                     api_version=api_version,
-                    template_url=self.get_web_app_stacks.metadata["url"],
                     headers=_headers,
                     params=_params,
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
+                _request.url = self._client.format_url(_request.url)
 
             else:
                 # make call to next link with the client's api-version
@@ -735,14 +698,13 @@ class ProviderOperations:
                         for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
                     }
                 )
-                _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _next_request_params["api-version"] = self._api_version
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
-                request.method = "GET"
-            return request
+                _request.url = self._client.format_url(_request.url)
+                _request.method = "GET"
+            return _request
 
         def extract_data(pipeline_response):
             deserialized = self._deserialize("WebAppStackCollection", pipeline_response)
@@ -752,11 +714,11 @@ class ProviderOperations:
             return deserialized.next_link or None, iter(list_of_elem)
 
         def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -768,8 +730,6 @@ class ProviderOperations:
             return pipeline_response
 
         return ItemPaged(get_next, extract_data)
-
-    get_web_app_stacks.metadata = {"url": "/providers/Microsoft.Web/webAppStacks"}
 
     @distributed_trace
     def get_available_stacks_on_prem(
@@ -782,7 +742,6 @@ class ProviderOperations:
         :param os_type_selected: Known values are: "Windows", "Linux", "WindowsFunctions",
          "LinuxFunctions", and "All". Default value is None.
         :type os_type_selected: str or ~azure.mgmt.web.v2022_09_01.models.ProviderOsTypeSelected
-        :keyword callable cls: A custom type or function that will be passed the direct response
         :return: An iterator like instance of either ApplicationStackResource or the result of
          cls(response)
         :rtype:
@@ -792,10 +751,10 @@ class ProviderOperations:
         _headers = kwargs.pop("headers", {}) or {}
         _params = case_insensitive_dict(kwargs.pop("params", {}) or {})
 
-        api_version: Literal["2022-09-01"] = kwargs.pop("api_version", _params.pop("api-version", "2022-09-01"))
+        api_version: str = kwargs.pop("api_version", _params.pop("api-version", self._api_version or "2022-09-01"))
         cls: ClsType[_models.ApplicationStackCollection] = kwargs.pop("cls", None)
 
-        error_map = {
+        error_map: MutableMapping = {
             401: ClientAuthenticationError,
             404: ResourceNotFoundError,
             409: ResourceExistsError,
@@ -806,16 +765,14 @@ class ProviderOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_get_available_stacks_on_prem_request(
+                _request = build_get_available_stacks_on_prem_request(
                     subscription_id=self._config.subscription_id,
                     os_type_selected=os_type_selected,
                     api_version=api_version,
-                    template_url=self.get_available_stacks_on_prem.metadata["url"],
                     headers=_headers,
                     params=_params,
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
+                _request.url = self._client.format_url(_request.url)
 
             else:
                 # make call to next link with the client's api-version
@@ -826,14 +783,13 @@ class ProviderOperations:
                         for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
                     }
                 )
-                _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _next_request_params["api-version"] = self._api_version
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
-                request = _convert_request(request)
-                request.url = self._client.format_url(request.url)
-                request.method = "GET"
-            return request
+                _request.url = self._client.format_url(_request.url)
+                _request.method = "GET"
+            return _request
 
         def extract_data(pipeline_response):
             deserialized = self._deserialize("ApplicationStackCollection", pipeline_response)
@@ -843,11 +799,11 @@ class ProviderOperations:
             return deserialized.next_link or None, iter(list_of_elem)
 
         def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -859,7 +815,3 @@ class ProviderOperations:
             return pipeline_response
 
         return ItemPaged(get_next, extract_data)
-
-    get_available_stacks_on_prem.metadata = {
-        "url": "/subscriptions/{subscriptionId}/providers/Microsoft.Web/availableStacks"
-    }

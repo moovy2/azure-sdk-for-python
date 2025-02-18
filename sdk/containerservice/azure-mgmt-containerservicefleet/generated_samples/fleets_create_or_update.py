@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.containerservicefleet import ContainerServiceFleetMgmtClient
 
 """
@@ -34,13 +35,13 @@ def main():
         fleet_name="fleet1",
         resource={
             "location": "East US",
-            "properties": {"hubProfile": {"dnsPrefix": "dnsprefix1"}},
+            "properties": {"hubProfile": {"agentProfile": {"vmSize": "Standard_DS1"}, "dnsPrefix": "dnsprefix1"}},
             "tags": {"archv2": "", "tier": "production"},
         },
     ).result()
     print(response)
 
 
-# x-ms-original-file: specification/containerservice/resource-manager/Microsoft.ContainerService/fleet/preview/2023-03-15-preview/examples/Fleets_CreateOrUpdate.json
+# x-ms-original-file: specification/containerservice/resource-manager/Microsoft.ContainerService/fleet/stable/2024-04-01/examples/Fleets_CreateOrUpdate.json
 if __name__ == "__main__":
     main()

@@ -35,7 +35,7 @@ import xml.etree.ElementTree as ET
 import types
 import re
 import uuid
-from typing import IO, cast, Union, Optional, AnyStr, Dict, Any, Set, Mapping
+from typing import IO, cast, Union, Optional, AnyStr, Dict, Any, Set, MutableMapping
 import urllib.parse
 
 from azure.core import __version__ as azcore_version
@@ -75,9 +75,7 @@ class HeadersPolicy(SansIOHTTPPolicy[HTTPRequestType, HTTPResponseType]):
             :caption: Configuring a headers policy.
     """
 
-    def __init__(
-        self, base_headers: Optional[Dict[str, str]] = None, **kwargs: Any
-    ) -> None:  # pylint: disable=super-init-not-called
+    def __init__(self, base_headers: Optional[Dict[str, str]] = None, **kwargs: Any) -> None:
         self._headers: Dict[str, str] = base_headers or {}
         self._headers.update(kwargs.pop("headers", {}))
 
@@ -205,9 +203,7 @@ class UserAgentPolicy(SansIOHTTPPolicy[HTTPRequestType, HTTPResponseType]):
     _USERAGENT = "User-Agent"
     _ENV_ADDITIONAL_USER_AGENT = "AZURE_HTTP_USER_AGENT"
 
-    def __init__(
-        self, base_user_agent: Optional[str] = None, **kwargs: Any
-    ) -> None:  # pylint: disable=super-init-not-called
+    def __init__(self, base_user_agent: Optional[str] = None, **kwargs: Any) -> None:
         self.overwrite: bool = kwargs.pop("user_agent_overwrite", False)
         self.use_env: bool = kwargs.pop("user_agent_use_env", True)
         application_id: Optional[str] = kwargs.pop("user_agent", None)
@@ -238,6 +234,7 @@ class UserAgentPolicy(SansIOHTTPPolicy[HTTPRequestType, HTTPResponseType]):
 
     def add_user_agent(self, value: str) -> None:
         """Add value to current user agent with a space.
+
         :param str value: value to add to user agent.
         """
         self._user_agent = "{} {}".format(self._user_agent, value)
@@ -263,7 +260,6 @@ class UserAgentPolicy(SansIOHTTPPolicy[HTTPRequestType, HTTPResponseType]):
 
 
 class NetworkTraceLoggingPolicy(SansIOHTTPPolicy[HTTPRequestType, HTTPResponseType]):
-
     """The logging policy in the pipeline is used to output HTTP network trace to the configured logger.
 
     This accepts both global configuration, and per-request level with "enable_http_logger"
@@ -283,9 +279,7 @@ class NetworkTraceLoggingPolicy(SansIOHTTPPolicy[HTTPRequestType, HTTPResponseTy
     def __init__(self, logging_enable: bool = False, **kwargs: Any):  # pylint: disable=unused-argument
         self.enable_http_logger = logging_enable
 
-    def on_request(
-        self, request: PipelineRequest[HTTPRequestType]
-    ) -> None:  # pylint: disable=too-many-return-statements
+    def on_request(self, request: PipelineRequest[HTTPRequestType]) -> None:
         """Logs HTTP request to the DEBUG logger.
 
         :param request: The PipelineRequest object.
@@ -424,6 +418,8 @@ class HttpLoggingPolicy(
             "Transfer-Encoding",
             "User-Agent",
             "WWW-Authenticate",  # OAuth Challenge header.
+            "x-vss-e2eid",  # Needed by Azure DevOps pipelines.
+            "x-msedge-ref",  # Needed by Azure DevOps pipelines.
         ]
     )
     REDACTED_PLACEHOLDER: str = "REDACTED"
@@ -446,6 +442,7 @@ class HttpLoggingPolicy(
         self, request: PipelineRequest[HTTPRequestType]
     ) -> None:
         """Logs HTTP method, url and headers.
+
         :param request: The PipelineRequest object.
         :type request: ~azure.core.pipeline.PipelineRequest
         """
@@ -727,7 +724,7 @@ class ProxyPolicy(SansIOHTTPPolicy[HTTPRequestType, HTTPResponseType]):
     Dictionary mapping protocol or protocol and host to the URL of the proxy
     to be used on each Request.
 
-    :param dict proxies: Maps protocol or protocol and hostname to the URL
+    :param MutableMapping proxies: Maps protocol or protocol and hostname to the URL
      of the proxy.
 
     .. admonition:: Example:
@@ -741,8 +738,8 @@ class ProxyPolicy(SansIOHTTPPolicy[HTTPRequestType, HTTPResponseType]):
     """
 
     def __init__(
-        self, proxies: Optional[Mapping[str, str]] = None, **kwargs: Any
-    ):  # pylint: disable=unused-argument,super-init-not-called
+        self, proxies: Optional[MutableMapping[str, str]] = None, **kwargs: Any
+    ):  # pylint: disable=unused-argument
         self.proxies = proxies
 
     def on_request(self, request: PipelineRequest[HTTPRequestType]) -> None:

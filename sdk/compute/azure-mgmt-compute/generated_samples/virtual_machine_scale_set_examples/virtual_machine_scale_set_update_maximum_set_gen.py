@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.compute import ComputeManagementClient
 
 """
@@ -51,7 +52,11 @@ def main():
                 "scaleInPolicy": {"forceDeletion": True, "rules": ["OldestVM"]},
                 "singlePlacementGroup": True,
                 "upgradePolicy": {
-                    "automaticOSUpgradePolicy": {"disableAutomaticRollback": True, "enableAutomaticOSUpgrade": True},
+                    "automaticOSUpgradePolicy": {
+                        "disableAutomaticRollback": True,
+                        "enableAutomaticOSUpgrade": True,
+                        "osRollingUpgradeDeferral": True,
+                    },
                     "mode": "Manual",
                     "rollingUpgradePolicy": {
                         "enableCrossZoneUpgrade": True,
@@ -236,6 +241,7 @@ def main():
                         },
                         "osDisk": {
                             "caching": "ReadWrite",
+                            "diffDiskSettings": {"option": "Local", "placement": "CacheDisk"},
                             "diskSizeGB": 6,
                             "image": {
                                 "uri": "http://{existing-storage-account-name}.blob.core.windows.net/{existing-container-name}/myDisk.vhd"
@@ -253,11 +259,12 @@ def main():
             },
             "sku": {"capacity": 7, "name": "DSv3-Type1", "tier": "aaa"},
             "tags": {"key246": "aaaaaaaaaaaaaaaaaaaaaaaa"},
+            "zones": ["1", "2", "3"],
         },
     ).result()
     print(response)
 
 
-# x-ms-original-file: specification/compute/resource-manager/Microsoft.Compute/ComputeRP/stable/2023-03-01/examples/virtualMachineScaleSetExamples/VirtualMachineScaleSet_Update_MaximumSet_Gen.json
+# x-ms-original-file: specification/compute/resource-manager/Microsoft.Compute/ComputeRP/stable/2024-07-01/examples/virtualMachineScaleSetExamples/VirtualMachineScaleSet_Update_MaximumSet_Gen.json
 if __name__ == "__main__":
     main()

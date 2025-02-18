@@ -4,12 +4,14 @@
 # license information.
 # --------------------------------------------------------------------------
 
-from logging import WARNING, getLogger
+from logging import getLogger
 
 from azure.monitor.opentelemetry import configure_azure_monitor
 from opentelemetry import trace
 
-configure_azure_monitor()
+configure_azure_monitor(
+    logger_name=__name__,
+)
 
 logger = getLogger(__name__)
 tracer = trace.get_tracer(__name__)

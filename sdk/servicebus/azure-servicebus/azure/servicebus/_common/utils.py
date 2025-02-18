@@ -19,7 +19,8 @@ from typing import (
     Union,
     Tuple,
     cast,
-    Callable
+    Callable,
+    Iterable,
 )
 from datetime import timezone
 
@@ -41,15 +42,12 @@ from ..amqp import AmqpAnnotatedMessage
 
 if TYPE_CHECKING:
     try:
-        # pylint:disable=unused-import
-        from uamqp import (
-            types as uamqp_types
-        )
+        from uamqp import types as uamqp_types
         from uamqp.authentication import JWTTokenAuth as uamqp_JWTTokenAuth
     except ImportError:
         pass
     from .._pyamqp.authentication import JWTTokenAuth as pyamqp_JWTTokenAuth
-    from .message import  ServiceBusReceivedMessage, ServiceBusMessage
+    from .message import ServiceBusReceivedMessage, ServiceBusMessage
     from azure.core.credentials import AzureSasCredential
     from .._servicebus_session import BaseSession
     from .._transport._base import AmqpTransport
@@ -58,12 +56,12 @@ if TYPE_CHECKING:
         Mapping[str, Any],
         ServiceBusMessage,
         AmqpAnnotatedMessage,
-        List[Union[Mapping[str, Any], ServiceBusMessage, AmqpAnnotatedMessage]],
+        Iterable[Mapping[str, Any]],
+        Iterable[ServiceBusMessage],
+        Iterable[AmqpAnnotatedMessage],
     ]
 
-    SingleMessageType = Union[
-        Mapping[str, Any], ServiceBusMessage, AmqpAnnotatedMessage
-    ]
+    SingleMessageType = Union[Mapping[str, Any], ServiceBusMessage, AmqpAnnotatedMessage]
 
 _log = logging.getLogger(__name__)
 
@@ -96,6 +94,9 @@ def create_properties(
     :param str user_agent: If specified,
     this will be added in front of the built-in user agent string.
 
+    :keyword amqp_transport: The AMQP transport type.
+    :paramtype amqp_transport: ~azure.servicebus._transport._base.AmqpTransport
+
     :return: The properties to add to the connection.
     :rtype: dict
     """
@@ -108,8 +109,7 @@ def create_properties(
     properties[amqp_transport.PLATFORM_SYMBOL] = platform_str
 
     final_user_agent = (
-        f"{USER_AGENT_PREFIX}/{VERSION} {amqp_transport.TRANSPORT_IDENTIFIER} "
-        f"{framework} ({platform_str})"
+        f"{USER_AGENT_PREFIX}/{VERSION} {amqp_transport.TRANSPORT_IDENTIFIER} " f"{framework} ({platform_str})"
     )
     if user_agent:
         final_user_agent = f"{user_agent} {final_user_agent}"
@@ -132,14 +132,9 @@ def get_renewable_start_time(renewable):
         ) from None
 
 
-def get_renewable_lock_duration(
-    renewable: Union["ServiceBusReceivedMessage", "BaseSession"]
-) -> datetime.timedelta:
-    # pylint: disable=protected-access
+def get_renewable_lock_duration(renewable: Union["ServiceBusReceivedMessage", "BaseSession"]) -> datetime.timedelta:
     try:
-        return max(
-            renewable.locked_until_utc - utc_now(), datetime.timedelta(seconds=0)
-        )
+        return max(renewable.locked_until_utc - utc_now(), datetime.timedelta(seconds=0))
     except AttributeError:
         raise TypeError(
             "Registered object is not renewable, renewable must be"
@@ -160,37 +155,30 @@ def create_authentication(client) -> Union["uamqp_JWTTokenAuth", "pyamqp_JWTToke
             get_token=functools.partial(client._credential.get_token, client._auth_uri),
             token_type=token_type,
             config=client._config,
-            update_token=True
+            update_token=True,
         )
     return client._amqp_transport.create_token_auth(
-            client._auth_uri,
-            get_token=functools.partial(client._credential.get_token, JWT_TOKEN_SCOPE),
-            token_type=token_type,
-            config=client._config,
-            update_token=False,
-        )
+        client._auth_uri,
+        get_token=functools.partial(client._credential.get_token, JWT_TOKEN_SCOPE),
+        token_type=token_type,
+        config=client._config,
+        update_token=False,
+    )
 
 
 def generate_dead_letter_entity_name(
     queue_name=None, topic_name=None, subscription_name=None, transfer_deadletter=False
 ):
+    entity_name = queue_name if queue_name else (topic_name + "/Subscriptions/" + subscription_name)
     entity_name = (
-        queue_name
-        if queue_name
-        else (topic_name + "/Subscriptions/" + subscription_name)
-    )
-    entity_name = (
-        f"{entity_name}"
-        f"{TRANSFER_DEAD_LETTER_QUEUE_SUFFIX if transfer_deadletter else DEAD_LETTER_QUEUE_SUFFIX}"
+        f"{entity_name}" f"{TRANSFER_DEAD_LETTER_QUEUE_SUFFIX if transfer_deadletter else DEAD_LETTER_QUEUE_SUFFIX}"
     )
 
     return entity_name
 
 
 def _convert_to_single_service_bus_message(
-    message: "SingleMessageType",
-    message_type: Type["ServiceBusMessage"],
-    to_outgoing_amqp_message: Callable
+    message: "SingleMessageType", message_type: Type["ServiceBusMessage"], to_outgoing_amqp_message: Callable
 ) -> "ServiceBusMessage":
     try:
         # ServiceBusMessage/ServiceBusReceivedMessage
@@ -221,9 +209,7 @@ def _convert_to_single_service_bus_message(
 
 
 def transform_outbound_messages(
-    messages: "MessagesType",
-    message_type: Type["ServiceBusMessage"],
-    to_outgoing_amqp_message: Callable
+    messages: "MessagesType", message_type: Type["ServiceBusMessage"], to_outgoing_amqp_message: Callable
 ) -> Union["ServiceBusMessage", List["ServiceBusMessage"]]:
     """
     This method serves multiple goals:
@@ -239,10 +225,8 @@ def transform_outbound_messages(
     :return: A list of ServiceBusMessage or a single ServiceBusMessage transformed.
     :rtype: ~azure.servicebus.ServiceBusMessage or list[~azure.servicebus.ServiceBusMessage]
     """
-    if isinstance(messages, list):
-        return [
-            _convert_to_single_service_bus_message(m, message_type, to_outgoing_amqp_message) for m in messages
-        ]
+    if isinstance(messages, Iterable) and not isinstance(messages, Mapping):
+        return [_convert_to_single_service_bus_message(m, message_type, to_outgoing_amqp_message) for m in messages]
     return _convert_to_single_service_bus_message(messages, message_type, to_outgoing_amqp_message)
 
 
@@ -260,9 +244,9 @@ def strip_protocol_from_uri(uri: str) -> str:
 
 def parse_sas_credential(credential: "AzureSasCredential") -> Tuple:
     sas = credential.signature
-    parsed_sas = sas.split('&')
+    parsed_sas = sas.split("&")
     expiry = None
     for item in parsed_sas:
-        if item.startswith('se='):
+        if item.startswith("se="):
             expiry = int(item[3:])
     return (sas, expiry)

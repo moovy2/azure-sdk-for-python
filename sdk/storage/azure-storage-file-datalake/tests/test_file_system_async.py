@@ -11,7 +11,7 @@ from time import sleep
 
 import pytest
 from azure.core import MatchConditions
-from azure.core.exceptions import HttpResponseError, ResourceNotFoundError
+from azure.core.exceptions import ClientAuthenticationError, HttpResponseError, ResourceNotFoundError
 from azure.storage.filedatalake import (
     AccessPolicy,
     AccountSasPermissions,
@@ -595,6 +595,7 @@ class TestFileSystemAsync(AsyncStorageRecordedTestCase):
         self.assertNamedItemInContainer(file_systems, file_system.file_system_name)
         assert file_systems[0].metadata == metadata
 
+    @pytest.mark.playback_test_only
     @DataLakePreparer()
     @recorded_by_proxy_async
     async def test_set_file_system_acl(self, **kwargs):
@@ -653,6 +654,7 @@ class TestFileSystemAsync(AsyncStorageRecordedTestCase):
         assert file_systems is not None
         assert len(file_systems) >= 3
 
+    @pytest.mark.playback_test_only
     @DataLakePreparer()
     @recorded_by_proxy_async
     async def test_list_file_systems_with_public_access_async(self, **kwargs):
@@ -1080,7 +1082,7 @@ class TestFileSystemAsync(AsyncStorageRecordedTestCase):
         self._setUp(datalake_storage_account_name, datalake_storage_account_key)
 
         url = self.account_url(datalake_storage_account_name, 'dfs')
-        token_credential = self.generate_oauth_token()
+        token_credential = self.get_credential(DataLakeServiceClient, is_async=True)
         dsc = DataLakeServiceClient(url, token_credential, logging_enable=True)
         file_system_name = self._get_file_system_reference()
         directory_client_name = '/'
@@ -1119,7 +1121,7 @@ class TestFileSystemAsync(AsyncStorageRecordedTestCase):
 
         self._setUp(datalake_storage_account_name, datalake_storage_account_key)
         url = self.account_url(datalake_storage_account_name, 'dfs')
-        token_credential = self.generate_oauth_token()
+        token_credential = self.get_credential(DataLakeServiceClient, is_async=True)
         dsc = DataLakeServiceClient(url, token_credential)
         file_system_name = self._get_file_system_reference()
         directory_client_name = '/'
@@ -1142,7 +1144,7 @@ class TestFileSystemAsync(AsyncStorageRecordedTestCase):
         )
         sas_directory_client = FileSystemClient(self.dsc.url, file_system_name,
                                                 credential=token)
-        paths = list()
+        paths = []
         async for path in sas_directory_client.get_paths():
             paths.append(path)
 
@@ -1200,6 +1202,60 @@ class TestFileSystemAsync(AsyncStorageRecordedTestCase):
         restored_file_client = await file_system_client._undelete_path(file_path, resp['deletion_id'])
         resp = await restored_file_client.get_file_properties()
         assert resp is not None
+
+    @DataLakePreparer()
+    @recorded_by_proxy_async
+    async def test_storage_account_audience_service_client(self, **kwargs):
+        datalake_storage_account_name = kwargs.pop("datalake_storage_account_name")
+        datalake_storage_account_key = kwargs.pop("datalake_storage_account_key")
+
+        # Arrange
+        self._setUp(datalake_storage_account_name, datalake_storage_account_key)
+        url = self.account_url(datalake_storage_account_name, 'dfs')
+        file_system_name = self._get_file_system_reference()
+        file_system_client = self.dsc.get_file_system_client(file_system_name)
+        await file_system_client.create_file_system()
+        await file_system_client.create_directory('testdir1')
+
+        # Act
+        token_credential = self.get_credential(DataLakeServiceClient, is_async=True)
+        fsc = FileSystemClient(
+            url, file_system_name,
+            credential=token_credential,
+            audience=f'https://{datalake_storage_account_name}.blob.core.windows.net/'
+        )
+
+        # Assert
+        response1 = await fsc.exists()
+        response2 = await fsc.create_directory('testdir11')
+        assert response1 is not None
+        assert response2 is not None
+
+    @DataLakePreparer()
+    @recorded_by_proxy_async
+    async def test_bad_audience_service_client(self, **kwargs):
+        datalake_storage_account_name = kwargs.pop("datalake_storage_account_name")
+        datalake_storage_account_key = kwargs.pop("datalake_storage_account_key")
+
+        # Arrange
+        self._setUp(datalake_storage_account_name, datalake_storage_account_key)
+        url = self.account_url(datalake_storage_account_name, 'dfs')
+        file_system_name = self._get_file_system_reference()
+        file_system_client = self.dsc.get_file_system_client(file_system_name)
+        await file_system_client.create_file_system()
+        await file_system_client.create_directory('testdir2')
+
+        # Act
+        token_credential = self.get_credential(DataLakeServiceClient, is_async=True)
+        fsc = FileSystemClient(
+            url, file_system_name,
+            credential=token_credential,
+            audience=f'https://badaudience.blob.core.windows.net/'
+        )
+
+        # Will not raise ClientAuthenticationError despite bad audience due to Bearer Challenge
+        await fsc.exists()
+        await fsc.create_directory('testdir22')
 
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':

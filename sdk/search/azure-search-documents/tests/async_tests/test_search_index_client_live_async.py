@@ -8,7 +8,7 @@ import pytest
 from azure.core.exceptions import HttpResponseError
 from azure.core import MatchConditions
 from devtools_testutils.aio import recorded_by_proxy_async
-from devtools_testutils import AzureRecordedTestCase
+from devtools_testutils import AzureRecordedTestCase, get_credential
 
 from search_service_preparer import SearchEnvVarPreparer, search_decorator
 from azure.search.documents.indexes.aio import SearchIndexClient
@@ -26,8 +26,8 @@ class TestSearchIndexClientAsync(AzureRecordedTestCase):
     @SearchEnvVarPreparer()
     @search_decorator(schema=None, index_batch=None)
     @recorded_by_proxy_async
-    async def test_search_index_client(self, api_key, endpoint, index_name):
-        client = SearchIndexClient(endpoint, api_key, retry_backoff_factor=60)
+    async def test_search_index_client(self, endpoint, index_name):
+        client = SearchIndexClient(endpoint, get_credential(is_async=True), retry_backoff_factor=60)
         index_name = "hotels"
         async with client:
             await self._test_get_service_statistics(client)
@@ -63,7 +63,10 @@ class TestSearchIndexClientAsync(AzureRecordedTestCase):
         scoring_profiles.append(scoring_profile)
         cors_options = CorsOptions(allowed_origins=["*"], max_age_in_seconds=60)
         index = SearchIndex(
-            name=index_name, fields=fields, scoring_profiles=scoring_profiles, cors_options=cors_options
+            name=index_name,
+            fields=fields,
+            scoring_profiles=scoring_profiles,
+            cors_options=cors_options,
         )
         result = await client.create_index(index)
         assert result.name == "hotels"
@@ -100,7 +103,12 @@ class TestSearchIndexClientAsync(AzureRecordedTestCase):
         scoring_profiles = []
         scoring_profiles.append(scoring_profile)
         cors_options = CorsOptions(allowed_origins=["*"], max_age_in_seconds=60)
-        index = SearchIndex(name=name, fields=fields, scoring_profiles=scoring_profiles, cors_options=cors_options)
+        index = SearchIndex(
+            name=name,
+            fields=fields,
+            scoring_profiles=scoring_profiles,
+            cors_options=cors_options,
+        )
         result = await client.create_index(index)
         etag = result.e_tag
         # get eTag and update
@@ -120,7 +128,12 @@ class TestSearchIndexClientAsync(AzureRecordedTestCase):
 
         cors_options = CorsOptions(allowed_origins=["*"], max_age_in_seconds=60)
         scoring_profiles = []
-        index = SearchIndex(name=name, fields=fields, scoring_profiles=scoring_profiles, cors_options=cors_options)
+        index = SearchIndex(
+            name=name,
+            fields=fields,
+            scoring_profiles=scoring_profiles,
+            cors_options=cors_options,
+        )
         result = await client.create_or_update_index(index=index)
         assert len(result.scoring_profiles) == 0
         assert result.cors_options.allowed_origins == cors_options.allowed_origins
@@ -128,7 +141,12 @@ class TestSearchIndexClientAsync(AzureRecordedTestCase):
         scoring_profile = ScoringProfile(name="MyProfile")
         scoring_profiles = []
         scoring_profiles.append(scoring_profile)
-        index = SearchIndex(name=name, fields=fields, scoring_profiles=scoring_profiles, cors_options=cors_options)
+        index = SearchIndex(
+            name=name,
+            fields=fields,
+            scoring_profiles=scoring_profiles,
+            cors_options=cors_options,
+        )
         result = await client.create_or_update_index(index=index)
         assert result.scoring_profiles[0].name == scoring_profile.name
         assert result.cors_options.allowed_origins == cors_options.allowed_origins
@@ -145,7 +163,12 @@ class TestSearchIndexClientAsync(AzureRecordedTestCase):
         scoring_profiles = []
         scoring_profiles.append(scoring_profile)
         cors_options = CorsOptions(allowed_origins=["*"], max_age_in_seconds=60)
-        index = SearchIndex(name=name, fields=fields, scoring_profiles=scoring_profiles, cors_options=cors_options)
+        index = SearchIndex(
+            name=name,
+            fields=fields,
+            scoring_profiles=scoring_profiles,
+            cors_options=cors_options,
+        )
         result = await client.create_index(index)
         etag = result.e_tag
         # get eTag and update

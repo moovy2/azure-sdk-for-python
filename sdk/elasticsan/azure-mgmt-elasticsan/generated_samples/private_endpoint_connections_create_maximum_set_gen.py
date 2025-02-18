@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.elasticsan import ElasticSanMgmtClient
 
 """
@@ -35,11 +36,11 @@ def main():
         private_endpoint_connection_name="privateendpointconnectionname",
         parameters={
             "properties": {
-                "groupIds": ["sytxzqlcoapcaywthgwvwcw"],
+                "groupIds": ["jdwrzpemdjrpiwzvy"],
                 "privateEndpoint": {},
                 "privateLinkServiceConnectionState": {
-                    "actionsRequired": "None",
-                    "description": "Auto-Approved",
+                    "actionsRequired": "jhjdpwvyzipggtn",
+                    "description": "dxl",
                     "status": "Pending",
                 },
             }
@@ -48,6 +49,6 @@ def main():
     print(response)
 
 
-# x-ms-original-file: specification/elasticsan/resource-manager/Microsoft.ElasticSan/preview/2022-12-01-preview/examples/PrivateEndpointConnections_Create_MaximumSet_Gen.json
+# x-ms-original-file: specification/elasticsan/resource-manager/Microsoft.ElasticSan/preview/2024-06-01-preview/examples/PrivateEndpointConnections_Create_MaximumSet_Gen.json
 if __name__ == "__main__":
     main()

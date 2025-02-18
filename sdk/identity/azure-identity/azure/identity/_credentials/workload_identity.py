@@ -12,11 +12,13 @@ from .._constants import EnvironmentVariables
 
 
 class TokenFileMixin:
-    def __init__(self, token_file_path: str, **_: Any) -> None:
+
+    _token_file_path: str
+
+    def __init__(self, **_: Any) -> None:
         super(TokenFileMixin, self).__init__()
         self._jwt = ""
         self._last_read_time = 0
-        self._token_file_path = token_file_path
 
     def _get_service_account_token(self) -> str:
         now = int(time.time())
@@ -28,7 +30,7 @@ class TokenFileMixin:
 
 
 class WorkloadIdentityCredential(ClientAssertionCredential, TokenFileMixin):
-    """Authenticates using an Azure Active Directory workload identity.
+    """Authenticates using Microsoft Entra Workload ID.
 
     Workload identity authentication is a feature in Azure that allows applications running on virtual machines (VMs)
     to access other Azure resources without the need for a service principal or managed identity. With workload
@@ -44,8 +46,8 @@ class WorkloadIdentityCredential(ClientAssertionCredential, TokenFileMixin):
     to `this workload identity overview <https://learn.microsoft.com/azure/aks/workload-identity-overview>`__
     for more information.
 
-    :keyword str tenant_id: ID of the application's Azure Active Directory tenant. Also called its "directory" ID.
-    :keyword str client_id: The client ID of an Azure AD app registration.
+    :keyword str tenant_id: ID of the application's Microsoft Entra tenant. Also called its "directory" ID.
+    :keyword str client_id: The client ID of a Microsoft Entra app registration.
     :keyword str token_file_path: The path to a file containing a Kubernetes service account token that authenticates
         the identity.
 
@@ -85,6 +87,7 @@ class WorkloadIdentityCredential(ClientAssertionCredential, TokenFileMixin):
                 "'token_file_path' is required. Please pass it in or set the "
                 f"{EnvironmentVariables.AZURE_FEDERATED_TOKEN_FILE} environment variable"
             )
+        self._token_file_path = token_file_path
         super(WorkloadIdentityCredential, self).__init__(
             tenant_id=tenant_id,
             client_id=client_id,

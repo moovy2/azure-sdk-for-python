@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.desktopvirtualization import DesktopVirtualizationMgmtClient
 
 """
@@ -29,13 +30,12 @@ def main():
         subscription_id="daefabc0-95b4-48b3-b645-8a753a63c4fa",
     )
 
-    response = client.scaling_plans.delete(
+    client.scaling_plans.delete(
         resource_group_name="resourceGroup1",
         scaling_plan_name="scalingPlan1",
     )
-    print(response)
 
 
-# x-ms-original-file: specification/desktopvirtualization/resource-manager/Microsoft.DesktopVirtualization/stable/2022-09-09/examples/ScalingPlan_Delete.json
+# x-ms-original-file: specification/desktopvirtualization/resource-manager/Microsoft.DesktopVirtualization/stable/2024-04-03/examples/ScalingPlan_Delete.json
 if __name__ == "__main__":
     main()

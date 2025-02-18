@@ -4,13 +4,14 @@
 # ------------------------------------
 import asyncio
 import os
-from azure.keyvault.certificates import CertificatePolicy
+
+from azure.keyvault.certificates import CertificatePolicy, KeyVaultCertificate
 from azure.keyvault.certificates.aio import CertificateClient
 from azure.identity.aio import DefaultAzureCredential
 
 # ----------------------------------------------------------------------------------------------------------
 # Prerequisites:
-# 1. An Azure Key Vault (https://docs.microsoft.com/azure/key-vault/quick-create-cli)
+# 1. An Azure Key Vault (https://learn.microsoft.com/azure/key-vault/quick-create-cli)
 #
 # 2. azure-keyvault-certificates and azure-identity packages (pip install these)
 #
@@ -19,7 +20,7 @@ from azure.identity.aio import DefaultAzureCredential
 #
 # ----------------------------------------------------------------------------------------------------------
 # Sample - demonstrates the basic list operations on a vault(certificate) resource for Azure Key Vault.
-# The vault has to be soft-delete enabled to perform one of the following operations: https://docs.microsoft.com/azure/key-vault/key-vault-ovw-soft-delete
+# The vault has to be soft-delete enabled to perform one of the following operations: https://learn.microsoft.com/azure/key-vault/key-vault-ovw-soft-delete
 #
 # 1. Create certificate (create_certificate)
 #
@@ -69,6 +70,7 @@ async def run_sample():
     bank_certificate = await client.create_certificate(
         certificate_name=bank_cert_name, policy=CertificatePolicy.get_default(), tags=tags
     )
+    assert isinstance(bank_certificate, KeyVaultCertificate) and bank_certificate.properties
     print(
         f"Certificate with name '{bank_certificate.name}' was created again with tags "
         f"'{bank_certificate.properties.tags}'"

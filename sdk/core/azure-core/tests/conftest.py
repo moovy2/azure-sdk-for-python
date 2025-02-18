@@ -31,18 +31,8 @@ import subprocess
 import random
 import platform
 import urllib
-from rest_client import TestRestClient
+from rest_client import MockRestClient
 import sys
-
-# If opencensus is loadable while doing these tests, register an empty tracer to avoid this:
-# https://github.com/census-instrumentation/opencensus-python/issues/442
-try:
-    from azure.core.tracing.ext.opencensus_span import OpenCensusSpan
-    from opencensus.trace.tracer import Tracer
-
-    Tracer()
-except ImportError:
-    pass
 
 
 def is_port_available(port_num):
@@ -87,7 +77,7 @@ def start_testserver():
         if not is_port_available(port):
             return child_process
         time.sleep(1)
-    raise ValueError("Didn't start!")
+    raise ValueError(f"Didn't start!")
 
 
 def terminate_testserver(process):
@@ -107,4 +97,4 @@ def testserver():
 
 @pytest.fixture
 def client(port):
-    return TestRestClient(port)
+    return MockRestClient(port)

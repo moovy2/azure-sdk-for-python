@@ -6,15 +6,15 @@ import hashlib
 import json
 import os
 import shutil
-from typing import Any, Dict, Iterable, List, Optional, Type, TypeVar, Union, overload
+from typing import TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Tuple, Type, TypeVar, Union, cast, overload
 from unittest import mock
 
 import msrest
 from marshmallow.exceptions import ValidationError
 
 from .._restclient.v2022_02_01_preview.models import JobInputType as JobInputType02
-from .._restclient.v2023_04_01_preview.models import JobInputType as JobInputType10
 from .._restclient.v2023_04_01_preview.models import JobInput as RestJobInput
+from .._restclient.v2023_04_01_preview.models import JobInputType as JobInputType10
 from .._restclient.v2023_04_01_preview.models import JobOutput as RestJobOutput
 from .._schema._datastore import AzureBlobSchema, AzureDataLakeGen1Schema, AzureDataLakeGen2Schema, AzureFileSchema
 from .._schema._deployment.batch.batch_deployment import BatchDeploymentSchema
@@ -37,10 +37,8 @@ from .._schema.job import CommandJobSchema, ParallelJobSchema
 from .._schema.pipeline.pipeline_job import PipelineJobSchema
 from .._schema.schedule.schedule import JobScheduleSchema
 from .._schema.workspace import WorkspaceSchema
-from .._utils.utils import is_internal_components_enabled, try_enable_internal_components
+from .._utils.utils import is_internal_component_data, try_enable_internal_components
 from ..constants._common import (
-    AZUREML_INTERNAL_COMPONENTS_ENV_VAR,
-    AZUREML_INTERNAL_COMPONENTS_SCHEMA_PREFIX,
     REF_DOC_YAML_SCHEMA_ERROR_MSG_FORMAT,
     CommonYamlFields,
     YAMLRefDocLinks,
@@ -50,6 +48,11 @@ from ..constants._component import NodeType
 from ..constants._endpoint import EndpointYamlFields
 from ..entities._mixins import RestTranslatableMixin
 from ..exceptions import ErrorCategory, ErrorTarget, ValidationErrorType, ValidationException
+
+# avoid circular import error
+if TYPE_CHECKING:
+    from azure.ai.ml.entities._inputs_outputs import Output
+    from azure.ai.ml.entities._job.pipeline._io import NodeOutput
 
 # Maps schema class name to formatted error message pointing to Microsoft docs reference page for a schema's YAML
 REF_DOC_ERROR_MESSAGE_MAP = {
@@ -129,19 +132,62 @@ REF_DOC_ERROR_MESSAGE_MAP = {
 }
 
 
-def find_type_in_override(params_override: Optional[list] = None) -> Optional[str]:
+def find_field_in_override(field: str, params_override: Optional[list] = None) -> Optional[str]:
+    """Find specific field in params override.
+
+    :param field: The name of the field to find
+    :type field: str
+    :param params_override: The params override
+    :type params_override: Optional[list]
+    :return: The type
+    :rtype: Optional[str]
+    """
     params_override = params_override or []
     for override in params_override:
-        if CommonYamlFields.TYPE in override:
-            return override[CommonYamlFields.TYPE]
+        if field in override:
+            res: Optional[str] = override[field]
+            return res
     return None
 
 
+def find_type_in_override(params_override: Optional[list] = None) -> Optional[str]:
+    """Find type in params override.
+
+    :param params_override: The params override
+    :type params_override: Optional[list]
+    :return: The type
+    :rtype: Optional[str]
+    """
+    return find_field_in_override(CommonYamlFields.TYPE, params_override)
+
+
 def is_compute_in_override(params_override: Optional[list] = None) -> bool:
-    return any(EndpointYamlFields.COMPUTE in param for param in params_override)
+    """Check if compute is in params override.
+
+    :param params_override: The params override
+    :type params_override: Optional[list]
+    :return: True if compute is in params override
+    :rtype: bool
+    """
+    if params_override is not None:
+        return any(EndpointYamlFields.COMPUTE in param for param in params_override)
+    return False
 
 
-def load_from_dict(schema: Any, data: Dict, context: Dict, additional_message: str = "", **kwargs):
+def load_from_dict(schema: Any, data: Dict, context: Dict, additional_message: str = "", **kwargs: Any) -> Any:
+    """Load data from dict.
+
+    :param schema: The schema to load data with.
+    :type schema: Any
+    :param data: The data to load.
+    :type data: Dict
+    :param context: The context of the data.
+    :type context: Dict
+    :param additional_message: The additional message to add to the error message.
+    :type additional_message: str
+    :return: The loaded data.
+    :rtype: Any
+    """
     try:
         return schema(context=context).load(data, **kwargs)
     except ValidationError as e:
@@ -150,20 +196,40 @@ def load_from_dict(schema: Any, data: Dict, context: Dict, additional_message: s
 
 
 def decorate_validation_error(schema: Any, pretty_error: str, additional_message: str = "") -> str:
+    """Decorate validation error with additional message.
+
+    :param schema: The schema that failed validation.
+    :type schema: Any
+    :param pretty_error: The pretty error message.
+    :type pretty_error: str
+    :param additional_message: The additional message to add.
+    :type additional_message: str
+    :return: The decorated error message.
+    :rtype: str
+    """
     ref_doc_link_error_msg = REF_DOC_ERROR_MESSAGE_MAP.get(schema, "")
     if ref_doc_link_error_msg:
         additional_message += f"\n{ref_doc_link_error_msg}"
     additional_message += (
         "\nThe easiest way to author a specification file is using IntelliSense and auto-completion Azure ML VS "
         "code extension provides: https://code.visualstudio.com/docs/datascience/azure-machine-learning. "
-        "To set up: https://docs.microsoft.com/azure/machine-learning/how-to-setup-vs-code"
+        "To set up: https://learn.microsoft.com/azure/machine-learning/how-to-setup-vs-code"
     )
     return f"Validation for {schema.__name__} failed:\n\n {pretty_error} \n\n {additional_message}"
 
 
-def get_md5_string(text):
+def get_md5_string(text: Optional[str]) -> str:
+    """Get md5 string for a given text.
+
+    :param text: The text to get md5 string for.
+    :type text: str
+    :return: The md5 string.
+    :rtype: str
+    """
     try:
-        return hashlib.md5(text.encode("utf8")).hexdigest()  # nosec
+        if text is not None:
+            return hashlib.md5(text.encode("utf8")).hexdigest()  # nosec
+        return ""
     except Exception as ex:
         raise ex
 
@@ -237,7 +303,7 @@ def convert_ordered_dict_to_dict(target_object: Union[Dict, List], remove_empty:
     return target_object
 
 
-def _general_copy(src: Union[str, os.PathLike], dst: Union[str, os.PathLike], make_dirs: bool = True):
+def _general_copy(src: Union[str, os.PathLike], dst: Union[str, os.PathLike], make_dirs: bool = True) -> None:
     """Wrapped `shutil.copy2` function for possible "Function not implemented" exception raised by it.
 
     Background: `shutil.copy2` will throw OSError when dealing with Azure File.
@@ -259,7 +325,7 @@ def _general_copy(src: Union[str, os.PathLike], dst: Union[str, os.PathLike], ma
         shutil.copy2(src, dst)
 
 
-def _dump_data_binding_expression_in_fields(obj):
+def _dump_data_binding_expression_in_fields(obj: Any) -> Any:
     for key, value in obj.__dict__.items():
         # PipelineInput is subclass of NodeInput
         from ._job.pipeline._io import NodeInput
@@ -274,7 +340,9 @@ def _dump_data_binding_expression_in_fields(obj):
 T = TypeVar("T")
 
 
-def get_rest_dict_for_node_attrs(target_obj: T, clear_empty_value: bool = False) -> Union[T, Dict]:
+def get_rest_dict_for_node_attrs(
+    target_obj: Union[T, str], clear_empty_value: bool = False
+) -> Union[T, Dict, List, str, int, float, bool]:
     """Convert object to dict and convert OrderedDict to dict.
     Allow data binding expression as value, disregarding of the type defined in rest object.
 
@@ -291,30 +359,33 @@ def get_rest_dict_for_node_attrs(target_obj: T, clear_empty_value: bool = False)
     if target_obj is None:
         return None
     if isinstance(target_obj, dict):
-        result = {}
+        result_dict: dict = {}
         for key, value in target_obj.items():
             if value is None:
                 continue
             if key in ["additional_properties"]:
                 continue
-            result[key] = get_rest_dict_for_node_attrs(value, clear_empty_value)
-        return result
+            result_dict[key] = get_rest_dict_for_node_attrs(value, clear_empty_value)
+        return result_dict
     if isinstance(target_obj, list):
-        result = []
+        result_list: list = []
         for item in target_obj:
-            result.append(get_rest_dict_for_node_attrs(item, clear_empty_value))
-        return result
+            result_list.append(get_rest_dict_for_node_attrs(item, clear_empty_value))
+        return result_list
     if isinstance(target_obj, RestTranslatableMixin):
         # note that the rest object may be invalid as data binding expression may not fit
         # rest object structure
         # pylint: disable=protected-access
-        target_obj = _dump_data_binding_expression_in_fields(copy.deepcopy(target_obj))
+        _target_obj = _dump_data_binding_expression_in_fields(copy.deepcopy(target_obj))
 
         from azure.ai.ml.entities._credentials import _BaseIdentityConfiguration
 
-        if isinstance(target_obj, _BaseIdentityConfiguration):
-            return get_rest_dict_for_node_attrs(target_obj._to_job_rest_object(), clear_empty_value=clear_empty_value)
-        return get_rest_dict_for_node_attrs(target_obj._to_rest_object(), clear_empty_value=clear_empty_value)
+        if isinstance(_target_obj, _BaseIdentityConfiguration):
+            # TODO: Bug Item number: 2883348
+            return get_rest_dict_for_node_attrs(
+                _target_obj._to_job_rest_object(), clear_empty_value=clear_empty_value  # type: ignore
+            )
+        return get_rest_dict_for_node_attrs(_target_obj._to_rest_object(), clear_empty_value=clear_empty_value)
 
     if isinstance(target_obj, msrest.serialization.Model):
         # can't use result.as_dict() as data binding expression may not fit rest object structure
@@ -335,11 +406,11 @@ class _DummyRestModelFromDict(msrest.serialization.Model):
     a non-existent public attribute.
     """
 
-    def __init__(self, rest_dict):
+    def __init__(self, rest_dict: Optional[dict]):
         self._rest_dict = rest_dict or {}
         super().__init__()
 
-    def __getattribute__(self, item):
+    def __getattribute__(self, item: str) -> Any:
         if not item.startswith("_"):
             return self._rest_dict.get(item, None)
         return super().__getattribute__(item)
@@ -369,7 +440,14 @@ def from_rest_dict_to_dummy_rest_object(rest_dict: Optional[Dict]) -> _DummyRest
     raise ValueError("Unexpected type {}".format(type(rest_dict)))
 
 
-def extract_label(input_str: str):
+def extract_label(input_str: str) -> Union[Tuple, List]:
+    """Extract label from input string.
+
+    :param input_str: The input string
+    :type input_str: str
+    :return: The rest of the string and the label
+    :rtype: Tuple[str, Optional[str]]
+    """
     if not isinstance(input_str, str):
         return None, None
     if "@" in input_str:
@@ -378,20 +456,16 @@ def extract_label(input_str: str):
 
 
 @overload
-def resolve_pipeline_parameters(pipeline_parameters: None, remove_empty: bool = False) -> None:
-    ...
+def resolve_pipeline_parameters(pipeline_parameters: None, remove_empty: bool = False) -> None: ...
 
 
 @overload
 def resolve_pipeline_parameters(
     pipeline_parameters: Dict[str, T], remove_empty: bool = False
-) -> Dict[str, Union[T, str, "NodeOutput"]]:
-    ...
+) -> Dict[str, Union[T, str, "NodeOutput"]]: ...
 
 
-def resolve_pipeline_parameters(
-    pipeline_parameters: Optional[Dict[str, T]], remove_empty: bool = False
-) -> Optional[Dict[str, Union[T, str, "NodeOutput"]]]:
+def resolve_pipeline_parameters(pipeline_parameters: Optional[Dict], remove_empty: bool = False) -> Optional[Dict]:
     """Resolve pipeline parameters.
 
     1. Resolve BaseNode and OutputsAttrDict type to NodeOutput.
@@ -426,19 +500,28 @@ def resolve_pipeline_parameters(
     return pipeline_parameters
 
 
-def resolve_pipeline_parameter(data: T) -> Union[T, str, "NodeOutput"]:
+def resolve_pipeline_parameter(data: Any) -> Union[T, str, "NodeOutput"]:
+    """Resolve pipeline parameter.
+    1. Resolve BaseNode and OutputsAttrDict type to NodeOutput.
+    2. Remove empty value (optional).
+    :param data: The pipeline parameter
+    :type data: T
+    :return:
+        * None if data is None
+        * The resolved pipeline parameter
+    :rtype: Union[T, str, "NodeOutput"]
+    """
     from azure.ai.ml.entities._builders.base_node import BaseNode
     from azure.ai.ml.entities._builders.pipeline import Pipeline
-    from azure.ai.ml.entities._job.pipeline._io import OutputsAttrDict
+    from azure.ai.ml.entities._job.pipeline._io import NodeOutput, OutputsAttrDict
     from azure.ai.ml.entities._job.pipeline._pipeline_expression import PipelineExpression
-    from azure.ai.ml.entities._job.pipeline._io import NodeOutput
 
     if isinstance(data, PipelineExpression):
-        data: Union[str, BaseNode] = data.resolve()
+        data = cast(Union[str, BaseNode], data.resolve())
     if isinstance(data, (BaseNode, Pipeline)):
         # For the case use a node/pipeline node as the input, we use its only one output as the real input.
         # Here we set node = node.outputs, then the following logic will get the output object.
-        data: OutputsAttrDict = data.outputs
+        data = cast(OutputsAttrDict, data.outputs)
     if isinstance(data, OutputsAttrDict):
         # For the case that use the outputs of another component as the input,
         # we use the only one output as the real input,
@@ -450,11 +533,11 @@ def resolve_pipeline_parameter(data: T) -> Union[T, str, "NodeOutput"]:
                 no_personal_data_message="multiple output(s) found of specified outputs, exactly 1 output required.",
                 target=ErrorTarget.PIPELINE,
             )
-        data: NodeOutput = list(data.values())[0]
-    return data
+        data = cast(NodeOutput, list(data.values())[0])
+    return cast(Union[T, str, "NodeOutput"], data)
 
 
-def normalize_job_input_output_type(input_output_value: Union[RestJobOutput, RestJobInput, Dict]):
+def normalize_job_input_output_type(input_output_value: Union[RestJobOutput, RestJobInput, Dict]) -> None:
     """Normalizes the `job_input_type`, `job_output_type`, and `type` keys for REST job output and input objects.
 
     :param input_output_value: Either a REST input or REST output of a job
@@ -516,7 +599,6 @@ def get_type_from_spec(data: dict, *, valid_keys: Iterable[str]) -> str:
     :rtype: str
     """
     _type, _ = extract_label(data.get(CommonYamlFields.TYPE, None))
-    schema = data.get(CommonYamlFields.SCHEMA, None)
 
     # we should keep at least 1 place outside _internal to enable internal components
     # and this is the only place
@@ -525,27 +607,19 @@ def get_type_from_spec(data: dict, *, valid_keys: Iterable[str]) -> str:
     if _type == NodeType.DATA_TRANSFER:
         _type = "_".join([NodeType.DATA_TRANSFER, data.get("task", " ")])
     if _type not in valid_keys:
-        if (
-            schema
-            and not is_internal_components_enabled()
-            and schema.startswith(AZUREML_INTERNAL_COMPONENTS_SCHEMA_PREFIX)
-        ):
-            msg = (
-                f"Internal components is a private feature in v2, please set environment variable "
-                f"{AZUREML_INTERNAL_COMPONENTS_ENV_VAR} to true to use it."
-            )
-        else:
-            msg = f"Unsupported component type: {_type}."
+        is_internal_component_data(data, raise_if_not_enabled=True)
+
         raise ValidationException(
-            message=msg,
+            message="Unsupported component type: %s." % _type,
             target=ErrorTarget.COMPONENT,
-            no_personal_data_message=msg,
+            no_personal_data_message="Unsupported component type",
             error_category=ErrorCategory.USER_ERROR,
         )
-    return _type
+    res: str = _type
+    return res
 
 
-def copy_output_setting(source: Union["Output", "NodeOutput"], target: "NodeOutput"):
+def copy_output_setting(source: Union["Output", "NodeOutput"], target: "NodeOutput") -> None:
     """Copy node output setting from source to target.
 
     Currently only path, name, version will be copied.
@@ -556,13 +630,16 @@ def copy_output_setting(source: Union["Output", "NodeOutput"], target: "NodeOutp
     :type target: NodeOutput
     """
     # pylint: disable=protected-access
-    from azure.ai.ml.entities._job.pipeline._io import NodeOutput
+    from azure.ai.ml.entities._job.pipeline._io import NodeOutput, PipelineOutput
 
     if not isinstance(source, NodeOutput):
         # Only copy when source is an output builder
         return
-    if source._data:
-        target._data = copy.deepcopy(source._data)
+    source_data = source._data
+    if isinstance(source_data, PipelineOutput):
+        source_data = source_data._data
+    if source_data:
+        target._data = copy.deepcopy(source_data)
     # copy pipeline component output's node output to subgraph builder
     if source._binding_output is not None:
         target._binding_output = source._binding_output

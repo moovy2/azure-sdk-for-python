@@ -2,17 +2,20 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License. See License.txt in the project root for license information.
 # --------------------------------------------------------------------------------------------
-from typing import Iterable, Dict, Any, Optional
+from typing import Iterable, Dict, Any, Optional, Union, TYPE_CHECKING
 import logging
 import copy
 from collections import defaultdict
 import asyncio
 from azure.eventhub.exceptions import OwnershipLostError  # type: ignore
-from azure.eventhub.aio import CheckpointStore  # type: ignore  # pylint: disable=no-name-in-module
+from azure.eventhub.aio import CheckpointStore  # type: ignore
 from azure.core.exceptions import ResourceModifiedError, ResourceExistsError, ResourceNotFoundError  # type: ignore
 from ._vendor.storage.blob.aio import ContainerClient, BlobClient
 from ._vendor.storage.blob._shared.base_client import parse_connection_str
 
+if TYPE_CHECKING:
+    from azure.core.credentials_async import AsyncTokenCredential
+    from azure.core.credentials import AzureSasCredential, AzureNamedKeyCredential
 
 logger = logging.getLogger(__name__)
 UPLOAD_DATA = ""
@@ -29,11 +32,11 @@ class BlobCheckpointStore(CheckpointStore):
     :param container_name:
      The name of the container for the blobs.
     :type container_name: str
-    :param credential:
+    :keyword credential:
      The credentials with which to authenticate. This is optional if the
      account URL already has a SAS token. The value can be a AzureSasCredential, an AzureNamedKeyCredential,
      or a TokenCredential.If the URL already has a SAS token, specifying an explicit credential will take priority.
-    :type credential: ~azure.core.credentials_async.AsyncTokenCredential or
+    :paramtype credential: ~azure.core.credentials_async.AsyncTokenCredential or
      ~azure.core.credentials.AzureSasCredential or ~azure.core.credentials.AzureNamedKeyCredential or None
     :keyword str api_version:
      The Storage API version to use for requests. Default value is '2019-07-07'.
@@ -41,27 +44,44 @@ class BlobCheckpointStore(CheckpointStore):
      The hostname of the secondary endpoint.
     """
 
-    def __init__(self, blob_account_url, container_name, *, credential=None, **kwargs):
-        # type(str, str, Optional[Any], Any) -> None
+    def __init__(
+        self,
+        blob_account_url: str,
+        container_name: str,
+        *,
+        credential: Optional[Union["AsyncTokenCredential", "AzureNamedKeyCredential", "AzureSasCredential"]] = None,
+        api_version: str = "2019-07-07",
+        secondary_hostname: Optional[str] = None,
+        **kwargs: Any
+    ) -> None:
         self._container_client = kwargs.pop("container_client", None)
         if not self._container_client:
-            api_version = kwargs.pop("api_version", None)
-            if api_version:
-                headers = kwargs.get("headers")
-                if headers:
-                    headers["x-ms-version"] = api_version
-                else:
-                    kwargs["headers"] = {"x-ms-version": api_version}
+            headers = kwargs.get("headers")
+            if headers:
+                headers["x-ms-version"] = api_version
+            else:
+                kwargs["headers"] = {"x-ms-version": api_version}
             self._container_client = ContainerClient(
-                blob_account_url, container_name, credential=credential, **kwargs
+                blob_account_url,
+                container_name,
+                credential=credential,
+                api_version=api_version,
+                secondary_hostname=secondary_hostname,
+                **kwargs
             )
         self._cached_blob_clients = defaultdict()  # type: Dict[str, BlobClient]
 
     @classmethod
-    def from_connection_string(
-        cls, conn_str, container_name, *, credential=None, **kwargs
-    ):
-        # type: (str, str, Any, Optional[Any], Any) -> BlobCheckpointStore
+    def from_connection_string(  # pylint:disable=docstring-keyword-should-match-keyword-only
+        cls,
+        conn_str: str,
+        container_name: str,
+        *,
+        credential: Optional[Union["AsyncTokenCredential", "AzureNamedKeyCredential", "AzureSasCredential"]] = None,
+        api_version: str = "2019-07-07",
+        secondary_hostname: Optional[str] = None,
+        **kwargs: Any
+    ) -> "BlobCheckpointStore":
         """Create BlobCheckpointStore from a storage connection string.
 
         :param str conn_str:
@@ -74,7 +94,7 @@ class BlobCheckpointStore(CheckpointStore):
          account URL already has a SAS token. The value can be a AzureSasCredential, an AzureNamedKeyCredential,
          or a TokenCredential.If the URL already has a SAS token,
          specifying an explicit credential will take priority.
-        :type credential: ~azure.core.credentials_async.AsyncTokenCredential or
+        :paramtype credential: ~azure.core.credentials_async.AsyncTokenCredential or
          ~azure.core.credentials.AzureSasCredential or ~azure.core.credentials.AzureNamedKeyCredential or None
         :keyword str api_version:
          The Storage API version to use for requests. Default value is '2019-07-07'.
@@ -83,29 +103,36 @@ class BlobCheckpointStore(CheckpointStore):
         :returns: A blob checkpoint store.
         :rtype: ~azure.eventhub.extensions.checkpointstoreblobaio.BlobCheckpointStore
         """
-        account_url, secondary, credential = parse_connection_str(conn_str, credential, 'blob')
-        if 'secondary_hostname' not in kwargs:
-            kwargs['secondary_hostname'] = secondary
+        account_url, secondary, credential = parse_connection_str(  # type: ignore[assignment]
+            conn_str, credential, "blob" # type: ignore[arg-type]
+        )
+        if not secondary_hostname:
+            secondary_hostname = secondary
 
-        return cls(account_url, container_name, credential=credential, **kwargs)
+        return cls(
+            account_url,
+            container_name,
+            credential=credential,
+            api_version=api_version,
+            secondary_hostname=secondary_hostname,
+            **kwargs
+        )
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> "BlobCheckpointStore":
         await self._container_client.__aenter__()
         return self
 
-    async def __aexit__(self, *args):
+    async def __aexit__(self, *args: Any) -> None:
         await self._container_client.__aexit__(*args)
 
     def _get_blob_client(self, blob_name: str) -> BlobClient:
         result = self._cached_blob_clients.get(blob_name)
         if not result:
             result = self._container_client.get_blob_client(blob_name)
-            self._cached_blob_clients[blob_name] = result
-        return result
+            self._cached_blob_clients[blob_name] = result  # type: ignore[assignment]
+        return result  # type: ignore[return-value]
 
-    async def _upload_ownership(
-        self, ownership: Dict[str, Any], **kwargs: Any
-    ) -> None:
+    async def _upload_ownership(self, ownership: Dict[str, Any], **kwargs: Any) -> None:
         etag = ownership.get("etag")
         if etag:
             kwargs["if_match"] = etag
@@ -119,7 +146,7 @@ class BlobCheckpointStore(CheckpointStore):
         )
         blob_name = blob_name.lower()
         blob_client = self._get_blob_client(blob_name)
-        metadata = {'ownerid': ownership['owner_id']}
+        metadata = {"ownerid": ownership["owner_id"]}
         try:
             uploaded_blob_properties = await blob_client.set_blob_metadata(metadata, **kwargs)
         except ResourceNotFoundError:
@@ -128,7 +155,7 @@ class BlobCheckpointStore(CheckpointStore):
                 data=UPLOAD_DATA, overwrite=True, metadata=metadata, **kwargs
             )
         ownership["etag"] = uploaded_blob_properties["etag"]
-        ownership["last_modified_time"] = uploaded_blob_properties[
+        ownership["last_modified_time"] = uploaded_blob_properties[  # type: ignore[union-attr]
             "last_modified"
         ].timestamp()
 
@@ -188,9 +215,7 @@ class BlobCheckpointStore(CheckpointStore):
         :rtype: iterable[dict[str, any]]
         """
         try:
-            blob_prefix = "{}/{}/{}/ownership/".format(
-                fully_qualified_namespace, eventhub_name, consumer_group
-            )
+            blob_prefix = "{}/{}/{}/ownership/".format(fully_qualified_namespace, eventhub_name, consumer_group)
             blobs = self._container_client.list_blobs(
                 name_starts_with=blob_prefix.lower(), include=["metadata"], **kwargs
             )
@@ -203,13 +228,11 @@ class BlobCheckpointStore(CheckpointStore):
                     "partition_id": blob.name.split("/")[-1],
                     "owner_id": blob.metadata["ownerid"],
                     "etag": blob.etag,
-                    "last_modified_time": blob.last_modified.timestamp()
-                    if blob.last_modified
-                    else None,
+                    "last_modified_time": blob.last_modified.timestamp() if blob.last_modified else None,
                 }
                 result.append(ownership)
             return result
-        except Exception as error:  # pylint:disable=broad-except
+        except Exception as error:
             logger.warning(
                 "An exception occurred during list_ownership for "
                 "namespace %r eventhub %r consumer group %r. "
@@ -242,12 +265,9 @@ class BlobCheckpointStore(CheckpointStore):
         :rtype: iterable[dict[str,any]]
         """
         results = await asyncio.gather(
-            *[self._claim_one_partition(x, **kwargs) for x in ownership_list],
-            return_exceptions=True
+            *[self._claim_one_partition(x, **kwargs) for x in ownership_list], return_exceptions=True
         )
-        return [
-            ownership for ownership in results if not isinstance(ownership, Exception)
-        ]
+        return [ownership for ownership in results if not isinstance(ownership, Exception)]  # type: ignore[misc]
 
     async def update_checkpoint(self, checkpoint: Dict[str, Any], **kwargs: Any) -> None:
         """Updates the checkpoint using the given information for the offset, associated partition and
@@ -287,13 +307,11 @@ class BlobCheckpointStore(CheckpointStore):
             await blob_client.set_blob_metadata(metadata, **kwargs)
         except ResourceNotFoundError:
             logger.info("Upload checkpoint blob %r because it hasn't existed in the container yet.", blob_name)
-            await blob_client.upload_blob(
-                data=UPLOAD_DATA, overwrite=True, metadata=metadata
-            )
+            await blob_client.upload_blob(data=UPLOAD_DATA, overwrite=True, metadata=metadata)
 
     async def list_checkpoints(
-        self, fully_qualified_namespace, eventhub_name, consumer_group, **kwargs
-    ):
+        self, fully_qualified_namespace: str, eventhub_name: str, consumer_group: str, **kwargs: Any
+    ) -> Iterable[Dict[str, Any]]:
         """List the updated checkpoints from the storage blob.
 
         :param str fully_qualified_namespace: The fully qualified namespace that the Event Hub belongs to.
@@ -313,12 +331,8 @@ class BlobCheckpointStore(CheckpointStore):
                 - `offset` (str): The offset of the :class:`EventData<azure.eventhub.EventData>`.
         :rtype: iterable[dict[str,any]]
         """
-        blob_prefix = "{}/{}/{}/checkpoint/".format(
-            fully_qualified_namespace, eventhub_name, consumer_group
-        )
-        blobs = self._container_client.list_blobs(
-            name_starts_with=blob_prefix.lower(), include=["metadata"], **kwargs
-        )
+        blob_prefix = "{}/{}/{}/checkpoint/".format(fully_qualified_namespace, eventhub_name, consumer_group)
+        blobs = self._container_client.list_blobs(name_starts_with=blob_prefix.lower(), include=["metadata"], **kwargs)
         result = []
         async for blob in blobs:
             metadata = blob.metadata

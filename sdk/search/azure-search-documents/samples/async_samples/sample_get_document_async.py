@@ -24,9 +24,9 @@ import os
 import asyncio
 
 
-service_endpoint = os.getenv("AZURE_SEARCH_SERVICE_ENDPOINT")
-index_name = os.getenv("AZURE_SEARCH_INDEX_NAME")
-key = os.getenv("AZURE_SEARCH_API_KEY")
+service_endpoint = os.environ["AZURE_SEARCH_SERVICE_ENDPOINT"]
+index_name = os.environ["AZURE_SEARCH_INDEX_NAME"]
+key = os.environ["AZURE_SEARCH_API_KEY"]
 
 
 async def autocomplete_query():
@@ -41,8 +41,6 @@ async def autocomplete_query():
 
         print("Details for hotel '23' are:")
         print("        Name: {}".format(result["hotelName"]))
-        print("      Rating: {}".format(result["rating"]))
-        print("    Category: {}".format(result["category"]))
     # [END get_document_async]
 
 

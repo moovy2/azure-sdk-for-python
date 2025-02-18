@@ -14,21 +14,22 @@ from azure.search.documents.indexes.models import (
     SearchIndexerDataContainer,
     SearchIndexerDataSourceConnection,
 )
-from devtools_testutils import AzureRecordedTestCase
+from devtools_testutils import AzureRecordedTestCase, get_credential
 from devtools_testutils.aio import recorded_by_proxy_async
 
 from search_service_preparer import SearchEnvVarPreparer, search_decorator
 
 
 class TestSearchIndexerClientTestAsync(AzureRecordedTestCase):
+    @pytest.mark.skip("fails because connection string of storage is disabled")
     @SearchEnvVarPreparer()
     @search_decorator(schema="hotel_schema.json", index_batch="hotel_small.json")
     @recorded_by_proxy_async
-    async def test_search_indexers(self, endpoint, api_key, **kwargs):
+    async def test_search_indexers(self, endpoint, **kwargs):
         storage_cs = kwargs.get("search_storage_connection_string")
         container_name = kwargs.get("search_storage_container_name")
-        client = SearchIndexerClient(endpoint, api_key, retry_backoff_factor=60)
-        index_client = SearchIndexClient(endpoint, api_key, retry_backoff_factor=60)
+        client = SearchIndexerClient(endpoint, get_credential(is_async=True), retry_backoff_factor=60)
+        index_client = SearchIndexClient(endpoint, get_credential(is_async=True), retry_backoff_factor=60)
         async with client:
             async with index_client:
                 await self._test_create_indexer(client, index_client, storage_cs, container_name)
@@ -107,7 +108,10 @@ class TestSearchIndexerClientTestAsync(AzureRecordedTestCase):
         indexer = await self._prepare_indexer(client, index_client, storage_cs, name, container_name)
         await client.create_indexer(indexer)
         await client.reset_indexer(name)
-        assert (await client.get_indexer_status(name)).last_result.status.lower() in ("inprogress", "reset")
+        assert (await client.get_indexer_status(name)).last_result.status.lower() in (
+            "inprogress",
+            "reset",
+        )
 
     async def _test_run_indexer(self, client, index_client, storage_cs, container_name):
         name = "run"

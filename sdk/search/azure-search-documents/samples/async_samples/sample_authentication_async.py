@@ -11,7 +11,7 @@ FILE: sample_authentication_async.py
 DESCRIPTION:
     This sample demonstrates how to authenticate with the Azure Congnitive Search
     service with an API key. See more details about authentication here:
-    https://docs.microsoft.com/en-us/azure.search.documents/search-security-api-keys
+    https://learn.microsoft.com/azure.search.documents/search-security-api-keys
 USAGE:
     python sample_authentication_async.py
     Set the environment variables with your own values before running the sample:
@@ -29,9 +29,9 @@ async def authentication_with_api_key_credential_async():
     from azure.core.credentials import AzureKeyCredential
     from azure.search.documents.aio import SearchClient
 
-    service_endpoint = os.getenv("AZURE_SEARCH_SERVICE_ENDPOINT")
-    index_name = os.getenv("AZURE_SEARCH_INDEX_NAME")
-    key = os.getenv("AZURE_SEARCH_API_KEY")
+    service_endpoint = os.environ["AZURE_SEARCH_SERVICE_ENDPOINT"]
+    index_name = os.environ["AZURE_SEARCH_INDEX_NAME"]
+    key = os.environ["AZURE_SEARCH_API_KEY"]
 
     search_client = SearchClient(service_endpoint, index_name, AzureKeyCredential(key))
     # [END create_search_client_with_key_async]
@@ -47,8 +47,8 @@ async def authentication_service_client_with_api_key_credential_async():
     from azure.core.credentials import AzureKeyCredential
     from azure.search.documents.indexes.aio import SearchIndexClient
 
-    service_endpoint = os.getenv("AZURE_SEARCH_SERVICE_ENDPOINT")
-    key = os.getenv("AZURE_SEARCH_API_KEY")
+    service_endpoint = os.environ["AZURE_SEARCH_SERVICE_ENDPOINT"]
+    key = os.environ["AZURE_SEARCH_API_KEY"]
 
     client = SearchIndexClient(service_endpoint, AzureKeyCredential(key))
     # [END create_search_service_with_key_async]
@@ -59,8 +59,8 @@ async def authentication_with_aad():
     from azure.identity.aio import DefaultAzureCredential
     from azure.search.documents.aio import SearchClient
 
-    service_endpoint = os.getenv("AZURE_SEARCH_SERVICE_ENDPOINT")
-    index_name = os.getenv("AZURE_SEARCH_INDEX_NAME")
+    service_endpoint = os.environ["AZURE_SEARCH_SERVICE_ENDPOINT"]
+    index_name = os.environ["AZURE_SEARCH_INDEX_NAME"]
     credential = DefaultAzureCredential()
 
     search_client = SearchClient(service_endpoint, index_name, credential)
@@ -77,7 +77,7 @@ async def authentication_service_client_with_aad():
     from azure.identity.aio import DefaultAzureCredential
     from azure.search.documents.indexes.aio import SearchIndexClient
 
-    service_endpoint = os.getenv("AZURE_SEARCH_SERVICE_ENDPOINT")
+    service_endpoint = os.environ["AZURE_SEARCH_SERVICE_ENDPOINT"]
     credential = DefaultAzureCredential()
 
     client = SearchIndexClient(service_endpoint, credential)

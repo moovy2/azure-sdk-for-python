@@ -28,6 +28,7 @@ from azure.core.credentials import AzureSasCredential
 from azure.core.exceptions import HttpResponseError, ResourceNotFoundError, ResourceExistsError, ResourceModifiedError
 
 from _shared.asynctestcase import AsyncTableTestCase
+from _shared.testcase import _encode_base64
 from async_preparers import cosmos_decorator_async
 
 # ------------------------------------------------------------------------------
@@ -181,12 +182,22 @@ class TestTableEntityCosmosAsync(AzureRecordedTestCase, AsyncTableTestCase):
             dict32["large"] = EntityProperty(2**31, EdmType.INT32)  # TODO: this is outside the range of int32
 
             # Assert
-            with pytest.raises(TypeError):
+            with pytest.raises(HttpResponseError) as error:
                 await self.table.create_entity(entity=dict32)
+            assert "Operation returned an invalid status 'Bad Request'" in str(error.value)
+            assert (
+                '"code":"InvalidInput","message":{"lang":"en-us","value":"One of the input values is invalid.'
+                in str(error.value)
+            )
 
             dict32["large"] = EntityProperty(-(2**31 + 1), EdmType.INT32)  # TODO: this is outside the range of int32
-            with pytest.raises(TypeError):
+            with pytest.raises(HttpResponseError) as error:
                 await self.table.create_entity(entity=dict32)
+            assert "Operation returned an invalid status 'Bad Request'" in str(error.value)
+            assert (
+                '"code":"InvalidInput","message":{"lang":"en-us","value":"One of the input values is invalid.'
+                in str(error.value)
+            )
         finally:
             await self._tear_down()
 
@@ -203,12 +214,22 @@ class TestTableEntityCosmosAsync(AzureRecordedTestCase, AsyncTableTestCase):
             dict64["large"] = EntityProperty(2**63, EdmType.INT64)
 
             # Assert
-            with pytest.raises(TypeError):
+            with pytest.raises(HttpResponseError) as error:
                 await self.table.create_entity(entity=dict64)
+            assert "Operation returned an invalid status 'Bad Request'" in str(error.value)
+            assert (
+                '"code":"InvalidInput","message":{"lang":"en-us","value":"One of the input values is invalid.'
+                in str(error.value)
+            )
 
             dict64["large"] = EntityProperty(-(2**63 + 1), EdmType.INT64)
-            with pytest.raises(TypeError):
+            with pytest.raises(HttpResponseError) as error:
                 await self.table.create_entity(entity=dict64)
+            assert "Operation returned an invalid status 'Bad Request'" in str(error.value)
+            assert (
+                '"code":"InvalidInput","message":{"lang":"en-us","value":"One of the input values is invalid.'
+                in str(error.value)
+            )
         finally:
             await self._tear_down()
 
@@ -555,8 +576,18 @@ class TestTableEntityCosmosAsync(AzureRecordedTestCase, AsyncTableTestCase):
 
             # Act
             sent_entity = self._create_updated_entity_dict(entity["PartitionKey"], entity["RowKey"])
-            with pytest.raises(ResourceNotFoundError):
+            with pytest.raises(ResourceNotFoundError) as ex:
                 await self.table.update_entity(mode=UpdateMode.REPLACE, entity=sent_entity)
+            assert ex.value.response.status_code == 404
+
+            with pytest.raises(ResourceNotFoundError) as ex:
+                await self.table.update_entity(
+                    mode=UpdateMode.REPLACE,
+                    entity=sent_entity,
+                    etag="W/\"datetime'2022-05-06T00%3A34%3A21.0093307Z'\"",
+                    match_condition=MatchConditions.IfNotModified,
+                )
+            assert ex.value.response.status_code == 404
 
             # Assert
         finally:
@@ -591,19 +622,29 @@ class TestTableEntityCosmosAsync(AzureRecordedTestCase, AsyncTableTestCase):
         # Arrange
         await self._set_up(tables_cosmos_account_name, tables_primary_cosmos_account_key, url="cosmos")
         try:
-            entity, _ = await self._insert_random_entity()
-
-            # Act
+            # Test when the entity not exists
+            entity = self._create_random_base_entity_dict()
             sent_entity = self._create_updated_entity_dict(entity["PartitionKey"], entity["RowKey"])
-            with pytest.raises(ResourceModifiedError):
+            with pytest.raises(ResourceNotFoundError) as ex:
+                await self.table.update_entity(
+                    mode=UpdateMode.REPLACE,
+                    entity=sent_entity,
+                    etag="W/\"datetime'2022-05-06T00%3A34%3A21.0093307Z'\"",
+                    match_condition=MatchConditions.IfNotModified,
+                )
+            assert ex.value.response.status_code == 404
+
+            # Test when the entity exists
+            entity, _ = await self._insert_random_entity()
+            sent_entity = self._create_updated_entity_dict(entity["PartitionKey"], entity["RowKey"])
+            with pytest.raises(ResourceModifiedError) as ex:
                 await self.table.update_entity(
                     mode=UpdateMode.REPLACE,
                     entity=sent_entity,
                     etag="W/\"datetime'2012-06-15T22%3A51%3A44.9662825Z'\"",
                     match_condition=MatchConditions.IfNotModified,
                 )
-
-            # Assert
+            assert ex.value.response.status_code == 412
         finally:
             await self._tear_down()
 
@@ -661,6 +702,7 @@ class TestTableEntityCosmosAsync(AzureRecordedTestCase, AsyncTableTestCase):
             resp = await self.table.upsert_entity(mode=UpdateMode.REPLACE, entity=sent_entity)
 
             # Assert
+            self._assert_valid_metadata(resp)
             received_entity = await self.table.get_entity(entity["PartitionKey"], entity["RowKey"])
             self._assert_updated_entity(received_entity)
         finally:
@@ -709,13 +751,11 @@ class TestTableEntityCosmosAsync(AzureRecordedTestCase, AsyncTableTestCase):
         await self._set_up(tables_cosmos_account_name, tables_primary_cosmos_account_key, url="cosmos")
         try:
             entity = self._create_random_base_entity_dict()
-
-            # Act
             sent_entity = self._create_updated_entity_dict(entity["PartitionKey"], entity["RowKey"])
-            with pytest.raises(ResourceNotFoundError):
-                await self.table.update_entity(mode=UpdateMode.MERGE, entity=sent_entity)
 
-            # Assert
+            with pytest.raises(ResourceNotFoundError) as ex:
+                await self.table.update_entity(mode=UpdateMode.MERGE, entity=sent_entity)
+            assert ex.value.response.status_code == 404
         finally:
             await self._tear_down()
 
@@ -729,7 +769,7 @@ class TestTableEntityCosmosAsync(AzureRecordedTestCase, AsyncTableTestCase):
 
             # Act
             sent_entity = self._create_updated_entity_dict(entity["PartitionKey"], entity["RowKey"])
-            resp = await self.table.update_entity(
+            await self.table.update_entity(
                 mode=UpdateMode.MERGE, entity=sent_entity, etag=etag, match_condition=MatchConditions.IfNotModified
             )
 
@@ -746,19 +786,31 @@ class TestTableEntityCosmosAsync(AzureRecordedTestCase, AsyncTableTestCase):
         # Arrange
         await self._set_up(tables_cosmos_account_name, tables_primary_cosmos_account_key, url="cosmos")
         try:
-            entity, _ = await self._insert_random_entity()
-
-            # Act
+            # Test when the entity not exists
+            entity = self._create_random_base_entity_dict()
             sent_entity = self._create_updated_entity_dict(entity["PartitionKey"], entity["RowKey"])
-            with pytest.raises(ResourceModifiedError):
+
+            with pytest.raises(ResourceNotFoundError) as ex:
+                await self.table.update_entity(
+                    mode=UpdateMode.MERGE,
+                    entity=sent_entity,
+                    etag="W/\"datetime'2022-05-06T00%3A34%3A21.0093307Z'\"",
+                    match_condition=MatchConditions.IfNotModified,
+                )
+            assert ex.value.response.status_code == 404
+
+            # Test when the entity exists
+            entity, _ = await self._insert_random_entity()
+            sent_entity = self._create_updated_entity_dict(entity["PartitionKey"], entity["RowKey"])
+
+            with pytest.raises(ResourceModifiedError) as ex:
                 await self.table.update_entity(
                     mode=UpdateMode.MERGE,
                     entity=sent_entity,
                     etag="W/\"datetime'2012-06-15T22%3A51%3A44.9662825Z'\"",
                     match_condition=MatchConditions.IfNotModified,
                 )
-
-            # Assert
+            assert ex.value.response.status_code == 412
         finally:
             await self._tear_down()
 
@@ -772,8 +824,9 @@ class TestTableEntityCosmosAsync(AzureRecordedTestCase, AsyncTableTestCase):
 
             await self.table.delete_entity(partition_key=entity["PartitionKey"], row_key=entity["RowKey"])
 
-            with pytest.raises(ResourceNotFoundError):
+            with pytest.raises(ResourceNotFoundError) as ex:
                 await self.table.get_entity(entity["PartitionKey"], entity["RowKey"])
+            assert ex.value.response.status_code == 404
         finally:
             await self._tear_down()
 
@@ -800,8 +853,9 @@ class TestTableEntityCosmosAsync(AzureRecordedTestCase, AsyncTableTestCase):
                 entity["PartitionKey"], entity["RowKey"], etag=etag, match_condition=MatchConditions.IfNotModified
             )
 
-            with pytest.raises(ResourceNotFoundError):
+            with pytest.raises(ResourceNotFoundError) as ex:
                 await self.table.get_entity(entity["PartitionKey"], entity["RowKey"])
+            assert ex.value.response.status_code == 404
         finally:
             await self._tear_down()
 
@@ -813,16 +867,23 @@ class TestTableEntityCosmosAsync(AzureRecordedTestCase, AsyncTableTestCase):
         # Arrange
         await self._set_up(tables_cosmos_account_name, tables_primary_cosmos_account_key, url="cosmos")
         try:
-            entity, _ = await self._insert_random_entity()
+            entity = self._create_random_base_entity_dict()
+            await self.table.delete_entity(
+                entity["PartitionKey"],
+                entity["RowKey"],
+                etag="W/\"datetime'2012-06-15T22%3A51%3A44.9662825Z'\"",
+                match_condition=MatchConditions.IfNotModified,
+            )
 
-            # Act
-            with pytest.raises(ResourceModifiedError):
+            entity, _ = await self._insert_random_entity()
+            with pytest.raises(ResourceModifiedError) as ex:
                 await self.table.delete_entity(
                     entity["PartitionKey"],
                     entity["RowKey"],
                     etag="W/\"datetime'2012-06-15T22%3A51%3A44.9662825Z'\"",
                     match_condition=MatchConditions.IfNotModified,
                 )
+            ex.value.response.status_code == 412
         finally:
             await self._tear_down()
 

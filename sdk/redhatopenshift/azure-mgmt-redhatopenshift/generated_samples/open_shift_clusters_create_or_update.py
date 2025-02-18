@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 from azure.identity import DefaultAzureCredential
+
 from azure.mgmt.redhatopenshift import AzureRedHatOpenShiftClient
 
 """
@@ -49,7 +50,12 @@ def main():
                     "subnetId": "/subscriptions/subscriptionId/resourceGroups/vnetResourceGroup/providers/Microsoft.Network/virtualNetworks/vnet/subnets/master",
                     "vmSize": "Standard_D8s_v3",
                 },
-                "networkProfile": {"podCidr": "10.128.0.0/14", "serviceCidr": "172.30.0.0/16"},
+                "networkProfile": {
+                    "loadBalancerProfile": {"managedOutboundIps": {"count": 1}},
+                    "podCidr": "10.128.0.0/14",
+                    "preconfiguredNSG": "Disabled",
+                    "serviceCidr": "172.30.0.0/16",
+                },
                 "servicePrincipalProfile": {"clientId": "clientId", "clientSecret": "clientSecret"},
                 "workerProfiles": [
                     {
@@ -67,6 +73,6 @@ def main():
     print(response)
 
 
-# x-ms-original-file: specification/redhatopenshift/resource-manager/Microsoft.RedHatOpenShift/stable/2023-04-01/examples/OpenShiftClusters_CreateOrUpdate.json
+# x-ms-original-file: specification/redhatopenshift/resource-manager/Microsoft.RedHatOpenShift/openshiftclusters/stable/2023-11-22/examples/OpenShiftClusters_CreateOrUpdate.json
 if __name__ == "__main__":
     main()
